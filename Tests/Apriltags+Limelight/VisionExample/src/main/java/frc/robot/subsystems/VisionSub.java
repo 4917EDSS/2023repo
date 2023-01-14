@@ -25,7 +25,8 @@
 
   Following the Limelight Getting started doc:
   1. Upgrade the camera to the newest firmware if needed (Compmute Module)
-  2. Setup a static IP address with bonjour and the Limelight Finder tool
+  2. DON'T Setup a static IP address with bonjour (Static ip should only be for competitions as you won't be able to connect the limelight to your laptop) 
+  Note: Limelight Finder sucks and never works, just go to limelight.local:5801
   3. Create a no vision, limelight, and apriltag pipeline
   4. Download the pipelines to save them on your computer
 
@@ -64,6 +65,8 @@ public class VisionSub extends SubsystemBase {
   private NetworkTableEntry getpipe;
   private NetworkTableEntry pipeline;
 
+  private int pipe = 0;
+
   public VisionSub() {
     limelight = NetworkTableInstance.getDefault().getTable("limelight");
     tx = limelight.getEntry("tx");
@@ -99,13 +102,22 @@ public class VisionSub extends SubsystemBase {
   public int getPrimaryID() { // Get primary apriltag ID (-1 means nothing)
     return (int)tid.getNumber(-1);
   }
-  
+
   public void setPipeline(int line) { // Set the currect pipeline (NO_VISION, LIMELIGHT, or APRILTAG)
     pipeline.setNumber(line);
   }
 
   @Override
   public void periodic() {
+
+    
+    SmartDashboard.putNumber("Horizontal Angle",getHorizontalOffset());
+    SmartDashboard.putNumber("Vertical Angle",getVerticalOffset());
+    SmartDashboard.putNumber("Target Area",getTargetArea());
+    SmartDashboard.putBoolean("Target Available",hasTarget());
+    SmartDashboard.putNumber("Apriltag ID",getPrimaryID());
+    pipe = (int)SmartDashboard.getNumber("Pipeline", pipe);
+    SmartDashboard.putNumber("Pipeline", pipe);
     // This method will be called once per scheduler run
   }
 }
