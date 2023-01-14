@@ -6,9 +6,9 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class ClimbSub extends SubsystemBase {
-  /** Creates a new ClimbSub. */
-  public ClimbSub() {}
+public class ClimberDriveSub extends SubsystemBase {
+  /** Creates a new ClimberDriveSub. */
+  public ClimberDriveSub() {}
 
   @Override
   public void periodic() {
