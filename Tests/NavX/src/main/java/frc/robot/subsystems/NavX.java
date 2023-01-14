@@ -41,7 +41,8 @@ public class NavX extends SubsystemBase {
 
     //measure rotation
     //double robotRotation = ahrs.getAngle();
-
+  
+  }
 
   @Override
   public void periodic() {
