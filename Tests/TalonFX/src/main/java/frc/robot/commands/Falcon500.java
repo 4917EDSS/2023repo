@@ -1,17 +1,28 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
-package frc.robot.commands;
+import edu.wpi.first.wpilibj.PS4Controller;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.ClimbSub;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
-public class Falcon500 extends SubsystemBase {
-  /** Creates a new Falcon500. */
-  public Falcon500() {}
-
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
+public class Falcon500 extends CommandBase {
+  private DrivetrainSub m_drivetrainSub;
+  private PS4Controller m_controller;
+  TalonFX m_climbArmMotor = new TalonFX(15);
+  ClimbSub ClimberDriveSub = new ClimbSub();
+ 
+  public Falcon500(PS4Controller controller, DrivetrainSub drivetrainSub) {
+    m_drivetrainSub = drivetrainSub;
+    m_controller = controller;
+    addRequirements(drivetrainSub);
   }
-}
+...
+  @Override
+  public void execute() {
+    m_drivetrainSub.tankDrive(m_controller.getLeftY(), m_controller.getRightX());
+    // For the Romi template, use m_drivetrainSub.arcadeDrive
+  }
+...
+  @Override
+  public void end(boolean interrupted) {
+    ClimberDriveSub.m_setClimberArmPower(0.3);
+  }
