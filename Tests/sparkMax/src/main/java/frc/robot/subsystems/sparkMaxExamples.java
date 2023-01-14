@@ -12,9 +12,9 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class SparkMaxExamples extends SubsystemBase {
-  private static final int leftDeviceID = 2; 
+  private static final int leftDeviceID = 4; 
 
-  CANSparkMax m_motor = new CANSparkMax(leftDeviceID, MotorType.kBrushless);
+  private CANSparkMax m_motor = new CANSparkMax(leftDeviceID, MotorType.kBrushless);
   
 
   /** Creates a new sparkMaxExamples. */

@@ -7,6 +7,7 @@
 * API Info:
 * NavX communication with MXP SPI (ahrs = new AHRS(SPI.Port.kMXP))
 * 
+*C:\Users\4917\navx-mxp\java\examples\AutoBalance\src\org\\usfirst\frc\team2465\robot
 */
 
 package frc.robot.subsystems;
@@ -41,11 +42,16 @@ public class NavX extends SubsystemBase {
     //measure rotation
     //double robotRotation = ahrs.getAngle();
 
-  }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    
+
+    //System.out.print("Yaw = "); 
+    //System.out.println(getNavXYaw());
+  }
+
+  public double getNavXYaw () {
+   return 0;//m_navX.getYaw();
   }
 }
