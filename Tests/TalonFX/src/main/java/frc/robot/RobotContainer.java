@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.RunMotorCmd;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.TalonFXSub;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -45,11 +46,12 @@ public class RobotContainer {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     new Trigger(m_exampleSubsystem::exampleCondition)
         .onTrue(new ExampleCommand(m_exampleSubsystem));
-
+    
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
-    //m_driverController.cross().whileTrue(m_exampleSubsystem.exampleMethodCommand());///////////////////////////
+    m_driverController.cross().whileTrue(new RunMotorCmd(m_talonFX));
   }
+
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
