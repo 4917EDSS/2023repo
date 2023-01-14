@@ -4,7 +4,6 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.DrivetrainSub;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -16,12 +15,12 @@ public class ExampleCommand extends CommandBase {
   /**
    * Creates a new ExampleCommand.
    *
-   * @param m_drivetrainSub The subsystem used by this command.
+   * @param subsystem The subsystem used by this command.
    */
-  public ExampleCommand(ExampleSubsystem m_drivetrainSub) {
-    m_subsystem = m_drivetrainSub;
+  public ExampleCommand(ExampleSubsystem subsystem) {
+    m_subsystem = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(m_drivetrainSub);
+    addRequirements(subsystem);
   }
 
   // Called when the command is initially scheduled.
