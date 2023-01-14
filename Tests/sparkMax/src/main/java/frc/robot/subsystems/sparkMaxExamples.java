@@ -27,5 +27,6 @@ public class SparkMaxExamples extends SubsystemBase {
 
   public void setPower(double power){
     m_motor.set(power);
+    
   }
 }
