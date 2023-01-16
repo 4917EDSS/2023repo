@@ -111,4 +111,29 @@ public class SwerveModule {
     m_driveMotor.setSelectedSensorPosition(0.0);
     m_turningEncoder.setPosition(0.0);
   }
+
+  public void setPID(boolean isDrive, double p, double i, double d) {
+    if(isDrive) {
+      if(m_drivePIDController.getP() != p) {
+        m_drivePIDController.setP(p);
+      }
+      if(m_drivePIDController.getI() != i) {
+        m_drivePIDController.setI(i);
+      }
+      if(m_drivePIDController.getD() != d) {
+        m_drivePIDController.setD(d);
+      }
+    }
+    else {
+      if(m_turningPIDController.getP() != p) {
+        m_turningPIDController.setP(p);
+      }
+      if(m_turningPIDController.getI() != i) {
+        m_turningPIDController.setI(i);
+      }
+      if(m_turningPIDController.getD() != d) {
+        m_turningPIDController.setD(d);
+      }
+    }
+  }
 }

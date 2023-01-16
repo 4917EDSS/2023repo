@@ -14,6 +14,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CanIds;
 
@@ -69,9 +70,15 @@ public class DrivetrainSub extends SubsystemBase {
 
   /** Creates a new DrivetrainSub. */
   public DrivetrainSub() {
-
+    SmartDashboard.putNumber("dP", 0.1);
+    SmartDashboard.putNumber("dI", 0);
+    SmartDashboard.putNumber("dD", 0);
+    SmartDashboard.putNumber("tP", 0.1);
+    SmartDashboard.putNumber("tI", 0);
+    SmartDashboard.putNumber("tD", 0);
   }
 
+  private int delayCount = 10;
   @Override
   public void periodic() {
     // Update the odometry in the periodic block
@@ -82,7 +89,7 @@ public class DrivetrainSub extends SubsystemBase {
         m_frontRight.getPosition(),
         m_backLeft.getPosition(),
         m_backRight.getPosition()
-  });
+      });
 
     // This method will be called once per scheduler run
     // SwerveModulePosition smp = m_frontLeft.getPosition();
@@ -92,6 +99,24 @@ public class DrivetrainSub extends SubsystemBase {
     // SmartDashboard.putNumber("FL Angle Deg", smp.angle.getDegrees());
     // SmartDashboard.putNumber("FL Speed mps", sms.speedMetersPerSecond);
     // SmartDashboard.putNumber("FL Angle Rad", sms.angle.getRadians());
+    if(--delayCount == 0) {
+      delayCount = 10;
+      double dp = SmartDashboard.getNumber("dP", 0.1);
+      double di = SmartDashboard.getNumber("dI", 0);
+      double dd = SmartDashboard.getNumber("dD", 0);
+      double tp = SmartDashboard.getNumber("tP", 0.1);
+      double ti = SmartDashboard.getNumber("tI", 0);
+      double td = SmartDashboard.getNumber("tD", 0);
+
+      m_frontLeft.setPID(true, dp, di, dd);
+      m_frontLeft.setPID(false, tp, ti, td);
+      m_frontRight.setPID(true, dp, di, dd);
+      m_frontRight.setPID(false, tp, ti, td);
+      m_backLeft.setPID(true, dp, di, dd);
+      m_backLeft.setPID(false, tp, ti, td);
+      m_backRight.setPID(true, dp, di, dd);
+      m_backRight.setPID(false, tp, ti, td);
+    }
   }
 
   public Pose2d getPose() {
