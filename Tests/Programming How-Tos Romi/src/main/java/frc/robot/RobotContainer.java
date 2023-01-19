@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.DriveForwardCmd;
+import frc.robot.commands.DriveWithJoystickCmd;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.DrivetrainSub;
 import frc.robot.subsystems.RomiDrivetrain;
@@ -35,6 +36,9 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+    
+    // Set default command for subsystems
+    m_drivetrainSub.setDefaultCommand(new DriveWithJoystickCmd(m_driverController, m_drivetrainSub));
   }
 
   /**
