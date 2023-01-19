@@ -5,9 +5,11 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.DriveForwardCmd;
 import frc.robot.subsystems.DrivetrainSub;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 
 /**
@@ -42,7 +44,22 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    m_driverController.cross().onTrue(new PrintCommand("Cross pressed!"));
 
+    // This ties a button to a command
+    //   m_driverController = The controller who's button you want to use
+    //   square() = The button you want to use (others: L1, cross, etc.)
+    //   onTrue = When you want the command to trigger (others: whileTrue, toggleOnFalse, etc.)
+    //   DriveForwardCmd = The command you want to trigger
+    //   (m_drivetrainSub) = The parameters that the command needs
+    m_driverController.square().whileTrue(new DriveForwardCmd(m_drivetrainSub));
+
+    // Instead of creating a command for this simple situation, define the command here
+    m_driverController.circle().whileTrue(
+        new StartEndCommand(
+            () -> m_drivetrainSub.tankDrive(-0.25, 0.25),   // Call on command start
+            () -> m_drivetrainSub.tankDrive(0.0, 0.0),      // Call on command end
+            m_drivetrainSub));                              // Required subsystem
   }
 
   /**

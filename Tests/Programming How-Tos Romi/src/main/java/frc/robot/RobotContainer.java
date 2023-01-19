@@ -6,10 +6,13 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.DriveForwardCmd;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.DrivetrainSub;
 import frc.robot.subsystems.RomiDrivetrain;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 
 /**
@@ -26,7 +29,7 @@ public class RobotContainer {
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_romiDrivetrain);
 
   private final CommandPS4Controller m_driverController = 
-  new CommandPS4Controller(OperatorConstants.kDriverControllerPort);	// This already exists for non-Romi
+      new CommandPS4Controller(OperatorConstants.kDriverControllerPort);	// This already exists for non-Romi
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -40,7 +43,24 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+    m_driverController.cross().onTrue(new PrintCommand("Cross pressed!"));
+
+    // This ties a button to a command
+    //   m_driverController = The controller who's button you want to use
+    //   square() = The button you want to use (others: L1, cross, etc.)
+    //   onTrue = When you want the command to trigger (others: whileTrue, toggleOnFalse, etc.)
+    //   DriveForwardCmd = The command you want to trigger
+    //   (m_drivetrainSub) = The parameters that the command needs
+    m_driverController.square().whileTrue(new DriveForwardCmd(m_drivetrainSub));
+
+    // Instead of creating a command for this simple situation, define the command here
+    m_driverController.circle().whileTrue(
+        new StartEndCommand(
+            () -> m_drivetrainSub.tankDrive(-0.25, 0.25),   // Call on command start
+            () -> m_drivetrainSub.tankDrive(0.0, 0.0),      // Call on command end
+            m_drivetrainSub));                              // Required subsystem
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
