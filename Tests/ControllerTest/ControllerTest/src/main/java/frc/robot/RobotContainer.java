@@ -5,15 +5,9 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Autos;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.commands.RunMotorCmd;
-import frc.robot.subsystems.TalonFXSub;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -23,10 +17,11 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  private final TalonFXSub m_talonFX = new TalonFXSub();
-  private final CommandPS4Controller m_driverController = new CommandPS4Controller(OperatorConstants.kDriverControllerPort);
-      
+
+  // Replace with CommandPS4Controller or CommandJoystick if needed
+  private final CommandPS4Controller m_driverController = 
+    new CommandPS4Controller(OperatorConstants.kDriverControllerPort);
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
@@ -43,15 +38,31 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    new Trigger(m_exampleSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_exampleSubsystem));
-    
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
-    m_driverController.cross().whileTrue(new RunMotorCmd(m_talonFX));
-  }
 
+    m_driverController.square().onTrue(new PrintCommand("Square Pressed"));
+    m_driverController.circle().onTrue(new PrintCommand("Circle Pressed"));
+    m_driverController.triangle().onTrue(new PrintCommand("Triangle Pressed"));
+    m_driverController.cross().onTrue(new PrintCommand("Cross Pressed"));
+
+    m_driverController.povUp().onTrue(new PrintCommand("POV Up Pressed"));
+    m_driverController.povRight().onTrue(new PrintCommand("POV Right Pressed"));
+    m_driverController.povDown().onTrue(new PrintCommand("POV Down Pressed"));
+    m_driverController.povLeft().onTrue(new PrintCommand("POV Left Pressed"));
+    m_driverController.povUpLeft().onTrue(new PrintCommand("POV Top Left Pressed"));
+    m_driverController.povUpRight().onTrue(new PrintCommand("POV Top Right Pressed"));
+    m_driverController.povDownRight().onTrue(new PrintCommand("POV Bottom Right Pressed"));
+    m_driverController.povDownLeft().onTrue(new PrintCommand("POV Bottom Left Pressed"));
+
+    m_driverController.share().onTrue(new PrintCommand("Share Pressed"));
+    m_driverController.options().onTrue(new PrintCommand("Options Pressed"));
+    m_driverController.touchpad().onTrue(new PrintCommand("Touchpad Pressed"));
+
+    m_driverController.L1().onTrue(new PrintCommand("Left Bumper Pressed"));
+    m_driverController.L2().onTrue(new PrintCommand("Left Trigger Pressed"));
+    m_driverController.R1().onTrue(new PrintCommand("Right Bumper Pressed"));
+    m_driverController.R2().onTrue(new PrintCommand("Right Trigger Pressed"));
+
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -60,6 +71,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
+    return new PrintCommand("No auto coded yet");
   }
 }
