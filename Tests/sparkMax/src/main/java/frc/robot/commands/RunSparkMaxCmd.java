@@ -34,6 +34,7 @@ public class RunSparkMaxCmd extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     m_sparkMaxSub.setPower(0.0);
+    
   }
 
   // Returns true when the command should end.

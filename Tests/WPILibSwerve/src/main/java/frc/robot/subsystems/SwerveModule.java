@@ -22,19 +22,16 @@ public class SwerveModule {
     public static final double kMaxModuleAngularSpeedRadiansPerSecond = 2 * Math.PI;
     public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 2 * Math.PI;
 
-    public static final int kDriveEncoderCPR = 2048; // For CTRE TalonFX built-in encoder
+    //public static final int kDriveEncoderCPR = 2048; // For CTRE TalonFX built-in encoder
+    //public static final double kWheelDiameterMeters = 0.1016; // 4"
+    public static final double kDriveEncoderDistancePerPulse = (1000.0/51782); // Millimeters per tick
+    public static final double kDriveVelocityFactor = (10.0/1000.0); // mm/100ms to m/s 
+    
     public static final int kTurningEncoderCPR = 4096; // For CTRE CANCoder magnetic encoder
-    public static final double kWheelDiameterMeters = 0.15;
-    public static final double kDriveEncoderDistancePerPulse =
-        // Assumes the encoders are directly mounted on the wheel shafts
-        (kWheelDiameterMeters * Math.PI) / (double) kDriveEncoderCPR;
-
-    public static final double kTurningEncoderDistancePerPulse =
-        // Assumes the encoders are on a 1:1 reduction with the module shaft.
-        (2 * Math.PI) / (double) kTurningEncoderCPR;
+    // Assumes the encoders are on a 1:1 reduction with the module shaft.
+    public static final double kTurningEncoderDistancePerPulse = (2 * Math.PI) / (double) kTurningEncoderCPR;
 
     public static final double kPModuleTurningController = 1;
-
     public static final double kPModuleDriveController = 1;
   }
 
@@ -81,12 +78,12 @@ public class SwerveModule {
 
   public SwerveModuleState getState() {
     return new SwerveModuleState(
-        m_driveMotor.getSelectedSensorVelocity(), new Rotation2d(m_turningEncoder.getPosition()));
+        m_driveMotor.getSelectedSensorVelocity() * ModuleConstants.kDriveVelocityFactor, 
+        new Rotation2d(m_turningEncoder.getPosition()));
   }
 
   public SwerveModulePosition getPosition() {
-    return new SwerveModulePosition(
-        m_driveMotor.getSelectedSensorPosition(), new Rotation2d(m_turningEncoder.getPosition()));
+    return new SwerveModulePosition(m_driveMotor.getSelectedSensorPosition() / 1000.0, new Rotation2d(m_turningEncoder.getPosition()));
   }
 
   public void setDesiredState(SwerveModuleState desiredState) {
@@ -96,13 +93,16 @@ public class SwerveModule {
 
     // Calculate the drive output from the drive PID controller.
     final double driveOutput =
-      m_drivePIDController.calculate(m_driveMotor.getSelectedSensorVelocity(), state.speedMetersPerSecond);
+      m_drivePIDController.calculate(
+        m_driveMotor.getSelectedSensorVelocity() * ModuleConstants.kDriveVelocityFactor, 
+        state.speedMetersPerSecond);
 
     // Calculate the turning motor output from the turning PID controller.
     final double turnOutput =
       m_turningPIDController.calculate(m_turningEncoder.getPosition(), state.angle.getRadians());
 
-    // Calculate the turning motor output from the turning PID controller.
+
+      // Calculate the turning motor output from the turning PID controller.
     m_driveMotor.set(ControlMode.PercentOutput, driveOutput);
     m_turningMotor.set(turnOutput);
   }
@@ -110,5 +110,30 @@ public class SwerveModule {
   public void resetEncoders() {
     m_driveMotor.setSelectedSensorPosition(0.0);
     m_turningEncoder.setPosition(0.0);
+  }
+
+  public void setPID(boolean isDrive, double p, double i, double d) {
+    if(isDrive) {
+      if(m_drivePIDController.getP() != p) {
+        m_drivePIDController.setP(p);
+      }
+      if(m_drivePIDController.getI() != i) {
+        m_drivePIDController.setI(i);
+      }
+      if(m_drivePIDController.getD() != d) {
+        m_drivePIDController.setD(d);
+      }
+    }
+    else {
+      if(m_turningPIDController.getP() != p) {
+        m_turningPIDController.setP(p);
+      }
+      if(m_turningPIDController.getI() != i) {
+        m_turningPIDController.setI(i);
+      }
+      if(m_turningPIDController.getD() != d) {
+        m_turningPIDController.setD(d);
+      }
+    }
   }
 }

@@ -7,6 +7,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+//import com.revrobotics.CANCoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -15,6 +16,7 @@ public class SparkMaxExamples extends SubsystemBase {
   private static final int leftDeviceID = 4; 
 
   private CANSparkMax m_motor = new CANSparkMax(leftDeviceID, MotorType.kBrushless);
+  //private CANcoder m_coder = m_motor.getEncoder(); 
   
 
   /** Creates a new sparkMaxExamples. */
@@ -27,5 +29,6 @@ public class SparkMaxExamples extends SubsystemBase {
 
   public void setPower(double power){
     m_motor.set(power);
+    
   }
 }
