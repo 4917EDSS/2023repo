@@ -48,8 +48,10 @@ public class ExampleSubsystem extends SubsystemBase {
   private final WPI_TalonFX  sMotorLeftA = new WPI_TalonFX(TalonFX);
   
   public float getVelocitySpeed() {
+    System.out.println(sMotorLeftA);
   return sMotorLeftA.getSelectedSensorVelocity(m_talonFX);
   }
   public float getPosition() {
+    System.out.println(sMotorLeftA);
   return sMotorLeftA.getSelectedSensorPosition(m_talonFX);
 }
