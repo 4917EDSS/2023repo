@@ -5,10 +5,13 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Autos;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.commands.CylinderCmd;
+
+import frc.robot.subsystems.ManipulatorSub;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -20,7 +23,9 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();  // TODO: Remove example sub when we have one of our own declared
+  private final ManipulatorSub m_ManipulatorSub = new ManipulatorSub();
+
+  //private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();  // TODO: Remove example sub when we have one of our own declared
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandPS4Controller m_driverController = new CommandPS4Controller(OperatorConstants.kDriverControllerPort);
@@ -41,13 +46,26 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    new Trigger(m_exampleSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_exampleSubsystem));                              // TODO: Remove this example once we have our own code written
+    m_driverController.cross().onTrue(new PrintCommand("Cross pressed"));
+    m_driverController.circle().onTrue(new PrintCommand("Circle pressed"));
 
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
-    m_driverController.cross().whileTrue(m_exampleSubsystem.exampleMethodCommand());  // TODO: Remove this example once we have our own code written
+    // Instead of creating a command for this simple situation, define the command here
+    m_driverController.cross().onTrue(
+      new StartEndCommand(
+        () -> m_ManipulatorSub.setSolenoid(true),   // Call on command start
+        () -> m_ManipulatorSub.setSolenoid(false),  // Call on command end
+        m_ManipulatorSub));                               // Required subsystem
+        m_driverController.circle().onTrue(
+          new StartEndCommand(
+            () -> m_ManipulatorSub.setSolenoid(false),   // Call on command start
+            () -> m_ManipulatorSub.setSolenoid(true),  // Call on command end
+            m_ManipulatorSub));   
+        
+
+    // Set the command to run when no other commands are using this subsystem
+    
+
+    
   }
 
   /**
@@ -55,8 +73,8 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
+  //public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);   // TODO: Remove example once we have our own code written
-  }
+    //return Autos.exampleAuto(m_exampleSubsystem);   // TODO: Remove example once we have our own code written
+  //}
 }
