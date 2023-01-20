@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class NavX extends SubsystemBase {
-
   AHRS ahrs;
 
   /** Creates a new NavX. */
