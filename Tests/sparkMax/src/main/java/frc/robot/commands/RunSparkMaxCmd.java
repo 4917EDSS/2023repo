@@ -28,7 +28,6 @@ public class RunSparkMaxCmd extends CommandBase {
   @Override
   public void execute() {
     m_sparkMaxSub.setPower(m_controller.getLeftY());
-    System.out.println(m_controller.getLeftY());
   }
 
   // Called once the command ends or is interrupted.
