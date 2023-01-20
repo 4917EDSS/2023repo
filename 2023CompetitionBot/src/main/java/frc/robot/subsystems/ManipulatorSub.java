@@ -4,14 +4,28 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class ManipulatorSub extends SubsystemBase {
+  
+  private final CANSparkMax m_topMotor = 
+      new CANSparkMax(Constants.CanIds.kTopDriveMotor, CANSparkMaxLowLevel.MotorType.kBrushless);
+  
   /** Creates a new TemplateSub. */
-  public ManipulatorSub() {}
+  public ManipulatorSub() {
+  }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
   }
+
+  public void tilt(double power) {
+    m_topMotor.set(power);
+  }
+
 }

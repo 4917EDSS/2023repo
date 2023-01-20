@@ -15,5 +15,12 @@ package frc.robot;
 public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
+    public static final int kOperatorControllerPort = 1;
   }
+
+  public final static class CanIds {
+    public final static int kTopDriveMotor = 1;	// This gives the code the network address of the motors
+    public final static int kShaftDriveMotor = 2;
+  }
+
 }

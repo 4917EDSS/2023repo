@@ -12,8 +12,6 @@ https://github.wpilib.org/allwpilib/docs/release/java/edu/wpi/first/wpilibj/Sole
 ---Hardware info---
 
 Applies or vents pressure from a single output port
-
-
  */
 
 package frc.robot.subsystems;
