@@ -19,13 +19,14 @@ public class DriveForwardCmd extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // set both motor to 25%
-    m_drivetrainSub.tankDrive(0.25, 0.25);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    // set both motor to 25%
+    m_drivetrainSub.tankDrive(0.25, 0.25);
+  }
 
   // Called once the command ends or is interrupted.
   @Override

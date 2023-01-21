@@ -32,12 +32,12 @@ public class DrivetrainSub extends SubsystemBase {
   }
   
   public void tankDrive(double leftPower, double rightPower){
-    m_leftMotor1.set(leftPower);
-    m_leftMotor2.set(leftPower);
-    m_leftMotor3.set(leftPower);
-    m_rightMotor1.set(-rightPower);
-    m_rightMotor2.set(-rightPower);
-    m_rightMotor3.set(-rightPower);
+    m_leftMotor1.set(-leftPower);
+    m_leftMotor2.set(-leftPower);
+    m_leftMotor3.set(-leftPower);
+    m_rightMotor1.set(rightPower);
+    m_rightMotor2.set(rightPower);
+    m_rightMotor3.set(rightPower);
   }
 
   public void shift(boolean isHigh) {
