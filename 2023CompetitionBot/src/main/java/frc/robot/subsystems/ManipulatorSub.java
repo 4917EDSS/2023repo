@@ -25,4 +25,5 @@ public class ManipulatorSub extends SubsystemBase {
   public void rotateArm(double armPower) {
     m_armMotor.set(armPower);
   }
+  public void tankDrive(double a, double b){}
 }

@@ -28,7 +28,7 @@ public final class Constants {
     public final int APRILTAG = 2;
   }
 
-  public final static class CanIds {
+  public final static class DrivetrainCanIds {
     public final static int kLeftDriveMotor1 = 1;
     public final static int kLeftDriveMotor2 = 2;
     public final static int kLeftDriveMotor3 = 3;
