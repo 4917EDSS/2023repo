@@ -4,24 +4,23 @@
 
 package frc.robot.commands;
 
+import frc.robot.subsystems.DoubleSolenoidsSub;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ManipulatorSub;
 
-public class RotateArmCmd extends CommandBase {
-   // Need a member variable to save the DrivetrainSub that was passed into the command
-   private final ManipulatorSub m_manipulatorSub;
-
-  /** Creates a new RotateArmCmd. */
-  public RotateArmCmd(ManipulatorSub manipulatorSub) {
+public class SetValveCommand extends CommandBase {
+  /** Creates a new SetValveCommand. */
+  private final DoubleSolenoidsSub m_subsystem;
+  public SetValveCommand(DoubleSolenoidsSub subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_manipulatorSub = manipulatorSub;
-    addRequirements(manipulatorSub);
+    m_subsystem = subsystem;
+    addRequirements(subsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_manipulatorSub.rotateArm(0.25);
+    m_subsystem.setValve(Value.kForward);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -31,7 +30,7 @@ public class RotateArmCmd extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_manipulatorSub.rotateArm(0.0);
+    m_subsystem.setValve(Value.kOff);
   }
 
   // Returns true when the command should end.

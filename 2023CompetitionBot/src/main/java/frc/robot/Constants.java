@@ -18,7 +18,7 @@ public final class Constants {
     public static final int kOperatorControllerPort = 1;
   }
   public final static class CanIds {
-    public final static int kLeftDriveMotor = 1;	// This gives the code the network address of the motors
+    // public final static int kLeftDriveMotor = 1;	// This gives the code the network address of the motors
     public final static int kArmMotor = 5;
   }
 

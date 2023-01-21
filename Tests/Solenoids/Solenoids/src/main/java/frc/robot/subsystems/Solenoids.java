@@ -26,8 +26,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Solenoids extends SubsystemBase {
   /* Creates a new Solenoids. */
   Solenoid m_solenoidPCM = new Solenoid(PneumaticsModuleType.CTREPCM, 1);
+  // Creates a new Solenoid object, sets the value to true
   public Solenoids() {
-// Creates a new Solenoid object, sets the value to true
     m_solenoidPCM.set(false);
   }
 
