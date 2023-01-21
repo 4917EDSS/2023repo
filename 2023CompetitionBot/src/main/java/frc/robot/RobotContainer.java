@@ -5,12 +5,16 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.RotateArmCmd;
 import frc.robot.subsystems.ManipulatorSub;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.RotateArmWithJoystickCmd;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
@@ -31,6 +35,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+    m_manipulatorSub.setDefaultCommand(new RotateArmWithJoystickCmd(m_driverController, m_manipulatorSub));
   }
 
   /**
@@ -43,14 +48,20 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    m_driverController.povUp().whileTrue(new PrintCommand("Right Joystick moved!!!!!!!"));
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    new Trigger(m_exampleSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_exampleSubsystem));                              // TODO: Remove this example once we have our own code written
+   // new Trigger(m_exampleSubsystem::exampleCondition)
+        //.onTrue(new ExampleCommand(m_exampleSubsystem));                              // TODO: Remove this example once we have our own code written
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
-    m_driverController.cross().whileTrue(m_exampleSubsystem.exampleMethodCommand());  // TODO: Remove this example once we have our own code written
-  }
+    m_driverController.povUp().whileTrue(
+        new StartEndCommand(
+            () -> m_manipulatorSub.rotateArm(0.25),   // Call on command start
+            () -> m_manipulatorSub.rotateArm(0.0),      // Call on command end
+            m_manipulatorSub));                              // Required subsystem
+
+     }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
