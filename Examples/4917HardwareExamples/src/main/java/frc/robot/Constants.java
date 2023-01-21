@@ -15,7 +15,7 @@ package frc.robot;
 public final class Constants {
   public static class CanIds {
     public static final int talonFxId = 1;
-    public static final int spartMaxId = 2;
+    public static final int sparkMaxId = 2;
   }
 
   public static class DioIds {
