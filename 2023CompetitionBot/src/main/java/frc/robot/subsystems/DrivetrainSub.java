@@ -8,6 +8,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import frc.robot.Constants;
 
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DrivetrainSub extends SubsystemBase {
@@ -19,7 +21,10 @@ public class DrivetrainSub extends SubsystemBase {
   private final CANSparkMax m_rightMotor3 = new CANSparkMax(Constants.CanIds.kRightDriveMotor3, CANSparkMaxLowLevel.MotorType.kBrushless);
   
   /** Creates a new DrivetrainSub. */
-  public DrivetrainSub() {}
+  private final Solenoid m_shifter = new Solenoid(PneumaticsModuleType.CTREPCM, 1);
+  public DrivetrainSub() {
+    m_shifter.set(false);
+  }
 
   @Override
   public void periodic() {
@@ -33,5 +38,9 @@ public class DrivetrainSub extends SubsystemBase {
     m_leftMotor1.set(-rightPower);
     m_leftMotor2.set(-rightPower);
     m_leftMotor3.set(-rightPower);
+
+  public void shift(boolean isHigh) {
+    //Shifts the shifter solenoid according to the isHigh parameter, true for high, false for low.
+    m_shifter.set(isHigh);
   }
 }
