@@ -19,7 +19,7 @@ public final class Constants {
   }
   public final static class CanIds {
     public final static int kLeftDriveMotor = 1;	// This gives the code the network address of the motors
-    public final static int kRightDriveMotor = 4;
+    public final static int kArmMotor = 5;
   }
 
   public static class LimelightConstants {
@@ -33,7 +33,7 @@ public final class Constants {
     public final static int kLeftDriveMotor2 = 2;
     public final static int kLeftDriveMotor3 = 3;
     public final static int kRightDriveMotor1 = 4;
-    public final static int kRightDriveMotor2 = 5;
-    public final static int kRightDriveMotor3 = 6;
+    public final static int kRightDriveMotor2 = 6;
+    public final static int kRightDriveMotor3 = 7;
   }
 }

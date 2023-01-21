@@ -13,7 +13,7 @@ import frc.robot.Constants;
 public class ManipulatorSub extends SubsystemBase {
   
   private final CANSparkMax m_armMotor = 
-      new CANSparkMax(Constants.CanIds.kRightDriveMotor, CANSparkMaxLowLevel.MotorType.kBrushless);
+      new CANSparkMax(Constants.CanIds.kArmMotor, CANSparkMaxLowLevel.MotorType.kBrushless);
 
   /** Creates a new TemplateSub. */
   public ManipulatorSub() {}
