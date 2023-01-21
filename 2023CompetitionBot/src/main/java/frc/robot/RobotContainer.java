@@ -62,7 +62,8 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    m_driverController.povUp().whileTrue(new PrintCommand("Right Joystick moved!!!!!!!"));
+    m_driverController.povUp().whileTrue(new PrintCommand("Arrow up pressed!!!!!!!"));
+    m_driverController.povDown().whileTrue(new PrintCommand("Arrow down pressed!!!!!!!"));
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
    // new Trigger(m_exampleSubsystem::exampleCondition)
@@ -96,6 +97,11 @@ public class RobotContainer {
             () -> m_manipulatorSub.rotateArm(0.25),   // Call on command start
             () -> m_manipulatorSub.rotateArm(0.0),      // Call on command end
             m_manipulatorSub));                              // Required subsystem
+    m_driverController.povDown().whileTrue(
+        new StartEndCommand(
+            () -> m_manipulatorSub.rotateArm(-0.25),
+            () -> m_manipulatorSub.rotateArm(0.0),
+            m_manipulatorSub));
 
      }
 
