@@ -25,7 +25,6 @@ public class Solenoids extends SubsystemBase {
   /* Creates a new Solenoids. */
   Solenoid m_solenoidPCM = new Solenoid(PneumaticsModuleType.CTREPCM, 2);
   public Solenoids() {
-// Creates a new Solenoid object, sets the value to true
     m_solenoidPCM.set(false);
   }
 

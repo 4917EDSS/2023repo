@@ -5,14 +5,24 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.RotateArmCmd;
+import frc.robot.subsystems.ManipulatorSub;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.TiltWithJoystickCmd;
+import frc.robot.commands.DriveForwardCmd;
+import frc.robot.commands.DriveWithJoystickCmd;
+import frc.robot.subsystems.DrivetrainSub;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.ManipulatorSub;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.RotateArmWithJoystickCmd;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -25,6 +35,8 @@ public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();  // TODO: Remove example sub when we have one of our own declared
   private final ManipulatorSub m_manipulatorSub = new ManipulatorSub();
 
+  private final DrivetrainSub m_drivetrainSub = new DrivetrainSub();
+
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandPS4Controller m_driverController = new CommandPS4Controller(OperatorConstants.kDriverControllerPort);
   private final CommandPS4Controller m_operatorController = new CommandPS4Controller(OperatorConstants.kDriverControllerPort);
@@ -33,7 +45,13 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
-    m_manipulatorSub.setDefaultCommand(new TiltWithJoystickCmd(m_operatorController, m_manipulatorSub));
+
+   // m_manipulatorSub.setDefaultCommand(new RotateArmWithJoystickCmd(m_driverController, m_manipulatorSub));
+
+     
+    // Set default command for subsystems
+    m_drivetrainSub.setDefaultCommand(new DriveWithJoystickCmd(m_driverController, m_drivetrainSub));
+
   }
 
   /**
@@ -46,14 +64,48 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    m_driverController.povUp().whileTrue(new PrintCommand("Arrow up pressed!!!!!!!"));
+    m_driverController.povDown().whileTrue(new PrintCommand("Arrow down pressed!!!!!!!"));
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
+
+   // new Trigger(m_exampleSubsystem::exampleCondition)
+        //.onTrue(new ExampleCommand(m_exampleSubsystem));                              // TODO: Remove this example once we have our own code written
+
+
+    // This ties a button to a command
+    //   m_driverController = The controller who's button you want to use
+    //   square() = The button you want to use (others: L1, cross, etc.)
+    //   onTrue = When you want the command to trigger (others: whileTrue, toggleOnFalse, etc.)
+    //   DriveForwardCmd = The command you want to trigger
+    //   (m_drivetrainSub) = The parameters that the command needs
+    m_driverController.square().whileTrue(new DriveForwardCmd(m_drivetrainSub));
+
+    // Instead of creating a command for this simple situation, define the command here
+    m_driverController.circle().whileTrue(
+      new StartEndCommand(
+          () -> m_drivetrainSub.tankDrive(-0.25, 0.25),   // Call on command start
+          () -> m_drivetrainSub.tankDrive(0.0, 0.0),      // Call on command end
+          m_drivetrainSub));                              // Required subsystem
+    
+    
     new Trigger(m_exampleSubsystem::exampleCondition)
         .onTrue(new ExampleCommand(m_exampleSubsystem));                              // TODO: Remove this example once we have our own code written
 
+
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
-    m_driverController.cross().whileTrue(m_exampleSubsystem.exampleMethodCommand());  // TODO: Remove this example once we have our own code written
-  }
+    m_driverController.povUp().whileTrue(
+        new StartEndCommand(
+            () -> m_manipulatorSub.rotateArm(0.25),   // Call on command start
+            () -> m_manipulatorSub.rotateArm(0.0),      // Call on command end
+            m_manipulatorSub));                              // Required subsystem
+    m_driverController.povDown().whileTrue(
+        new StartEndCommand(
+            () -> m_manipulatorSub.rotateArm(-0.25),
+            () -> m_manipulatorSub.rotateArm(0.0),
+            m_manipulatorSub));
+
+     }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
