@@ -9,7 +9,6 @@ import frc.robot.commands.RotateArmCmd;
 import frc.robot.subsystems.ManipulatorSub;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.TiltWithJoystickCmd;
 import frc.robot.commands.DriveForwardCmd;
 import frc.robot.commands.DriveWithJoystickCmd;
 import frc.robot.subsystems.DrivetrainSub;
