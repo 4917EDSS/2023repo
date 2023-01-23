@@ -15,6 +15,8 @@ public class ManipulatorSub extends SubsystemBase {
   private final CANSparkMax m_armMotor = 
       new CANSparkMax(Constants.CanIds.kArmMotor, CANSparkMaxLowLevel.MotorType.kBrushless);
 
+  private final CANSparkMax m_mastMotor = new CANSparkMax((Constants.CanIds.kMastMotor), CANSparkMaxLowLevel.MotorType.kBrushless);
+
   /** Creates a new TemplateSub. */
   public ManipulatorSub() {
   }
@@ -26,5 +28,8 @@ public class ManipulatorSub extends SubsystemBase {
   public void rotateArm(double armPower) {
     m_armMotor.set(armPower);
   }
-  public void tankDrive(double a, double b){}
+  public void moveMast(double mastPower) {
+    m_mastMotor.set(mastPower);
+  }
+  //public void tankDrive(double a, double b){}
 }

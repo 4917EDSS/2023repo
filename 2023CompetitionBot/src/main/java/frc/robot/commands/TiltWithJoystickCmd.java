@@ -31,14 +31,14 @@ public class TiltWithJoystickCmd extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_manipulatorSub.tilt(m_controller.getLeftY());
+    m_manipulatorSub.rotateArm(m_controller.getLeftY());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     // Stop motor
-    m_manipulatorSub.tilt(0);
+    m_manipulatorSub.rotateArm(0);
   }
 
   // Returns true when the command should end.

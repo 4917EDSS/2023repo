@@ -20,11 +20,12 @@ public final class Constants {
   public final static class CanIds {
     // public final static int kLeftDriveMotor = 1;	// This gives the code the network address of the motors
     public final static int kArmMotor = 8;
-    public final static int kTopDriveMotor = 1;	// This gives the code the network address of the motors
-    public final static int kShaftDriveMotor = 2;
+    public final static int kMastMotor = 5;
+    /*public final static int kTopDriveMotor = 1;	// This gives the code the network address of the motors
+    public final static int kShaftDriveMotor = 2;*/
   }
 
-  public static class LimelightConstants {
+  public final static class LimelightConstants {
     public final int NO_VISION = 0;
     public final int LIMELIGHT = 1;
     public final int APRILTAG = 2;
@@ -37,6 +38,10 @@ public final class Constants {
     public final static int kRightDriveMotor1 = 4;
     public final static int kRightDriveMotor2 = 6;
     public final static int kRightDriveMotor3 = 7;
+  }
+
+  public final static class SolenoidIds {
+    public final static int kGripperCylinder = 2;
   }
 
 
