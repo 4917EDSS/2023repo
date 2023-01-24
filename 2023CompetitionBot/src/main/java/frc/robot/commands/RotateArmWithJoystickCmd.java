@@ -8,22 +8,23 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import frc.robot.subsystems.ManipulatorSub;
 
-
 public class RotateArmWithJoystickCmd extends CommandBase {
   private final CommandPS4Controller m_controller;
   private final ManipulatorSub m_manipulatorSub;
+
   /** Creates a new RotateArmWithJoystickCmd. */
   public RotateArmWithJoystickCmd(CommandPS4Controller controller, ManipulatorSub manipulatorSub) {
     m_controller = controller;
     m_manipulatorSub = manipulatorSub;
-    addRequirements(manipulatorSub);
 
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(manipulatorSub);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override

@@ -7,11 +7,13 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class GripperSub extends SubsystemBase {
   /** Creates a new GripperSub. */
-  private final Solenoid m_solenoidPCM = new Solenoid(PneumaticsModuleType.CTREPCM, 2);
-  
+  private final Solenoid m_solenoidPCM = new Solenoid(PneumaticsModuleType.CTREPCM,
+      Constants.SolenoidIds.kGripperCylinder);
+
   public GripperSub() {
     m_solenoidPCM.set(false);
   }
@@ -20,6 +22,7 @@ public class GripperSub extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
   }
+
   public void setValve(boolean isOpen) {
     m_solenoidPCM.set(isOpen);
   }

@@ -5,17 +5,17 @@
 // Read the doc for more info: https://docs.limelightvision.io/en/latest/cs_estimating_distance.html
 
 package frc.robot.subsystems;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class VisionSub extends SubsystemBase {
-  /** Creates a new VisionSub. */
 
   // Variables
+  //TODO: Add m_ to variables
   private final NetworkTable limelight;
   private NetworkTableEntry tx;
   private NetworkTableEntry ty;
@@ -27,6 +27,7 @@ public class VisionSub extends SubsystemBase {
 
   private int pipe = 0;
 
+  /** Creates a new VisionSub. */
   public VisionSub() {
     limelight = NetworkTableInstance.getDefault().getTable("limelight");
     tx = limelight.getEntry("tx");
@@ -55,11 +56,11 @@ public class VisionSub extends SubsystemBase {
   }
 
   public int getVisionMode() { // Gets current vision pipeline number
-    return (int)getpipe.getNumber(0);
+    return (int) getpipe.getNumber(0);
   }
 
   public int getPrimaryID() { // Get primary apriltag ID (-1 means nothing)
-    return (int)tid.getNumber(-1);
+    return (int) tid.getNumber(-1);
   }
 
   public void setPipeline(int line) { // Set the currect pipeline (NO_VISION, LIMELIGHT, or APRILTAG)
@@ -70,12 +71,12 @@ public class VisionSub extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
 
-    SmartDashboard.putNumber("Horizontal Angle",getHorizontalAngle());
-    SmartDashboard.putNumber("Vertical Angle",getVerticalAngle());
-    SmartDashboard.putNumber("Target Area",getTargetArea());
-    SmartDashboard.putBoolean("Target Available",hasTarget());
-    SmartDashboard.putNumber("Apriltag ID",getPrimaryID());
-    pipe = (int)SmartDashboard.getNumber("Pipeline", pipe);
+    SmartDashboard.putNumber("Horizontal Angle", getHorizontalAngle());
+    SmartDashboard.putNumber("Vertical Angle", getVerticalAngle());
+    SmartDashboard.putNumber("Target Area", getTargetArea());
+    SmartDashboard.putBoolean("Target Available", hasTarget());
+    SmartDashboard.putNumber("Apriltag ID", getPrimaryID());
+    pipe = (int) SmartDashboard.getNumber("Pipeline", pipe);
     SmartDashboard.putNumber("Pipeline", pipe);
   }
 }

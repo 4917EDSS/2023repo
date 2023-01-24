@@ -41,6 +41,7 @@ public final class Constants {
   }
 
   public final static class SolenoidIds {
+    public final static int kShifter = 1;
     public final static int kGripperCylinder = 2;
   }
 

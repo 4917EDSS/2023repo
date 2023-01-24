@@ -9,15 +9,15 @@ import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-
 public class ManipulatorSub extends SubsystemBase {
-  
-  private final CANSparkMax m_armMotor = 
-      new CANSparkMax(Constants.CanIds.kArmMotor, CANSparkMaxLowLevel.MotorType.kBrushless);
 
-  private final CANSparkMax m_mastMotor = new CANSparkMax((Constants.CanIds.kMastMotor), CANSparkMaxLowLevel.MotorType.kBrushless);
+  private final CANSparkMax m_armMotor = new CANSparkMax(Constants.CanIds.kArmMotor,
+      CANSparkMaxLowLevel.MotorType.kBrushless);
 
-  /** Creates a new TemplateSub. */
+  private final CANSparkMax m_mastMotor = new CANSparkMax((Constants.CanIds.kMastMotor),
+      CANSparkMaxLowLevel.MotorType.kBrushless);
+
+  /** Creates a new ManipulatorSub. */
   public ManipulatorSub() {
   }
 
@@ -25,11 +25,12 @@ public class ManipulatorSub extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
   }
+
   public void rotateArm(double armPower) {
     m_armMotor.set(armPower);
   }
+
   public void moveMast(double mastPower) {
     m_mastMotor.set(mastPower);
   }
-  //public void tankDrive(double a, double b){}
 }

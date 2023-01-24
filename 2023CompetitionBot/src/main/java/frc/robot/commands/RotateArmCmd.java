@@ -12,6 +12,7 @@ public class RotateArmCmd extends CommandBase {
    private final ManipulatorSub m_manipulatorSub;
 
   /** Creates a new RotateArmCmd. */
+  //TODO: Set power as a parameter
   public RotateArmCmd(ManipulatorSub manipulatorSub) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_manipulatorSub = manipulatorSub;
