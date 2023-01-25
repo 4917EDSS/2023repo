@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
@@ -67,6 +68,21 @@ public class RobotContainer {
   private void configureBindings() {
     m_driverController.povUp().whileTrue(new PrintCommand("Arrow up pressed!!!!!!!"));
     m_driverController.povDown().whileTrue(new PrintCommand("Arrow down pressed!!!!!!!"));
+
+    m_driverController.R1().whileTrue(
+      new InstantCommand(
+          () -> m_drivetrainSub.shift(true), // Call on command start
+          m_drivetrainSub));
+    
+    m_driverController.L1().whileTrue(
+      new InstantCommand(
+          () -> m_drivetrainSub.shift(false), // Call on command start
+          m_drivetrainSub));
+
+    m_driverController.triangle().onTrue(
+      new InstantCommand(
+          () -> m_drivetrainSub.autoShift(), // Call on command start
+          m_drivetrainSub));
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
     // This ties a button to a command

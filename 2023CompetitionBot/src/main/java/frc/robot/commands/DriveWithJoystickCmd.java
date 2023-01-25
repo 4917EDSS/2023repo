@@ -11,7 +11,6 @@ import frc.robot.subsystems.DrivetrainSub;
 public class DriveWithJoystickCmd extends CommandBase {
   private final CommandPS4Controller m_controller;
   private final DrivetrainSub m_drivetrainSub;
-  private double m_maxPower = 0.3; // Make sure power doesn't go too high
 
   /** Creates a new DriveWithJoystickCmd. */
   public DriveWithJoystickCmd(CommandPS4Controller controller, DrivetrainSub drivetrainSub) {
@@ -20,10 +19,6 @@ public class DriveWithJoystickCmd extends CommandBase {
     m_drivetrainSub = drivetrainSub;
 
     addRequirements(drivetrainSub);
-  }
-
-  private double clamp(double a, double min, double max) { // Clamps value between two other values
-    return Math.max(Math.min(a,max),min);
   }
 
   // Called when the command is initially scheduled.

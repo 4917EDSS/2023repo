@@ -57,7 +57,7 @@ public class DrivetrainSub extends SubsystemBase {
     m_drive.tankDrive(leftPower, rightPower);
   }
 
-  public void arcadeDrive(double leftPower, double rightPower){
+  public void arcadeDrive(double leftPower, double rightPower) {
     m_drive.arcadeDrive(leftPower, rightPower);
   }
 
@@ -65,5 +65,20 @@ public class DrivetrainSub extends SubsystemBase {
     // Shifts the shifter solenoid according to the isHigh parameter, true for high,
     // false for low.
     m_shifter.set(isHigh);
+  }
+
+  public void autoShift(){
+    // if(!m_isAutoShift){
+    //   return;
+    // } else {
+      
+    //   double averageWheelSpeed = (getLeftVelocity() + getRightVelocity()) / 2.;
+
+    //   if(fabs(averageWheelSpeed) > kshiftHighSpeed){
+    //     shift(true);
+    //   } else if (fabs(averageWheelSpeed) < kshiftLowSpeed){
+    //     shift(false);
+    //   }
+    // }
   }
 }
