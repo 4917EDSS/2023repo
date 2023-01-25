@@ -102,10 +102,17 @@ public class RobotContainer {
             () -> m_manipulatorSub.rotateArm(0.0),
             m_manipulatorSub));
 
-    m_operatorController.povRight().whileTrue(new StartEndCommand(() -> m_manipulatorSub.moveMast(0.6), () -> m_manipulatorSub.moveMast(0.0), m_manipulatorSub));
-    m_operatorController.povLeft().whileTrue(new StartEndCommand(() -> m_manipulatorSub.moveMast(-0.6), () -> m_manipulatorSub.moveMast(0.0), m_manipulatorSub));
-    m_operatorController.triangle().onTrue(new StartEndCommand(() -> m_gripperSub.setValve(true), () -> m_gripperSub.setValve(true), m_gripperSub));
-    m_operatorController.cross().onTrue(new StartEndCommand(() -> m_gripperSub.setValve(false), () -> m_gripperSub.setValve(false), m_gripperSub));
+    m_operatorController.povRight().whileTrue(
+        new StartEndCommand(() -> m_manipulatorSub.setManipulatorState(ManipulatorSub.ManipulatorMode.MANUAL, 0.6),
+            () -> m_manipulatorSub.setManipulatorState(ManipulatorSub.ManipulatorMode.MANUAL, 0.0), m_manipulatorSub));
+    m_operatorController.povLeft()
+        .whileTrue(new StartEndCommand(
+            () -> m_manipulatorSub.setManipulatorState(ManipulatorSub.ManipulatorMode.MANUAL, -0.6),
+            () -> m_manipulatorSub.setManipulatorState(ManipulatorSub.ManipulatorMode.MANUAL, 0.0), m_manipulatorSub));
+    m_operatorController.triangle().onTrue(
+        new StartEndCommand(() -> m_gripperSub.setValve(true), () -> m_gripperSub.setValve(true), m_gripperSub));
+    m_operatorController.cross().onTrue(
+        new StartEndCommand(() -> m_gripperSub.setValve(false), () -> m_gripperSub.setValve(false), m_gripperSub));
 
   }
 
