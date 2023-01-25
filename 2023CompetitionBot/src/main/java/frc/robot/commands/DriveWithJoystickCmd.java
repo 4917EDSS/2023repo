@@ -33,13 +33,13 @@ public class DriveWithJoystickCmd extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drivetrainSub.tankDrive(clamp((-m_controller.getLeftY()+ m_controller.getRightX()) * m_maxPower,-m_maxPower,m_maxPower), clamp((-m_controller.getLeftY() - m_controller.getRightX()) * 0.3, -m_maxPower,m_maxPower)); // Driving is clamped to power
+    m_drivetrainSub.arcadeDrive(m_controller.getLeftY(), m_controller.getRightX());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    //m_drivetrainSub.tankDrive(0.0, 0.0); Dont end or it will break the motors
+    // m_drivetrainSub.tankDrive(0.0, 0.0); // Dont end or it will break the motors
   }
 
   // Returns true when the command should end.

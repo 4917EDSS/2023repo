@@ -10,6 +10,8 @@ import frc.robot.Constants;
 
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DrivetrainSub extends SubsystemBase {
@@ -26,12 +28,23 @@ public class DrivetrainSub extends SubsystemBase {
   private final CANSparkMax m_rightMotor3 = new CANSparkMax(Constants.DrivetrainCanIds.kRightDriveMotor3,
       CANSparkMaxLowLevel.MotorType.kBrushless);
 
-  private final Solenoid m_shifter = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.SolenoidIds.kShifter);
+  private final MotorControllerGroup m_leftMotors = new MotorControllerGroup(m_leftMotor1, m_leftMotor2, m_leftMotor3);
+  private final MotorControllerGroup m_rightMotors = new MotorControllerGroup(m_rightMotor1, m_rightMotor2,
+      m_rightMotor3);
+  private final DifferentialDrive m_drive = new DifferentialDrive(m_leftMotors, m_rightMotors);
 
-  // TODO: Invert left motors
+  private final Solenoid m_shifter = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.SolenoidIds.kShifter);
 
   /** Creates a new DrivetrainSub. */
   public DrivetrainSub() {
+
+    m_leftMotor1.setInverted(false);
+    m_leftMotor2.setInverted(false);
+    m_leftMotor3.setInverted(false);
+    m_rightMotor1.setInverted(true);
+    m_rightMotor2.setInverted(true);
+    m_rightMotor3.setInverted(true);
+
     m_shifter.set(false);
   }
 
@@ -41,13 +54,11 @@ public class DrivetrainSub extends SubsystemBase {
   }
 
   public void tankDrive(double leftPower, double rightPower) {
-  //TODO: remove negatives when motors are inverted
-    m_leftMotor1.set(-leftPower);
-    m_leftMotor2.set(-leftPower);
-    m_leftMotor3.set(-leftPower);
-    m_rightMotor1.set(rightPower);
-    m_rightMotor2.set(rightPower);
-    m_rightMotor3.set(rightPower);
+    m_drive.tankDrive(leftPower, rightPower);
+  }
+
+  public void arcadeDrive(double leftPower, double rightPower){
+    m_drive.arcadeDrive(leftPower, rightPower);
   }
 
   public void shift(boolean isHigh) {
