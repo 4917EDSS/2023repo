@@ -26,9 +26,9 @@ public final class Constants {
   }
 
   public final static class LimelightConstants {
-    public final int NO_VISION = 0;
-    public final int LIMELIGHT = 1;
-    public final int APRILTAG = 2;
+    public final int kNoVision = 0;
+    public final int kLimelimelight = 1;
+    public final int kApriltag = 2;
   }
 
   public final static class DrivetrainCanIds {
