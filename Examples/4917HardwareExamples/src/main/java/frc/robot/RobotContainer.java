@@ -52,6 +52,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    
     m_driverController.cross().onTrue(new PrintCommand("Cross pressed"));
 
     // Instead of creating a command for this simple situation, define the command here

@@ -12,8 +12,6 @@ https://github.wpilib.org/allwpilib/docs/release/java/edu/wpi/first/wpilibj/Sole
 ---Hardware info---
 
 Applies or vents pressure from a single output port
-
-
  */
 
 package frc.robot.subsystems;
@@ -25,9 +23,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Solenoids extends SubsystemBase {
   /* Creates a new Solenoids. */
-  Solenoid m_solenoidPCM = new Solenoid(PneumaticsModuleType.CTREPCM, 1);
+  Solenoid m_solenoidPCM = new Solenoid(PneumaticsModuleType.CTREPCM, 2);
   public Solenoids() {
-// Creates a new Solenoid object, sets the value to true
     m_solenoidPCM.set(false);
   }
 
