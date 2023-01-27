@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
+//package frc.robot.commands;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
@@ -28,6 +29,7 @@ public class ManipulatorSub extends SubsystemBase {
   }
   /** Creates a new ManipulatorSub. */
   public ManipulatorSub() {
+    m_mastMotor.setInverted(true);
   }
 
   public void setManipulatorState(ManipulatorMode mode, double mastPower){
@@ -53,8 +55,16 @@ public class ManipulatorSub extends SubsystemBase {
   }
 
   private double getMastEncoder() {
-    return m_mastMotor.getEncoder().getPosition() * -1;
+    return m_mastMotor.getEncoder().getPosition();
   }
+  public void setGripperToPosition(double MastEncoderPosition, double armEncoderPosition){
+double x = getMastEncoder();
+while( x != MastEncoderPosition){
+  updateManipulatorStateMachine();
+}
+
+  }
+
 
   private void updateManipulatorStateMachine(){
     if (getMastEncoder() >= kMastEncoderMax && m_mastPower > 0){
