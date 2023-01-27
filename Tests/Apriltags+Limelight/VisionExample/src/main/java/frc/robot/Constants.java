@@ -16,4 +16,10 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
+
+  public static class LimelightConstants {
+    public final int NO_VISION = 0;
+    public final int LIMELIGHT = 1;
+    public final int APRILTAG = 2;
+  }
 }
