@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class CylinderCmd extends CommandBase {
   /** Creates a new Cylinder. */
-  Solenoid m_solenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.PneumaticIds.solenoidId);
+  Solenoid m_solenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.SolenoidIds.kGripperCylinder);
   public CylinderCmd() {
     // Use addRequirements() here to declare subsystem dependencies.
     m_solenoid.set(false);
