@@ -13,8 +13,12 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DrivetrainSub extends SubsystemBase {
+  private final double kEncoderRotationsToMeterLowGear = 5.0/204.5; 
+  private final double kEncoderRotationsToMeterHighGear = 5.0/129.5;
+  
   private final CANSparkMax m_leftMotor1 = new CANSparkMax(Constants.DrivetrainCanIds.kLeftDriveMotor1,
       CANSparkMaxLowLevel.MotorType.kBrushless);
   private final CANSparkMax m_leftMotor2 = new CANSparkMax(Constants.DrivetrainCanIds.kLeftDriveMotor2,
@@ -46,11 +50,30 @@ public class DrivetrainSub extends SubsystemBase {
     m_rightMotor3.setInverted(true);
 
     m_shifter.set(false);
+
+    zeroDrivetrainEncoders();
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    updateSmarterDashboard();
+  }
+
+  private void zeroDrivetrainEncoders(){
+    m_leftMotor1.getEncoder().setPosition(0);
+  }
+
+  private double getLeftMotorEncoder() {
+    return m_leftMotor1.getEncoder().getPosition();
+  }
+
+  private double getEncoderRotationsToMeterFactor() {
+    return (m_shifter.get()) ? kEncoderRotationsToMeterHighGear : kEncoderRotationsToMeterLowGear;
+}
+
+  public void updateSmarterDashboard(){
+    SmartDashboard.putNumber("left motor1 encoder", getLeftMotorEncoder());
   }
 
   public void tankDrive(double leftPower, double rightPower) {
@@ -72,7 +95,6 @@ public class DrivetrainSub extends SubsystemBase {
     // if(!m_isAutoShift){
     //   return;
     // } else {
-      
     //   double averageWheelSpeed = (getLeftVelocity() + getRightVelocity()) / 2.;
 
     //   if(fabs(averageWheelSpeed) > kshiftHighSpeed){
@@ -80,6 +102,5 @@ public class DrivetrainSub extends SubsystemBase {
     //   } else if (fabs(averageWheelSpeed) < kshiftLowSpeed){
     //     shift(false);
     //   }
-    // }
-  }
+   }   
 }
