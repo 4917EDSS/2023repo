@@ -5,11 +5,16 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.DrivetrainSub;
+import frc.robot.subsystems.GripperSub;
+import frc.robot.subsystems.ManipulatorSub;
 
 public class KillSwitchCmd extends CommandBase {
+
   /** Creates a new KillSwitchCmd. */
-  public KillSwitchCmd() {
+  public KillSwitchCmd(ManipulatorSub manipulatorSub, GripperSub gripperSub, DrivetrainSub drivetrainSub) {
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(manipulatorSub, gripperSub, drivetrainSub);
   }
 
   // Called when the command is initially scheduled.
