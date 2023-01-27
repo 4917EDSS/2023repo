@@ -32,7 +32,7 @@ public class RobotContainer {
   private final GripperSub m_gripperSub = new GripperSub();
   // TODO: Add vision subsystem when camera connected
 
-  // Replace with CommandPS4Controller or CommandJoystick if needed
+  // Define controllers
   private final CommandPS4Controller m_driverController = new CommandPS4Controller(
       OperatorConstants.kDriverControllerPort);
   private final CommandPS4Controller m_operatorController = new CommandPS4Controller(
@@ -48,7 +48,7 @@ public class RobotContainer {
     // Set default command for subsystems
     m_drivetrainSub.setDefaultCommand(new DriveWithJoystickCmd(m_driverController, m_drivetrainSub));
     // m_manipulatorSub.setDefaultCommand(new
-    // RotateArmWithJoystickCmd(m_driverController, m_manipulatorSub));
+    //     RotateArmWithJoystickCmd(m_driverController, m_manipulatorSub));
   }
 
   /**
@@ -66,6 +66,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    // Driver controller bindings
     m_driverController.povUp().whileTrue(new PrintCommand("Arrow up pressed!!!!!!!"));
     m_driverController.povDown().whileTrue(new PrintCommand("Arrow down pressed!!!!!!!"));
 
@@ -83,35 +84,14 @@ public class RobotContainer {
       new InstantCommand(
           () -> m_drivetrainSub.autoShift(), // Call on command start
           m_drivetrainSub));
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
-    // This ties a button to a command
-    // m_driverController = The controller who's button you want to use
-    // square() = The button you want to use (others: L1, cross, etc.)
-    // onTrue = When you want the command to trigger (others: whileTrue,
-    // toggleOnFalse, etc.)
-    // DriveForwardCmd = The command you want to trigger
-    // (m_drivetrainSub) = The parameters that the command needs
-    // m_driverController.square().whileTrue(new DriveForwardCmd(m_drivetrainSub));
-
-    // Instead of creating a command for this simple situation, define the command
-    // here
-    /*
-     * m_driverController.circle().whileTrue( // This doens't help
-     * new StartEndCommand(
-     * () -> m_drivetrainSub.tankDrive(-0.25, 0.25), // Call on command start
-     * () -> m_drivetrainSub.tankDrive(0.0, 0.0), // Call on command end
-     * m_drivetrainSub)); // Required subsystem
-     */
-
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is
-    // pressed,
-    // cancelling on release.
+    // Operator controller bindings
     m_operatorController.povUp().whileTrue(
         new StartEndCommand(
             () -> m_manipulatorSub.rotateArm(0.3), // Call on command start
             () -> m_manipulatorSub.rotateArm(0.0), // Call on command end
             m_manipulatorSub)); // Required subsystem
+
     m_operatorController.povDown().whileTrue(
         new StartEndCommand(
             () -> m_manipulatorSub.rotateArm(-0.3),
@@ -119,16 +99,26 @@ public class RobotContainer {
             m_manipulatorSub));
 
     m_operatorController.povRight().whileTrue(
-        new StartEndCommand(() -> m_manipulatorSub.setManipulatorState(ManipulatorSub.ManipulatorMode.MANUAL, 0.6),
+        new StartEndCommand(
+            () -> m_manipulatorSub.setManipulatorState(ManipulatorSub.ManipulatorMode.MANUAL, 0.6),
             () -> m_manipulatorSub.setManipulatorState(ManipulatorSub.ManipulatorMode.MANUAL, 0.0), m_manipulatorSub));
+
     m_operatorController.povLeft()
         .whileTrue(new StartEndCommand(
             () -> m_manipulatorSub.setManipulatorState(ManipulatorSub.ManipulatorMode.MANUAL, -0.6),
             () -> m_manipulatorSub.setManipulatorState(ManipulatorSub.ManipulatorMode.MANUAL, 0.0), m_manipulatorSub));
+
     m_operatorController.triangle().onTrue(
-        new StartEndCommand(() -> m_gripperSub.setValve(true), () -> m_gripperSub.setValve(true), m_gripperSub));
+        new StartEndCommand(
+            () -> m_gripperSub.setValve(true), 
+            () -> m_gripperSub.setValve(true), 
+            m_gripperSub));
+            
     m_operatorController.cross().onTrue(
-        new StartEndCommand(() -> m_gripperSub.setValve(false), () -> m_gripperSub.setValve(false), m_gripperSub));
+        new StartEndCommand(
+            () -> m_gripperSub.setValve(false), 
+            () -> m_gripperSub.setValve(false), 
+            m_gripperSub));
 
   }
 

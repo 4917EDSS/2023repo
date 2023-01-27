@@ -67,6 +67,7 @@ public class DrivetrainSub extends SubsystemBase {
     m_shifter.set(isHigh);
   }
 
+  // TODO #6: Finish implementing auto-shift.  Then enable it in DriveWithJoystick
   public void autoShift(){
     // if(!m_isAutoShift){
     //   return;
