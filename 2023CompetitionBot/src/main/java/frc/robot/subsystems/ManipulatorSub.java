@@ -28,6 +28,7 @@ public class ManipulatorSub extends SubsystemBase {
   }
   /** Creates a new ManipulatorSub. */
   public ManipulatorSub() {
+    m_mastMotor.setInverted(true);
   }
 
   public void setManipulatorState(ManipulatorMode mode, double mastPower){
@@ -53,7 +54,7 @@ public class ManipulatorSub extends SubsystemBase {
   }
 
   private double getMastEncoder() {
-    return m_mastMotor.getEncoder().getPosition() * -1;
+    return m_mastMotor.getEncoder().getPosition();
   }
 
   private void updateManipulatorStateMachine(){
