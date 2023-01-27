@@ -5,6 +5,8 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.JoystickPrintCmd;
+import frc.robot.subsystems.JoystickSub;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
@@ -18,6 +20,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
+  private final JoystickSub m_joystickSub = new JoystickSub();
+
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandPS4Controller m_driverController = 
     new CommandPS4Controller(OperatorConstants.kDriverControllerPort);
@@ -26,6 +30,8 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+
+     m_joystickSub.setDefaultCommand(new JoystickPrintCmd(m_driverController, m_joystickSub));
   }
 
   /**
@@ -37,8 +43,8 @@ public class RobotContainer {
    * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
-  private void configureBindings() {
-
+  private void configureBindings() 
+  {
     m_driverController.square().onTrue(new PrintCommand("Square Pressed"));
     m_driverController.circle().onTrue(new PrintCommand("Circle Pressed"));
     m_driverController.triangle().onTrue(new PrintCommand("Triangle Pressed"));
@@ -61,7 +67,6 @@ public class RobotContainer {
     m_driverController.L2().onTrue(new PrintCommand("Left Trigger Pressed"));
     m_driverController.R1().onTrue(new PrintCommand("Right Bumper Pressed"));
     m_driverController.R2().onTrue(new PrintCommand("Right Trigger Pressed"));
-
   }
 
   /**
