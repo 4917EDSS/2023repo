@@ -5,21 +5,16 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
-import frc.robot.subsystems.JoystickSub;
+import frc.robot.subsystems.DrivetrainSub;
+import frc.robot.subsystems.GripperSub;
+import frc.robot.subsystems.ManipulatorSub;
 
+public class KillSwitchCmd extends CommandBase {
 
-public class JoystickPrintCmd extends CommandBase {
-
-  int printTimer = 0;
-
-  private final CommandPS4Controller m_controller;
-
-  /** Creates a new JoystickPrintCmd. */
-  public JoystickPrintCmd(CommandPS4Controller controller, JoystickSub joystickSub) {
-    m_controller = controller;
+  /** Creates a new KillSwitchCmd. */
+  public KillSwitchCmd(ManipulatorSub manipulatorSub, GripperSub gripperSub, DrivetrainSub drivetrainSub) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(joystickSub);
+    addRequirements(manipulatorSub, gripperSub, drivetrainSub);
   }
 
   // Called when the command is initially scheduled.
@@ -28,21 +23,7 @@ public class JoystickPrintCmd extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-
-    printTimer += 1;
-
-    if(printTimer == 10)
-    {
-      if(m_controller.getLeftX() != 0)
-      {
-        System.out.print("LX ");
-        System.out.println(m_controller.getLeftX());
-      }
-
-      printTimer = 0;
-    }
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override

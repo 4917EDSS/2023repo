@@ -65,6 +65,7 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
+
   private void configureBindings() {
     // Driver controller bindings
     m_driverController.povUp().whileTrue(new PrintCommand("Arrow up pressed!!!!!!!"));
@@ -101,12 +102,14 @@ public class RobotContainer {
     m_operatorController.povRight().whileTrue(
         new StartEndCommand(
             () -> m_manipulatorSub.setManipulatorState(ManipulatorSub.ManipulatorMode.MANUAL, 0.6),
-            () -> m_manipulatorSub.setManipulatorState(ManipulatorSub.ManipulatorMode.MANUAL, 0.0), m_manipulatorSub));
+            () -> m_manipulatorSub.setManipulatorState(ManipulatorSub.ManipulatorMode.MANUAL, 0.0), 
+            m_manipulatorSub));
 
-    m_operatorController.povLeft()
-        .whileTrue(new StartEndCommand(
+    m_operatorController.povLeft().whileTrue(
+      new StartEndCommand(
             () -> m_manipulatorSub.setManipulatorState(ManipulatorSub.ManipulatorMode.MANUAL, -0.6),
-            () -> m_manipulatorSub.setManipulatorState(ManipulatorSub.ManipulatorMode.MANUAL, 0.0), m_manipulatorSub));
+            () -> m_manipulatorSub.setManipulatorState(ManipulatorSub.ManipulatorMode.MANUAL, 0.0), 
+            m_manipulatorSub));
 
     m_operatorController.triangle().onTrue(
         new StartEndCommand(
@@ -115,10 +118,15 @@ public class RobotContainer {
             m_gripperSub));
             
     m_operatorController.cross().onTrue(
-        new StartEndCommand(
-            () -> m_gripperSub.setValve(false), 
+        new InstantCommand(
             () -> m_gripperSub.setValve(false), 
             m_gripperSub));
+
+    m_operatorController.circle().onTrue(
+        new InstantCommand(
+            () -> m_manipulatorSub.setGripperToPosition(1.0,1.0), 
+            m_gripperSub));
+  
 
   }
 
@@ -127,7 +135,8 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  //public Command getAutonomousCommand() {
+  public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     //return new PrintCommand("No auto yet");
   }
+}
