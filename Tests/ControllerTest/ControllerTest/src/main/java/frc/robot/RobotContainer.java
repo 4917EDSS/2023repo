@@ -9,6 +9,7 @@ import frc.robot.commands.JoystickPrintCmd;
 import frc.robot.subsystems.JoystickSub;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
+import frc.robot.commands.JoystickPrintCmd;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 
 /**
@@ -67,13 +68,23 @@ public class RobotContainer {
     m_driverController.L2().onTrue(new PrintCommand("Left Trigger Pressed"));
     m_driverController.R1().onTrue(new PrintCommand("Right Bumper Pressed"));
     m_driverController.R2().onTrue(new PrintCommand("Right Trigger Pressed"));
+
+    m_driverController.axisGreaterThan(0, 0.1).onTrue(new PrintCommand("Axis 0 greater than 0"));
+    m_driverController.axisGreaterThan(1, 0.1).onTrue(new PrintCommand("Axis 1 greater than 0"));
+    m_driverController.axisGreaterThan(2, 0.1).onTrue(new PrintCommand("Axis 2 greater than 0"));
+    m_driverController.axisGreaterThan(3, 0.1).onTrue(new PrintCommand("Axis 3 greater than 0"));
+
+    m_driverController.axisLessThan(0, 0.1).onTrue(new PrintCommand("Axis 0 less than 0"));
+    m_driverController.axisLessThan(1, 0.1).onTrue(new PrintCommand("Axis 1 less than 0"));
+    m_driverController.axisLessThan(2, 0.1).onTrue(new PrintCommand("Axis 2 less than 0"));
+    m_driverController.axisLessThan(3, 0.1).onTrue(new PrintCommand("Axis 3 less than 0"));
   }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
-   */
+   **/
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     return new PrintCommand("No auto coded yet");
