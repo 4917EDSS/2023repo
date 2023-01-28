@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.DriveWithJoystickCmd;
+import frc.robot.commands.MoveMastCmd;
 import frc.robot.subsystems.DrivetrainSub;
 import frc.robot.subsystems.GripperSub;
 import frc.robot.subsystems.ManipulatorSub;
@@ -52,6 +53,9 @@ public class RobotContainer {
     m_drivetrainSub.setDefaultCommand(new DriveWithJoystickCmd(m_driverController, m_drivetrainSub));
     // m_manipulatorSub.setDefaultCommand(new
     //     RotateArmWithJoystickCmd(m_driverController, m_manipulatorSub));
+
+    m_manipulatorSub.setDefaultCommand(new MoveMastCmd(m_driverController, m_manipulatorSub));
+    m_manipulatorSub.resetEncoders();
   }
 
   /**
@@ -71,10 +75,15 @@ public class RobotContainer {
 
   private void configureBindings() {
     // Driver controller bindings
-    m_driverController.povUp().whileTrue(new PrintCommand("Arrow up pressed!!!!!!!"));
-    m_driverController.povDown().whileTrue(new PrintCommand("Arrow down pressed!!!!!!!"));
+    //m_driverController.povUp().whileTrue(new PrintCommand("Arrow up pressed!!!!!!!"));
+    //m_driverController.povDown().whileTrue(new PrintCommand("Arrow down pressed!!!!!!!"));
 
-    
+    /* 
+    m_driverController.povLeft().whileTrue(new StartEndCommand( () -> m_manipulatorSub.setMastPosition(0.0),() -> m_manipulatorSub.moveMast(0.0),m_manipulatorSub));
+    m_driverController.povUp().whileTrue(new StartEndCommand( () -> m_manipulatorSub.setMastPosition(30.0),() -> m_manipulatorSub.moveMast(0.0),m_manipulatorSub));
+    m_driverController.povRight().whileTrue(new StartEndCommand( () -> m_manipulatorSub.setMastPosition(60.0),() -> m_manipulatorSub.moveMast(0.0),m_manipulatorSub));*/
+
+
     m_driverController.R1().whileTrue(
       new InstantCommand(
           () -> m_drivetrainSub.shift(true), // Call on command start
@@ -142,5 +151,9 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     return new PrintCommand("No auto yet");
+  }
+
+  public void resetEncoders() {
+    m_manipulatorSub.resetEncoders();
   }
 }
