@@ -12,9 +12,12 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.DriveWithJoystickCmd;
+import frc.robot.commands.MoveMastCmd;
 import frc.robot.subsystems.DrivetrainSub;
 import frc.robot.subsystems.GripperSub;
 import frc.robot.subsystems.ManipulatorSub;
+import frc.robot.subsystems.VisionSub;
+import frc.robot.subsystems.ManipulatorSub.ManipulatorMode;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -27,9 +30,11 @@ import frc.robot.subsystems.ManipulatorSub;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
+  
   private final ManipulatorSub m_manipulatorSub = new ManipulatorSub();
   private final DrivetrainSub m_drivetrainSub = new DrivetrainSub();
   private final GripperSub m_gripperSub = new GripperSub();
+  //private final VisionSub m_visionSub = new VisionSub(); // Uncomment when limelight connected
   // TODO: Add vision subsystem when camera connected
 
   // Define controllers
@@ -49,6 +54,9 @@ public class RobotContainer {
     m_drivetrainSub.setDefaultCommand(new DriveWithJoystickCmd(m_driverController, m_drivetrainSub));
     // m_manipulatorSub.setDefaultCommand(new
     //     RotateArmWithJoystickCmd(m_driverController, m_manipulatorSub));
+
+    m_manipulatorSub.setDefaultCommand(new MoveMastCmd(m_driverController, m_manipulatorSub));
+    m_manipulatorSub.resetEncoders();
   }
 
   /**
@@ -65,11 +73,16 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
-
   private void configureBindings() {
     // Driver controller bindings
-    m_driverController.povUp().whileTrue(new PrintCommand("Arrow up pressed!!!!!!!"));
-    m_driverController.povDown().whileTrue(new PrintCommand("Arrow down pressed!!!!!!!"));
+    //m_driverController.povUp().whileTrue(new PrintCommand("Arrow up pressed!!!!!!!"));
+    //m_driverController.povDown().whileTrue(new PrintCommand("Arrow down pressed!!!!!!!"));
+
+    /* 
+    m_driverController.povLeft().whileTrue(new StartEndCommand( () -> m_manipulatorSub.setMastPosition(0.0),() -> m_manipulatorSub.moveMast(0.0),m_manipulatorSub));
+    m_driverController.povUp().whileTrue(new StartEndCommand( () -> m_manipulatorSub.setMastPosition(30.0),() -> m_manipulatorSub.moveMast(0.0),m_manipulatorSub));
+    m_driverController.povRight().whileTrue(new StartEndCommand( () -> m_manipulatorSub.setMastPosition(60.0),() -> m_manipulatorSub.moveMast(0.0),m_manipulatorSub));*/
+
 
     m_driverController.R1().whileTrue(
       new InstantCommand(
@@ -124,8 +137,9 @@ public class RobotContainer {
 
     m_operatorController.circle().onTrue(
         new InstantCommand(
-            () -> m_manipulatorSub.setGripperToPosition(1.0,1.0), 
-            m_gripperSub));
+            () -> m_manipulatorSub.setMastMode(ManipulatorMode.MANUAL,42.9757385253),
+              ///42.9757385253,-76.8597106933), 
+            m_manipulatorSub)); 
   
 
   }
@@ -138,5 +152,9 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     return new PrintCommand("No auto yet");
+  }
+
+  public void resetEncoders() {
+    m_manipulatorSub.resetEncoders();
   }
 }
