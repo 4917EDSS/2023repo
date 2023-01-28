@@ -28,7 +28,7 @@ public class ManipulatorSub extends SubsystemBase {
   private static final double kArmVelocityMax = 1.0; // TODO fix me
   private static final double kArmVelocityMin = -1.0; // TODO fix me
 
-  private final double kArmPower = 0.3;
+  private final double kArmPower = 0.6;
   private final double kMastPower = 0.3;
   private final double kMaxMastTicks = 0.0; // 0 - 60.0 30 is straight up
 
@@ -60,6 +60,8 @@ public class ManipulatorSub extends SubsystemBase {
   private double m_mastCurrentPosition = 0.0;
   private double m_mastCurrentVelocity = 0.0;
   private ManipulatorMode m_mastCurrentMode = ManipulatorMode.DISABLED;
+  private double m_mastTargettPosition = 0.0;
+  private double m_mastTargetVelocity = 0.0;
 
   private double m_armCurrentAngle = 0.0;
   private double m_armCurrentVelocity = 0.0;
@@ -67,15 +69,25 @@ public class ManipulatorSub extends SubsystemBase {
 
   /** Creates a new ManipulatorSub. */
   public ManipulatorSub() {
+    zeroManipulator();
+
     m_mastMotor.getEncoder().setPosition(0.0); // Reset the encoders on startup
     m_armMotor.getEncoder().setPosition(0.0);
     m_mastMotor.setInverted(true);
+
+    SmartDashboard.putNumber("Mast kP", 0.1);
+    SmartDashboard.putNumber("Mast kD", 0.0);
   }
 
   public void setManipulatorState(ManipulatorMode mode, double mastPower) {
     // TODO others arent implented yet
     assert mode == ManipulatorMode.MANUAL;
     m_mastPower = mastPower;
+  }
+
+  private void zeroManipulator() {
+    m_armMotor.getEncoder().setPosition(0);
+    m_mastMotor.getEncoder().setPosition(0);
   }
 
   @Override
@@ -85,7 +97,13 @@ public class ManipulatorSub extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
+  public void resetEncoders() {
+    m_mastMotor.getEncoder().setPosition(0.0); // Reset the encoders on startup
+    m_armMotor.getEncoder().setPosition(0.0);
+  }
+
   private void updateManipulatorStateMachine() {
+    //IF MODE MANUAL
     if (getMastPosition() >= kMastPositionMax && m_mastPower > 0) {
       moveMast(0);
     } else if (getMastPosition() <= kMastPositionMin && m_mastPower < 0) {
@@ -93,29 +111,56 @@ public class ManipulatorSub extends SubsystemBase {
     } else {
       moveMast(m_mastPower);
     }
+
+    //IF MODE AUTO -----
+    // Is there a new target?
+    //   If yes, then update all state machine variables with new ones
+    //
+    // Switch statement for mechanism state (IDLE, HOLDING, MOVING, INTERRUPTED)
+    // case IDLE
+    //  leave everything off
+    // case HOLDING
+    //  setHoldPower
+    // case MOVING
+    //  Am I interrupted?
+    //    If yes, go to INTERRUPTED state
+    //  Am I at target position?
+    //    If yes, go to HOLDING state
+    //  setMastPosition
+    // case INTERRUPTED
+    //  Am I still interrupted?
+    //    If not, go to MOVING state
+    //  setHoldPower
+    
   }
 
   // ------------------------ GRIPPER -------------------//
 
   // Set mast power to 'power'
   public void setGripperToPosition(double MastEncoderPosition, double armEncoderPosition) {
-    double x = getMastPosition();
-    while (x != MastEncoderPosition) {
-      updateManipulatorStateMachine();
-    }
+    // TODO later during the lifecycle
+    // double x = getMastPosition();
+    // double y = getArmPosition();
+    // while (x != MastEncoderPosition)
+    // while (y != getArmPosition) {
+    // x = getMastPosition();
+    // y = getArmPosition();
+
+    // updateManipulatorStateMachine();
+    // }
 
   }
 
   // ------------------------- MAST ----------------------//
 
-  public boolean isMastWithinLimits(){
+  public boolean isMastWithinLimits() {
     boolean withinPositionLimits = false;
     boolean withinVelocityLimits = false;
 
-    if((getMastPosition() > kMastPositionMin) && (getMastPosition() < kMastPositionMax)){
+    if ((getMastPosition() > kMastPositionMin) && (getMastPosition() < kMastPositionMax)) {
       withinPositionLimits = true;
     }
-    if((getMastVelocity() > kMastVelocityMin) && (getMastVelocity() < kMastVelocityMax)){
+    if ((getMastVelocity() > kMastVelocityMin) && (getMastVelocity() < kMastVelocityMax)) {
       withinVelocityLimits = true;
     }
 
@@ -136,29 +181,37 @@ public class ManipulatorSub extends SubsystemBase {
 
   public void setMastPosition(double encoderTicks) { // Set tick position of mast. 0 - Full back, 30 - Straight up, 60
     // full forwards
-    double currentPos = getMastPosition() / kMaxMastTicks * 2.0 - 1.0; // Convert from 0-1 to -1-1
-    double targetPos = MathUtil.clamp(encoderTicks, 0.0, kMaxMastTicks) / kMaxMastTicks * 2.0 - 1.0;
+    double currentPos = getMastPosition();// / kMaxMastTicks * 2.0 - 1.0; // Convert from 0-1 to -1-1
+    double targetPos = encoderTicks;// MathUtil.clamp(encoderTicks, 0.0, kMaxMastTicks) / kMaxMastTicks * 2.0 - 1.0;
     double power = MathUtil.clamp(kMastPID.calculate(currentPos, targetPos), -kMastPower, kMastPower);
+
+    moveMast(power);
   }
 
+  public void setMastMode(ManipulatorMode mode, double encoderTicks) {
+    System.out.println("mode " + mode + " encoder ticks " + encoderTicks);
+    if (mode == ManipulatorMode.MANUAL) {
+      m_mastTargettPosition = encoderTicks;
+    }
+
+  }
   // ------------------------- ARM -----------------------//
 
   // TODO make this private when moved into state machine
-  
-  public boolean isArmWithinLimits(){
+
+  public boolean isArmWithinLimits() {
     boolean withinAngleLimits = false;
     boolean withinVelocityLimits = false;
 
-    if((getArmAngle() > kArmAngleMin) && (getArmAngle() < kArmAngleMax)){
+    if ((getArmAngle() > kArmAngleMin) && (getArmAngle() < kArmAngleMax)) {
       withinAngleLimits = true;
     }
-    if((getArmVelocity() > kArmVelocityMin) && (getArmVelocity() < kArmVelocityMax)){
+    if ((getArmVelocity() > kArmVelocityMin) && (getArmVelocity() < kArmVelocityMax)) {
       withinVelocityLimits = true;
     }
 
     return (withinAngleLimits && withinVelocityLimits);
   }
-
 
   public void rotateArm(double armPower) {
     m_armMotor.set(armPower);
@@ -173,26 +226,19 @@ public class ManipulatorSub extends SubsystemBase {
   }
 
   public void setArmAngle(double angle) { // 160 degrees of rotation (-80 to 80)
-    double currentAngle = getArmAngle() / kArmAngleMax; // -80, 80 to -1, 1 range
-    double targetAngle = MathUtil.clamp(angle, kArmAngleMin, kArmAngleMax) / kArmAngleMax;
+    double currentAngle = getArmAngle();// / kArmAngleMax; // -80, 80 to -1, 1 range
+    double targetAngle = angle;//MathUtil.clamp(angle, kArmAngleMin, kArmAngleMax) / kArmAngleMax;
     double power = MathUtil.clamp(kArmPID.calculate(currentAngle, targetAngle), -kArmPower, kArmPower);
 
     // Set arm power to 'power'
+    rotateArm(power);
   }
-
-
-
-
-
-
-
-
 
   public boolean isWithinLimits() {
     return (isMastWithinLimits() && isArmWithinLimits());
   }
 
-  public void updateCurrentState(){
+  public void updateCurrentState() {
     System.out.println("SetManupulatorPositionCmd #Update current state");
 
     m_mastCurrentPosition = getMastPosition();
@@ -201,7 +247,6 @@ public class ManipulatorSub extends SubsystemBase {
     m_armCurrentAngle = getArmAngle();
     m_armCurrentVelocity = getArmVelocity();
   }
-
 
   // -------------------------- DASHBOARD ----------------------//
 

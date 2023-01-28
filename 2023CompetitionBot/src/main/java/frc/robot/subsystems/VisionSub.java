@@ -10,7 +10,11 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.json.simple.*;
+import org.json.simple.parser.*;
+import frc.robot.Constants;
 
 public class VisionSub extends SubsystemBase {
 
@@ -23,8 +27,11 @@ public class VisionSub extends SubsystemBase {
   private NetworkTableEntry m_tid;
   private NetworkTableEntry m_getpipe;
   private NetworkTableEntry m_pipeline; // Use constants for pipeline
+  private NetworkTableEntry m_json;
 
   private int m_pipe = 0;
+
+  private final double kSlope = 0.7667; // Conversion from robot space to meters
 
   /** Creates a new VisionSub. */
   public VisionSub() {
@@ -36,6 +43,7 @@ public class VisionSub extends SubsystemBase {
     m_tid = m_limelight.getEntry("tid");
     m_getpipe = m_limelight.getEntry("getpipe");
     m_pipeline = m_limelight.getEntry("pipeline");
+    m_json = m_limelight.getEntry("json");
   }
 
   public double getHorizontalAngle() { // Horizontal offset between -27 to 27 degrees or -29.8 to 29.8 degrees
@@ -55,15 +63,46 @@ public class VisionSub extends SubsystemBase {
   }
 
   public int getVisionMode() { // Gets current vision pipeline number
-    return (int)m_getpipe.getNumber(0);
+    Long val = m_tid.getInteger(0);
+    return val.intValue();
   }
 
   public int getPrimaryID() { // Get primary apriltag ID (-1 means nothing)
-    return (int)m_tid.getNumber(-1);
+    Long val = m_tid.getInteger(-1);
+    return val.intValue();
   }
 
   public void setPipeline(int line) { // Set the currect pipeline (NO_VISION, LIMELIGHT, or APRILTAG)
     m_pipeline.setNumber(line);
+  }
+
+  public double getDistance() { // Returns distance in meter, 0 if no distance [ Must have apriltag pipeline enabled]
+
+    if(m_pipe == Constants.LimelightConstants.kApriltag) {
+      JSONParser parser = new JSONParser();
+      String temp_json = m_json.getString("");
+      JSONObject json_data;
+      JSONArray result_data;
+      double distance = 0.0;
+      
+      try {
+        json_data = (JSONObject)parser.parse(temp_json); // Go through the json dump to get the tag Z position
+        json_data = (JSONObject)json_data.get("Results");
+        
+        result_data = (JSONArray)json_data.get("Fiducial");
+        json_data = (JSONObject)result_data.get(0);
+        result_data = (JSONArray)json_data.get("t6t_cs");
+        distance = (double)result_data.get(2);
+
+      }
+      catch(Exception e) {
+        json_data = null;
+        distance = -0.0; // -0.0 means error
+        //System.out.println(e);
+      }
+      return distance*kSlope; // Convert to meters
+    }
+    return 0.0; // No Apriltag vision
   }
 
   @Override
@@ -77,5 +116,7 @@ public class VisionSub extends SubsystemBase {
     SmartDashboard.putNumber("Apriltag ID",getPrimaryID());
     m_pipe = (int)SmartDashboard.getNumber("Pipeline", m_pipe);
     SmartDashboard.putNumber("Pipeline", m_pipe);
+
+    SmartDashboard.putNumber("Distance (m)", getDistance());
   }
 }

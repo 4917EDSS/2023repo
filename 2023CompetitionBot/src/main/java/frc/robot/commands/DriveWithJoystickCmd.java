@@ -9,8 +9,16 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import frc.robot.subsystems.DrivetrainSub;
 
 public class DriveWithJoystickCmd extends CommandBase {
+  private final int kForwardSensitivityPower = 2;
+  private final int kTurnSensitivityPower = 1;
+  private final double kDeadband = 0.0075;
+  private final double kForwardMaxAcceleration = 0.1;
+  private final double kTurnMaxAcceleration = 0.2;
+
   private final CommandPS4Controller m_controller;
   private final DrivetrainSub m_drivetrainSub;
+  private double m_curFwdPower;
+  private double m_curTurnPower;
 
   /** Creates a new DriveWithJoystickCmd. */
   public DriveWithJoystickCmd(CommandPS4Controller controller, DrivetrainSub drivetrainSub) {
@@ -21,15 +29,67 @@ public class DriveWithJoystickCmd extends CommandBase {
     addRequirements(drivetrainSub);
   }
 
+  private double adjustSensativity(double power, int sensitvity) {
+    double dir;
+    if(power < 0) {
+      dir = -1;
+    } else {
+      dir = 1;
+    }
+
+    power = Math.pow(Math.abs(power), sensitvity) * dir;
+
+    return power;
+  }
+
+  private double applyDeadband(double power) {
+    if(Math.abs(power) <= kDeadband) {
+      power = 0.0;
+    }
+    return power;
+  }
+
+  private double capAcceleration(double targetPower, double curPower, double maxAccleration) {
+    boolean positiveAcceleration;
+    double newPower = targetPower;
+    if(curPower - targetPower < 0) {
+      positiveAcceleration = true;
+    } else {
+      positiveAcceleration = false;
+    }
+    if(Math.abs(targetPower - curPower) > maxAccleration) {
+      if(positiveAcceleration) {
+        newPower = curPower + maxAccleration;
+      } else {
+        newPower = curPower - maxAccleration;
+      }
+    }
+    return newPower;
+  }
+
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // TODO #7: Modify this code to use smoothing methods
-    m_drivetrainSub.arcadeDrive(m_controller.getLeftY(), m_controller.getRightX());
+    double fwdPower = m_controller.getLeftY(); 
+    double turnPower = m_controller.getRightX();
+
+    fwdPower = adjustSensativity(fwdPower, kForwardSensitivityPower);
+    turnPower = adjustSensativity(turnPower, kTurnSensitivityPower);
+
+    fwdPower = capAcceleration(fwdPower, m_curFwdPower, kForwardMaxAcceleration);
+    turnPower = capAcceleration(turnPower, m_curTurnPower, kTurnMaxAcceleration);
+
+    fwdPower = applyDeadband(fwdPower);
+    turnPower = applyDeadband(turnPower);
+
+    m_drivetrainSub.arcadeDrive(fwdPower, turnPower);
+    m_curFwdPower = fwdPower;
+    m_curTurnPower = turnPower;
 
     // Implemented auto-shifting here
      m_drivetrainSub.autoShift();
