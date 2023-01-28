@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DrivetrainSub extends SubsystemBase {
   private final double kEncoderRotationsToMeterLowGear = 5.0/204.5; 
-  private final double kEncoderRotationsToMeterHighGear = 5.0/129.5;
+  private final double kEncoderRotationsToMeterHighGear = 5.0/129.8;
   
   private final CANSparkMax m_leftMotor1 = new CANSparkMax(Constants.DrivetrainCanIds.kLeftDriveMotor1,
       CANSparkMaxLowLevel.MotorType.kBrushless);
