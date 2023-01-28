@@ -15,15 +15,23 @@ import edu.wpi.first.math.controller.PIDController;
 import frc.robot.Constants;
 
 public class ManipulatorSub extends SubsystemBase {
-  private static final double kMastEncoderMax = 60;
-  private static final double kMastEncoderMin = 0;
-  private static final double kArmEncoderMin = -80.0; // 0 is within the center of the mast
-  private static final double kArmEncoderMax = 80.0; // Positive towards spark maxes, negative away from them
+
+  // DEFAULT VARIABLES //
+
+  private static final double kMastPositionMax = 60.0; // In encoder ticks
+  private static final double kMastPositionMin = 0.0; // In endcoder ticks
+  private static final double kMastVelocityMax = 1.0; // TODO fix me
+  private static final double kMastVelocityMin = -1.0; // TODO fix me
+
+  private static final double kArmAngleMin = -80.0; // In encoder ticks
+  private static final double kArmAngleMax = 80.0; // In encoder ticks
+  private static final double kArmVelocityMax = 1.0; // TODO fix me
+  private static final double kArmVelocityMin = -1.0; // TODO fix me
 
   private final double kArmPower = 0.3;
   private final double kMastPower = 0.3;
   private final double kMaxMastTicks = 0.0; // 0 - 60.0 30 is straight up
-  
+
   private double kArmP = 0.1;
   private double kArmI = 0.0;
   private double kArmD = 0.0;
@@ -43,9 +51,20 @@ public class ManipulatorSub extends SubsystemBase {
   private final CANSparkMax m_mastMotor = new CANSparkMax((Constants.CanIds.kMastMotor),
       CANSparkMaxLowLevel.MotorType.kBrushless);
 
-  public enum ManipulatorMode{
+  public enum ManipulatorMode {
     AUTO, DISABLED, MANUAL
   }
+
+  // STATE VARIABLES //
+
+  private double m_mastCurrentPosition = 0.0;
+  private double m_mastCurrentVelocity = 0.0;
+  private ManipulatorMode m_mastCurrentMode = ManipulatorMode.DISABLED;
+
+  private double m_armCurrentAngle = 0.0;
+  private double m_armCurrentVelocity = 0.0;
+  private ManipulatorMode m_armCurrentMode = ManipulatorMode.DISABLED;
+
   /** Creates a new ManipulatorSub. */
   public ManipulatorSub() {
     m_mastMotor.getEncoder().setPosition(0.0); // Reset the encoders on startup
@@ -53,10 +72,10 @@ public class ManipulatorSub extends SubsystemBase {
     m_mastMotor.setInverted(true);
   }
 
-  public void setManipulatorState(ManipulatorMode mode, double mastPower){
-    //TODO others arent implented yet
+  public void setManipulatorState(ManipulatorMode mode, double mastPower) {
+    // TODO others arent implented yet
     assert mode == ManipulatorMode.MANUAL;
-    m_mastPower = mastPower; 
+    m_mastPower = mastPower;
   }
 
   @Override
@@ -65,75 +84,145 @@ public class ManipulatorSub extends SubsystemBase {
     updateSmartDashboard();
     // This method will be called once per scheduler run
   }
+
+  private void updateManipulatorStateMachine() {
+    if (getMastPosition() >= kMastPositionMax && m_mastPower > 0) {
+      moveMast(0);
+    } else if (getMastPosition() <= kMastPositionMin && m_mastPower < 0) {
+      moveMast(0);
+    } else {
+      moveMast(m_mastPower);
+    }
+  }
+
+  // ------------------------ GRIPPER -------------------//
+
+  // Set mast power to 'power'
+  public void setGripperToPosition(double MastEncoderPosition, double armEncoderPosition) {
+    double x = getMastPosition();
+    while (x != MastEncoderPosition) {
+      updateManipulatorStateMachine();
+    }
+
+  }
+
+  // ------------------------- MAST ----------------------//
+
+  public boolean isMastWithinLimits(){
+    boolean withinPositionLimits = false;
+    boolean withinVelocityLimits = false;
+
+    if((getMastPosition() > kMastPositionMin) && (getMastPosition() < kMastPositionMax)){
+      withinPositionLimits = true;
+    }
+    if((getMastVelocity() > kMastVelocityMin) && (getMastVelocity() < kMastVelocityMax)){
+      withinVelocityLimits = true;
+    }
+
+    return (withinPositionLimits && withinVelocityLimits);
+  }
+
+  public void moveMast(double mastPower) {
+    m_mastMotor.set(mastPower);
+  }
+
+  public double getMastPosition() {
+    return m_mastMotor.getEncoder().getPosition();
+  }
+
+  public double getMastVelocity() {
+    return m_mastMotor.getEncoder().getVelocity();
+  }
+
+  public void setMastPosition(double encoderTicks) { // Set tick position of mast. 0 - Full back, 30 - Straight up, 60
+    // full forwards
+    double currentPos = getMastPosition() / kMaxMastTicks * 2.0 - 1.0; // Convert from 0-1 to -1-1
+    double targetPos = MathUtil.clamp(encoderTicks, 0.0, kMaxMastTicks) / kMaxMastTicks * 2.0 - 1.0;
+    double power = MathUtil.clamp(kMastPID.calculate(currentPos, targetPos), -kMastPower, kMastPower);
+  }
+
+  // ------------------------- ARM -----------------------//
+
+  // TODO make this private when moved into state machine
   
-  //TODO make this private when moved into state machine
+  public boolean isArmWithinLimits(){
+    boolean withinAngleLimits = false;
+    boolean withinVelocityLimits = false;
+
+    if((getArmAngle() > kArmAngleMin) && (getArmAngle() < kArmAngleMax)){
+      withinAngleLimits = true;
+    }
+    if((getArmVelocity() > kArmVelocityMin) && (getArmVelocity() < kArmVelocityMax)){
+      withinVelocityLimits = true;
+    }
+
+    return (withinAngleLimits && withinVelocityLimits);
+  }
+
+
   public void rotateArm(double armPower) {
     m_armMotor.set(armPower);
   }
 
-  private void moveMast(double mastPower) {
-    m_mastMotor.set(mastPower);
-  }
-  private double getMastEncoder() {
-    return m_mastMotor.getEncoder().getPosition();
-  }
-  private double getArmEncoder() {
+  public double getArmAngle() {
     return m_armMotor.getEncoder().getPosition();
   }
 
-  public void setArmAngle(double angle) { //160 degrees of rotation (-80 to 80)
-    double currentAngle = getArmEncoder() / kArmEncoderMax ; // -80, 80 to -1, 1 range
-    double targetAngle = MathUtil.clamp(angle,kArmEncoderMin,kArmEncoderMax) / kArmEncoderMax;
-    double power = MathUtil.clamp(kArmPID.calculate(currentAngle,targetAngle),-kArmPower,kArmPower);
+  public double getArmVelocity() {
+    return m_armMotor.getEncoder().getVelocity();
+  }
+
+  public void setArmAngle(double angle) { // 160 degrees of rotation (-80 to 80)
+    double currentAngle = getArmAngle() / kArmAngleMax; // -80, 80 to -1, 1 range
+    double targetAngle = MathUtil.clamp(angle, kArmAngleMin, kArmAngleMax) / kArmAngleMax;
+    double power = MathUtil.clamp(kArmPID.calculate(currentAngle, targetAngle), -kArmPower, kArmPower);
 
     // Set arm power to 'power'
   }
-  public void setMastPosition(double encoderTicks) { // Set tick position of mast. 0 - Full back, 30 - Straight up, 60 full forwards
-    double currentPos = getMastEncoder()/kMaxMastTicks * 2.0 - 1.0; //Convert from 0-1 to -1-1
-    double targetPos = MathUtil.clamp(encoderTicks,0.0,kMaxMastTicks)/kMaxMastTicks * 2.0 - 1.0;
-    double power = MathUtil.clamp(kMastPID.calculate(currentPos,targetPos),-kMastPower,kMastPower);
 
-  }
-    // Set mast power to 'power'
-  public void setGripperToPosition(double MastEncoderPosition, double armEncoderPosition){
-double x = getMastEncoder();
-while( x != MastEncoderPosition){
-  updateManipulatorStateMachine();
-}
 
+
+
+
+
+
+
+
+  public boolean isWithinLimits() {
+    return (isMastWithinLimits() && isArmWithinLimits());
   }
 
+  public void updateCurrentState(){
+    System.out.println("SetManupulatorPositionCmd #Update current state");
 
-  private void updateManipulatorStateMachine(){
-    if (getMastEncoder() >= kMastEncoderMax && m_mastPower > 0){
-      moveMast(0); 
-    }
-    else if (getMastEncoder() <= kMastEncoderMin && m_mastPower < 0){
-      moveMast(0);
-    }
-    else {
-      moveMast (m_mastPower);
-    }
+    m_mastCurrentPosition = getMastPosition();
+    m_mastCurrentVelocity = getMastVelocity();
+
+    m_armCurrentAngle = getArmAngle();
+    m_armCurrentVelocity = getArmVelocity();
   }
-  
-  private void updateSmartDashboard(){
-    SmartDashboard.putNumber("Mast Encoder Number", getMastEncoder());
-    SmartDashboard.putNumber("Arm Encoder Number", getArmEncoder());
 
-    kArmP = SmartDashboard.getNumber("Arm kP",0.1); // Get then set
-    kArmI = SmartDashboard.getNumber("Arm kI",0.0);
-    kArmD = SmartDashboard.getNumber("Arm kD",0.0);
 
-    kMastP = SmartDashboard.getNumber("Mast kP",0.1);
-    kMastI = SmartDashboard.getNumber("Mast kI",0.0);
-    kMastD = SmartDashboard.getNumber("Mast kD",0.0);
+  // -------------------------- DASHBOARD ----------------------//
 
-    SmartDashboard.putNumber("Arm kP",kArmP); 
-    SmartDashboard.putNumber("Arm kI",kArmI);
-    SmartDashboard.putNumber("Arm kD",kArmD);
-    SmartDashboard.putNumber("Mast kP",kMastP);
-    SmartDashboard.putNumber("Mast kI",kMastI);
-    SmartDashboard.putNumber("Mast kD",kMastD);
+  private void updateSmartDashboard() {
+    SmartDashboard.putNumber("Mast Encoder Number", getMastPosition());
+    SmartDashboard.putNumber("Arm Encoder Number", getArmAngle());
+
+    kArmP = SmartDashboard.getNumber("Arm kP", 0.1); // Get then set
+    kArmI = SmartDashboard.getNumber("Arm kI", 0.0);
+    kArmD = SmartDashboard.getNumber("Arm kD", 0.0);
+
+    kMastP = SmartDashboard.getNumber("Mast kP", 0.1);
+    kMastI = SmartDashboard.getNumber("Mast kI", 0.0);
+    kMastD = SmartDashboard.getNumber("Mast kD", 0.0);
+
+    SmartDashboard.putNumber("Arm kP", kArmP);
+    SmartDashboard.putNumber("Arm kI", kArmI);
+    SmartDashboard.putNumber("Arm kD", kArmD);
+    SmartDashboard.putNumber("Mast kP", kMastP);
+    SmartDashboard.putNumber("Mast kI", kMastI);
+    SmartDashboard.putNumber("Mast kD", kMastD);
 
     kArmPID.setP(kArmP);
     kArmPID.setI(kArmI);
