@@ -80,8 +80,8 @@ public class DrivetrainSub extends SubsystemBase {
     m_drive.tankDrive(leftPower, rightPower);
   }
 
-  public void arcadeDrive(double leftPower, double rightPower) {
-    m_drive.arcadeDrive(leftPower, rightPower);
+  public void arcadeDrive(double fwdPower, double turnPower) {
+    m_drive.arcadeDrive(fwdPower, turnPower);
   }
 
   public void shift(boolean isHigh) {
