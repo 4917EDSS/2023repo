@@ -15,6 +15,7 @@ import frc.robot.commands.DriveWithJoystickCmd;
 import frc.robot.subsystems.DrivetrainSub;
 import frc.robot.subsystems.GripperSub;
 import frc.robot.subsystems.ManipulatorSub;
+import frc.robot.subsystems.VisionSub;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -27,9 +28,11 @@ import frc.robot.subsystems.ManipulatorSub;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
+  
   private final ManipulatorSub m_manipulatorSub = new ManipulatorSub();
   private final DrivetrainSub m_drivetrainSub = new DrivetrainSub();
   private final GripperSub m_gripperSub = new GripperSub();
+  //private final VisionSub m_visionSub = new VisionSub(); // Uncomment when limelight connected
   // TODO: Add vision subsystem when camera connected
 
   // Define controllers
@@ -71,6 +74,7 @@ public class RobotContainer {
     m_driverController.povUp().whileTrue(new PrintCommand("Arrow up pressed!!!!!!!"));
     m_driverController.povDown().whileTrue(new PrintCommand("Arrow down pressed!!!!!!!"));
 
+    
     m_driverController.R1().whileTrue(
       new InstantCommand(
           () -> m_drivetrainSub.shift(true), // Call on command start
