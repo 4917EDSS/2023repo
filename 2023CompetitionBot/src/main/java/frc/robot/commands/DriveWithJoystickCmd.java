@@ -31,8 +31,8 @@ public class DriveWithJoystickCmd extends CommandBase {
     // TODO #7: Modify this code to use smoothing methods
     m_drivetrainSub.arcadeDrive(m_controller.getLeftY(), m_controller.getRightX());
 
-    // TODO #6: Implement auto-shifting here
-
+    // Implemented auto-shifting here
+     m_drivetrainSub.autoShift();
   }
 
   // Called once the command ends or is interrupted.

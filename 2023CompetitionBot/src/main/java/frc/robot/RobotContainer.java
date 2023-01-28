@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.DriveWithJoystickCmd;
+import frc.robot.commands.SetManualGearCmd;
 import frc.robot.subsystems.DrivetrainSub;
 import frc.robot.subsystems.GripperSub;
 import frc.robot.subsystems.ManipulatorSub;
@@ -66,24 +67,16 @@ public class RobotContainer {
    * joysticks}.
    */
 
+   
   private void configureBindings() {
     // Driver controller bindings
-    m_driverController.povUp().whileTrue(new PrintCommand("Arrow up pressed!!!!!!!"));
-    m_driverController.povDown().whileTrue(new PrintCommand("Arrow down pressed!!!!!!!"));
-
-    m_driverController.R1().whileTrue(
-      new InstantCommand(
-          () -> m_drivetrainSub.shift(true), // Call on command start
-          m_drivetrainSub));
-    
-    m_driverController.L1().whileTrue(
-      new InstantCommand(
-          () -> m_drivetrainSub.shift(false), // Call on command start
-          m_drivetrainSub));
+    m_driverController.L1().onTrue(new SetManualGearCmd(false, m_drivetrainSub));
+   
+    m_driverController.R1().onTrue(new SetManualGearCmd(true, m_drivetrainSub));
 
     m_driverController.triangle().onTrue(
       new InstantCommand(
-          () -> m_drivetrainSub.autoShift(), // Call on command start
+          () -> m_drivetrainSub.setIsAutoShift(true), // Call on command start
           m_drivetrainSub));
 
     // Operator controller bindings
