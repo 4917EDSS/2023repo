@@ -12,6 +12,7 @@ public class RotateArmCmd extends CommandBase {
    private final ManipulatorSub m_manipulatorSub;
 
   /** Creates a new RotateArmCmd. */
+  //TODO: Set power as a parameter
   public RotateArmCmd(ManipulatorSub manipulatorSub) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_manipulatorSub = manipulatorSub;
@@ -21,7 +22,7 @@ public class RotateArmCmd extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_manipulatorSub.tankDrive(0.25, 0.25);
+    m_manipulatorSub.rotateArm(0.25);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -31,7 +32,7 @@ public class RotateArmCmd extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_manipulatorSub.tankDrive(0.0, 0.0);
+    m_manipulatorSub.rotateArm(0.0);
   }
 
   // Returns true when the command should end.

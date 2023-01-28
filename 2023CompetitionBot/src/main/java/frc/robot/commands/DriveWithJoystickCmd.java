@@ -28,13 +28,17 @@ public class DriveWithJoystickCmd extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drivetrainSub.tankDrive(m_controller.getLeftY(), m_controller.getRightY());
+    // TODO #7: Modify this code to use smoothing methods
+    m_drivetrainSub.arcadeDrive(m_controller.getLeftY(), m_controller.getRightX());
+
+    // TODO #6: Implement auto-shifting here
+
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_drivetrainSub.tankDrive(0.0, 0.0);
+    // m_drivetrainSub.tankDrive(0.0, 0.0); // Dont end or it will break the motors
   }
 
   // Returns true when the command should end.
@@ -42,4 +46,9 @@ public class DriveWithJoystickCmd extends CommandBase {
   public boolean isFinished() {
     return false;
   }
+
+  // TODO #7: Add a methods for smoothing the drivetrain response (see 2022 code)
+  // - adjustSensativity
+  // - applyDeadband
+  // - capAcceleration
 }
