@@ -60,6 +60,8 @@ public class ManipulatorSub extends SubsystemBase {
   private double m_mastCurrentPosition = 0.0;
   private double m_mastCurrentVelocity = 0.0;
   private ManipulatorMode m_mastCurrentMode = ManipulatorMode.DISABLED;
+  private double m_mastTargettPosition = 0.0;
+  private double m_mastTargetVelocity = 0.0;
 
   private double m_armCurrentAngle = 0.0;
   private double m_armCurrentVelocity = 0.0;
@@ -67,6 +69,8 @@ public class ManipulatorSub extends SubsystemBase {
 
   /** Creates a new ManipulatorSub. */
   public ManipulatorSub() {
+   zeroManipulator();
+    
     m_mastMotor.getEncoder().setPosition(0.0); // Reset the encoders on startup
     m_armMotor.getEncoder().setPosition(0.0);
     m_mastMotor.setInverted(true);
@@ -76,6 +80,10 @@ public class ManipulatorSub extends SubsystemBase {
     // TODO others arent implented yet
     assert mode == ManipulatorMode.MANUAL;
     m_mastPower = mastPower;
+  }
+  private void zeroManipulator(){
+    m_armMotor.getEncoder().setPosition(0);
+    m_mastMotor.getEncoder().setPosition(0);
   }
 
   @Override
@@ -94,15 +102,21 @@ public class ManipulatorSub extends SubsystemBase {
       moveMast(m_mastPower);
     }
   }
-
+  
   // ------------------------ GRIPPER -------------------//
 
   // Set mast power to 'power'
   public void setGripperToPosition(double MastEncoderPosition, double armEncoderPosition) {
-    double x = getMastPosition();
-    while (x != MastEncoderPosition) {
-      updateManipulatorStateMachine();
-    }
+    //TODO later during the lifecycle
+    // double x = getMastPosition();
+    // double y = getArmPosition();
+    // while (x != MastEncoderPosition)
+    // while (y != getArmPosition) {
+    //   x =  getMastPosition();
+    //   y = getArmPosition();
+      
+    //   updateManipulatorStateMachine();
+    // }
 
   }
 
@@ -134,13 +148,22 @@ public class ManipulatorSub extends SubsystemBase {
     return m_mastMotor.getEncoder().getVelocity();
   }
 
-  public void setMastPosition(double encoderTicks) { // Set tick position of mast. 0 - Full back, 30 - Straight up, 60
+  private void setMastPosition(double encoderTicks) { // Set tick position of mast. 0 - Full back, 30 - Straight up, 60
     // full forwards
     double currentPos = getMastPosition() / kMaxMastTicks * 2.0 - 1.0; // Convert from 0-1 to -1-1
     double targetPos = MathUtil.clamp(encoderTicks, 0.0, kMaxMastTicks) / kMaxMastTicks * 2.0 - 1.0;
     double power = MathUtil.clamp(kMastPID.calculate(currentPos, targetPos), -kMastPower, kMastPower);
+    m_mastMotor.getEncoder().setPosition(power);
   }
 
+  public void setMastMode (ManipulatorMode mode, double encoderTicks){
+   System.out.println("mode "+mode+" encoder ticks "+encoderTicks);
+   if( mode ==  ManipulatorMode.MANUAL) {
+  m_mastTargettPosition=encoderTicks;
+   }
+
+   
+  }
   // ------------------------- ARM -----------------------//
 
   // TODO make this private when moved into state machine
