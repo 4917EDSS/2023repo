@@ -17,6 +17,7 @@ import frc.robot.subsystems.DrivetrainSub;
 import frc.robot.subsystems.GripperSub;
 import frc.robot.subsystems.ManipulatorSub;
 import frc.robot.subsystems.VisionSub;
+import frc.robot.subsystems.ManipulatorSub.ManipulatorMode;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -72,7 +73,6 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
-
   private void configureBindings() {
     // Driver controller bindings
     //m_driverController.povUp().whileTrue(new PrintCommand("Arrow up pressed!!!!!!!"));
@@ -137,8 +137,9 @@ public class RobotContainer {
 
     m_operatorController.circle().onTrue(
         new InstantCommand(
-            () -> m_manipulatorSub.setGripperToPosition(1.0,1.0), 
-            m_gripperSub));
+            () -> m_manipulatorSub.setMastMode(ManipulatorMode.MANUAL,42.9757385253),
+              ///42.9757385253,-76.8597106933), 
+            m_manipulatorSub)); 
   
 
   }
