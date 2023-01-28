@@ -28,7 +28,7 @@ public class ManipulatorSub extends SubsystemBase {
   private static final double kArmVelocityMax = 1.0; // TODO fix me
   private static final double kArmVelocityMin = -1.0; // TODO fix me
 
-  private final double kArmPower = 0.3;
+  private final double kArmPower = 0.6;
   private final double kMastPower = 0.3;
   private final double kMaxMastTicks = 0.0; // 0 - 60.0 30 is straight up
 
@@ -226,11 +226,12 @@ public class ManipulatorSub extends SubsystemBase {
   }
 
   public void setArmAngle(double angle) { // 160 degrees of rotation (-80 to 80)
-    double currentAngle = getArmAngle() / kArmAngleMax; // -80, 80 to -1, 1 range
-    double targetAngle = MathUtil.clamp(angle, kArmAngleMin, kArmAngleMax) / kArmAngleMax;
+    double currentAngle = getArmAngle();// / kArmAngleMax; // -80, 80 to -1, 1 range
+    double targetAngle = angle;//MathUtil.clamp(angle, kArmAngleMin, kArmAngleMax) / kArmAngleMax;
     double power = MathUtil.clamp(kArmPID.calculate(currentAngle, targetAngle), -kArmPower, kArmPower);
 
     // Set arm power to 'power'
+    rotateArm(power);
   }
 
   public boolean isWithinLimits() {

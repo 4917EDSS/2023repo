@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.DriveWithJoystickCmd;
 import frc.robot.commands.MoveMastCmd;
+import frc.robot.commands.SetArmAngleCmd;
+import frc.robot.commands.SetArmMastCmd;
 import frc.robot.subsystems.DrivetrainSub;
 import frc.robot.subsystems.GripperSub;
 import frc.robot.subsystems.ManipulatorSub;
@@ -55,7 +57,7 @@ public class RobotContainer {
     // m_manipulatorSub.setDefaultCommand(new
     //     RotateArmWithJoystickCmd(m_driverController, m_manipulatorSub));
 
-    m_manipulatorSub.setDefaultCommand(new MoveMastCmd(m_driverController, m_manipulatorSub));
+    //m_manipulatorSub.setDefaultCommand(new SetArmMastCmd(m_driverController, m_manipulatorSub)); // Testing for arm and mast 
     m_manipulatorSub.resetEncoders();
   }
 
