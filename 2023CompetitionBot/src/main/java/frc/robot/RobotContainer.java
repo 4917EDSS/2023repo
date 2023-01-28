@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
@@ -36,8 +38,10 @@ public class RobotContainer {
   private final ManipulatorSub m_manipulatorSub = new ManipulatorSub();
   private final DrivetrainSub m_drivetrainSub = new DrivetrainSub();
   private final GripperSub m_gripperSub = new GripperSub();
+  SendableChooser<Command> m_Chooser = new SendableChooser<>();
   //private final VisionSub m_visionSub = new VisionSub(); // Uncomment when limelight connected
   // TODO: Add vision subsystem when camera connected
+
 
   // Define controllers
   private final CommandPS4Controller m_driverController = new CommandPS4Controller(
@@ -51,6 +55,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+    autoChooserSetup();
 
     // Set default command for subsystems
     m_drivetrainSub.setDefaultCommand(new DriveWithJoystickCmd(m_driverController, m_drivetrainSub));
@@ -87,19 +92,19 @@ public class RobotContainer {
 
 
     m_driverController.R1().whileTrue(
-      new InstantCommand(
-          () -> m_drivetrainSub.shift(true), // Call on command start
-          m_drivetrainSub));
-    
+        new InstantCommand(
+            () -> m_drivetrainSub.shift(true), // Call on command start
+            m_drivetrainSub));
+
     m_driverController.L1().whileTrue(
-      new InstantCommand(
-          () -> m_drivetrainSub.shift(false), // Call on command start
-          m_drivetrainSub));
+        new InstantCommand(
+            () -> m_drivetrainSub.shift(false), // Call on command start
+            m_drivetrainSub));
 
     m_driverController.triangle().onTrue(
-      new InstantCommand(
-          () -> m_drivetrainSub.autoShift(), // Call on command start
-          m_drivetrainSub));
+        new InstantCommand(
+            () -> m_drivetrainSub.autoShift(), // Call on command start
+            m_drivetrainSub));
 
     // Operator controller bindings
     m_operatorController.povUp().whileTrue(
@@ -117,24 +122,24 @@ public class RobotContainer {
     m_operatorController.povRight().whileTrue(
         new StartEndCommand(
             () -> m_manipulatorSub.setManipulatorState(ManipulatorSub.ManipulatorMode.MANUAL, 0.6),
-            () -> m_manipulatorSub.setManipulatorState(ManipulatorSub.ManipulatorMode.MANUAL, 0.0), 
+            () -> m_manipulatorSub.setManipulatorState(ManipulatorSub.ManipulatorMode.MANUAL, 0.0),
             m_manipulatorSub));
 
     m_operatorController.povLeft().whileTrue(
-      new StartEndCommand(
+        new StartEndCommand(
             () -> m_manipulatorSub.setManipulatorState(ManipulatorSub.ManipulatorMode.MANUAL, -0.6),
-            () -> m_manipulatorSub.setManipulatorState(ManipulatorSub.ManipulatorMode.MANUAL, 0.0), 
+            () -> m_manipulatorSub.setManipulatorState(ManipulatorSub.ManipulatorMode.MANUAL, 0.0),
             m_manipulatorSub));
 
     m_operatorController.triangle().onTrue(
         new StartEndCommand(
-            () -> m_gripperSub.setValve(true), 
-            () -> m_gripperSub.setValve(true), 
+            () -> m_gripperSub.setValve(true),
+            () -> m_gripperSub.setValve(true),
             m_gripperSub));
-            
+
     m_operatorController.cross().onTrue(
         new InstantCommand(
-            () -> m_gripperSub.setValve(false), 
+            () -> m_gripperSub.setValve(false),
             m_gripperSub));
 
     m_operatorController.circle().onTrue(
@@ -146,6 +151,13 @@ public class RobotContainer {
 
   }
 
+  void autoChooserSetup() {
+    m_Chooser.setDefaultOption("do nothing", getAutonomousCommand());
+    m_Chooser.addOption("do nothing2", getAutonomousCommand());
+    SmartDashboard.putData("auto choices", m_Chooser);
+  }
+
+  //frc::SmartDashboard::PutData("Auto Chooser", &m_autoChooser);
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
