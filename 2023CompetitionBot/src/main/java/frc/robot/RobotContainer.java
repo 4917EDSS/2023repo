@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.DriveWithJoystickCmd;
+import frc.robot.commands.KillSwitchCmd;
 import frc.robot.commands.SetManualGearCmd;
 import frc.robot.commands.MoveMastCmd;
 import frc.robot.commands.SetArmAngleCmd;
@@ -88,6 +89,12 @@ public class RobotContainer {
     m_driverController.L1().onTrue(new SetManualGearCmd(false, m_drivetrainSub));
 
     m_driverController.R1().onTrue(new SetManualGearCmd(true, m_drivetrainSub));
+
+    m_driverController.L3().and(
+       m_driverController.R3()).onTrue(new KillSwitchCmd(m_manipulatorSub, m_gripperSub, m_drivetrainSub).repeatedly());
+
+    m_operatorController.L3().and(
+       m_operatorController.R3()).onTrue(new KillSwitchCmd(m_manipulatorSub, m_gripperSub, m_drivetrainSub).repeatedly());
 
     m_driverController.triangle().onTrue(
         new InstantCommand(

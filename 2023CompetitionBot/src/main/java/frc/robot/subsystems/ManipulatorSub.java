@@ -44,6 +44,7 @@ public class ManipulatorSub extends SubsystemBase {
   private final PIDController kArmPID = new PIDController(0.1, 0.0, 0.0);
 
   private double m_mastPower;
+  private boolean m_isAlive = true;
 
   private final CANSparkMax m_armMotor = new CANSparkMax(Constants.CanIds.kArmMotor,
       CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -168,7 +169,13 @@ public class ManipulatorSub extends SubsystemBase {
   }
 
   public void moveMast(double mastPower) {
-    m_mastMotor.set(mastPower);
+    if (m_isAlive){
+      m_mastMotor.set(mastPower);
+    }
+  }
+
+  public void kill(){
+    m_isAlive = false;
   }
 
   public double getMastPosition() {
@@ -214,8 +221,11 @@ public class ManipulatorSub extends SubsystemBase {
   }
 
   public void rotateArm(double armPower) {
+    if (m_isAlive){
     m_armMotor.set(armPower);
+    }
   }
+    
 
   public double getArmAngle() {
     return m_armMotor.getEncoder().getPosition();
