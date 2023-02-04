@@ -11,17 +11,15 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.DriveWithJoystickCmd;
+import frc.robot.commands.StationPickUpCmd;
 import frc.robot.commands.SetManualGearCmd;
-import frc.robot.commands.MoveMastCmd;
-import frc.robot.commands.SetArmAngleCmd;
-import frc.robot.commands.SetArmMastCmd;
 import frc.robot.subsystems.DrivetrainSub;
 import frc.robot.subsystems.GripperSub;
 import frc.robot.subsystems.ManipulatorSub;
-import frc.robot.subsystems.VisionSub;
 import frc.robot.subsystems.ManipulatorSub.ManipulatorMode;
 
 /**
@@ -93,9 +91,6 @@ public class RobotContainer {
     m_driverController.povUp().whileTrue(new PrintCommand("Right Joystick moved!!!!!!!"));
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
-   // new Trigger(m_exampleSubsystem::exampleCondition)
-        //.onTrue(new ExampleCommand(m_exampleSubsystem));                              // TODO: Remove this example once we have our own code written
-
     m_driverController.L1().onTrue(new SetManualGearCmd(false, m_drivetrainSub));
 
 
@@ -120,9 +115,9 @@ public class RobotContainer {
             () -> m_manipulatorSub.rotateArm(0.0),
             m_manipulatorSub));
 
-            () -> m_manipulatorSub.rotateArm(0.25),   // Call on command start
-            () -> m_manipulatorSub.rotateArm(0.0),      // Call on command end
-            m_manipulatorSub));                              // Required subsystem
+            // () -> m_manipulatorSub.rotateArm(0.25),   // Call on command start
+            // () -> m_manipulatorSub.rotateArm(0.0),      // Call on command end
+            // m_manipulatorSub));                              // Required subsystem
 
     m_operatorController.povRight().whileTrue(
         new StartEndCommand(
@@ -153,6 +148,8 @@ public class RobotContainer {
             /// 42.9757385253,-76.8597106933),
             m_manipulatorSub));
 
+    m_operatorController.square().onTrue(new StationPickUpCmd(m_manipulatorSub));
+  
   }
 
   void autoChooserSetup() {
