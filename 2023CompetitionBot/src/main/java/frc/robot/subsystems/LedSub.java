@@ -69,18 +69,19 @@ public class LedSub extends SubsystemBase {
     m_ledStrip.setData(m_ledBuffer);
   }
 
+  // LED state enums
   public enum LEDMode {
-    ConeMode,
+    ConeMode,           
     CubeMode,
     
   }
-
+//Set Colours according to state
   public void setLEDState (LEDMode LEDState){
     if (LEDState == LEDMode.ConeMode) {
-      setColor(-1, 255, 255, 0);
+      setColor(-1, 255, 255, 0);         //Set LED colour to yellow 
     }
     else if (LEDState == LEDMode.CubeMode) {
-      setColor(-1, 230, 230, 250);
+      setColor(-1, 230, 230, 250);       //Set LED colour to purple
     }
   }
 }

@@ -120,10 +120,6 @@ public class RobotContainer {
             () -> m_manipulatorSub.rotateArm(0.0),
             m_manipulatorSub));
 
-           // () -> m_manipulatorSub.rotateArm(0.25),   // Call on command start
-           // () -> m_manipulatorSub.rotateArm(0.0),      // Call on command end
-           // m_manipulatorSub));                              // Required subsystem
-
     m_operatorController.povRight().whileTrue(
         new StartEndCommand(
             () -> m_manipulatorSub.setManipulatorState(ManipulatorSub.ManipulatorMode.MANUAL, 0.6),
