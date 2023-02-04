@@ -18,13 +18,15 @@ import frc.robot.commands.AlignToVisionCmd;
 import frc.robot.commands.DriveWithJoystickCmd;
 import frc.robot.commands.KillSwitchCmd;
 import frc.robot.commands.SetManualGearCmd;
-import frc.robot.commands.StationPickUpCmd;
+import frc.robot.commands.PickUpCmd;
 import frc.robot.subsystems.DrivetrainSub;
 import frc.robot.subsystems.GripperSub;
-import frc.robot.subsystems.LedSub;
 import frc.robot.subsystems.ManipulatorSub;
 import frc.robot.subsystems.VisionSub;
+import frc.robot.subsystems.LedSub.LEDMode;
+
 import frc.robot.subsystems.ManipulatorSub.ManipulatorMode;
+import frc.robot.subsystems.LedSub; 
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -121,14 +123,7 @@ public class RobotContainer {
         new InstantCommand(
             () -> m_drivetrainSub.setIsAutoShift(true), // Call on command start
             m_drivetrainSub));
-
-    m_driverController.povUp().onTrue(
-        new InstantCommand(
-            () -> m_drivetrainSub.setBrakeCmd(false), m_drivetrainSub));
-
-    m_driverController.povDown().onTrue(
-        new InstantCommand(
-            () -> m_drivetrainSub.setBrakeCmd(true), m_drivetrainSub));
+            
 
     // Operator controller bindings
     m_operatorController.povUp().whileTrue(
@@ -142,7 +137,7 @@ public class RobotContainer {
             () -> m_manipulatorSub.rotateArm(-0.3),
             () -> m_manipulatorSub.rotateArm(0.0),
             m_manipulatorSub));
-
+			
     // () -> m_manipulatorSub.rotateArm(0.25), // Call on command start
     // () -> m_manipulatorSub.rotateArm(0.0), // Call on command end
     // m_manipulatorSub)); // Required subsystem
@@ -176,14 +171,9 @@ public class RobotContainer {
             /// 42.9757385253,-76.8597106933),
             m_manipulatorSub));
 
-
-    m_operatorController.square().onTrue(new StationPickUpCmd(m_manipulatorSub, 0));
+    m_operatorController.square().onTrue(new PickUpCmd(m_manipulatorSub, 0));
   
-    m_operatorController.options().onTrue(new StationPickUpCmd(m_manipulatorSub, 1));
-
-    m_operatorController.square().onTrue(new StationPickUpCmd(m_manipulatorSub));
-
-
+    m_operatorController.options().onTrue(new PickUpCmd(m_manipulatorSub, 1));
   }
 
   void autoChooserSetup() {
@@ -206,7 +196,7 @@ public class RobotContainer {
   public void resetEncoders() {
     m_manipulatorSub.resetEncoders();
   }
-  /*
+/* 
    * public void LedPanell () {
    * int r, g, b;
    * r = 0;
@@ -219,5 +209,5 @@ public class RobotContainer {
    * SmartDashboard.putNumberArray("null", colour);
    * 
    * }
-   */
+  */
 }
