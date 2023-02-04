@@ -18,6 +18,10 @@ public class GripperSub extends SubsystemBase {
     m_solenoidPCM.set(false);
   }
 
+  public void Kill(){
+    setValve(true);
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
