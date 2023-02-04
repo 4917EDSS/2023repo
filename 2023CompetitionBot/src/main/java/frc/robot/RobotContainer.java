@@ -20,7 +20,11 @@ import frc.robot.commands.SetManualGearCmd;
 import frc.robot.subsystems.DrivetrainSub;
 import frc.robot.subsystems.GripperSub;
 import frc.robot.subsystems.ManipulatorSub;
+import frc.robot.subsystems.VisionSub;
+import frc.robot.subsystems.LedSub.LEDMode;
+
 import frc.robot.subsystems.ManipulatorSub.ManipulatorMode;
+import frc.robot.subsystems.LedSub; 
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -37,6 +41,7 @@ public class RobotContainer {
   private final ManipulatorSub m_manipulatorSub = new ManipulatorSub();
   private final DrivetrainSub m_drivetrainSub = new DrivetrainSub();
   private final GripperSub m_gripperSub = new GripperSub();
+  private final LedSub m_ledSub = new LedSub();
   SendableChooser<Command> m_Chooser = new SendableChooser<>();
   // private final VisionSub m_visionSub = new VisionSub(); // Uncomment when
   // limelight connected
@@ -55,6 +60,10 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
     autoChooserSetup();
+    
+    // 
+    LedPanell();
+    //
 
     // Set default command for subsystems
     m_drivetrainSub.setDefaultCommand(new DriveWithJoystickCmd(m_driverController, m_drivetrainSub));
@@ -114,10 +123,11 @@ public class RobotContainer {
             () -> m_manipulatorSub.rotateArm(-0.3),
             () -> m_manipulatorSub.rotateArm(0.0),
             m_manipulatorSub));
-
+			
             // () -> m_manipulatorSub.rotateArm(0.25),   // Call on command start
             // () -> m_manipulatorSub.rotateArm(0.0),      // Call on command end
             // m_manipulatorSub));                              // Required subsystem
+
 
     m_operatorController.povRight().whileTrue(
         new StartEndCommand(
@@ -171,5 +181,17 @@ public class RobotContainer {
 
   public void resetEncoders() {
     m_manipulatorSub.resetEncoders();
+  }
+
+  public void LedPanell () {
+    int r, g, b;
+    r = 0;
+    g = 1;
+    b = 2;
+    double[] colour = {Double.valueOf(m_ledSub.rr), Double.valueOf(m_ledSub.gg), Double.valueOf(m_ledSub.bb)}; 
+
+    m_ledSub.setLEDState(LEDMode.ConeMode);
+
+    SmartDashboard.putNumberArray("null", colour);
   }
 }

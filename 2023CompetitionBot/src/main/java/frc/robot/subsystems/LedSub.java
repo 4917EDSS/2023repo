@@ -10,6 +10,9 @@ import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import frc.robot.Constants.LedConstants;
 
 public class LedSub extends SubsystemBase {
+  //previous RGB colour vars
+  public int rr, gg, bb = 0;
+
   // Hardware setup.
   AddressableLED m_ledStrip = new AddressableLED(LedConstants.kLedStripPwmPort);
   AddressableLEDBuffer m_ledBuffer = new AddressableLEDBuffer(LedConstants.kLedStripLength);
@@ -58,6 +61,11 @@ public class LedSub extends SubsystemBase {
     if (b > 255) {
       b = 255;
     }
+    //
+    rr = r;
+    gg = g;
+    bb = b;
+    //
     if (i < 0) {
       for (int led = 0; i < LedConstants.kLedStripLength; led++) {
         m_ledBuffer.setRGB(led, r, g, b);
@@ -67,5 +75,21 @@ public class LedSub extends SubsystemBase {
     }
     
     m_ledStrip.setData(m_ledBuffer);
+  }
+
+  // LED state enums
+  public enum LEDMode {
+    ConeMode,           
+    CubeMode,
+    
+  }
+//Set Colours according to state
+  public void setLEDState (LEDMode LEDState){
+    if (LEDState == LEDMode.ConeMode) {
+      setColor(-1, 255, 255, 0);         //Set LED colour to yellow 
+    }
+    else if (LEDState == LEDMode.CubeMode) {
+      setColor(-1, 230, 230, 250);       //Set LED colour to purple
+    }
   }
 }
