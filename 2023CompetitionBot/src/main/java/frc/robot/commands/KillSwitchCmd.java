@@ -12,8 +12,14 @@ import frc.robot.subsystems.ManipulatorSub;
 public class KillSwitchCmd extends CommandBase {
 
   /** Creates a new KillSwitchCmd. */
+  private final ManipulatorSub m_manipulatorSub;
+  private final GripperSub m_gripperSub;
+  private final DrivetrainSub m_drivetrainSub;
   public KillSwitchCmd(ManipulatorSub manipulatorSub, GripperSub gripperSub, DrivetrainSub drivetrainSub) {
     // Use addRequirements() here to declare subsystem dependencies.
+   m_manipulatorSub = manipulatorSub;
+   m_gripperSub = gripperSub; 
+   m_drivetrainSub = drivetrainSub; 
     addRequirements(manipulatorSub, gripperSub, drivetrainSub);
   }
 
@@ -23,15 +29,30 @@ public class KillSwitchCmd extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+   // m_manipulatorSub.rotateArm(0.0); // Set arm's power to 0
+    // m_manipulatorSub.moveMast(0.0); // Set arm's power to 0
+    // m_gripperSub.setValve(true); // Set solenoid to open, We will not do anything to the solenoid
+    // m_drivetrainSub.tankDrive(0.0,0.0); // Set tank drivetrain to 0 Keep or remove?
+    // m_drivetrainSub.arcadeDrive(0.0, 0.0); // Set arcade drivetrain to 0
+    //TODO: Add gripper motor if implemented
+    m_manipulatorSub.kill();
+    m_drivetrainSub.kill();
+   
+
+    
+  }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    
+
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;  // This needs to be false to allow command to run indefinately.
   }
 }

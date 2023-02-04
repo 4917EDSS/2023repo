@@ -10,11 +10,11 @@ import frc.robot.subsystems.ManipulatorSub;
 
 public class SetArmMastCmd extends CommandBase {
   /** Creates a new SetArmMastCmd. */
-  private final CommandPS4Controller m_controller;
+  private final CommandPS4Controller m_operatorController;
   private final ManipulatorSub m_manipulatorSub;
   public SetArmMastCmd(CommandPS4Controller controller, ManipulatorSub manipulatorSub) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_controller = controller;
+    m_operatorController = controller;
     m_manipulatorSub = manipulatorSub;
     addRequirements(manipulatorSub);
   }
@@ -26,19 +26,19 @@ public class SetArmMastCmd extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(m_controller.povUp().getAsBoolean()) {
+    if(m_operatorController.povUp().getAsBoolean()) { // if manually controlled, this command won't run
       m_manipulatorSub.setArmAngle(0.0);
       m_manipulatorSub.setMastPosition(30.0);
     }
     else {
-      if(m_controller.share().getAsBoolean()) {
-        if(m_controller.povDown().getAsBoolean()) {
+      if(m_operatorController.share().getAsBoolean()) {
+        if(m_operatorController.povDown().getAsBoolean()) {
           m_manipulatorSub.setArmAngle(0.0);
         }
-        else if(m_controller.povLeft().getAsBoolean()) {
+        else if(m_operatorController.povLeft().getAsBoolean()) {
           m_manipulatorSub.setArmAngle(-80.0);
         }
-        else if(m_controller.povRight().getAsBoolean()) {
+        else if(m_operatorController.povRight().getAsBoolean()) {
           m_manipulatorSub.setArmAngle(80.0);
         }
         else {
@@ -47,13 +47,13 @@ public class SetArmMastCmd extends CommandBase {
         }
       }
       else {
-        if(m_controller.povDown().getAsBoolean()) {
+        if(m_operatorController.povDown().getAsBoolean()) {
           m_manipulatorSub.setMastPosition(30.0);
         }
-        else if(m_controller.povLeft().getAsBoolean()) {
+        else if(m_operatorController.povLeft().getAsBoolean()) {
           m_manipulatorSub.setMastPosition(5.0);
         }
-        else if(m_controller.povRight().getAsBoolean()) {
+        else if(m_operatorController.povRight().getAsBoolean()) {
           m_manipulatorSub.setMastPosition(55.0);
         }
         else {

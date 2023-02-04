@@ -75,6 +75,7 @@ public class DriveWithJoystickCmd extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    
     double fwdPower = m_controller.getLeftY(); 
     double turnPower = m_controller.getRightX();
 
@@ -90,6 +91,7 @@ public class DriveWithJoystickCmd extends CommandBase {
     m_drivetrainSub.arcadeDrive(fwdPower, turnPower);
     m_curFwdPower = fwdPower;
     m_curTurnPower = turnPower;
+    
 
     // Implemented auto-shifting here
      m_drivetrainSub.autoShift();
