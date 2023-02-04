@@ -23,6 +23,7 @@ import frc.robot.subsystems.GripperSub;
 import frc.robot.subsystems.ManipulatorSub;
 import frc.robot.subsystems.VisionSub;
 import frc.robot.subsystems.ManipulatorSub.ManipulatorMode;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -93,7 +94,14 @@ public class RobotContainer {
         new InstantCommand(
             () -> m_drivetrainSub.setIsAutoShift(true), // Call on command start
             m_drivetrainSub));
-            
+
+    m_driverController.povUp().onTrue(
+        new InstantCommand(
+            () -> m_drivetrainSub.setBrakeCmd(false), m_drivetrainSub));
+
+    m_driverController.povDown().onTrue(
+        new InstantCommand(
+            () -> m_drivetrainSub.setBrakeCmd(true), m_drivetrainSub));
 
     // Operator controller bindings
     m_operatorController.povUp().whileTrue(

@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import com.revrobotics.CANSparkMax.IdleMode;
+
 import frc.robot.Constants;
 import java.lang.Math;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -43,7 +45,6 @@ public class DrivetrainSub extends SubsystemBase {
   private final DifferentialDrive m_drive = new DifferentialDrive(m_leftMotors, m_rightMotors);
 
   private final Solenoid m_shifter = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.SolenoidIds.kShifter);
-
 
   boolean m_isAutoShift = true;
 
@@ -126,8 +127,9 @@ public class DrivetrainSub extends SubsystemBase {
   public void updateSmarterDashboard() {
     SmartDashboard.putNumber("left motor1 encoder", getLeftMotorEncoder());
     SmartDashboard.putBoolean("Auto Shift", (getisAutoShift()));
-    //TODO Add high and low gear on Smart Dashboard
-    //SmartDashboard.putBoolean("High Gear", ())
+    SmartDashboard.putBoolean("Coasting", isCoasting());
+    // TODO Add high and low gear on Smart Dashboard
+    // SmartDashboard.putBoolean("High Gear", ())
   }
 
   public void tankDrive(double leftPower, double rightPower) {
@@ -142,6 +144,28 @@ public class DrivetrainSub extends SubsystemBase {
     // Shifts the shifter solenoid according to the isHigh parameter, true for high,
     // false for low.
     m_shifter.set(isHigh);
+  }
+
+  public boolean isCoasting() {
+    return m_rightMotor3.getIdleMode().equals(IdleMode.kCoast);
+  }
+
+  public void setBrakeCmd(boolean isBrakeOn) {
+    IdleMode mode;
+    if (isBrakeOn) {
+      tankDrive(0, 0);
+      arcadeDrive(0, 0);
+      mode = IdleMode.kBrake;
+    } else {
+      mode = IdleMode.kCoast;
+    }
+
+    m_leftMotor1.setIdleMode(mode);
+    m_leftMotor2.setIdleMode(mode);
+    m_leftMotor3.setIdleMode(mode);
+    m_rightMotor1.setIdleMode(mode);
+    m_rightMotor2.setIdleMode(mode);
+    m_rightMotor3.setIdleMode(mode);
   }
 
   public void autoShift() {
