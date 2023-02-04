@@ -121,14 +121,7 @@ public class RobotContainer {
         new InstantCommand(
             () -> m_drivetrainSub.setIsAutoShift(true), // Call on command start
             m_drivetrainSub));
-
-    m_driverController.povUp().onTrue(
-        new InstantCommand(
-            () -> m_drivetrainSub.setBrakeCmd(false), m_drivetrainSub));
-
-    m_driverController.povDown().onTrue(
-        new InstantCommand(
-            () -> m_drivetrainSub.setBrakeCmd(true), m_drivetrainSub));
+            
 
     // Operator controller bindings
     m_operatorController.povUp().whileTrue(
