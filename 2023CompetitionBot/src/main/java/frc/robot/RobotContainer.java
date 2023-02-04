@@ -74,9 +74,17 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+<<<<<<< Updated upstream
     // Driver controller bindings
     //m_driverController.povUp().whileTrue(new PrintCommand("Arrow up pressed!!!!!!!"));
     //m_driverController.povDown().whileTrue(new PrintCommand("Arrow down pressed!!!!!!!"));
+=======
+    m_driverController.povUp().whileTrue(new PrintCommand("Right Joystick moved!!!!!!!"));
+    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
+
+   // new Trigger(m_exampleSubsystem::exampleCondition)
+        //.onTrue(new ExampleCommand(m_exampleSubsystem));                              // TODO: Remove this example once we have our own code written
+>>>>>>> Stashed changes
 
     /* 
     m_driverController.povLeft().whileTrue(new StartEndCommand( () -> m_manipulatorSub.setMastPosition(0.0),() -> m_manipulatorSub.moveMast(0.0),m_manipulatorSub));
@@ -102,6 +110,7 @@ public class RobotContainer {
     // Operator controller bindings
     m_operatorController.povUp().whileTrue(
         new StartEndCommand(
+<<<<<<< Updated upstream
             () -> m_manipulatorSub.rotateArm(0.3), // Call on command start
             () -> m_manipulatorSub.rotateArm(0.0), // Call on command end
             m_manipulatorSub)); // Required subsystem
@@ -111,6 +120,11 @@ public class RobotContainer {
             () -> m_manipulatorSub.rotateArm(-0.3),
             () -> m_manipulatorSub.rotateArm(0.0),
             m_manipulatorSub));
+=======
+            () -> m_manipulatorSub.rotateArm(0.25),   // Call on command start
+            () -> m_manipulatorSub.rotateArm(0.0),      // Call on command end
+            m_manipulatorSub));                              // Required subsystem
+>>>>>>> Stashed changes
 
     m_operatorController.povRight().whileTrue(
         new StartEndCommand(
