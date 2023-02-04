@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
@@ -12,7 +14,10 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.DriveWithJoystickCmd;
+import frc.robot.commands.SetManualGearCmd;
 import frc.robot.commands.MoveMastCmd;
+import frc.robot.commands.SetArmAngleCmd;
+import frc.robot.commands.SetArmMastCmd;
 import frc.robot.subsystems.DrivetrainSub;
 import frc.robot.subsystems.GripperSub;
 import frc.robot.subsystems.ManipulatorSub;
@@ -30,11 +35,13 @@ import frc.robot.subsystems.ManipulatorSub.ManipulatorMode;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  
+
   private final ManipulatorSub m_manipulatorSub = new ManipulatorSub();
   private final DrivetrainSub m_drivetrainSub = new DrivetrainSub();
   private final GripperSub m_gripperSub = new GripperSub();
-  //private final VisionSub m_visionSub = new VisionSub(); // Uncomment when limelight connected
+  SendableChooser<Command> m_Chooser = new SendableChooser<>();
+  // private final VisionSub m_visionSub = new VisionSub(); // Uncomment when
+  // limelight connected
   // TODO: Add vision subsystem when camera connected
 
   // Define controllers
@@ -49,13 +56,15 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+    autoChooserSetup();
 
     // Set default command for subsystems
     m_drivetrainSub.setDefaultCommand(new DriveWithJoystickCmd(m_driverController, m_drivetrainSub));
     // m_manipulatorSub.setDefaultCommand(new
-    //     RotateArmWithJoystickCmd(m_driverController, m_manipulatorSub));
+    // RotateArmWithJoystickCmd(m_driverController, m_manipulatorSub));
 
-    m_manipulatorSub.setDefaultCommand(new MoveMastCmd(m_driverController, m_manipulatorSub));
+    // m_manipulatorSub.setDefaultCommand(new SetArmMastCmd(m_driverController,
+    // m_manipulatorSub)); // Testing for arm and mast
     m_manipulatorSub.resetEncoders();
   }
 
@@ -73,44 +82,34 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
+
   private void configureBindings() {
-<<<<<<< Updated upstream
+
     // Driver controller bindings
+
     //m_driverController.povUp().whileTrue(new PrintCommand("Arrow up pressed!!!!!!!"));
     //m_driverController.povDown().whileTrue(new PrintCommand("Arrow down pressed!!!!!!!"));
-=======
+
     m_driverController.povUp().whileTrue(new PrintCommand("Right Joystick moved!!!!!!!"));
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
    // new Trigger(m_exampleSubsystem::exampleCondition)
         //.onTrue(new ExampleCommand(m_exampleSubsystem));                              // TODO: Remove this example once we have our own code written
->>>>>>> Stashed changes
 
-    /* 
-    m_driverController.povLeft().whileTrue(new StartEndCommand( () -> m_manipulatorSub.setMastPosition(0.0),() -> m_manipulatorSub.moveMast(0.0),m_manipulatorSub));
-    m_driverController.povUp().whileTrue(new StartEndCommand( () -> m_manipulatorSub.setMastPosition(30.0),() -> m_manipulatorSub.moveMast(0.0),m_manipulatorSub));
-    m_driverController.povRight().whileTrue(new StartEndCommand( () -> m_manipulatorSub.setMastPosition(60.0),() -> m_manipulatorSub.moveMast(0.0),m_manipulatorSub));*/
+    m_driverController.L1().onTrue(new SetManualGearCmd(false, m_drivetrainSub));
 
 
-    m_driverController.R1().whileTrue(
-      new InstantCommand(
-          () -> m_drivetrainSub.shift(true), // Call on command start
-          m_drivetrainSub));
-    
-    m_driverController.L1().whileTrue(
-      new InstantCommand(
-          () -> m_drivetrainSub.shift(false), // Call on command start
-          m_drivetrainSub));
+    m_driverController.R1().onTrue(new SetManualGearCmd(true, m_drivetrainSub));
 
     m_driverController.triangle().onTrue(
-      new InstantCommand(
-          () -> m_drivetrainSub.autoShift(), // Call on command start
-          m_drivetrainSub));
+        new InstantCommand(
+            () -> m_drivetrainSub.setIsAutoShift(true), // Call on command start
+            m_drivetrainSub));
+            
 
     // Operator controller bindings
     m_operatorController.povUp().whileTrue(
         new StartEndCommand(
-<<<<<<< Updated upstream
             () -> m_manipulatorSub.rotateArm(0.3), // Call on command start
             () -> m_manipulatorSub.rotateArm(0.0), // Call on command end
             m_manipulatorSub)); // Required subsystem
@@ -120,44 +119,49 @@ public class RobotContainer {
             () -> m_manipulatorSub.rotateArm(-0.3),
             () -> m_manipulatorSub.rotateArm(0.0),
             m_manipulatorSub));
-=======
+
             () -> m_manipulatorSub.rotateArm(0.25),   // Call on command start
             () -> m_manipulatorSub.rotateArm(0.0),      // Call on command end
             m_manipulatorSub));                              // Required subsystem
->>>>>>> Stashed changes
 
     m_operatorController.povRight().whileTrue(
         new StartEndCommand(
             () -> m_manipulatorSub.setManipulatorState(ManipulatorSub.ManipulatorMode.MANUAL, 0.6),
-            () -> m_manipulatorSub.setManipulatorState(ManipulatorSub.ManipulatorMode.MANUAL, 0.0), 
+            () -> m_manipulatorSub.setManipulatorState(ManipulatorSub.ManipulatorMode.MANUAL, 0.0),
             m_manipulatorSub));
 
     m_operatorController.povLeft().whileTrue(
-      new StartEndCommand(
+        new StartEndCommand(
             () -> m_manipulatorSub.setManipulatorState(ManipulatorSub.ManipulatorMode.MANUAL, -0.6),
-            () -> m_manipulatorSub.setManipulatorState(ManipulatorSub.ManipulatorMode.MANUAL, 0.0), 
+            () -> m_manipulatorSub.setManipulatorState(ManipulatorSub.ManipulatorMode.MANUAL, 0.0),
             m_manipulatorSub));
 
     m_operatorController.triangle().onTrue(
         new StartEndCommand(
-            () -> m_gripperSub.setValve(true), 
-            () -> m_gripperSub.setValve(true), 
+            () -> m_gripperSub.setValve(true),
+            () -> m_gripperSub.setValve(true),
             m_gripperSub));
-            
+
     m_operatorController.cross().onTrue(
         new InstantCommand(
-            () -> m_gripperSub.setValve(false), 
+            () -> m_gripperSub.setValve(false),
             m_gripperSub));
 
     m_operatorController.circle().onTrue(
         new InstantCommand(
-            () -> m_manipulatorSub.setMastMode(ManipulatorMode.MANUAL,42.9757385253),
-              ///42.9757385253,-76.8597106933), 
-            m_manipulatorSub)); 
-  
+            () -> m_manipulatorSub.setMastMode(ManipulatorMode.MANUAL, 42.9757385253),
+            /// 42.9757385253,-76.8597106933),
+            m_manipulatorSub));
 
   }
 
+  void autoChooserSetup() {
+    m_Chooser.setDefaultOption("do nothing", getAutonomousCommand());
+    m_Chooser.addOption("do nothing2", getAutonomousCommand());
+    SmartDashboard.putData("auto choices", m_Chooser);
+  }
+
+  // frc::SmartDashboard::PutData("Auto Chooser", &m_autoChooser);
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

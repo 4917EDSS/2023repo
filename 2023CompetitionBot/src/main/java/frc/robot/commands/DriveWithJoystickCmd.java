@@ -91,8 +91,8 @@ public class DriveWithJoystickCmd extends CommandBase {
     m_curFwdPower = fwdPower;
     m_curTurnPower = turnPower;
 
-    // TODO #6: Implement auto-shifting here
-
+    // Implemented auto-shifting here
+     m_drivetrainSub.autoShift();
   }
 
   // Called once the command ends or is interrupted.

@@ -13,21 +13,10 @@ public class JoystickPrintCmd extends CommandBase {
 
   private final CommandPS4Controller m_driverController = 
   new CommandPS4Controller(OperatorConstants.kDriverControllerPort);
-import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
-import frc.robot.subsystems.JoystickSub;
-
-
-public class JoystickPrintCmd extends CommandBase {
-
-  int printTimer = 0;
-
-  private final CommandPS4Controller m_controller;
 
   /** Creates a new JoystickPrintCmd. */
-  public JoystickPrintCmd(CommandPS4Controller controller, JoystickSub joystickSub) {
-    m_controller = controller;
+  public JoystickPrintCmd() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(joystickSub);
   }
 
   // Called when the command is initially scheduled.
@@ -38,29 +27,15 @@ public class JoystickPrintCmd extends CommandBase {
   @Override
   public void execute() 
   {
-    m_driverController.axisGreaterThan(0, 0.1).onTrue(new PrintCommand("Axis 0 greater than 0"));
-    m_driverController.axisGreaterThan(1, 0.1).onTrue(new PrintCommand("Axis 1 greater than 0"));
-    m_driverController.axisGreaterThan(2, 0.1).onTrue(new PrintCommand("Axis 2 greater than 0"));
-    m_driverController.axisGreaterThan(3, 0.1).onTrue(new PrintCommand("Axis 3 greater than 0"));
+    m_driverController.axisGreaterThan(0, 0.1).onTrue(new PrintCommand("Axis 0 greater than 0.1"));
+    m_driverController.axisGreaterThan(1, 0.1).onTrue(new PrintCommand("Axis 1 greater than 0.1"));
+    m_driverController.axisGreaterThan(2, 0.1).onTrue(new PrintCommand("Axis 2 greater than 0.1"));
+    m_driverController.axisGreaterThan(3, 0.1).onTrue(new PrintCommand("Axis 3 greater than 0.1"));
 
-    m_driverController.axisLessThan(0, 0.1).onTrue(new PrintCommand("Axis 0 less than 0"));
-    m_driverController.axisLessThan(1, 0.1).onTrue(new PrintCommand("Axis 1 less than 0"));
-    m_driverController.axisLessThan(2, 0.1).onTrue(new PrintCommand("Axis 2 less than 0"));
-    m_driverController.axisLessThan(3, 0.1).onTrue(new PrintCommand("Axis 3 less than 0"));
-  public void execute() {
-
-    printTimer += 1;
-
-    if(printTimer == 10)
-    {
-      if(m_controller.getLeftX() != 0)
-      {
-        System.out.print("LX ");
-        System.out.println(m_controller.getLeftX());
-      }
-
-      printTimer = 0;
-    }
+    m_driverController.axisLessThan(0, -0.1).onTrue(new PrintCommand("Axis 0 less than -0.1"));
+    m_driverController.axisLessThan(1, -0.1).onTrue(new PrintCommand("Axis 1 less than -0.1"));
+    m_driverController.axisLessThan(2, -0.1).onTrue(new PrintCommand("Axis 2 less than -0.1"));
+    m_driverController.axisLessThan(3, -0.1).onTrue(new PrintCommand("Axis 3 less than -0.1"));
   }
 
   // Called once the command ends or is interrupted.

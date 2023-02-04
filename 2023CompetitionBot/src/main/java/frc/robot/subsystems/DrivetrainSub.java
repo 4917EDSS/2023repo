@@ -7,7 +7,7 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import frc.robot.Constants;
-
+import java.lang.Math;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -16,9 +16,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DrivetrainSub extends SubsystemBase {
-  private final double kEncoderRotationsToMeterLowGear = 5.0/204.5; 
-  private final double kEncoderRotationsToMeterHighGear = 5.0/129.8;
-  
+
+  private final double kShiftUpSpeed = 1.8; // meters per second
+  private final double kShiftDownSpeed = 1.4; // meters per second
+
+  private final double kEncoderRotationsToMeterLowGear = 5.0 / 204.5;
+  private final double kEncoderRotationsToMeterHighGear = 5.0 / 129.8;
+
   private final CANSparkMax m_leftMotor1 = new CANSparkMax(Constants.DrivetrainCanIds.kLeftDriveMotor1,
       CANSparkMaxLowLevel.MotorType.kBrushless);
   private final CANSparkMax m_leftMotor2 = new CANSparkMax(Constants.DrivetrainCanIds.kLeftDriveMotor2,
@@ -35,9 +39,13 @@ public class DrivetrainSub extends SubsystemBase {
   private final MotorControllerGroup m_leftMotors = new MotorControllerGroup(m_leftMotor1, m_leftMotor2, m_leftMotor3);
   private final MotorControllerGroup m_rightMotors = new MotorControllerGroup(m_rightMotor1, m_rightMotor2,
       m_rightMotor3);
+
   private final DifferentialDrive m_drive = new DifferentialDrive(m_leftMotors, m_rightMotors);
 
   private final Solenoid m_shifter = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.SolenoidIds.kShifter);
+
+
+  boolean m_isAutoShift = true;
 
   /** Creates a new DrivetrainSub. */
   public DrivetrainSub() {
@@ -52,6 +60,8 @@ public class DrivetrainSub extends SubsystemBase {
     m_shifter.set(false);
 
     zeroDrivetrainEncoders();
+
+    setIsAutoShift(true);
   }
 
   @Override
@@ -60,7 +70,7 @@ public class DrivetrainSub extends SubsystemBase {
     updateSmarterDashboard();
   }
 
-  private void zeroDrivetrainEncoders(){
+  private void zeroDrivetrainEncoders() {
     m_leftMotor1.getEncoder().setPosition(0);
   }
 
@@ -68,12 +78,56 @@ public class DrivetrainSub extends SubsystemBase {
     return m_leftMotor1.getEncoder().getPosition();
   }
 
-  private double getEncoderRotationsToMeterFactor() {
-    return (m_shifter.get()) ? kEncoderRotationsToMeterHighGear : kEncoderRotationsToMeterLowGear;
-}
+  private double getRightMotorEncoder() {
+    return m_rightMotor1.getEncoder().getPosition();
+  }
 
-  public void updateSmarterDashboard(){
+  private double getLeftVelocity() {
+    return m_leftMotor1.getEncoder().getVelocity() * getEncoderRotationsToMeterFactor() / 60.; // In meters per second
+  }
+
+  private double getRightVelocity() {
+    return m_rightMotor1.getEncoder().getVelocity() * getEncoderRotationsToMeterFactor() / 60.; // In meters per second
+  }
+
+  public double getVelocity() {
+    return (getLeftVelocity() + getRightVelocity()) / 2;
+  }
+
+  private double getLeftEncoderDistanceM() {
+    return getLeftMotorEncoder() * getEncoderRotationsToMeterFactor();
+  }
+
+  private double getRightEncoderDistanceM() {
+    return getRightMotorEncoder() * getEncoderRotationsToMeterFactor();
+  }
+
+  public double getEncoderDistanceM() {
+    return (getLeftEncoderDistanceM() + getRightEncoderDistanceM() / 2);
+  }
+
+  private double getEncoderRotationsToMeterFactor() {
+    if (m_shifter.get()) {
+      return kEncoderRotationsToMeterHighGear;
+    } else {
+      return kEncoderRotationsToMeterLowGear;
+    }
+  }
+
+  public void setIsAutoShift(boolean autoShiftActive) {
+    m_isAutoShift = autoShiftActive;
+    return;
+  }
+
+  public boolean getisAutoShift() {
+    return m_isAutoShift;
+  }
+
+  public void updateSmarterDashboard() {
     SmartDashboard.putNumber("left motor1 encoder", getLeftMotorEncoder());
+    SmartDashboard.putBoolean("Auto Shift", (getisAutoShift()));
+    //TODO Add high and low gear on Smart Dashboard
+    //SmartDashboard.putBoolean("High Gear", ())
   }
 
   public void tankDrive(double leftPower, double rightPower) {
@@ -90,17 +144,17 @@ public class DrivetrainSub extends SubsystemBase {
     m_shifter.set(isHigh);
   }
 
-  // TODO #6: Finish implementing auto-shift.  Then enable it in DriveWithJoystick
-  public void autoShift(){
-    // if(!m_isAutoShift){
-    //   return;
-    // } else {
-    //   double averageWheelSpeed = (getLeftVelocity() + getRightVelocity()) / 2.;
+  public void autoShift() {
+    if (!m_isAutoShift) {
+      return;
+    } else {
+      double averageWheelSpeed = (getLeftVelocity() + getRightVelocity()) / 2.;
 
-    //   if(fabs(averageWheelSpeed) > kshiftHighSpeed){
-    //     shift(true);
-    //   } else if (fabs(averageWheelSpeed) < kshiftLowSpeed){
-    //     shift(false);
-    //   }
-   }   
+      if (Math.abs(averageWheelSpeed) > kShiftUpSpeed) {
+        shift(true);
+      } else if (Math.abs(averageWheelSpeed) < kShiftDownSpeed) {
+        shift(false);
+      }
+    }
+  }
 }
