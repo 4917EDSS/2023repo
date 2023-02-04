@@ -9,14 +9,21 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ManipulatorSub;
 
 public class StationPickUpCmd extends CommandBase {
-  private static final double kStationArmAngle = 55;
-  private static final double kStationMastPosition = 0;
+  private static double kStationArmAngle = 55;
+  private static double kStationMastPosition = 0;
   
   private final ManipulatorSub m_manipulatorSub;
   /** Creates a new MoveManipulatorToHighPickUpCmd. */
-  public StationPickUpCmd(ManipulatorSub manipulatorSub) {
+  public StationPickUpCmd(ManipulatorSub manipulatorSub, int button) {
     m_manipulatorSub = manipulatorSub;
     addRequirements(manipulatorSub);
+
+    if(button == 0){
+      kStationArmAngle = 55;
+      kStationMastPosition = 0;
+    } else if(button == 1){
+      kStationArmAngle = 55; 
+    }
     // Use addRequirements() here to declare subsystem dependencies.
   }
 

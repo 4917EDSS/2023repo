@@ -167,8 +167,9 @@ public class RobotContainer {
             /// 42.9757385253,-76.8597106933),
             m_manipulatorSub));
 
-    m_operatorController.square().onTrue(new StationPickUpCmd(m_manipulatorSub));
+    m_operatorController.square().onTrue(new StationPickUpCmd(m_manipulatorSub, 0));
   
+    m_operatorController.options().onTrue(new StationPickUpCmd(m_manipulatorSub, 1));
   }
 
   void autoChooserSetup() {
