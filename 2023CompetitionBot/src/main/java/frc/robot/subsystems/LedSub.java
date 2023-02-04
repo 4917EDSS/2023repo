@@ -8,10 +8,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import frc.robot.Constants.LedConstants;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class LedSub extends SubsystemBase {
   //previous RGB colour vars
-  public int rr, gg, bb = 0;
+  private int m_rr, m_gg, m_bb = 0;
 
   // Hardware setup.
   AddressableLED m_ledStrip = new AddressableLED(LedConstants.kLedStripPwmPort);
@@ -62,12 +63,12 @@ public class LedSub extends SubsystemBase {
       b = 255;
     }
     //
-    rr = r;
-    gg = g;
-    bb = b;
+    m_rr = r;
+    m_gg = g;
+    m_bb = b;
     //
     if (i < 0) {
-      for (int led = 0; i < LedConstants.kLedStripLength; led++) {
+      for (int led = 0; led < LedConstants.kLedStripLength - 1; led++) {
         m_ledBuffer.setRGB(led, r, g, b);
       }
     } else {
@@ -86,10 +87,19 @@ public class LedSub extends SubsystemBase {
 //Set Colours according to state
   public void setLEDState (LEDMode LEDState){
     if (LEDState == LEDMode.ConeMode) {
-      setColor(-1, 255, 255, 0);         //Set LED colour to yellow 
+      setColor(0, 255, 255, 0);         //Set LED colour to yellow 
     }
     else if (LEDState == LEDMode.CubeMode) {
-      setColor(-1, 230, 230, 250);       //Set LED colour to purple
+      setColor(0, 230, 230, 250);       //Set LED colour to purple
     }
+  }
+
+  public void smartDashboardSet(){
+
+    setLEDState(LEDMode.ConeMode);
+
+    double[] colour = {Double.valueOf(m_rr), Double.valueOf(m_gg), Double.valueOf(m_bb)}; 
+
+    SmartDashboard.putNumberArray("null", colour);
   }
 }

@@ -62,7 +62,9 @@ public class RobotContainer {
     autoChooserSetup();
     
     // 
-    LedPanell();
+    //LedPanell();
+    m_ledSub.setColor(-1, 255, 255, 0);
+
     //
 
     // Set default command for subsystems
@@ -178,16 +180,17 @@ public class RobotContainer {
   public void resetEncoders() {
     m_manipulatorSub.resetEncoders();
   }
-
+/* 
   public void LedPanell () {
     int r, g, b;
     r = 0;
     g = 1;
     b = 2;
-    double[] colour = {Double.valueOf(m_ledSub.rr), Double.valueOf(m_ledSub.gg), Double.valueOf(m_ledSub.bb)}; 
 
     m_ledSub.setLEDState(LEDMode.ConeMode);
-
+    double[] colour = {Double.valueOf(m_ledSub.m_rr), Double.valueOf(m_ledSub.gg), Double.valueOf(m_ledSub.bb)}; 
     SmartDashboard.putNumberArray("null", colour);
+
   }
+  */
 }
