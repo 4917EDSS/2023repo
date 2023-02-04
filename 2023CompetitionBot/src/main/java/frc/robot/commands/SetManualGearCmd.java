@@ -6,7 +6,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DrivetrainSub;
-import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 
 public class SetManualGearCmd extends CommandBase {
   /** Creates a new SetManualGearCmd. */

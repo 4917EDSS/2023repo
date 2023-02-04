@@ -35,14 +35,14 @@ import frc.robot.subsystems.ManipulatorSub.ManipulatorMode;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  
+
   private final ManipulatorSub m_manipulatorSub = new ManipulatorSub();
   private final DrivetrainSub m_drivetrainSub = new DrivetrainSub();
   private final GripperSub m_gripperSub = new GripperSub();
   SendableChooser<Command> m_Chooser = new SendableChooser<>();
-  //private final VisionSub m_visionSub = new VisionSub(); // Uncomment when limelight connected
+  // private final VisionSub m_visionSub = new VisionSub(); // Uncomment when
+  // limelight connected
   // TODO: Add vision subsystem when camera connected
-
 
   // Define controllers
   private final CommandPS4Controller m_driverController = new CommandPS4Controller(
@@ -61,9 +61,10 @@ public class RobotContainer {
     // Set default command for subsystems
     m_drivetrainSub.setDefaultCommand(new DriveWithJoystickCmd(m_driverController, m_drivetrainSub));
     // m_manipulatorSub.setDefaultCommand(new
-    //     RotateArmWithJoystickCmd(m_driverController, m_manipulatorSub));
+    // RotateArmWithJoystickCmd(m_driverController, m_manipulatorSub));
 
-    //m_manipulatorSub.setDefaultCommand(new SetArmMastCmd(m_driverController, m_manipulatorSub)); // Testing for arm and mast 
+    // m_manipulatorSub.setDefaultCommand(new SetArmMastCmd(m_driverController,
+    // m_manipulatorSub)); // Testing for arm and mast
     m_manipulatorSub.resetEncoders();
   }
 
@@ -82,17 +83,17 @@ public class RobotContainer {
    * joysticks}.
    */
 
-   
   private void configureBindings() {
     // Driver controller bindings
     m_driverController.L1().onTrue(new SetManualGearCmd(false, m_drivetrainSub));
-   
+
     m_driverController.R1().onTrue(new SetManualGearCmd(true, m_drivetrainSub));
 
     m_driverController.triangle().onTrue(
-      new InstantCommand(
-          () -> m_drivetrainSub.setIsAutoShift(true), // Call on command start
-          m_drivetrainSub));
+        new InstantCommand(
+            () -> m_drivetrainSub.setIsAutoShift(true), // Call on command start
+            m_drivetrainSub));
+            
 
     // Operator controller bindings
     m_operatorController.povUp().whileTrue(
@@ -132,10 +133,9 @@ public class RobotContainer {
 
     m_operatorController.circle().onTrue(
         new InstantCommand(
-            () -> m_manipulatorSub.setMastMode(ManipulatorMode.MANUAL,42.9757385253),
-              ///42.9757385253,-76.8597106933), 
-            m_manipulatorSub)); 
-  
+            () -> m_manipulatorSub.setMastMode(ManipulatorMode.MANUAL, 42.9757385253),
+            /// 42.9757385253,-76.8597106933),
+            m_manipulatorSub));
 
   }
 
@@ -145,7 +145,7 @@ public class RobotContainer {
     SmartDashboard.putData("auto choices", m_Chooser);
   }
 
-  //frc::SmartDashboard::PutData("Auto Chooser", &m_autoChooser);
+  // frc::SmartDashboard::PutData("Auto Chooser", &m_autoChooser);
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
