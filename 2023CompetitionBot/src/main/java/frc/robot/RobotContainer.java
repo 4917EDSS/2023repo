@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.AlignToVisionCmd;
 import frc.robot.commands.DriveWithJoystickCmd;
 import frc.robot.commands.KillSwitchCmd;
 import frc.robot.commands.SetManualGearCmd;
@@ -41,7 +42,7 @@ public class RobotContainer {
   private final GripperSub m_gripperSub = new GripperSub();
   private final LedSub m_ledSub = new LedSub();
   SendableChooser<Command> m_Chooser = new SendableChooser<>();
-  // private final VisionSub m_visionSub = new VisionSub(); // Uncomment when
+  private final VisionSub m_visionSub = new VisionSub(); // Uncomment when
   // limelight connected
   // TODO: Add vision subsystem when camera connected
 
@@ -99,7 +100,8 @@ public class RobotContainer {
     // m_driverController.povDown().whileTrue(new PrintCommand("Arrow down
     // pressed!!!!!!!"));
 
-    m_driverController.povUp().whileTrue(new PrintCommand("Right Joystick moved!!!!!!!"));
+    //m_driverController.povUp().whileTrue(new PrintCommand("Right Joystick moved!!!!!!!"));
+    m_driverController.povUp().onTrue(new AlignToVisionCmd(m_drivetrainSub, m_visionSub));
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
     m_driverController.L1().onTrue(new SetManualGearCmd(false, m_drivetrainSub));

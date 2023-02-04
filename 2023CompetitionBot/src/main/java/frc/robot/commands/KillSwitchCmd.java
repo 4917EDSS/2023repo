@@ -25,7 +25,10 @@ public class KillSwitchCmd extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_manipulatorSub.kill();
+    m_drivetrainSub.kill();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -36,8 +39,7 @@ public class KillSwitchCmd extends CommandBase {
     // m_drivetrainSub.tankDrive(0.0,0.0); // Set tank drivetrain to 0 Keep or remove?
     // m_drivetrainSub.arcadeDrive(0.0, 0.0); // Set arcade drivetrain to 0
     //TODO: Add gripper motor if implemented
-    m_manipulatorSub.kill();
-    m_drivetrainSub.kill();
+    
    
 
     
