@@ -78,7 +78,7 @@ public class VisionSub extends SubsystemBase {
 
   public double getDistance() { // Returns distance in meter, 0 if no distance [ Must have apriltag pipeline enabled]
 
-    if(m_pipe == Constants.LimelightConstants.kApriltag) {
+    if(getVisionMode() == Constants.LimelightConstants.kApriltag) {
       JSONParser parser = new JSONParser();
       String temp_json = m_json.getString("");
       JSONObject json_data;

@@ -23,6 +23,7 @@ import frc.robot.subsystems.DrivetrainSub;
 import frc.robot.subsystems.GripperSub;
 import frc.robot.subsystems.LedSub;
 import frc.robot.subsystems.ManipulatorSub;
+import frc.robot.subsystems.VisionSub;
 import frc.robot.subsystems.ManipulatorSub.ManipulatorMode;
 
 /**
@@ -59,7 +60,7 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
     autoChooserSetup();
-
+    m_visionSub.setPipeline(Constants.LimelightConstants.kApriltag);
     //
     // LedPanell();
     m_ledSub.setColor(-1, 255, 255, 0);
