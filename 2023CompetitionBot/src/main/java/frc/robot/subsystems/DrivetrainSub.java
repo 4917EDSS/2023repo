@@ -5,15 +5,16 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel;
-import frc.robot.Constants;
-import java.lang.Math;
+
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class DrivetrainSub extends SubsystemBase {
 
@@ -127,6 +128,7 @@ public class DrivetrainSub extends SubsystemBase {
   public void updateSmarterDashboard() {
     SmartDashboard.putNumber("left motor1 encoder", getLeftMotorEncoder());
     SmartDashboard.putBoolean("Auto Shift", (getisAutoShift()));
+    SmartDashboard.putBoolean("Coasting", isCoasting());
     // TODO Add high and low gear on Smart Dashboard
     // SmartDashboard.putBoolean("High Gear", ())
   }
@@ -144,7 +146,7 @@ public class DrivetrainSub extends SubsystemBase {
     if (m_isKilled) {
       m_drive.arcadeDrive(0, 0);
       return;
-    } 
+    }
     m_drive.arcadeDrive(fwdPower, turnPower);
   }
 
@@ -156,6 +158,28 @@ public class DrivetrainSub extends SubsystemBase {
     // Shifts the shifter solenoid according to the isHigh parameter, true for high,
     // false for low.
     m_shifter.set(isHigh);
+  }
+
+  public boolean isCoasting() {
+    return m_rightMotor3.getIdleMode().equals(IdleMode.kCoast);
+  }
+
+  public void setBrakeCmd(boolean isBrakeOn) {
+    IdleMode mode;
+    if (isBrakeOn) {
+      tankDrive(0, 0);
+      arcadeDrive(0, 0);
+      mode = IdleMode.kBrake;
+    } else {
+      mode = IdleMode.kCoast;
+    }
+
+    m_leftMotor1.setIdleMode(mode);
+    m_leftMotor2.setIdleMode(mode);
+    m_leftMotor3.setIdleMode(mode);
+    m_rightMotor1.setIdleMode(mode);
+    m_rightMotor2.setIdleMode(mode);
+    m_rightMotor3.setIdleMode(mode);
   }
 
   public void autoShift() {

@@ -14,18 +14,16 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.AlignToVisionCmd;
 import frc.robot.commands.DriveWithJoystickCmd;
 import frc.robot.commands.KillSwitchCmd;
-import frc.robot.commands.StationPickUpCmd;
 import frc.robot.commands.SetManualGearCmd;
+import frc.robot.commands.StationPickUpCmd;
 import frc.robot.subsystems.DrivetrainSub;
 import frc.robot.subsystems.GripperSub;
+import frc.robot.subsystems.LedSub;
 import frc.robot.subsystems.ManipulatorSub;
-import frc.robot.subsystems.VisionSub;
-import frc.robot.subsystems.LedSub.LEDMode;
-
 import frc.robot.subsystems.ManipulatorSub.ManipulatorMode;
-import frc.robot.subsystems.LedSub; 
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -44,7 +42,7 @@ public class RobotContainer {
   private final GripperSub m_gripperSub = new GripperSub();
   private final LedSub m_ledSub = new LedSub();
   SendableChooser<Command> m_Chooser = new SendableChooser<>();
-  // private final VisionSub m_visionSub = new VisionSub(); // Uncomment when
+  private final VisionSub m_visionSub = new VisionSub(); // Uncomment when
   // limelight connected
   // TODO: Add vision subsystem when camera connected
 
@@ -61,9 +59,9 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
     autoChooserSetup();
-    
-    // 
-    //LedPanell();
+
+    //
+    // LedPanell();
     m_ledSub.setColor(-1, 255, 255, 0);
 
     //
@@ -97,28 +95,39 @@ public class RobotContainer {
 
     // Driver controller bindings
 
-    //m_driverController.povUp().whileTrue(new PrintCommand("Arrow up pressed!!!!!!!"));
-    //m_driverController.povDown().whileTrue(new PrintCommand("Arrow down pressed!!!!!!!"));
+    // m_driverController.povUp().whileTrue(new PrintCommand("Arrow up
+    // pressed!!!!!!!"));
+    // m_driverController.povDown().whileTrue(new PrintCommand("Arrow down
+    // pressed!!!!!!!"));
 
-    m_driverController.povUp().whileTrue(new PrintCommand("Right Joystick moved!!!!!!!"));
+    //m_driverController.povUp().whileTrue(new PrintCommand("Right Joystick moved!!!!!!!"));
+    m_driverController.povUp().onTrue(new AlignToVisionCmd(m_drivetrainSub, m_visionSub));
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
     m_driverController.L1().onTrue(new SetManualGearCmd(false, m_drivetrainSub));
 
-
     m_driverController.R1().onTrue(new SetManualGearCmd(true, m_drivetrainSub));
 
     m_driverController.L3().and(
-       m_driverController.R3()).onTrue(new KillSwitchCmd(m_manipulatorSub, m_gripperSub, m_drivetrainSub).repeatedly());
+        m_driverController.R3())
+        .onTrue(new KillSwitchCmd(m_manipulatorSub, m_gripperSub, m_drivetrainSub).repeatedly());
 
     m_operatorController.L3().and(
-       m_operatorController.R3()).onTrue(new KillSwitchCmd(m_manipulatorSub, m_gripperSub, m_drivetrainSub).repeatedly());
+        m_operatorController.R3())
+        .onTrue(new KillSwitchCmd(m_manipulatorSub, m_gripperSub, m_drivetrainSub).repeatedly());
 
     m_driverController.triangle().onTrue(
         new InstantCommand(
             () -> m_drivetrainSub.setIsAutoShift(true), // Call on command start
             m_drivetrainSub));
-            
+
+    m_driverController.povUp().onTrue(
+        new InstantCommand(
+            () -> m_drivetrainSub.setBrakeCmd(false), m_drivetrainSub));
+
+    m_driverController.povDown().onTrue(
+        new InstantCommand(
+            () -> m_drivetrainSub.setBrakeCmd(true), m_drivetrainSub));
 
     // Operator controller bindings
     m_operatorController.povUp().whileTrue(
@@ -132,11 +141,10 @@ public class RobotContainer {
             () -> m_manipulatorSub.rotateArm(-0.3),
             () -> m_manipulatorSub.rotateArm(0.0),
             m_manipulatorSub));
-			
-            // () -> m_manipulatorSub.rotateArm(0.25),   // Call on command start
-            // () -> m_manipulatorSub.rotateArm(0.0),      // Call on command end
-            // m_manipulatorSub));                              // Required subsystem
 
+    // () -> m_manipulatorSub.rotateArm(0.25), // Call on command start
+    // () -> m_manipulatorSub.rotateArm(0.0), // Call on command end
+    // m_manipulatorSub)); // Required subsystem
 
     m_operatorController.povRight().whileTrue(
         new StartEndCommand(
@@ -167,9 +175,14 @@ public class RobotContainer {
             /// 42.9757385253,-76.8597106933),
             m_manipulatorSub));
 
+
     m_operatorController.square().onTrue(new StationPickUpCmd(m_manipulatorSub, 0));
   
     m_operatorController.options().onTrue(new StationPickUpCmd(m_manipulatorSub, 1));
+
+    m_operatorController.square().onTrue(new StationPickUpCmd(m_manipulatorSub));
+
+
   }
 
   void autoChooserSetup() {
@@ -192,17 +205,18 @@ public class RobotContainer {
   public void resetEncoders() {
     m_manipulatorSub.resetEncoders();
   }
-/* 
-  public void LedPanell () {
-    int r, g, b;
-    r = 0;
-    g = 1;
-    b = 2;
-
-    m_ledSub.setLEDState(LEDMode.ConeMode);
-    double[] colour = {Double.valueOf(m_ledSub.m_rr), Double.valueOf(m_ledSub.gg), Double.valueOf(m_ledSub.bb)}; 
-    SmartDashboard.putNumberArray("null", colour);
-
-  }
-  */
+  /*
+   * public void LedPanell () {
+   * int r, g, b;
+   * r = 0;
+   * g = 1;
+   * b = 2;
+   * 
+   * m_ledSub.setLEDState(LEDMode.ConeMode);
+   * double[] colour = {Double.valueOf(m_ledSub.m_rr),
+   * Double.valueOf(m_ledSub.gg), Double.valueOf(m_ledSub.bb)};
+   * SmartDashboard.putNumberArray("null", colour);
+   * 
+   * }
+   */
 }
