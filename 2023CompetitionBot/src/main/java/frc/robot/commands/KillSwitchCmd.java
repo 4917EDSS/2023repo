@@ -28,6 +28,7 @@ public class KillSwitchCmd extends CommandBase {
   public void initialize() {
     m_manipulatorSub.kill();
     m_drivetrainSub.kill();
+    m_gripperSub.Kill();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
