@@ -44,7 +44,6 @@ public class ManipulatorSub extends SubsystemBase {
   private final PIDController kArmPID = new PIDController(0.1, 0.0, 0.0);
 
   private double m_mastPower;
-  private boolean m_isAlive = true;
 
   private final CANSparkMax m_armMotor = new CANSparkMax(Constants.CanIds.kArmMotor,
       CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -80,6 +79,23 @@ public class ManipulatorSub extends SubsystemBase {
     SmartDashboard.putNumber("Mast kD", 0.0);
   }
 
+  @Override
+  public void periodic() {
+    updateManipulatorStateMachine();
+    updateSmartDashboard();
+    // This method will be called once per scheduler run
+  }
+
+  /** Use this method to reset all of the hardware and states to safe starting values */
+  public void init() {
+    //TODO: Add resets here.  Call from constructor.
+  }
+
+  /** This method puts the subsystem in a safe state when all commands are interrupted */
+  public void interrupt() {
+    //TODO: Cleanly stop any state machine driven motion
+  }
+
   public void setManipulatorState(ManipulatorMode mode, double mastPower) {
     // TODO others arent implented yet
     assert mode == ManipulatorMode.MANUAL;
@@ -91,12 +107,7 @@ public class ManipulatorSub extends SubsystemBase {
     m_mastMotor.getEncoder().setPosition(0);
   }
 
-  @Override
-  public void periodic() {
-    updateManipulatorStateMachine();
-    updateSmartDashboard();
-    // This method will be called once per scheduler run
-  }
+
 
   public void resetEncoders() {
     m_mastMotor.getEncoder().setPosition(0.0); // Reset the encoders on startup
@@ -169,13 +180,7 @@ public class ManipulatorSub extends SubsystemBase {
   }
 
   public void moveMast(double mastPower) {
-    if (m_isAlive){
-      m_mastMotor.set(mastPower);
-    }
-  }
-
-  public void kill(){
-    m_isAlive = false;
+    m_mastMotor.set(mastPower);
   }
 
   public double getMastPosition() {
@@ -221,11 +226,8 @@ public class ManipulatorSub extends SubsystemBase {
   }
 
   public void rotateArm(double armPower) {
-    if (m_isAlive){
     m_armMotor.set(armPower);
-    }
   }
-    
 
   public double getArmAngle() {
     return m_armMotor.getEncoder().getPosition();

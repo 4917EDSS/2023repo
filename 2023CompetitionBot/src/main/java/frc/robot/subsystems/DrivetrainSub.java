@@ -24,8 +24,6 @@ public class DrivetrainSub extends SubsystemBase {
   private final double kEncoderRotationsToMeterLowGear = 5.0 / 204.5;
   private final double kEncoderRotationsToMeterHighGear = 5.0 / 129.8;
 
-  private boolean m_isKilled = false;
-
   private final CANSparkMax m_leftMotor1 = new CANSparkMax(Constants.DrivetrainCanIds.kLeftDriveMotor1,
       CANSparkMaxLowLevel.MotorType.kBrushless);
   private final CANSparkMax m_leftMotor2 = new CANSparkMax(Constants.DrivetrainCanIds.kLeftDriveMotor2,
@@ -72,6 +70,16 @@ public class DrivetrainSub extends SubsystemBase {
     updateSmarterDashboard();
   }
 
+  /** Use this method to reset all of the hardware and states to safe starting values */
+  public void init() {
+    //TODO: Add resets here.  Call from constructor.
+  }
+
+  /** This method puts the subsystem in a safe state when all commands are interrupted */
+  public void interrupt() {
+    // Nothing to do on interrupt at this time
+  }
+  
   private void zeroDrivetrainEncoders() {
     m_leftMotor1.getEncoder().setPosition(0);
   }
@@ -134,24 +142,11 @@ public class DrivetrainSub extends SubsystemBase {
   }
 
   public void tankDrive(double leftPower, double rightPower) {
-    if (m_isKilled) {
-      m_drive.tankDrive(0, 0);
-      return;
-    }
-
     m_drive.tankDrive(leftPower, rightPower);
   }
 
   public void arcadeDrive(double fwdPower, double turnPower) {
-    if (m_isKilled) {
-      m_drive.arcadeDrive(0, 0);
-      return;
-    }
     m_drive.arcadeDrive(fwdPower, turnPower);
-  }
-
-  public void kill() {
-    m_isKilled = true;
   }
 
   public void shift(boolean isHigh) {

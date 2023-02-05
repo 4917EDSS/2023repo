@@ -18,13 +18,19 @@ public class GripperSub extends SubsystemBase {
     m_solenoidPCM.set(false);
   }
 
-  public void Kill(){
-    setValve(true);
-  }
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+
+  /** Use this method to reset all of the hardware and states to safe starting values */
+  public void init() {
+    //TODO: Add resets here.  Call from constructor.
+  }
+
+  /** This method puts the subsystem in a safe state when all commands are interrupted */
+  public void interrupt() {
+    // Nothing to do on interrupt at this time
   }
 
   public void setValve(boolean isOpen) {
