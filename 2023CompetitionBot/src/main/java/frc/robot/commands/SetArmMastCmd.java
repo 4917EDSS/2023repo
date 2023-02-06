@@ -12,6 +12,7 @@ public class SetArmMastCmd extends CommandBase {
   /** Creates a new SetArmMastCmd. */
   private final CommandPS4Controller m_operatorController;
   private final ManipulatorSub m_manipulatorSub;
+
   public SetArmMastCmd(CommandPS4Controller controller, ManipulatorSub manipulatorSub) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_operatorController = controller;
@@ -29,40 +30,32 @@ public class SetArmMastCmd extends CommandBase {
     if(m_operatorController.povUp().getAsBoolean()) { // if manually controlled, this command won't run
       m_manipulatorSub.setArmAngle(0.0);
       m_manipulatorSub.setMastPosition(30.0);
-    }
-    else {
+    } else {
       if(m_operatorController.share().getAsBoolean()) {
         if(m_operatorController.povDown().getAsBoolean()) {
           m_manipulatorSub.setArmAngle(0.0);
-        }
-        else if(m_operatorController.povLeft().getAsBoolean()) {
+        } else if(m_operatorController.povLeft().getAsBoolean()) {
           m_manipulatorSub.setArmAngle(-80.0);
-        }
-        else if(m_operatorController.povRight().getAsBoolean()) {
+        } else if(m_operatorController.povRight().getAsBoolean()) {
           m_manipulatorSub.setArmAngle(80.0);
-        }
-        else {
+        } else {
           m_manipulatorSub.moveMast(0.0);
           m_manipulatorSub.rotateArm(0.0);
         }
-      }
-      else {
+      } else {
         if(m_operatorController.povDown().getAsBoolean()) {
           m_manipulatorSub.setMastPosition(30.0);
-        }
-        else if(m_operatorController.povLeft().getAsBoolean()) {
+        } else if(m_operatorController.povLeft().getAsBoolean()) {
           m_manipulatorSub.setMastPosition(5.0);
-        }
-        else if(m_operatorController.povRight().getAsBoolean()) {
+        } else if(m_operatorController.povRight().getAsBoolean()) {
           m_manipulatorSub.setMastPosition(55.0);
-        }
-        else {
+        } else {
           m_manipulatorSub.moveMast(0.0);
           m_manipulatorSub.rotateArm(0.0);
         }
       }
     }
-    
+
   }
 
   // Called once the command ends or is interrupted.

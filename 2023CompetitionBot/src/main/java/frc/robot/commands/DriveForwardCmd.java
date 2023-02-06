@@ -10,6 +10,7 @@ import frc.robot.subsystems.DrivetrainSub;
 public class DriveForwardCmd extends CommandBase {
   // Need a member variable to save the drivetrain sub that was passed into the command
   private final DrivetrainSub m_drivetrainSub;
+
   /** Creates a new DriveForwardCmd. */
   public DriveForwardCmd(DrivetrainSub drivetrainSub) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -18,8 +19,7 @@ public class DriveForwardCmd extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override

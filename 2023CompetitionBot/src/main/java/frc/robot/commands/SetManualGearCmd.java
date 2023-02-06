@@ -16,7 +16,7 @@ public class SetManualGearCmd extends CommandBase {
   public SetManualGearCmd(boolean isHighGear, DrivetrainSub drivetrainSub) {
     m_isHighGear = isHighGear;
     m_drivetrainSub = drivetrainSub;
-   
+
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrainSub);
   }

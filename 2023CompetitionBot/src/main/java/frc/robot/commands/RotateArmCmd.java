@@ -8,8 +8,8 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ManipulatorSub;
 
 public class RotateArmCmd extends CommandBase {
-   // Need a member variable to save the DrivetrainSub that was passed into the command
-   private final ManipulatorSub m_manipulatorSub;
+  // Need a member variable to save the DrivetrainSub that was passed into the command
+  private final ManipulatorSub m_manipulatorSub;
 
   /** Creates a new RotateArmCmd. */
   //TODO: Set power as a parameter

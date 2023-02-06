@@ -11,8 +11,8 @@ import frc.robot.Constants;
 
 public class GripperSub extends SubsystemBase {
   /** Creates a new GripperSub. */
-  private final Solenoid m_solenoidPCM = new Solenoid(PneumaticsModuleType.CTREPCM,
-      Constants.SolenoidIds.kGripperCylinder);
+  private final Solenoid m_solenoidPCM =
+      new Solenoid(PneumaticsModuleType.CTREPCM, Constants.SolenoidIds.kGripperCylinder);
 
   public GripperSub() {
     m_solenoidPCM.set(false);

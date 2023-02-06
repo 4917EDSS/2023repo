@@ -3,7 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
-//package frc.robot.commands;
+// package frc.robot.commands;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
@@ -45,11 +45,11 @@ public class ManipulatorSub extends SubsystemBase {
 
   private double m_mastPower;
 
-  private final CANSparkMax m_armMotor = new CANSparkMax(Constants.CanIds.kArmMotor,
-      CANSparkMaxLowLevel.MotorType.kBrushless);
+  private final CANSparkMax m_armMotor =
+      new CANSparkMax(Constants.CanIds.kArmMotor, CANSparkMaxLowLevel.MotorType.kBrushless);
 
-  private final CANSparkMax m_mastMotor = new CANSparkMax((Constants.CanIds.kMastMotor),
-      CANSparkMaxLowLevel.MotorType.kBrushless);
+  private final CANSparkMax m_mastMotor =
+      new CANSparkMax((Constants.CanIds.kMastMotor), CANSparkMaxLowLevel.MotorType.kBrushless);
 
   public enum ManipulatorMode {
     AUTO, DISABLED, MANUAL
@@ -116,9 +116,9 @@ public class ManipulatorSub extends SubsystemBase {
 
   private void updateManipulatorStateMachine() {
     //IF MODE MANUAL
-    if (getMastPosition() >= kMastPositionMax && m_mastPower > 0) {
+    if(getMastPosition() >= kMastPositionMax && m_mastPower > 0) {
       moveMast(0);
-    } else if (getMastPosition() <= kMastPositionMin && m_mastPower < 0) {
+    } else if(getMastPosition() <= kMastPositionMin && m_mastPower < 0) {
       moveMast(0);
     } else {
       moveMast(m_mastPower);
@@ -143,7 +143,7 @@ public class ManipulatorSub extends SubsystemBase {
     //  Am I still interrupted?
     //    If not, go to MOVING state
     //  setHoldPower
-    
+
   }
 
   // ------------------------ GRIPPER -------------------//
@@ -169,10 +169,10 @@ public class ManipulatorSub extends SubsystemBase {
     boolean withinPositionLimits = false;
     boolean withinVelocityLimits = false;
 
-    if ((getMastPosition() > kMastPositionMin) && (getMastPosition() < kMastPositionMax)) {
+    if((getMastPosition() > kMastPositionMin) && (getMastPosition() < kMastPositionMax)) {
       withinPositionLimits = true;
     }
-    if ((getMastVelocity() > kMastVelocityMin) && (getMastVelocity() < kMastVelocityMax)) {
+    if((getMastVelocity() > kMastVelocityMin) && (getMastVelocity() < kMastVelocityMax)) {
       withinVelocityLimits = true;
     }
 
@@ -202,7 +202,7 @@ public class ManipulatorSub extends SubsystemBase {
 
   public void setMastMode(ManipulatorMode mode, double encoderTicks) {
     System.out.println("mode " + mode + " encoder ticks " + encoderTicks);
-    if (mode == ManipulatorMode.MANUAL) {
+    if(mode == ManipulatorMode.MANUAL) {
       m_mastTargettPosition = encoderTicks;
     }
 
@@ -215,10 +215,10 @@ public class ManipulatorSub extends SubsystemBase {
     boolean withinAngleLimits = false;
     boolean withinVelocityLimits = false;
 
-    if ((getArmAngle() > kArmAngleMin) && (getArmAngle() < kArmAngleMax)) {
+    if((getArmAngle() > kArmAngleMin) && (getArmAngle() < kArmAngleMax)) {
       withinAngleLimits = true;
     }
-    if ((getArmVelocity() > kArmVelocityMin) && (getArmVelocity() < kArmVelocityMax)) {
+    if((getArmVelocity() > kArmVelocityMin) && (getArmVelocity() < kArmVelocityMax)) {
       withinVelocityLimits = true;
     }
 

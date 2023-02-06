@@ -24,22 +24,22 @@ public class DrivetrainSub extends SubsystemBase {
   private final double kEncoderRotationsToMeterLowGear = 5.0 / 204.5;
   private final double kEncoderRotationsToMeterHighGear = 5.0 / 129.8;
 
-  private final CANSparkMax m_leftMotor1 = new CANSparkMax(Constants.DrivetrainCanIds.kLeftDriveMotor1,
-      CANSparkMaxLowLevel.MotorType.kBrushless);
-  private final CANSparkMax m_leftMotor2 = new CANSparkMax(Constants.DrivetrainCanIds.kLeftDriveMotor2,
-      CANSparkMaxLowLevel.MotorType.kBrushless);
-  private final CANSparkMax m_leftMotor3 = new CANSparkMax(Constants.DrivetrainCanIds.kLeftDriveMotor3,
-      CANSparkMaxLowLevel.MotorType.kBrushless);
-  private final CANSparkMax m_rightMotor1 = new CANSparkMax(Constants.DrivetrainCanIds.kRightDriveMotor1,
-      CANSparkMaxLowLevel.MotorType.kBrushless);
-  private final CANSparkMax m_rightMotor2 = new CANSparkMax(Constants.DrivetrainCanIds.kRightDriveMotor2,
-      CANSparkMaxLowLevel.MotorType.kBrushless);
-  private final CANSparkMax m_rightMotor3 = new CANSparkMax(Constants.DrivetrainCanIds.kRightDriveMotor3,
-      CANSparkMaxLowLevel.MotorType.kBrushless);
+  private final CANSparkMax m_leftMotor1 =
+      new CANSparkMax(Constants.DrivetrainCanIds.kLeftDriveMotor1, CANSparkMaxLowLevel.MotorType.kBrushless);
+  private final CANSparkMax m_leftMotor2 =
+      new CANSparkMax(Constants.DrivetrainCanIds.kLeftDriveMotor2, CANSparkMaxLowLevel.MotorType.kBrushless);
+  private final CANSparkMax m_leftMotor3 =
+      new CANSparkMax(Constants.DrivetrainCanIds.kLeftDriveMotor3, CANSparkMaxLowLevel.MotorType.kBrushless);
+  private final CANSparkMax m_rightMotor1 =
+      new CANSparkMax(Constants.DrivetrainCanIds.kRightDriveMotor1, CANSparkMaxLowLevel.MotorType.kBrushless);
+  private final CANSparkMax m_rightMotor2 =
+      new CANSparkMax(Constants.DrivetrainCanIds.kRightDriveMotor2, CANSparkMaxLowLevel.MotorType.kBrushless);
+  private final CANSparkMax m_rightMotor3 =
+      new CANSparkMax(Constants.DrivetrainCanIds.kRightDriveMotor3, CANSparkMaxLowLevel.MotorType.kBrushless);
 
   private final MotorControllerGroup m_leftMotors = new MotorControllerGroup(m_leftMotor1, m_leftMotor2, m_leftMotor3);
-  private final MotorControllerGroup m_rightMotors = new MotorControllerGroup(m_rightMotor1, m_rightMotor2,
-      m_rightMotor3);
+  private final MotorControllerGroup m_rightMotors =
+      new MotorControllerGroup(m_rightMotor1, m_rightMotor2, m_rightMotor3);
 
   private final DifferentialDrive m_drive = new DifferentialDrive(m_leftMotors, m_rightMotors);
 
@@ -79,7 +79,7 @@ public class DrivetrainSub extends SubsystemBase {
   public void interrupt() {
     // Nothing to do on interrupt at this time
   }
-  
+
   private void zeroDrivetrainEncoders() {
     m_leftMotor1.getEncoder().setPosition(0);
   }
@@ -117,7 +117,7 @@ public class DrivetrainSub extends SubsystemBase {
   }
 
   private double getEncoderRotationsToMeterFactor() {
-    if (m_shifter.get()) {
+    if(m_shifter.get()) {
       return kEncoderRotationsToMeterHighGear;
     } else {
       return kEncoderRotationsToMeterLowGear;
@@ -161,7 +161,7 @@ public class DrivetrainSub extends SubsystemBase {
 
   public void setBrakeCmd(boolean isBrakeOn) {
     IdleMode mode;
-    if (isBrakeOn) {
+    if(isBrakeOn) {
       tankDrive(0, 0);
       arcadeDrive(0, 0);
       mode = IdleMode.kBrake;
@@ -178,14 +178,14 @@ public class DrivetrainSub extends SubsystemBase {
   }
 
   public void autoShift() {
-    if (!m_isAutoShift) {
+    if(!m_isAutoShift) {
       return;
     } else {
       double averageWheelSpeed = (getLeftVelocity() + getRightVelocity()) / 2.;
 
-      if (Math.abs(averageWheelSpeed) > kShiftUpSpeed) {
+      if(Math.abs(averageWheelSpeed) > kShiftUpSpeed) {
         shift(true);
-      } else if (Math.abs(averageWheelSpeed) < kShiftDownSpeed) {
+      } else if(Math.abs(averageWheelSpeed) < kShiftDownSpeed) {
         shift(false);
       }
     }

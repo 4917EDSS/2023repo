@@ -20,28 +20,29 @@ public class AlignToVisionCmd extends CommandBase {
   private final double kMaxPower = 0.45; // Maximum possible motor power
   private double kPower = 0.0;
   private long m_timeStart; // Time constraint incase it never aligns
+
   public AlignToVisionCmd(DrivetrainSub drivetrain, VisionSub vision) {
     // Use addRequirements() here to declare subsystem dependencies.
 
     m_drivetrainSub = drivetrain;
     m_visionSub = vision;
 
-    addRequirements(drivetrain,vision);
+    addRequirements(drivetrain, vision);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     m_timeStart = RobotController.getFPGATime();
-    
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     double angle_offset = m_visionSub.getHorizontalAngle();
-    kPower = MathUtil.clamp(m_angleController.calculate(-angle_offset,0.0),-1.0,1.0);
-    m_drivetrainSub.arcadeDrive(0.0, kPower*kMaxPower);
+    kPower = MathUtil.clamp(m_angleController.calculate(-angle_offset, 0.0), -1.0, 1.0);
+    m_drivetrainSub.arcadeDrive(0.0, kPower * kMaxPower);
   }
 
   // Called once the command ends or is interrupted.
@@ -59,11 +60,11 @@ public class AlignToVisionCmd extends CommandBase {
     if(RobotController.getFPGATime() - m_timeStart > 3000000) { // After 3 seconds the command stops automatically
       return true;
     }
-    
+
     if(Math.abs(kPower) < 0.01) {
       return true;
     }
-    
+
     return false;
   }
 }

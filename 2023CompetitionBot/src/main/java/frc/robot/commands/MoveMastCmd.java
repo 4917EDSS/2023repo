@@ -9,10 +9,10 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import frc.robot.subsystems.ManipulatorSub;
 
 public class MoveMastCmd extends CommandBase {
-  /** Creates a new MoveMastCmd. */
-
   private final CommandPS4Controller m_controller;
   private final ManipulatorSub m_manipulatorSub;
+
+  /** Creates a new MoveMastCmd. */
   public MoveMastCmd(CommandPS4Controller controller, ManipulatorSub manipulatorSub) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_controller = controller;
@@ -29,14 +29,11 @@ public class MoveMastCmd extends CommandBase {
   public void execute() {
     if(m_controller.povUp().getAsBoolean()) {
       m_manipulatorSub.setMastPosition(30.0);
-    }
-    else if(m_controller.povLeft().getAsBoolean()) {
+    } else if(m_controller.povLeft().getAsBoolean()) {
       m_manipulatorSub.setMastPosition(5.0);
-    }
-    else if(m_controller.povRight().getAsBoolean()) {
+    } else if(m_controller.povRight().getAsBoolean()) {
       m_manipulatorSub.setMastPosition(55.0);
-    }
-    else {
+    } else {
       m_manipulatorSub.moveMast(0.0);
     }
   }

@@ -12,6 +12,7 @@ public class SetArmAngleCmd extends CommandBase {
   /** Creates a new SetArmAngleCmd. */
   private final CommandPS4Controller m_controller;
   private final ManipulatorSub m_manipulatorSub;
+
   public SetArmAngleCmd(CommandPS4Controller controller, ManipulatorSub manipulatorSub) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_controller = controller;
@@ -28,14 +29,11 @@ public class SetArmAngleCmd extends CommandBase {
   public void execute() {
     if(m_controller.povDown().getAsBoolean()) {
       m_manipulatorSub.setArmAngle(0.0);
-    }
-    else if(m_controller.povLeft().getAsBoolean()) {
+    } else if(m_controller.povLeft().getAsBoolean()) {
       m_manipulatorSub.setArmAngle(-80.0);
-    }
-    else if(m_controller.povRight().getAsBoolean()) {
+    } else if(m_controller.povRight().getAsBoolean()) {
       m_manipulatorSub.setArmAngle(80.0);
-    }
-    else {
+    } else {
       m_manipulatorSub.rotateArm(0);
     }
   }

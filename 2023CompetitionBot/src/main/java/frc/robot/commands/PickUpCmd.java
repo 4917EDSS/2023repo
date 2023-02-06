@@ -4,7 +4,6 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ManipulatorSub;
 
@@ -13,23 +12,24 @@ public class PickUpCmd extends CommandBase {
   private final static double kStationMastPosition = 13;
   private final static double kGroundArmAngle = -30;
   private final static double kGroundMastPosition = 30;
-  
+
   public final static int kSquareButton = 0;
   public final static int kOptionsButton = 1;
 
   private double m_armAngle = 0;
   private double m_mastPosition = 0;
-  
+
   private final ManipulatorSub m_manipulatorSub;
+
   /** Creates a new MoveManipulatorToHighPickUpCmd. */
   public PickUpCmd(ManipulatorSub manipulatorSub, int button) {
     m_manipulatorSub = manipulatorSub;
     addRequirements(manipulatorSub);
 
-    if(button == kSquareButton){
+    if(button == kSquareButton) {
       m_armAngle = kStationArmAngle;
       m_mastPosition = kStationMastPosition;
-    } else if(button == kOptionsButton){
+    } else if(button == kOptionsButton) {
       m_armAngle = kGroundArmAngle;
       m_mastPosition = kGroundMastPosition;
     }
@@ -60,13 +60,14 @@ public class PickUpCmd extends CommandBase {
     boolean isArmAngleInPosition = false;
     boolean isMastInPosition = false;
 
-    if((m_manipulatorSub.getArmAngle() >= (m_armAngle - 5)) && (m_manipulatorSub.getArmAngle() <= (m_armAngle +5))){
+    if((m_manipulatorSub.getArmAngle() >= (m_armAngle - 5)) && (m_manipulatorSub.getArmAngle() <= (m_armAngle + 5))) {
       isArmAngleInPosition = true;
     }
-    if((m_manipulatorSub.getMastPosition() >= (m_mastPosition - 5)) && (m_manipulatorSub.getMastPosition() <= (m_mastPosition + 5))){
+    if((m_manipulatorSub.getMastPosition() >= (m_mastPosition - 5))
+        && (m_manipulatorSub.getMastPosition() <= (m_mastPosition + 5))) {
       isMastInPosition = true;
     }
 
-    return(isArmAngleInPosition && isMastInPosition); 
+    return (isArmAngleInPosition && isMastInPosition);
   }
 }

@@ -30,13 +30,9 @@ import frc.robot.subsystems.ManipulatorSub.ManipulatorMode;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 
 /**
- * This class is where the bulk of the robot should be declared. Since
- * Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in
- * the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of
- * the robot (including
- * subsystems, commands, and trigger mappings) should be declared here.
+ * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
+ * little robot logic should actually be handled in the {@link Robot} periodic methods (other than the scheduler calls).
+ * Instead, the structure of the robot (including subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
@@ -51,10 +47,10 @@ public class RobotContainer {
   // TODO: Add vision subsystem when camera connected
 
   // Define controllers
-  private final CommandPS4Controller m_driverController = new CommandPS4Controller(
-      OperatorConstants.kDriverControllerPort);
-  private final CommandPS4Controller m_operatorController = new CommandPS4Controller(
-      OperatorConstants.kOperatorControllerPort);
+  private final CommandPS4Controller m_driverController =
+      new CommandPS4Controller(OperatorConstants.kDriverControllerPort);
+  private final CommandPS4Controller m_operatorController =
+      new CommandPS4Controller(OperatorConstants.kOperatorControllerPort);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -81,24 +77,17 @@ public class RobotContainer {
   }
 
   /**
-   * Use this method to define your trigger->command mappings. Triggers can be
-   * created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with
-   * an arbitrary
-   * predicate, or via the named factories in {@link
-   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for
-   * {@link
-   * CommandXboxController
-   * Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-   * PS4} controllers or
-   * {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
-   * joysticks}.
+   * Use this method to define your trigger->command mappings. Triggers can be created via the
+   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary predicate, or via the
+   * named factories in {@link edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for
+   * {@link CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller PS4}
+   * controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight joysticks}.
    */
 
   private void configureBindings() {
     // Driver controller bindings
-    m_driverController.L3().or(
-        m_driverController.R3()).onTrue(new InterruptAllCommandsCmd(m_manipulatorSub, m_gripperSub, m_drivetrainSub));
+    m_driverController.L3().or(m_driverController.R3())
+        .onTrue(new InterruptAllCommandsCmd(m_manipulatorSub, m_gripperSub, m_drivetrainSub));
 
     m_driverController.povUp().onTrue(new AlignToVisionCmd(m_drivetrainSub, m_visionSub));
 
@@ -106,58 +95,42 @@ public class RobotContainer {
 
     m_driverController.R1().onTrue(new SetManualGearCmd(true, m_drivetrainSub));
 
-    m_driverController.triangle().onTrue(
-        new InstantCommand(
-            () -> m_drivetrainSub.setIsAutoShift(true), // Call on command start
-            m_drivetrainSub));
-        
+    m_driverController.triangle().onTrue(new InstantCommand(() -> m_drivetrainSub.setIsAutoShift(true), // Call on command start
+        m_drivetrainSub));
+
     // Operator controller bindings
-    m_operatorController.L3().or(
-        m_operatorController.R3()).onTrue(new InterruptAllCommandsCmd(m_manipulatorSub, m_gripperSub, m_drivetrainSub));
+    m_operatorController.L3().or(m_operatorController.R3())
+        .onTrue(new InterruptAllCommandsCmd(m_manipulatorSub, m_gripperSub, m_drivetrainSub));
 
-    m_operatorController.povUp().whileTrue(
-        new StartEndCommand(
-            () -> m_manipulatorSub.rotateArm(0.3), // Call on command start
-            () -> m_manipulatorSub.rotateArm(0.0), // Call on command end
-            m_manipulatorSub)); // Required subsystem
+    m_operatorController.povUp().whileTrue(new StartEndCommand(() -> m_manipulatorSub.rotateArm(0.3), // Call on command start
+        () -> m_manipulatorSub.rotateArm(0.0), // Call on command end
+        m_manipulatorSub)); // Required subsystem
 
-    m_operatorController.povDown().whileTrue(
-        new StartEndCommand(
-            () -> m_manipulatorSub.rotateArm(-0.3),
-            () -> m_manipulatorSub.rotateArm(0.0),
-            m_manipulatorSub));
+    m_operatorController.povDown().whileTrue(new StartEndCommand(() -> m_manipulatorSub.rotateArm(-0.3),
+        () -> m_manipulatorSub.rotateArm(0.0), m_manipulatorSub));
 
-    m_operatorController.povRight().whileTrue(
-        new StartEndCommand(
+    m_operatorController.povRight()
+        .whileTrue(new StartEndCommand(
             () -> m_manipulatorSub.setManipulatorState(ManipulatorSub.ManipulatorMode.MANUAL, 0.6),
-            () -> m_manipulatorSub.setManipulatorState(ManipulatorSub.ManipulatorMode.MANUAL, 0.0),
-            m_manipulatorSub));
+            () -> m_manipulatorSub.setManipulatorState(ManipulatorSub.ManipulatorMode.MANUAL, 0.0), m_manipulatorSub));
 
-    m_operatorController.povLeft().whileTrue(
-        new StartEndCommand(
+    m_operatorController.povLeft()
+        .whileTrue(new StartEndCommand(
             () -> m_manipulatorSub.setManipulatorState(ManipulatorSub.ManipulatorMode.MANUAL, -0.6),
-            () -> m_manipulatorSub.setManipulatorState(ManipulatorSub.ManipulatorMode.MANUAL, 0.0),
-            m_manipulatorSub));
+            () -> m_manipulatorSub.setManipulatorState(ManipulatorSub.ManipulatorMode.MANUAL, 0.0), m_manipulatorSub));
 
     m_operatorController.triangle().onTrue(
-        new StartEndCommand(
-            () -> m_gripperSub.setValve(true),
-            () -> m_gripperSub.setValve(true),
-            m_gripperSub));
+        new StartEndCommand(() -> m_gripperSub.setValve(true), () -> m_gripperSub.setValve(true), m_gripperSub));
 
-    m_operatorController.cross().onTrue(
-        new InstantCommand(
-            () -> m_gripperSub.setValve(false),
-            m_gripperSub));
+    m_operatorController.cross().onTrue(new InstantCommand(() -> m_gripperSub.setValve(false), m_gripperSub));
 
-    m_operatorController.circle().onTrue(
-        new InstantCommand(
-            () -> m_manipulatorSub.setMastMode(ManipulatorMode.MANUAL, 42.9757385253),
+    m_operatorController.circle()
+        .onTrue(new InstantCommand(() -> m_manipulatorSub.setMastMode(ManipulatorMode.MANUAL, 42.9757385253),
             /// 42.9757385253,-76.8597106933),
             m_manipulatorSub));
 
     m_operatorController.square().onTrue(new PickUpCmd(m_manipulatorSub, 0));
-  
+
     m_operatorController.options().onTrue(new PickUpCmd(m_manipulatorSub, 1));
   }
 
@@ -181,17 +154,12 @@ public class RobotContainer {
   public void resetEncoders() {
     m_manipulatorSub.resetEncoders();
   }
-/* 
-  public void LedPanell () {
-    int r, g, b;
-    r = 0;
-    g = 1;
-    b = 2;
-
-    m_ledSub.setLEDState(LEDMode.ConeMode);
-    double[] colour = {Double.valueOf(m_ledSub.m_rr), Double.valueOf(m_ledSub.gg), Double.valueOf(m_ledSub.bb)}; 
-    SmartDashboard.putNumberArray("null", colour);
-
-  }
-  */
+  /*
+   * public void LedPanell () { int r, g, b; r = 0; g = 1; b = 2;
+   * 
+   * m_ledSub.setLEDState(LEDMode.ConeMode); double[] colour = {Double.valueOf(m_ledSub.m_rr),
+   * Double.valueOf(m_ledSub.gg), Double.valueOf(m_ledSub.bb)}; SmartDashboard.putNumberArray("null", colour);
+   * 
+   * }
+   */
 }

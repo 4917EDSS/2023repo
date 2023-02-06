@@ -84,23 +84,22 @@ public class VisionSub extends SubsystemBase {
       JSONObject json_data;
       JSONArray result_data;
       double distance = 0.0;
-      
-      try {
-        json_data = (JSONObject)parser.parse(temp_json); // Go through the json dump to get the tag Z position
-        json_data = (JSONObject)json_data.get("Results");
-        
-        result_data = (JSONArray)json_data.get("Fiducial");
-        json_data = (JSONObject)result_data.get(0);
-        result_data = (JSONArray)json_data.get("t6t_cs");
-        distance = (double)result_data.get(2);
 
-      }
-      catch(Exception e) {
+      try {
+        json_data = (JSONObject) parser.parse(temp_json); // Go through the json dump to get the tag Z position
+        json_data = (JSONObject) json_data.get("Results");
+
+        result_data = (JSONArray) json_data.get("Fiducial");
+        json_data = (JSONObject) result_data.get(0);
+        result_data = (JSONArray) json_data.get("t6t_cs");
+        distance = (double) result_data.get(2);
+
+      } catch (Exception e) {
         json_data = null;
         distance = -0.0; // -0.0 means error
         //System.out.println(e);
       }
-      return distance*kSlope; // Convert to meters
+      return distance * kSlope; // Convert to meters
     }
     return 0.0; // No Apriltag vision
   }
@@ -109,12 +108,12 @@ public class VisionSub extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
 
-    SmartDashboard.putNumber("Horizontal Angle",getHorizontalAngle());
-    SmartDashboard.putNumber("Vertical Angle",getVerticalAngle());
-    SmartDashboard.putNumber("Target Area",getTargetArea());
-    SmartDashboard.putBoolean("Target Available",hasTarget());
-    SmartDashboard.putNumber("Apriltag ID",getPrimaryID());
-    m_pipe = (int)SmartDashboard.getNumber("Pipeline", m_pipe);
+    SmartDashboard.putNumber("Horizontal Angle", getHorizontalAngle());
+    SmartDashboard.putNumber("Vertical Angle", getVerticalAngle());
+    SmartDashboard.putNumber("Target Area", getTargetArea());
+    SmartDashboard.putBoolean("Target Available", hasTarget());
+    SmartDashboard.putNumber("Apriltag ID", getPrimaryID());
+    m_pipe = (int) SmartDashboard.getNumber("Pipeline", m_pipe);
     SmartDashboard.putNumber("Pipeline", m_pipe);
 
     SmartDashboard.putNumber("Distance (m)", getDistance());
