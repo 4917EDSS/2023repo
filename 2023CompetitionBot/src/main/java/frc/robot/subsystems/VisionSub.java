@@ -76,13 +76,15 @@ public class VisionSub extends SubsystemBase {
     m_pipeline.setNumber(line);
   }
 
-  public double getDistance() { // Returns distance in meter, 0 if no distance [ Must have apriltag pipeline enabled]
+  public double getDistance() { // Returns distance in meters, 0 if no distance [ Must have apriltag pipeline enabled]
 
     if(getVisionMode() == Constants.LimelightConstants.kApriltag) {
       JSONParser parser = new JSONParser();
       String temp_json = m_json.getString("");
       JSONObject json_data;
       JSONArray result_data;
+      double dx = 0.0;
+      double dz = 0.0;
       double distance = 0.0;
 
       try {
@@ -92,18 +94,44 @@ public class VisionSub extends SubsystemBase {
         result_data = (JSONArray) json_data.get("Fiducial");
         json_data = (JSONObject) result_data.get(0);
         result_data = (JSONArray) json_data.get("t6t_cs");
-        distance = (double) result_data.get(2);
+        dx = (double) result_data.get(0); // X value of apriltag
+        dz = (double) result_data.get(2); // Z value of apriltag
 
       } catch (Exception e) {
         json_data = null;
         distance = -0.0; // -0.0 means error
         //System.out.println(e);
       }
-      return distance * kSlope; // Convert to meters
+      return Math.sqrt(dx*dx+dz*dz) * kSlope; // Convert to meters
     }
     return 0.0; // No Apriltag vision
   }
+  public double getDistanceX() { // Get horizontal distance from target
+    if(getVisionMode() == Constants.LimelightConstants.kApriltag) {
+      JSONParser parser = new JSONParser();
+      String temp_json = m_json.getString("");
+      JSONObject json_data;
+      JSONArray result_data;
+      double dx = 0.0;
 
+      try {
+        json_data = (JSONObject) parser.parse(temp_json); // Go through the json dump to get the tag Z position
+        json_data = (JSONObject) json_data.get("Results");
+
+        result_data = (JSONArray) json_data.get("Fiducial");
+        json_data = (JSONObject) result_data.get(0);
+        result_data = (JSONArray) json_data.get("t6t_cs");
+        dx = (double) result_data.get(0); // X value of apriltag
+
+      } catch (Exception e) {
+        json_data = null;
+        dx = -0.0; // -0.0 means error
+        //System.out.println(e);
+      }
+      return dx * kSlope; // Convert to meters
+    }
+    return 0.0; // No Apriltag vision
+  }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -113,9 +141,10 @@ public class VisionSub extends SubsystemBase {
     SmartDashboard.putNumber("Target Area", getTargetArea());
     SmartDashboard.putBoolean("Target Available", hasTarget());
     SmartDashboard.putNumber("Apriltag ID", getPrimaryID());
-    m_pipe = (int) SmartDashboard.getNumber("Pipeline", m_pipe);
-    SmartDashboard.putNumber("Pipeline", m_pipe);
+    //m_pipe = (int) SmartDashboard.getNumber("Pipeline", m_pipe);
+    //SmartDashboard.putNumber("Pipeline", m_pipe);
 
     SmartDashboard.putNumber("Distance (m)", getDistance());
+    SmartDashboard.putNumber("Distance X", getDistanceX());
   }
 }

@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AlignToVisionCmd;
+import frc.robot.commands.DriveAlignCmd;
 import frc.robot.commands.DriveWithJoystickCmd;
 import frc.robot.commands.InterruptAllCommandsCmd;
 import frc.robot.commands.PickUpCmd;
@@ -87,9 +88,9 @@ public class RobotContainer {
   private void configureBindings() {
     // Driver controller bindings
     m_driverController.L3().or(m_driverController.R3())
-        .onTrue(new InterruptAllCommandsCmd(m_manipulatorSub, m_gripperSub, m_drivetrainSub));
+        .whileTrue(new InterruptAllCommandsCmd(m_manipulatorSub, m_gripperSub, m_drivetrainSub));
 
-    m_driverController.povUp().onTrue(new AlignToVisionCmd(m_drivetrainSub, m_visionSub));
+    m_driverController.povUp().onTrue(new DriveAlignCmd(m_drivetrainSub, m_visionSub, 15.0));
 
     m_driverController.L1().onTrue(new SetManualGearCmd(false, m_drivetrainSub));
 

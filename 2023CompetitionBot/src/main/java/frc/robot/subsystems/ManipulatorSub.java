@@ -230,9 +230,9 @@ public class ManipulatorSub extends SubsystemBase {
 
   public void setMastPosition(double encoderTicks) { // Set tick position of mast. 0 - Full back, 30 - Straight up, 60
     // full forwards
-    double currentPos = getMastPosition();// / kMaxMastTicks * 2.0 - 1.0; // Convert from 0-1 to -1-1
-    double targetPos = encoderTicks;// MathUtil.clamp(encoderTicks, 0.0, kMaxMastTicks) / kMaxMastTicks * 2.0 - 1.0;
-    double power = MathUtil.clamp(m_mastPID.calculate(currentPos, targetPos), -kMastPower, kMastPower);
+    double currentPos = getMastPosition();
+    double targetPos = encoderTicks;
+    double power = MathUtil.clamp(m_mastPID.calculate(currentPos, targetPos), -kMastPower, kMastPower); // Calculate how much power to use to get to target position
 
     moveMast(power);
   }
