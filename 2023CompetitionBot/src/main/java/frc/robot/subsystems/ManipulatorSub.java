@@ -40,20 +40,29 @@ public class ManipulatorSub extends SubsystemBase {
   private final PIDController m_armPID = new PIDController(0.1, 0.0, 0.0);
 
   // STATE VARIABLES //
-  public enum ManipulatorMode {
+  public enum OperationMode {
     AUTO, DISABLED, MANUAL
   }
 
-  private ManipulatorMode m_mastCurrentMode = ManipulatorMode.DISABLED;
+  public enum OperationState {
+    IDLE, HOLDING, MOVING, INTERRUPTED
+  }
+
+  private OperationMode m_mastCurrentMode = OperationMode.DISABLED;
+  private OperationState m_mastNewState = OperationState.IDLE;
+  private OperationMode m_mastNewMode = OperationMode.DISABLED;
   private double m_mastCurrentPosition = 0.0;
   private double m_mastCurrentVelocity = 0.0;
-  private double m_mastTargettPosition = 0.0;
+  private double m_mastTargetPosition = 0.0;
+  private double m_mastNewTargetPosition = 0.0;
   private double m_mastTargetVelocity = 0.0;
   private double m_mastTargetPower = 0.0;
+  private double m_mastNewTargetPower = 0.0;
+  private boolean m_mastNewStateParameters = false;
 
   private double m_armCurrentAngle = 0.0;
   private double m_armCurrentVelocity = 0.0;
-  private ManipulatorMode m_armCurrentMode = ManipulatorMode.DISABLED;
+  private OperationMode m_armCurrentMode = OperationMode.DISABLED;
 
   /** Creates a new ManipulatorSub. */
   public ManipulatorSub() {
@@ -84,9 +93,9 @@ public class ManipulatorSub extends SubsystemBase {
     //TODO: Cleanly stop any state machine driven motion
   }
 
-  public void setManipulatorState(ManipulatorMode mode, double mastPower) {
+  public void setManipulatorState(OperationMode mode, double mastPower) {
     // TODO others arent implented yet
-    assert mode == ManipulatorMode.MANUAL;
+    assert mode == OperationMode.MANUAL;
     m_mastTargetPower = mastPower;
   }
 
@@ -151,6 +160,48 @@ public class ManipulatorSub extends SubsystemBase {
 
   // ------------------------- MAST ----------------------//
 
+
+  public void setMastPosition(OperationMode mode, double targetPower, double targetPosition) {
+    // Only do something if one of the parameters has changed
+    if((mode == m_mastCurrentMode) && (targetPower == m_mastTargetPower) && (targetPosition == m_mastTargetPosition)) {
+      return;
+    }
+
+    // validate input parameters
+    if(Math.abs(targetPower) > 1.0) {
+      return;
+    }
+
+    if((mode != OperationMode.MANUAL) && ((targetPosition < kMastPositionMin) || (targetPosition > kMastPositionMax))) {
+      return;
+    }
+
+    // If an old input is pedning, drop it
+    m_mastNewStateParameters = false;
+
+    switch (mode) {
+      case DISABLED:
+        // Turn motors off
+        m_mastNewState = OperationState.IDLE;
+        m_mastNewMode = mode;
+        m_mastNewTargetPower = 0.0;
+        m_mastNewTargetPosition = targetPosition;
+        m_mastNewStateParameters = true; // Only set this to true after all the other parameters have been set
+        break;
+      case AUTO:
+        // Go to new target position
+        m_mastNewState = OperationState.MOVING;
+        m_mastNewMode = mode;
+        m_mastNewTargetPower = Math.abs(targetPower);
+        m_mastNewTargetPosition = targetPosition;
+        m_mastNewStateParameters = true; // Only set this to true after all the other parameters have been set
+        break;
+      case MANUAL:
+        break;
+    }
+
+  }
+
   public boolean isMastWithinLimits() {
     boolean withinPositionLimits = false;
     boolean withinVelocityLimits = false;
@@ -186,10 +237,10 @@ public class ManipulatorSub extends SubsystemBase {
     moveMast(power);
   }
 
-  public void setMastMode(ManipulatorMode mode, double encoderTicks) {
+  public void setMastMode(OperationMode mode, double encoderTicks) {
     System.out.println("mode " + mode + " encoder ticks " + encoderTicks);
-    if(mode == ManipulatorMode.MANUAL) {
-      m_mastTargettPosition = encoderTicks;
+    if(mode == OperationMode.MANUAL) {
+      m_mastTargetPosition = encoderTicks;
     }
 
   }
@@ -252,7 +303,7 @@ public class ManipulatorSub extends SubsystemBase {
     double armP = 0.1;
     double armI = 0.0;
     double armD = 0.0;
-  
+
     double mastP = 0.1;
     double mastI = 0.0;
     double mastD = 0.0;

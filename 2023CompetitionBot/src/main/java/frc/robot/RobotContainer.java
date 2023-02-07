@@ -26,7 +26,7 @@ import frc.robot.subsystems.VisionSub;
 import frc.robot.subsystems.LedSub.LEDMode;
 import frc.robot.subsystems.LedSub;
 
-import frc.robot.subsystems.ManipulatorSub.ManipulatorMode;
+import frc.robot.subsystems.ManipulatorSub.OperationMode;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 
 /**
@@ -111,13 +111,13 @@ public class RobotContainer {
 
     m_operatorController.povRight()
         .whileTrue(new StartEndCommand(
-            () -> m_manipulatorSub.setManipulatorState(ManipulatorSub.ManipulatorMode.MANUAL, 0.6),
-            () -> m_manipulatorSub.setManipulatorState(ManipulatorSub.ManipulatorMode.MANUAL, 0.0), m_manipulatorSub));
+            () -> m_manipulatorSub.setManipulatorState(ManipulatorSub.OperationMode.MANUAL, 0.6),
+            () -> m_manipulatorSub.setManipulatorState(ManipulatorSub.OperationMode.MANUAL, 0.0), m_manipulatorSub));
 
     m_operatorController.povLeft()
         .whileTrue(new StartEndCommand(
-            () -> m_manipulatorSub.setManipulatorState(ManipulatorSub.ManipulatorMode.MANUAL, -0.6),
-            () -> m_manipulatorSub.setManipulatorState(ManipulatorSub.ManipulatorMode.MANUAL, 0.0), m_manipulatorSub));
+            () -> m_manipulatorSub.setManipulatorState(ManipulatorSub.OperationMode.MANUAL, -0.6),
+            () -> m_manipulatorSub.setManipulatorState(ManipulatorSub.OperationMode.MANUAL, 0.0), m_manipulatorSub));
 
     m_operatorController.triangle().onTrue(
         new StartEndCommand(() -> m_gripperSub.setValve(true), () -> m_gripperSub.setValve(true), m_gripperSub));
@@ -125,7 +125,7 @@ public class RobotContainer {
     m_operatorController.cross().onTrue(new InstantCommand(() -> m_gripperSub.setValve(false), m_gripperSub));
 
     m_operatorController.circle()
-        .onTrue(new InstantCommand(() -> m_manipulatorSub.setMastMode(ManipulatorMode.MANUAL, 42.9757385253),
+        .onTrue(new InstantCommand(() -> m_manipulatorSub.setMastMode(ManipulatorSub.OperationMode.MANUAL, 42.9757385253),
             /// 42.9757385253,-76.8597106933),
             m_manipulatorSub));
 
