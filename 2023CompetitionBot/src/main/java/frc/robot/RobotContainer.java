@@ -125,8 +125,8 @@ public class RobotContainer {
 
     m_operatorController.cross().onTrue(new InstantCommand(() -> m_gripperSub.setValve(false), m_gripperSub));
 
-    m_operatorController.circle()
-        .onTrue(new InstantCommand(() -> m_manipulatorSub.setMastMode(ManipulatorSub.OperationMode.MANUAL, 42.9757385253),
+    m_operatorController.circle().onTrue(
+        new InstantCommand(() -> m_manipulatorSub.setMastMode(ManipulatorSub.OperationMode.MANUAL, 42.9757385253),
             /// 42.9757385253,-76.8597106933),
             m_manipulatorSub));
 

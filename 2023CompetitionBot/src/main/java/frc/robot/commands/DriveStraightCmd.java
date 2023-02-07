@@ -34,19 +34,18 @@ public class DriveStraightCmd extends CommandBase {
   public void execute() {
     double rotatePwr = 1;
     double power = 1;
-    m_distanceRemaining = m_targetDriveDistance-m_drivetrainSub.getEncoderDistanceM();
+    m_distanceRemaining = m_targetDriveDistance - m_drivetrainSub.getEncoderDistanceM();
     m_distanceRemaining = Math.abs(m_distanceRemaining);
     double dir = (m_distanceRemaining < 0) ? -1 : 1;
 
-  if(m_distanceRemaining <= 0.4) { 
-    power = (m_distanceRemaining / 0.4) * (1 - kMinPower) + kMinPower;
-  }
-  if(m_distanceRemaining <= kTolerance)
-  {
-    power = 0;
-  }
+    if(m_distanceRemaining <= 0.4) {
+      power = (m_distanceRemaining / 0.4) * (1 - kMinPower) + kMinPower;
+    }
+    if(m_distanceRemaining <= kTolerance) {
+      power = 0;
+    }
 
-  m_drivetrainSub.arcadeDrive(power * dir, -rotatePwr);
+    m_drivetrainSub.arcadeDrive(power * dir, -rotatePwr);
 
   }
 
@@ -59,9 +58,9 @@ public class DriveStraightCmd extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-  if((m_distanceRemaining <= kTolerance) && (Math.abs(m_drivetrainSub.getVelocity()) <= 0.1)) {
-      return true; 
-   }
+    if((m_distanceRemaining <= kTolerance) && (Math.abs(m_drivetrainSub.getVelocity()) <= 0.1)) {
+      return true;
+    }
     return false;
   }
 }

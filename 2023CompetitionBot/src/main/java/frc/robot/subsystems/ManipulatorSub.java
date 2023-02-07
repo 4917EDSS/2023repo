@@ -179,7 +179,7 @@ public class ManipulatorSub extends SubsystemBase {
     // If an old input is pedning, drop it
     m_mastNewStateParameters = false;
 
-    switch (mode) {
+    switch(mode) {
       case DISABLED:
         // Turn motors off
         m_mastNewState = OperationState.IDLE;

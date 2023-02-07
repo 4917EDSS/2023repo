@@ -44,13 +44,12 @@ public class DriveAlignCmd extends CommandBase {
   public void execute() {
     if(m_visionSub.getDistance() > 1.0) { // Drives towards the target
       double angle_offset = m_visionSub.getHorizontalAngle();
-      kPower = MathUtil.clamp(m_angleController.calculate(-angle_offset, turn_dir*kOffsetAngle), -1.0, 1.0);
-      m_drivetrainSub.arcadeDrive(-0.6, kPower * kMaxPower); 
-    }
-    else {
+      kPower = MathUtil.clamp(m_angleController.calculate(-angle_offset, turn_dir * kOffsetAngle), -1.0, 1.0);
+      m_drivetrainSub.arcadeDrive(-0.6, kPower * kMaxPower);
+    } else {
       double angle_offset = m_visionSub.getHorizontalAngle(); // Directly aligns with target when close
       kPower = MathUtil.clamp(m_angleController.calculate(-angle_offset, 0.0), -1.0, 1.0);
-      m_drivetrainSub.arcadeDrive(-0.4, kPower * kMaxPower); 
+      m_drivetrainSub.arcadeDrive(-0.4, kPower * kMaxPower);
     }
   }
 

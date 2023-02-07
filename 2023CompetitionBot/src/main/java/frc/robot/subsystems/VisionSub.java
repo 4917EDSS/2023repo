@@ -102,10 +102,11 @@ public class VisionSub extends SubsystemBase {
         distance = -0.0; // -0.0 means error
         //System.out.println(e);
       }
-      return Math.sqrt(dx*dx+dz*dz) * kSlope; // Convert to meters
+      return Math.sqrt(dx * dx + dz * dz) * kSlope; // Convert to meters
     }
     return 0.0; // No Apriltag vision
   }
+
   public double getDistanceX() { // Get horizontal distance from target
     if(getVisionMode() == Constants.LimelightConstants.kApriltag) {
       JSONParser parser = new JSONParser();
@@ -132,6 +133,7 @@ public class VisionSub extends SubsystemBase {
     }
     return 0.0; // No Apriltag vision
   }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

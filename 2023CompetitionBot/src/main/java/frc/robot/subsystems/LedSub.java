@@ -68,7 +68,7 @@ public class LedSub extends SubsystemBase {
     m_bb = b;
     //
     if(i < 0) {
-      for (int led = 0; led < LedConstants.kLedStripLength - 1; led++) {
+      for(int led = 0; led < LedConstants.kLedStripLength - 1; led++) {
         m_ledBuffer.setRGB(led, r, g, b);
       }
     } else {
