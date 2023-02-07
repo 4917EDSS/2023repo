@@ -15,6 +15,7 @@ public class DriveForwardCmd extends CommandBase {
   public DriveForwardCmd(DrivetrainSub drivetrainSub) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_drivetrainSub = drivetrainSub;
+    addRequirements(drivetrainSub);
   }
 
   // Called when the command is initially scheduled.

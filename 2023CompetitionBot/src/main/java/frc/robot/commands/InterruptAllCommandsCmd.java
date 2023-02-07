@@ -11,7 +11,7 @@ import frc.robot.subsystems.ManipulatorSub;
 
 public class InterruptAllCommandsCmd extends CommandBase {
 
-  /** Creates a new KillSwitchCmd. */
+  /** Creates a new InterruptAllCommandsCmd. */
   private final ManipulatorSub m_manipulatorSub;
   private final GripperSub m_gripperSub;
   private final DrivetrainSub m_drivetrainSub;
