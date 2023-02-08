@@ -237,6 +237,37 @@ public class ManipulatorSub extends SubsystemBase {
     }
   }
 
+  private void updateMastStateMachine(){
+    double newPower = 0.0;
+    double currentPosition = getMastPosition();
+
+    if(m_mastNewStateParameters){
+      m_mastCurrentState = m_mastNewState;
+      m_mastCurrentMode = m_mastNewMode;
+      m_mastTargetPower = m_mastNewTargetPower;
+      m_mastCurrentPosition = m_mastNewTargetPosition;
+      m_mastNewStateParameters = false;
+    }
+
+    switch(m_mastCurrentState){
+      case IDLE:
+        newPower = 0.0;
+        break;
+      case HOLDING:
+      //TODO Create a calc mast hold power method. 
+        newPower = calcMastMovePower(currentPosition, currentPosition, newPower);
+        break;
+        case MOVING:
+        //TODO: FINISH THIS
+        break;
+    }
+  }
+
+  public double calcMastMovePower(double currentPosition, double newPosition, double targetPower) { 
+    double power = MathUtil.clamp(m_mastPID.calculate(currentPosition, newPosition), -targetPower, targetPower); 
+    return power; 
+  }
+
   public boolean isMastWithinLimits() {
     boolean withinPositionLimits = false;
     boolean withinVelocityLimits = false;
@@ -263,7 +294,7 @@ public class ManipulatorSub extends SubsystemBase {
     return m_mastMotor.getEncoder().getVelocity();
   }
 
-  public void setMastPosition(double encoderTicks) { // Set tick position of mast. 0 - Full back, 30 - Straight up, 60
+  public void autoSetMastPosition(double encoderTicks) { // Set tick position of mast. 0 - Full back, 30 - Straight up, 60
     // full forwards
     double currentPos = getMastPosition();
     double targetPos = encoderTicks;

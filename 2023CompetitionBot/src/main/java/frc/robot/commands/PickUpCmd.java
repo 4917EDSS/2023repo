@@ -44,7 +44,7 @@ public class PickUpCmd extends CommandBase {
   @Override
   public void execute() {
     m_manipulatorSub.setArmAngle(m_armAngle);
-    m_manipulatorSub.setMastPosition(m_mastPosition);
+    m_manipulatorSub.autoSetMastPosition(m_mastPosition);
   }
 
   // Called once the command ends or is interrupted.

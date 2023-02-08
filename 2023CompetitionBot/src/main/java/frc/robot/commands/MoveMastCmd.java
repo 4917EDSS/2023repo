@@ -28,11 +28,11 @@ public class MoveMastCmd extends CommandBase {
   @Override
   public void execute() {
     if(m_controller.povUp().getAsBoolean()) {
-      m_manipulatorSub.setMastPosition(30.0);
+      m_manipulatorSub.autoSetMastPosition(30.0);
     } else if(m_controller.povLeft().getAsBoolean()) {
-      m_manipulatorSub.setMastPosition(5.0);
+      m_manipulatorSub.autoSetMastPosition(5.0);
     } else if(m_controller.povRight().getAsBoolean()) {
-      m_manipulatorSub.setMastPosition(55.0);
+      m_manipulatorSub.autoSetMastPosition(55.0);
     } else {
       m_manipulatorSub.moveMast(0.0);
     }

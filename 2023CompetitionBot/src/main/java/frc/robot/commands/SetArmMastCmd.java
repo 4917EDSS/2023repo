@@ -29,7 +29,7 @@ public class SetArmMastCmd extends CommandBase {
   public void execute() {
     if(m_operatorController.povUp().getAsBoolean()) { // if manually controlled, this command won't run
       m_manipulatorSub.setArmAngle(0.0);
-      m_manipulatorSub.setMastPosition(30.0);
+      m_manipulatorSub.autoSetMastPosition(30.0);
     } else {
       if(m_operatorController.share().getAsBoolean()) {
         if(m_operatorController.povDown().getAsBoolean()) {
@@ -44,11 +44,11 @@ public class SetArmMastCmd extends CommandBase {
         }
       } else {
         if(m_operatorController.povDown().getAsBoolean()) {
-          m_manipulatorSub.setMastPosition(30.0);
+          m_manipulatorSub.autoSetMastPosition(30.0);
         } else if(m_operatorController.povLeft().getAsBoolean()) {
-          m_manipulatorSub.setMastPosition(5.0);
+          m_manipulatorSub.autoSetMastPosition(5.0);
         } else if(m_operatorController.povRight().getAsBoolean()) {
-          m_manipulatorSub.setMastPosition(55.0);
+          m_manipulatorSub.autoSetMastPosition(55.0);
         } else {
           m_manipulatorSub.moveMast(0.0);
           m_manipulatorSub.rotateArm(0.0);
