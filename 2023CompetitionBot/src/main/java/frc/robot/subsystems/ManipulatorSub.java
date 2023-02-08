@@ -321,10 +321,28 @@ public class ManipulatorSub extends SubsystemBase {
         m_armNewStateParameters = true; // Only set this to true after all the other parameters have been set
         break;
 
-      case MANUAL:
-        break;
+        case MANUAL:
+        if (Math.abs(targetPower) < kManualModePowerDeadband){
+          //Hold position 
+          if(m_mastCurrentState != OperationState.HOLDING){
+            m_mastNewState = OperationState.HOLDING;
+            m_mastNewMode = mode; 
+            m_mastNewTargetPower = 0.0;
+            m_mastNewTargetPosition = getMastPosition(); 
+            m_mastNewStateParameters = true; 
+          } 
+        } else{
+          m_armNewState = OperationState.MOVING; 
+          m_armNewMode = mode; 
+          m_armNewTargetPower = Math.abs(targetPower);
+         if ( m_armNewTargetPosition > 0){
+           m_armNewTargetPosition = kArmPositionMax;
+         }else{
+          m_armNewTargetPosition = kArmPositionMin; 
+         }
+          break;
     }
-
+   }
   }
 ///////////////////////////////////////
 
