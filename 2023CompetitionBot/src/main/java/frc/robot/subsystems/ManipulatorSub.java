@@ -22,6 +22,8 @@ public class ManipulatorSub extends SubsystemBase {
   private static final double kMastVelocityMax = 1.0; // TODO set to reasonable value
   private static final double kMastVelocityMin = -1.0; // TODO set to reasonable value
 
+  private static final double kArmPositionMax = 60.0; // In encoder ticks (striaght up is 30)
+  private static final double kArmPositionMin = 0.0; // In endcoder ticks
   private static final double kArmAngleMin = -80.0; // In encoder ticks
   private static final double kArmAngleMax = 80.0; // In encoder ticks
   private static final double kArmVelocityMax = 1.0; // TODO set to reasonable value
@@ -49,7 +51,7 @@ public class ManipulatorSub extends SubsystemBase {
   public enum OperationState {
     IDLE, HOLDING, MOVING, INTERRUPTED
   }
-
+  //Mast
   private OperationMode m_mastCurrentMode = OperationMode.DISABLED;
   private OperationState m_mastNewState = OperationState.IDLE;
   private OperationMode m_mastNewMode = OperationMode.DISABLED;
@@ -63,13 +65,20 @@ public class ManipulatorSub extends SubsystemBase {
   private double m_mastNewTargetPower = 0.0;
   private boolean m_mastNewStateParameters = false;
  
-
-  private double m_armCurrentAngle = 0.0;
-  private double m_armCurrentVelocity = 0.0;
+  //Arm
   private OperationMode m_armCurrentMode = OperationMode.DISABLED;
+  private OperationState m_armNewState = OperationState.IDLE;
+  private OperationMode m_armNewMode = OperationMode.DISABLED;
+  //private double m_armCurrentPosition = 0.0; (not used)
+  private double m_armCurrentVelocity = 0.0;
+  private double m_armCurrentAngle = 0.0;
+  private double m_armTargetPosition = 0.0;
+  private double m_armNewTargetPosition = 0.0;
+  //private double m_armTargetVelocity = 0.0;
+  private double m_armTargetPower = 0.0;
+  private double m_armNewTargetPower = 0.0;
+  private boolean m_armNewStateParameters = false;
   
- 
-
   /** Creates a new ManipulatorSub. */
   public ManipulatorSub() {
     zeroManipulator();
@@ -273,6 +282,51 @@ public class ManipulatorSub extends SubsystemBase {
   // ------------------------- ARM -----------------------//
 
   // TODO make this private when moved into state machine
+
+
+  public void setArmPosition(OperationMode mode, double targetPower, double targetPosition) {
+    // Only do something if one of the parameters has changed
+    if((mode == m_armCurrentMode) && (targetPower == m_armTargetPower) && (targetPosition == m_armTargetPosition)) {
+      return;
+    }
+
+    // validate input parameters
+    if(Math.abs(targetPower) > 1.0) {
+      return;
+    }
+
+    if((mode != OperationMode.MANUAL) && ((targetPosition < kArmPositionMin) || (targetPosition > kArmPositionMax))) {
+      return;
+    }
+
+    // If an old input is pending, drop it
+    m_armNewStateParameters = false;
+
+    switch(mode) {
+      case DISABLED:
+        // Turn motors off
+        m_armNewState = OperationState.IDLE;
+        m_armNewMode = mode;
+        m_armNewTargetPower = 0.0;
+        m_armNewTargetPosition = targetPosition;
+        m_armNewStateParameters = true; // Only set this to true after all the other parameters have been set
+        break; 
+
+      case AUTO:
+        // Go to new target position
+        m_armNewState = OperationState.MOVING;
+        m_armNewMode = mode;
+        m_armNewTargetPower = Math.abs(targetPower);
+        m_armNewTargetPosition = targetPosition;
+        m_armNewStateParameters = true; // Only set this to true after all the other parameters have been set
+        break;
+
+      case MANUAL:
+        break;
+    }
+
+  }
+///////////////////////////////////////
 
   public boolean isArmWithinLimits() {
     boolean withinAngleLimits = false;
