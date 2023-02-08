@@ -69,6 +69,7 @@ public class ManipulatorSub extends SubsystemBase {
   private OperationMode m_armCurrentMode = OperationMode.DISABLED;
   private OperationState m_armNewState = OperationState.IDLE;
   private OperationMode m_armNewMode = OperationMode.DISABLED;
+  private OperationState m_armCurrentState = OperationState.IDLE; 
   //private double m_armCurrentPosition = 0.0; (not used)
   private double m_armCurrentVelocity = 0.0;
   private double m_armCurrentAngle = 0.0;
@@ -352,12 +353,33 @@ public class ManipulatorSub extends SubsystemBase {
         m_armNewStateParameters = true; // Only set this to true after all the other parameters have been set
         break;
 
-      case MANUAL:
-        break;
+        case MANUAL:
+        if (Math.abs(targetPower) < kManualModePowerDeadband){
+          //Hold position 
+          if(m_armCurrentState != OperationState.HOLDING){
+            m_armNewState = OperationState.HOLDING;
+            m_armNewMode = mode; 
+            m_armNewTargetPower = 0.0;
+            m_armNewTargetPosition = getArmPosition(); 
+            m_armNewStateParameters = true; 
+          } 
+        } else{
+          m_armNewState = OperationState.MOVING; 
+          m_armNewMode = mode; 
+          m_armNewTargetPower = Math.abs(targetPower);
+         if ( m_armNewTargetPosition > 0){
+           m_armNewTargetPosition = kArmPositionMax;
+         }else{
+          m_armNewTargetPosition = kArmPositionMin; 
+         }
+          break;
     }
-
+   }
   }
 ///////////////////////////////////////
+public double getArmPosition() {
+  return m_armMotor.getEncoder().getPosition();
+} 
 
   public boolean isArmWithinLimits() {
     boolean withinAngleLimits = false;
