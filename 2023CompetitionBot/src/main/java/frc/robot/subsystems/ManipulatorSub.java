@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 // package frc.robot.commands;
 
+import com.fasterxml.jackson.annotation.JsonCreator.Mode;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 
@@ -25,6 +26,7 @@ public class ManipulatorSub extends SubsystemBase {
   private static final double kArmAngleMax = 80.0; // In encoder ticks
   private static final double kArmVelocityMax = 1.0; // TODO set to reasonable value
   private static final double kArmVelocityMin = -1.0; // TODO set to reasonable value
+  private static final double kManualModePowerDeadband = 0.03;
 
   private final double kArmPower = 0.6;
   private final double kMastPower = 0.3;
@@ -51,6 +53,7 @@ public class ManipulatorSub extends SubsystemBase {
   private OperationMode m_mastCurrentMode = OperationMode.DISABLED;
   private OperationState m_mastNewState = OperationState.IDLE;
   private OperationMode m_mastNewMode = OperationMode.DISABLED;
+  private OperationState m_mastCurrentState = OperationState.IDLE; 
   private double m_mastCurrentPosition = 0.0;
   private double m_mastCurrentVelocity = 0.0;
   private double m_mastTargetPosition = 0.0;
@@ -59,10 +62,13 @@ public class ManipulatorSub extends SubsystemBase {
   private double m_mastTargetPower = 0.0;
   private double m_mastNewTargetPower = 0.0;
   private boolean m_mastNewStateParameters = false;
+ 
 
   private double m_armCurrentAngle = 0.0;
   private double m_armCurrentVelocity = 0.0;
   private OperationMode m_armCurrentMode = OperationMode.DISABLED;
+  
+ 
 
   /** Creates a new ManipulatorSub. */
   public ManipulatorSub() {
@@ -176,7 +182,7 @@ public class ManipulatorSub extends SubsystemBase {
       return;
     }
 
-    // If an old input is pedning, drop it
+    // If an old input is pending, drop it
     m_mastNewStateParameters = false;
 
     switch(mode) {
@@ -185,9 +191,10 @@ public class ManipulatorSub extends SubsystemBase {
         m_mastNewState = OperationState.IDLE;
         m_mastNewMode = mode;
         m_mastNewTargetPower = 0.0;
-        m_mastNewTargetPosition = targetPosition;
+        m_mastNewTargetPosition = 0.0;
         m_mastNewStateParameters = true; // Only set this to true after all the other parameters have been set
         break;
+
       case AUTO:
         // Go to new target position
         m_mastNewState = OperationState.MOVING;
@@ -196,10 +203,29 @@ public class ManipulatorSub extends SubsystemBase {
         m_mastNewTargetPosition = targetPosition;
         m_mastNewStateParameters = true; // Only set this to true after all the other parameters have been set
         break;
-      case MANUAL:
-        break;
-    }
 
+      case MANUAL:
+        if (Math.abs(targetPower) < kManualModePowerDeadband){
+          //Hold position 
+          if(m_mastCurrentState != OperationState.HOLDING){
+            m_mastNewState = OperationState.HOLDING;
+            m_mastNewMode = mode; 
+            m_mastNewTargetPower = 0.0;
+            m_mastNewTargetPosition = getMastPosition(); 
+            m_mastNewStateParameters = true; 
+          } 
+        } else{
+          m_mastNewState = OperationState.MOVING; 
+          m_mastNewMode = mode; 
+          m_mastNewTargetPower = Math.abs(targetPower);
+         if ( m_mastNewTargetPosition > 0){
+           m_mastNewTargetPosition = kMastPositionMax;
+         }else{
+          m_mastNewTargetPosition = kMastPositionMin; 
+         }
+          break;
+        }
+    }
   }
 
   public boolean isMastWithinLimits() {
