@@ -5,27 +5,28 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ManipulatorSub;
+import frc.robot.subsystems.DrivetrainSub;
 
-// STATE MACHINE //
+public class DriveSetGearCmd extends CommandBase {
+  /** Creates a new DriveSetGearCmd. */
+  private final boolean m_isHighGear;
+  private final DrivetrainSub m_drivetrainSub;
 
-public class SetManipulatorPositionCmd extends CommandBase {
 
-  // GENERAL VARIABLES //
+  public DriveSetGearCmd(boolean isHighGear, DrivetrainSub drivetrainSub) {
+    m_isHighGear = isHighGear;
+    m_drivetrainSub = drivetrainSub;
 
-  // Need a member variable to save the DrivetrainSub that was passed into the
-  // command
-  private final ManipulatorSub m_manipulatorSub;
-
-  public SetManipulatorPositionCmd(ManipulatorSub manipulatorSub) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_manipulatorSub = manipulatorSub;
-    addRequirements(manipulatorSub);
+    addRequirements(drivetrainSub);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_drivetrainSub.setIsAutoShift(false);
+    m_drivetrainSub.shift(m_isHighGear);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
