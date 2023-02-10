@@ -49,7 +49,11 @@ public class Robot extends TimedRobot {
   public void disabledInit() {}
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+        /*if(HALUtil.getFPGAButton() == true){
+      System.out.println("User button pressed");
+    }*/
+  }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
