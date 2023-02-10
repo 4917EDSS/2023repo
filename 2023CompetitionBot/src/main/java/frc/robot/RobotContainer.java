@@ -137,10 +137,13 @@ public class RobotContainer {
     return new PrintCommand("No auto yet");
   }
 
-  public void resetEncoders() {
-    //m_manipulatorSub.resetEncoders();
-    m_armSub.zeroEncoder();
-    m_mastSub.zeroEncoder();
+  public void initSubsystems() {
+    m_armSub.init();
+    m_drivetrainSub.init();
+    m_gripperSub.init();
+    m_ledSub.init();
+    m_mastSub.init();
+    m_visionSub.init();
   }
   /*
    * public void LedPanell () { int r, g, b; r = 0; g = 1; b = 2;
