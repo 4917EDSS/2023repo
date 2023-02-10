@@ -6,17 +6,24 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.OperatorConstants;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
+import frc.robot.subsystems.JoystickSub;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 
 public class JoystickPrintCmd extends CommandBase {
+
+  private final JoystickSub m_JoystickSub;
 
   private final CommandPS4Controller m_driverController = 
   new CommandPS4Controller(OperatorConstants.kDriverControllerPort);
 
   /** Creates a new JoystickPrintCmd. */
-  public JoystickPrintCmd() {
+  public JoystickPrintCmd(JoystickSub joystickSub, CommandPS4Controller driverController) {
     // Use addRequirements() here to declare subsystem dependencies.
+    
+    m_JoystickSub = joystickSub;
+
+    addRequirements(joystickSub);
+
   }
 
   // Called when the command is initially scheduled.
@@ -27,15 +34,29 @@ public class JoystickPrintCmd extends CommandBase {
   @Override
   public void execute() 
   {
-    m_driverController.axisGreaterThan(0, 0.1).onTrue(new PrintCommand("Axis 0 greater than 0.1"));
-    m_driverController.axisGreaterThan(1, 0.1).onTrue(new PrintCommand("Axis 1 greater than 0.1"));
-    m_driverController.axisGreaterThan(2, 0.1).onTrue(new PrintCommand("Axis 2 greater than 0.1"));
-    m_driverController.axisGreaterThan(3, 0.1).onTrue(new PrintCommand("Axis 3 greater than 0.1"));
+    //if(m_driverController.getLeftX() > 0.1f || m_driverController.getLeftX() < 0.1f)
+    //{
+      System.out.print("Left X Axis: ");
+      System.out.println(m_driverController.getLeftX());
+    //}
 
-    m_driverController.axisLessThan(0, -0.1).onTrue(new PrintCommand("Axis 0 less than -0.1"));
-    m_driverController.axisLessThan(1, -0.1).onTrue(new PrintCommand("Axis 1 less than -0.1"));
-    m_driverController.axisLessThan(2, -0.1).onTrue(new PrintCommand("Axis 2 less than -0.1"));
-    m_driverController.axisLessThan(3, -0.1).onTrue(new PrintCommand("Axis 3 less than -0.1"));
+    //if(m_driverController.getLeftY() > 0.1f || m_driverController.getLeftY() < 0.1f)
+    //{
+      System.out.print("Left Y Axis: ");
+      System.out.println(m_driverController.getLeftY());
+    //}
+
+    //if(m_driverController.getRightX() > 0.1f || m_driverController.getRightX() < 0.1f)
+   // {
+      System.out.print("Right X Axis: ");
+      System.out.println(m_driverController.getRightX());
+ //   }
+
+  //  if(m_driverController.getRightY() > 0.1f || m_driverController.getRightY() < 0.1f)
+  //  {
+      System.out.print("Right Y Axis: ");
+      System.out.println(m_driverController.getLeftX());
+ //   }
   }
 
   // Called once the command ends or is interrupted.
