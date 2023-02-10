@@ -26,7 +26,6 @@ import frc.robot.subsystems.ManipulatorSub;
 import frc.robot.subsystems.VisionSub;
 import frc.robot.subsystems.LedSub.LEDMode;
 import frc.robot.subsystems.LedSub;
-
 import frc.robot.subsystems.ManipulatorSub.OperationMode;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 
@@ -103,32 +102,12 @@ public class RobotContainer {
     m_operatorController.L3().or(m_operatorController.R3())
         .onTrue(new InterruptAllCommandsCmd(m_manipulatorSub, m_gripperSub, m_drivetrainSub));
 
-    m_operatorController.povUp().whileTrue(new StartEndCommand(() -> m_manipulatorSub.rotateArm(0.3), // Call on command start
-        () -> m_manipulatorSub.rotateArm(0.0), // Call on command end
-        m_manipulatorSub)); // Required subsystem
-
-    m_operatorController.povDown().whileTrue(new StartEndCommand(() -> m_manipulatorSub.rotateArm(-0.3),
-        () -> m_manipulatorSub.rotateArm(0.0), m_manipulatorSub));
-
-    m_operatorController.povRight()
-        .whileTrue(new StartEndCommand(
-            () -> m_manipulatorSub.setManipulatorState(ManipulatorSub.OperationMode.MANUAL, 0.6),
-            () -> m_manipulatorSub.setManipulatorState(ManipulatorSub.OperationMode.MANUAL, 0.0), m_manipulatorSub));
-
-    m_operatorController.povLeft()
-        .whileTrue(new StartEndCommand(
-            () -> m_manipulatorSub.setManipulatorState(ManipulatorSub.OperationMode.MANUAL, -0.6),
-            () -> m_manipulatorSub.setManipulatorState(ManipulatorSub.OperationMode.MANUAL, 0.0), m_manipulatorSub));
 
     m_operatorController.triangle().onTrue(
         new StartEndCommand(() -> m_gripperSub.setValve(true), () -> m_gripperSub.setValve(true), m_gripperSub));
 
     m_operatorController.cross().onTrue(new InstantCommand(() -> m_gripperSub.setValve(false), m_gripperSub));
 
-    m_operatorController.circle().onTrue(
-        new InstantCommand(() -> m_manipulatorSub.setMastMode(ManipulatorSub.OperationMode.MANUAL, 42.9757385253),
-            /// 42.9757385253,-76.8597106933),
-            m_manipulatorSub));
 
     m_operatorController.square().onTrue(new PickUpCmd(m_manipulatorSub, 0));
 
