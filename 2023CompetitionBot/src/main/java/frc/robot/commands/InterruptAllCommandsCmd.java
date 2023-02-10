@@ -5,30 +5,36 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.ArmSub;
 import frc.robot.subsystems.DrivetrainSub;
 import frc.robot.subsystems.GripperSub;
-import frc.robot.subsystems.ManipulatorSub;
+import frc.robot.subsystems.MastSub;
 
 public class InterruptAllCommandsCmd extends CommandBase {
 
   /** Creates a new InterruptAllCommandsCmd. */
-  private final ManipulatorSub m_manipulatorSub;
+  //private final ManipulatorSub m_manipulatorSub;
+  private final ArmSub m_armSub;
+  private final MastSub m_mastSub;
   private final GripperSub m_gripperSub;
   private final DrivetrainSub m_drivetrainSub;
 
-  public InterruptAllCommandsCmd(ManipulatorSub manipulatorSub, GripperSub gripperSub, DrivetrainSub drivetrainSub) {
-    m_manipulatorSub = manipulatorSub;
+  public InterruptAllCommandsCmd(ArmSub armSub, MastSub mastSub, GripperSub gripperSub, DrivetrainSub drivetrainSub) {
+    m_armSub = armSub;
+    m_mastSub = mastSub;
     m_gripperSub = gripperSub;
     m_drivetrainSub = drivetrainSub;
 
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(manipulatorSub, gripperSub, drivetrainSub);
+    addRequirements(mastSub, armSub, gripperSub, drivetrainSub);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_manipulatorSub.interrupt();
+    m_armSub.interrupt();
+    m_mastSub.interrupt();
+    //m_manipulatorSub.interrupt();
     m_drivetrainSub.interrupt();
     m_gripperSub.interrupt();
   }
