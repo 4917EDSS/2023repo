@@ -100,5 +100,9 @@ public class LedSub extends SubsystemBase {
     double[] colour = {Double.valueOf(m_rr), Double.valueOf(m_gg), Double.valueOf(m_bb)};
 
     SmartDashboard.putNumberArray("null", colour);
+
+
   }
+  
+  public void init() {}
 }
