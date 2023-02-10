@@ -7,13 +7,13 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DrivetrainSub;
 
-public class SetManualGearCmd extends CommandBase {
-  /** Creates a new SetManualGearCmd. */
+public class DriveSetGearCmd extends CommandBase {
+  /** Creates a new DriveSetGearCmd. */
   private final boolean m_isHighGear;
   private final DrivetrainSub m_drivetrainSub;
 
 
-  public SetManualGearCmd(boolean isHighGear, DrivetrainSub drivetrainSub) {
+  public DriveSetGearCmd(boolean isHighGear, DrivetrainSub drivetrainSub) {
     m_isHighGear = isHighGear;
     m_drivetrainSub = drivetrainSub;
 
