@@ -149,4 +149,6 @@ public class VisionSub extends SubsystemBase {
     SmartDashboard.putNumber("Distance (m)", getDistance());
     SmartDashboard.putNumber("Distance X", getDistanceX());
   }
+
+  public void init() {}
 }

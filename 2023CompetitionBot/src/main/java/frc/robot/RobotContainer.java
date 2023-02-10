@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -15,18 +16,20 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AlignToVisionCmd;
+import frc.robot.commands.ArmMoveWithJoystickCmd;
 import frc.robot.commands.DriveAlignCmd;
 import frc.robot.commands.DriveWithJoystickCmd;
 import frc.robot.commands.InterruptAllCommandsCmd;
 import frc.robot.commands.PickUpCmd;
-import frc.robot.commands.SetManualGearCmd;
+import frc.robot.commands.DriveSetGearCmd;
+import frc.robot.subsystems.ArmSub;
 import frc.robot.subsystems.DrivetrainSub;
 import frc.robot.subsystems.GripperSub;
 import frc.robot.subsystems.ManipulatorSub;
+import frc.robot.subsystems.MastSub;
 import frc.robot.subsystems.VisionSub;
 import frc.robot.subsystems.LedSub.LEDMode;
 import frc.robot.subsystems.LedSub;
-
 import frc.robot.subsystems.ManipulatorSub.OperationMode;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 
@@ -38,7 +41,9 @@ import edu.wpi.first.wpilibj2.command.StartEndCommand;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
-  private final ManipulatorSub m_manipulatorSub = new ManipulatorSub();
+  //private final ManipulatorSub m_manipulatorSub = new ManipulatorSub();
+  private final ArmSub m_armSub = new ArmSub();
+  private final MastSub m_mastSub = new MastSub();
   private final DrivetrainSub m_drivetrainSub = new DrivetrainSub();
   private final GripperSub m_gripperSub = new GripperSub();
   private final LedSub m_ledSub = new LedSub();
@@ -69,12 +74,14 @@ public class RobotContainer {
 
     // Set default command for subsystems
     m_drivetrainSub.setDefaultCommand(new DriveWithJoystickCmd(m_driverController, m_drivetrainSub));
+    m_armSub.setDefaultCommand(new ArmMoveWithJoystickCmd(m_operatorController, m_armSub));
     // m_manipulatorSub.setDefaultCommand(new
     // RotateArmWithJoystickCmd(m_driverController, m_manipulatorSub));
 
     // m_manipulatorSub.setDefaultCommand(new SetArmMastCmd(m_driverController,
     // m_manipulatorSub)); // Testing for arm and mast
-    m_manipulatorSub.resetEncoders();
+    m_armSub.zeroEncoder(); 
+    m_mastSub.zeroEncoder(); 
   }
 
   /**
@@ -88,51 +95,31 @@ public class RobotContainer {
   private void configureBindings() {
     // Driver controller bindings
     m_driverController.L3().or(m_driverController.R3())
-        .whileTrue(new InterruptAllCommandsCmd(m_manipulatorSub, m_gripperSub, m_drivetrainSub));
+        .whileTrue(new InterruptAllCommandsCmd(m_armSub,m_mastSub, m_gripperSub, m_drivetrainSub));
 
     m_driverController.povUp().onTrue(new DriveAlignCmd(m_drivetrainSub, m_visionSub, 15.0));
 
-    m_driverController.L1().onTrue(new SetManualGearCmd(false, m_drivetrainSub));
+    m_driverController.L1().onTrue(new DriveSetGearCmd(false, m_drivetrainSub));
 
-    m_driverController.R1().onTrue(new SetManualGearCmd(true, m_drivetrainSub));
+    m_driverController.R1().onTrue(new DriveSetGearCmd(true, m_drivetrainSub));
 
     m_driverController.triangle().onTrue(new InstantCommand(() -> m_drivetrainSub.setIsAutoShift(true), // Call on command start
         m_drivetrainSub));
 
     // Operator controller bindings
     m_operatorController.L3().or(m_operatorController.R3())
-        .onTrue(new InterruptAllCommandsCmd(m_manipulatorSub, m_gripperSub, m_drivetrainSub));
+        .onTrue(new InterruptAllCommandsCmd(m_armSub,m_mastSub, m_gripperSub, m_drivetrainSub));
 
-    m_operatorController.povUp().whileTrue(new StartEndCommand(() -> m_manipulatorSub.rotateArm(0.3), // Call on command start
-        () -> m_manipulatorSub.rotateArm(0.0), // Call on command end
-        m_manipulatorSub)); // Required subsystem
-
-    m_operatorController.povDown().whileTrue(new StartEndCommand(() -> m_manipulatorSub.rotateArm(-0.3),
-        () -> m_manipulatorSub.rotateArm(0.0), m_manipulatorSub));
-
-    m_operatorController.povRight()
-        .whileTrue(new StartEndCommand(
-            () -> m_manipulatorSub.setManipulatorState(ManipulatorSub.OperationMode.MANUAL, 0.6),
-            () -> m_manipulatorSub.setManipulatorState(ManipulatorSub.OperationMode.MANUAL, 0.0), m_manipulatorSub));
-
-    m_operatorController.povLeft()
-        .whileTrue(new StartEndCommand(
-            () -> m_manipulatorSub.setManipulatorState(ManipulatorSub.OperationMode.MANUAL, -0.6),
-            () -> m_manipulatorSub.setManipulatorState(ManipulatorSub.OperationMode.MANUAL, 0.0), m_manipulatorSub));
 
     m_operatorController.triangle().onTrue(
         new StartEndCommand(() -> m_gripperSub.setValve(true), () -> m_gripperSub.setValve(true), m_gripperSub));
 
     m_operatorController.cross().onTrue(new InstantCommand(() -> m_gripperSub.setValve(false), m_gripperSub));
 
-    m_operatorController.circle().onTrue(
-        new InstantCommand(() -> m_manipulatorSub.setMastMode(ManipulatorSub.OperationMode.MANUAL, 42.9757385253),
-            /// 42.9757385253,-76.8597106933),
-            m_manipulatorSub));
 
-    m_operatorController.square().onTrue(new PickUpCmd(m_manipulatorSub, 0));
+    m_operatorController.square().onTrue(new PickUpCmd(m_armSub,m_mastSub, 0));
 
-    m_operatorController.options().onTrue(new PickUpCmd(m_manipulatorSub, 1));
+    m_operatorController.options().onTrue(new PickUpCmd(m_armSub,m_mastSub, 1));
   }
 
   void autoChooserSetup() {
@@ -152,8 +139,13 @@ public class RobotContainer {
     return new PrintCommand("No auto yet");
   }
 
-  public void resetEncoders() {
-    m_manipulatorSub.resetEncoders();
+  public void initSubsystems() {
+    m_armSub.init();
+    m_drivetrainSub.init();
+    m_gripperSub.init();
+    m_ledSub.init();
+    m_mastSub.init();
+    m_visionSub.init();
   }
   /*
    * public void LedPanell () { int r, g, b; r = 0; g = 1; b = 2;

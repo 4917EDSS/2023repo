@@ -5,22 +5,21 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ManipulatorSub;
+import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
+import frc.robot.subsystems.ArmSub;
+import frc.robot.subsystems.SubControl;
 
-// STATE MACHINE //
+public class ArmMoveWithJoystickCmd extends CommandBase {
+  private final CommandPS4Controller m_controller;
+  private final ArmSub m_armSub;
 
-public class SetManipulatorPositionCmd extends CommandBase {
+  /** Creates a new ArmMoveWithJoystickCmd. */
+  public ArmMoveWithJoystickCmd(CommandPS4Controller controller, ArmSub armSub) {
+    m_controller = controller;
+    m_armSub = armSub;
 
-  // GENERAL VARIABLES //
-
-  // Need a member variable to save the DrivetrainSub that was passed into the
-  // command
-  private final ManipulatorSub m_manipulatorSub;
-
-  public SetManipulatorPositionCmd(ManipulatorSub manipulatorSub) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_manipulatorSub = manipulatorSub;
-    addRequirements(manipulatorSub);
+    addRequirements(armSub);
   }
 
   // Called when the command is initially scheduled.
@@ -29,11 +28,15 @@ public class SetManipulatorPositionCmd extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    m_armSub.setPosition(SubControl.Mode.MANUAL, m_controller.getRightY(), 0);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_armSub.setPosition(SubControl.Mode.MANUAL, 0.0, 0);
+  }
 
   // Returns true when the command should end.
   @Override
