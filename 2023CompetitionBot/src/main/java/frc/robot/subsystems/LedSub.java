@@ -32,6 +32,22 @@ public class LedSub extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
+  /**
+   * Use this method to reset all of the hardware and states to safe starting
+   * values
+   */
+  public void init() {
+    setColor(-1, 255, 255, 0);
+  }
+
+  /**
+   * This method puts the subsystem in a safe state when all commands are
+   * interrupted
+   */
+  public void interrupt() {
+
+  }
+
   public void setColor(int i, int r, int g, int b) {
     // Sets the RGB color of an LED, or of all of them.
     // The r, g, and b parameters are quite self-explanatory (representing the r, g,
@@ -68,7 +84,7 @@ public class LedSub extends SubsystemBase {
     m_bb = b;
     //
     if(i < 0) {
-      for(int led = 0; led < LedConstants.kLedStripLength - 1; led++) {
+      for(int led = 0; led < LedConstants.kLedStripLength; led++) {
         m_ledBuffer.setRGB(led, r, g, b);
       }
     } else {
@@ -100,5 +116,8 @@ public class LedSub extends SubsystemBase {
     double[] colour = {Double.valueOf(m_rr), Double.valueOf(m_gg), Double.valueOf(m_bb)};
 
     SmartDashboard.putNumberArray("null", colour);
+
+
   }
+
 }

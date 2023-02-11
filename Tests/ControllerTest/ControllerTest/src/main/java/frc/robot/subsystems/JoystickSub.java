@@ -8,7 +8,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class JoystickSub extends SubsystemBase {
   /** Creates a new JoystickSub. */
-  public JoystickSub() {}
+  public JoystickSub() {
+  }
 
   @Override
   public void periodic() {

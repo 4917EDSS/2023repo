@@ -45,8 +45,8 @@ public class DriveStraightCmd extends CommandBase {
       power = 0;
     }
 
-    m_drivetrainSub.arcadeDrive(power * dir, -rotatePwr);
-
+    // TODO:  Fix rotate power before testing this
+    //m_drivetrainSub.arcadeDrive(power * dir, -rotatePwr);//////////////////////////////////////////////////////////////////
   }
 
   // Called once the command ends or is interrupted.

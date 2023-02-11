@@ -5,24 +5,27 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ManipulatorSub;
+import frc.robot.subsystems.DrivetrainSub;
 
-public class RotateArmCmd extends CommandBase {
-  // Need a member variable to save the DrivetrainSub that was passed into the command
-  private final ManipulatorSub m_manipulatorSub;
+public class DriveSetGearCmd extends CommandBase {
+  /** Creates a new DriveSetGearCmd. */
+  private final boolean m_isHighGear;
+  private final DrivetrainSub m_drivetrainSub;
 
-  /** Creates a new RotateArmCmd. */
-  //TODO: Set power as a parameter
-  public RotateArmCmd(ManipulatorSub manipulatorSub) {
+
+  public DriveSetGearCmd(boolean isHighGear, DrivetrainSub drivetrainSub) {
+    m_isHighGear = isHighGear;
+    m_drivetrainSub = drivetrainSub;
+
     // Use addRequirements() here to declare subsystem dependencies.
-    m_manipulatorSub = manipulatorSub;
-    addRequirements(manipulatorSub);
+    addRequirements(drivetrainSub);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_manipulatorSub.rotateArm(0.25);
+    m_drivetrainSub.setIsAutoShift(false);
+    m_drivetrainSub.shift(m_isHighGear);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -31,9 +34,7 @@ public class RotateArmCmd extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    m_manipulatorSub.rotateArm(0.0);
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
