@@ -158,8 +158,9 @@ public class GripperSub extends SubsystemBase {
           } else {
             m_newControl.targetPosition = kPositionMin;
           }
-          break;
+          m_newControlParameters = true;
         }
+        break;
     }
   }
 
