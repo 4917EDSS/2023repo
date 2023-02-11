@@ -17,6 +17,7 @@ import frc.robot.Constants;
 public class GripperSub extends SubsystemBase {
   private static final double kPositionMin = 0.0; // In encoder ticks
   private static final double kPositionMax = 60.0; // In encoder ticks (straight up is 30)
+  private static final double kManualModePowerDeadband = 0.03; // If manual power is less than this, assume power is 0
   // STATE VARIABLES //////////////////////////////////////////////////////////
   private SubControl m_currentControl; // Current states of mechanism
   private SubControl m_newControl; // New state to copy to current state when newStateParameters is true
@@ -140,7 +141,7 @@ public double getVelocityRotate() {
         break;
 
       case MANUAL:
-       //if (Math.abs(targetPower) < kManualModePowerDeadband) {
+       if (Math.abs(targetPower) < kManualModePowerDeadband) {
           // Power is 0 or close to 0 so hold position
           if (m_currentControl.state != SubControl.State.HOLDING) {
             // We're not currently holding so set that up
@@ -150,7 +151,7 @@ public double getVelocityRotate() {
             m_newControl.targetPosition = getPositionRotate();
             m_newControlParameters = true;
           }
-         else {
+        } else {
           // Move in the specified direction with the specified power
           m_newControl.state = SubControl.State.MOVING;
           m_newControl.mode = mode;
