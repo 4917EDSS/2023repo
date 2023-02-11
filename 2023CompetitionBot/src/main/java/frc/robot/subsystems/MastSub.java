@@ -166,8 +166,9 @@ public class MastSub extends SubsystemBase {
           } else {
             m_newControl.targetPosition = kPositionMin;
           }
-          break;
+          m_newControlParameters = true;
         }
+        break;
     }
   }
 
@@ -192,7 +193,7 @@ public class MastSub extends SubsystemBase {
         newPower = 0.0;
         break;
 
-      case MOVING:
+        case MOVING:
         // If the mechanism is moving, check if it has arrived at it's target.
         if(isBlocked(currentPosition, m_currentControl.targetPosition)) {
           m_blockedPosition = currentPosition;
