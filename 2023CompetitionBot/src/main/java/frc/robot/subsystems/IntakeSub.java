@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class GripperSub extends SubsystemBase {
+public class IntakeSub extends SubsystemBase {
   private static final double kPositionMin = 0.0; // In encoder ticks
   private static final double kPositionMax = 60.0; // In encoder ticks (straight up is 30)
   private static final double kManualModePowerDeadband = 0.03; // If manual power is less than this, assume power is 0
@@ -32,8 +32,8 @@ public class GripperSub extends SubsystemBase {
   private double m_d = 0.0;
   private final PIDController m_pid = new PIDController(m_p, m_i, m_d);
 
-  /** Creates a new GripperSub. */
-  public GripperSub() {
+  /** Creates a new intakeSub. */
+  public IntakeSub() {
     
   }
 
@@ -158,8 +158,9 @@ public class GripperSub extends SubsystemBase {
           } else {
             m_newControl.targetPosition = kPositionMin;
           }
-          break;
+          m_newControlParameters = true;
         }
+        break;
     }
   }
 
