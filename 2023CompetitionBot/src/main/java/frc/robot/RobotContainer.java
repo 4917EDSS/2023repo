@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -20,7 +19,6 @@ import frc.robot.commands.DriveSetGearCmd;
 import frc.robot.commands.DriveWithJoystickCmd;
 import frc.robot.commands.InterruptAllCommandsCmd;
 import frc.robot.commands.MastMoveWithJoystickCmd;
-import frc.robot.commands.PickUpCmd;
 import frc.robot.subsystems.ArmSub;
 import frc.robot.subsystems.DrivetrainSub;
 import frc.robot.subsystems.GripperSub;
@@ -90,13 +88,16 @@ public class RobotContainer {
     // Operator controller bindings
     m_operatorController.L3().or(m_operatorController.R3())
         .onTrue(new InterruptAllCommandsCmd(m_armSub,m_mastSub, m_gripperSub, m_drivetrainSub));
+
     // L2 is maped to Intakes in
     m_operatorController.L2().onTrue(new InstantCommand(() -> m_gripperSub.spinWheelsIntake(0.3), m_gripperSub));
+    
     // R2 is maped to the intake out
     m_operatorController.R2().onTrue(new InstantCommand(() -> m_gripperSub.spinWheelsIntake(-0.3), m_gripperSub));
+    
     // Share is maped to rotate gripper
     m_operatorController.share().onTrue(new InstantCommand(() -> m_gripperSub.intakeRotate(0.3), m_gripperSub));
-    // Options is maped to rotate gripper oposite to share
+      
     m_operatorController.options().onTrue(new InstantCommand(() -> m_gripperSub.intakeRotate(-0.3), m_gripperSub));
   }
 
