@@ -37,7 +37,7 @@ public class MastMoveWithJoystickCmd extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_mastSub.setPosition(Mode.MANUAL, m_controller.getLeftY(), 0);
+    m_mastSub.setPosition(Mode.MANUAL, -m_controller.getLeftY(), 0);
    
   }
 

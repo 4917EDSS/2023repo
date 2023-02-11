@@ -23,9 +23,9 @@ public class ArmSub extends SubsystemBase {
   //TODO: Tune the two constants above
 
   // STATE VARIABLES //////////////////////////////////////////////////////////
-  private SubControl m_currentControl; // Current states of mechanism
-  private SubControl m_newControl; // New state to copy to current state when newStateParameters is true
-  private boolean m_newControlParameters; // Set to true when ready to switch to new state
+  private SubControl m_currentControl = new SubControl(); // Current states of mechanism
+  private SubControl m_newControl = new SubControl(); // New state to copy to current state when newStateParameters is true
+  private boolean m_newControlParameters = false; // Set to true when ready to switch to new state
   private double m_lastPower = 0;
   private double m_blockedPosition;
 
@@ -169,8 +169,9 @@ public class ArmSub extends SubsystemBase {
           } else {
             m_newControl.targetPosition = kPositionMin;
           }
-          break;
+          m_newControlParameters = true;
         }
+        break;
     }
   }
 
