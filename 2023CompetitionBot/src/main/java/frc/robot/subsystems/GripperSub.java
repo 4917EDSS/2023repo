@@ -17,8 +17,8 @@ public class GripperSub extends SubsystemBase {
   private static final double kPositionMax = 60.0; // In encoder ticks (straight up is 30)
   private static final double kManualModePowerDeadband = 0.03; // If manual power is less than this, assume power is 0
   // STATE VARIABLES //////////////////////////////////////////////////////////
-  private SubControl m_currentControl; // Current states of mechanism
-  private SubControl m_newControl; // New state to copy to current state when newStateParameters is true
+  private SubControl m_currentControl = new SubControl(); // Current states of mechanism
+  private SubControl m_newControl = new SubControl(); // New state to copy to current state when newStateParameters is true
   private boolean m_newControlParameters; // Set to true when ready to switch to new state
 
   /** Creates a new GripperSub. */
