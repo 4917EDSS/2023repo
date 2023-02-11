@@ -21,25 +21,25 @@ public class GripperSub extends SubsystemBase {
   private SubControl m_newControl = new SubControl(); // New state to copy to current state when newStateParameters is true
   private boolean m_newControlParameters; // Set to true when ready to switch to new state
 
-  /** Creates a new GripperSub. */
- // private final Solenoid m_solenoidPCM = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.SolenoidIds.kGripperCylinder);
-  private final CANSparkMax m_intakeMotor = new CANSparkMax((Constants.CanIds.kIntakeMotor), CANSparkMaxLowLevel.MotorType.kBrushless);
-  private final CANSparkMax m_rotateMotor = new CANSparkMax((Constants.CanIds.kRotateMotor), CANSparkMaxLowLevel.MotorType.kBrushless);
+  private final CANSparkMax m_intakeMotor =
+      new CANSparkMax((Constants.CanIds.kIntakeMotor), CANSparkMaxLowLevel.MotorType.kBrushless);
+  private final CANSparkMax m_rotateMotor =
+      new CANSparkMax((Constants.CanIds.kRotateMotor), CANSparkMaxLowLevel.MotorType.kBrushless);
 
   private double m_p = 0.1;
   private double m_i = 0.0;
   private double m_d = 0.0;
   private final PIDController m_pid = new PIDController(m_p, m_i, m_d);
 
+  /** Creates a new GripperSub. */
   public GripperSub() {
-   // m_solenoidPCM.set(false);
+    
   }
 
   @Override
   public void periodic() {
     updateStateMachine();
     updateSmartDashboard();
-    // This method will be called once per scheduler run
   }
 
   /** Use this method to reset all of the hardware and states to safe starting values */
@@ -49,66 +49,65 @@ public class GripperSub extends SubsystemBase {
 
   /** This method puts the subsystem in a safe state when all commands are interrupted */
   public void interrupt() {
-    setPosition(SubControl.Mode.DISABLED, 0.0, 0.0);
 
-}
-// This is for the intake motors
-public void spinWheelsIntake(double power) {
-  m_intakeMotor.set(power);
-}
+  }
 
-public void zeroEncoderIntake() {
-  m_intakeMotor.getEncoder().setPosition(0);
-}
+  // This is for the intake motors
+  public void spinWheelsIntake(double power) {
+    m_intakeMotor.set(power);
+  }
 
-/** Returns the position of the mechanism in encoder ticks */
-public double getPositionIntake() {
-  return m_intakeMotor.getEncoder().getPosition();
-}
+  public void zeroEncoderIntake() {
+    m_intakeMotor.getEncoder().setPosition(0);
+  }
 
-/** Returns the velocity of the mechanism in ticks per second */
-public double getVelocityIntake() {
-  return m_intakeMotor.getEncoder().getVelocity();
-}
+  /** Returns the position of the mechanism in encoder ticks */
+  public double getPositionIntake() {
+    return m_intakeMotor.getEncoder().getPosition();
+  }
 
-// This is for the rotate motors
-public void intakeRotate(double power) {
-  m_rotateMotor.set(power);
-}
+  /** Returns the velocity of the mechanism in ticks per second */
+  public double getVelocityIntake() {
+    return m_intakeMotor.getEncoder().getVelocity();
+  }
 
-public void zeroEncoderRotate() {
-  m_rotateMotor.getEncoder().setPosition(0);
-}
+  // This is for the rotate motors
+  public void intakeRotate(double power) {
+    m_rotateMotor.set(power);
+  }
 
-/** Returns the position of the mechanism in encoder ticks */
-public double getPositionRotate() {
-  return m_rotateMotor.getEncoder().getPosition();
-}
+  public void zeroEncoderRotate() {
+    m_rotateMotor.getEncoder().setPosition(0);
+  }
 
-/** Returns the velocity of the mechanism in ticks per second */
-public double getVelocityRotate() {
-  return m_rotateMotor.getEncoder().getVelocity();
-}
-/**
-   * Move the mechanism to the desired position using the state machine
-   * - In mode DISABLED, the mechanism is disabled
-   * - In mode AUTO, the mechanism smoothly goes to the specified position
-   * - In mode MANUAL, the mechanism blindly moves in the specified direction with
-   * the specified power
+  /** Returns the position of the mechanism in encoder ticks */
+  public double getPositionRotate() {
+    return m_rotateMotor.getEncoder().getPosition();
+  }
+
+  /** Returns the velocity of the mechanism in ticks per second */
+  public double getVelocityRotate() {
+    return m_rotateMotor.getEncoder().getVelocity();
+  }
+
+  /**
+   * Move the mechanism to the desired position using the state machine - In mode DISABLED, the mechanism is disabled -
+   * In mode AUTO, the mechanism smoothly goes to the specified position - In mode MANUAL, the mechanism blindly moves
+   * in the specified direction with the specified power
    */
   public void setPosition(SubControl.Mode mode, double targetPower, double targetPosition) {
     // Only do something if one of the parameters has changed
-    if ((mode == m_currentControl.mode) && (targetPower == m_currentControl.targetPower)
+    if((mode == m_currentControl.mode) && (targetPower == m_currentControl.targetPower)
         && (targetPosition == m_currentControl.targetPosition)) {
       return;
     }
 
     // Validate input parameters
-    if (Math.abs(targetPower) > 1.0) {
+    if(Math.abs(targetPower) > 1.0) {
       return; // Power out of range
     }
 
-    if ((mode != SubControl.Mode.MANUAL) && ((targetPosition < kPositionMin) || (targetPosition > kPositionMax))) {
+    if((mode != SubControl.Mode.MANUAL) && ((targetPosition < kPositionMin) || (targetPosition > kPositionMax))) {
       return; // Position is beyond allowable range
     }
 
@@ -116,7 +115,7 @@ public double getVelocityRotate() {
     m_newControlParameters = false;
 
     // Set the new state machine parameters based on the specified control mode
-    switch (mode) {
+    switch(mode) {
       case DISABLED:
         // Turn motors off
         m_newControl.state = SubControl.State.IDLE;
@@ -136,9 +135,9 @@ public double getVelocityRotate() {
         break;
 
       case MANUAL:
-       if (Math.abs(targetPower) < kManualModePowerDeadband) {
+        if(Math.abs(targetPower) < kManualModePowerDeadband) {
           // Power is 0 or close to 0 so hold position
-          if (m_currentControl.state != SubControl.State.HOLDING) {
+          if(m_currentControl.state != SubControl.State.HOLDING) {
             // We're not currently holding so set that up
             m_newControl.state = SubControl.State.HOLDING;
             m_newControl.mode = mode;
@@ -153,7 +152,7 @@ public double getVelocityRotate() {
           m_newControl.targetPower = Math.abs(targetPower);
           // Set the target position to be as far is the mechanism can go in the specified
           // direction
-          if (targetPower > 0) {
+          if(targetPower > 0) {
             m_newControl.targetPosition = kPositionMax;
           } else {
             m_newControl.targetPosition = kPositionMin;
@@ -169,7 +168,7 @@ public double getVelocityRotate() {
     double currentPosition = getPositionRotate();
 
     // Check if there are new control parameters to set
-    if (m_newControlParameters) {
+    if(m_newControlParameters) {
       m_currentControl.state = m_newControl.state;
       m_currentControl.mode = m_newControl.mode;
       m_currentControl.targetPower = m_newControl.targetPower;
@@ -178,7 +177,7 @@ public double getVelocityRotate() {
     }
 
     // Determine what power the mechanism should use based on the current state
-    switch (m_currentControl.state) {
+    switch(m_currentControl.state) {
       case IDLE:
         // If the state machine is idle, don't supply any power to the mechanism
         newPower = 0.0;
@@ -222,7 +221,7 @@ public double getVelocityRotate() {
 
   /** Display/get subsystem information to/from the Smart Dashboard */
   private void updateSmartDashboard() {
-    SmartDashboard .putNumber("Rotate Intake Encoder", getPositionRotate());
+    SmartDashboard.putNumber("Rotate Intake Encoder", getPositionRotate());
 
     double p = SmartDashboard.getNumber("Arm kP", m_p);
     double i = SmartDashboard.getNumber("Arm kI", m_i);
