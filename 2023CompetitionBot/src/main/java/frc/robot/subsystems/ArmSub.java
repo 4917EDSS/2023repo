@@ -15,7 +15,7 @@ import frc.robot.Constants;
 
 public class ArmSub extends SubsystemBase {
   // CONSTANTS ////////////////////////////////////////////////////////////////
-  private static final double kPositionMin = 0.0; // In endcoder ticks
+  private static final double kPositionMin = 0.0; // In encoder ticks
   private static final double kPositionMax = 60.0; // In encoder ticks (straight up is 30)
   private static final double kManualModePowerDeadband = 0.03; // If manual power is less than this, assume power is 0
 
