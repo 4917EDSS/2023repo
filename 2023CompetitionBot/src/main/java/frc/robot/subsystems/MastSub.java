@@ -18,6 +18,9 @@ public class MastSub extends SubsystemBase {
   private static final double kPositionMin = 0.0; // In endcoder ticks
   private static final double kPositionMax = 60.0; // In encoder ticks (straight up is 30)
   private static final double kManualModePowerDeadband = 0.03; // If manual power is less than this, assume power is 0
+  private static final double kMaxPosDifference = 0.1; // Maximum difference between the target and current pos for the state to finish  <---- Must be tuned
+  private static final double kMaxPowerStop = 0.1; // max amount of power for the state to finish                                        <--- Must be tuned
+  //TODO: Tune the two constants above
 
   // STATE VARIABLES //////////////////////////////////////////////////////////
   private SubControl m_currentControl; // Current states of mechanism
@@ -126,6 +129,7 @@ public class MastSub extends SubsystemBase {
         m_newControl.targetPower = 0.0;
         m_newControl.targetPosition = 0.0;
         m_newControlParameters = true; // Only set this to true after all the other parameters have been set
+        
         break;
 
       case AUTO:
@@ -237,6 +241,19 @@ public class MastSub extends SubsystemBase {
     m_pid.setP(p);
     m_pid.setI(i);
     m_pid.setD(d);
+  }
+
+  public boolean isFinished() {
+    if(Math.abs(getPosition()-m_currentControl.targetPosition) > kMaxPosDifference) {
+      return false;
+    }
+    if(Math.abs(getVelocity()) > kMaxPowerStop) {
+      return false;
+    }
+    if(m_newControlParameters) {
+      return false;
+    }
+    return true;
   }
 
 }
