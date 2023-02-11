@@ -22,8 +22,8 @@ public final class Constants {
     // public final static int kLeftDriveMotor = 1;	// This gives the code the network address of the motors
     public final static int kArmMotor = 8;
     public final static int kMastMotor = 5;
-    public final static int kIntakeMotor = 9999999; // To be added
-    public final static int kRotateMotor = 999999;
+    public final static int kIntakeMotor = 28; // To be added
+    public final static int kRotateMotor = 29; // To be added
     /*
      * public final static int kTopDriveMotor = 1; // This gives the code the network address of the motors public final
      * static int kShaftDriveMotor = 2;
@@ -47,7 +47,6 @@ public final class Constants {
 
   public final static class SolenoidIds {
     public final static int kShifter = 1;
-    //public final static int kGripperCylinder = 2; not used
   }
 
   public final static class LedConstants {
