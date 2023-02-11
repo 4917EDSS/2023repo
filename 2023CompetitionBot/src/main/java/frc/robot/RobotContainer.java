@@ -61,7 +61,7 @@ public class RobotContainer {
     // Set default command for subsystems
     m_drivetrainSub.setDefaultCommand(new DriveWithJoystickCmd(m_driverController, m_drivetrainSub));
     m_armSub.setDefaultCommand(new ArmMoveWithJoystickCmd(m_operatorController, m_armSub));
-    m_mastSub.setDefaultCommand(new MastMoveWithJoystickCmd(m_driverController, m_mastSub));
+    m_mastSub.setDefaultCommand(new MastMoveWithJoystickCmd(m_operatorController, m_mastSub));
 
   }
 

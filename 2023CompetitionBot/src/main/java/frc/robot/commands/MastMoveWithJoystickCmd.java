@@ -21,28 +21,30 @@ public class MastMoveWithJoystickCmd extends CommandBase {
   private final MastSub m_mastSub;
 
   public MastMoveWithJoystickCmd(CommandPS4Controller controller, MastSub mastSub) {
-
-
     m_controller = controller;
     m_mastSub = mastSub;
-    addRequirements(mastSub);
+  
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(mastSub);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+ 
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     m_mastSub.setPosition(Mode.MANUAL, m_controller.getLeftY(), 0);
+   
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_mastSub.setPosition(Mode.MANUAL, 0, 0);
+    //m_mastSub.setPosition(Mode.MANUAL, 0, 0);
   }
 
   // Returns true when the command should end.
