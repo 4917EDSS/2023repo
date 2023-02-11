@@ -8,8 +8,6 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -53,9 +51,6 @@ public class GripperSub extends SubsystemBase {
   public void interrupt() {
     setPosition(SubControl.Mode.DISABLED, 0.0, 0.0);
 
-  //public void setValve(boolean isOpen) {
-    //m_solenoidPCM.set(isOpen);
-  //}
 }
 // This is for the intake motors
 public void spinWheelsIntake(double power) {
