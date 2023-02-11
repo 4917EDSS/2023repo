@@ -15,12 +15,12 @@ import frc.robot.subsystems.ArmSub;
 import frc.robot.subsystems.SubControl.Mode;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class mastMoveWithJoystickCmd extends CommandBase {
+public class MastMoveWithJoystickCmd extends CommandBase {
   /** Creates a new maseMoveWithJoysticlCmd. */
   private final CommandPS4Controller m_controller;
   private final ArmSub m_armSub;
 
-  public mastMoveWithJoystickCmd(CommandPS4Controller controller, ArmSub armSub) {
+  public MastMoveWithJoystickCmd(CommandPS4Controller controller, ArmSub armSub) {
 
 
     m_controller = controller;

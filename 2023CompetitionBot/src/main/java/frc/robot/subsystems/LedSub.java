@@ -32,6 +32,22 @@ public class LedSub extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
+  /**
+   * Use this method to reset all of the hardware and states to safe starting
+   * values
+   */
+  public void init() {
+    setColor(-1, 255, 255, 0);
+  }
+
+  /**
+   * This method puts the subsystem in a safe state when all commands are
+   * interrupted
+   */
+  public void interrupt() {
+
+  }
+
   public void setColor(int i, int r, int g, int b) {
     // Sets the RGB color of an LED, or of all of them.
     // The r, g, and b parameters are quite self-explanatory (representing the r, g,
@@ -103,6 +119,5 @@ public class LedSub extends SubsystemBase {
 
 
   }
-  
-  public void init() {}
+
 }
