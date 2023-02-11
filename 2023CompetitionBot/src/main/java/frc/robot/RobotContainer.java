@@ -90,15 +90,14 @@ public class RobotContainer {
     // Operator controller bindings
     m_operatorController.L3().or(m_operatorController.R3())
         .onTrue(new InterruptAllCommandsCmd(m_armSub,m_mastSub, m_gripperSub, m_drivetrainSub));
-
-    m_operatorController.triangle().onTrue(
-        new StartEndCommand(() -> m_gripperSub.setValve(true), () -> m_gripperSub.setValve(true), m_gripperSub));
-
-    m_operatorController.cross().onTrue(new InstantCommand(() -> m_gripperSub.setValve(false), m_gripperSub));
-
-    m_operatorController.square().onTrue(new PickUpCmd(m_armSub,m_mastSub, 0));
-
-    m_operatorController.options().onTrue(new PickUpCmd(m_armSub,m_mastSub, 1));
+    // L2 is maped to Intakes in
+    m_operatorController.L2().onTrue(new InstantCommand(() -> m_gripperSub.spinWheelsIntake(0.3), m_gripperSub));
+    // R2 is maped to the intake out
+    m_operatorController.R2().onTrue(new InstantCommand(() -> m_gripperSub.spinWheelsIntake(-0.3), m_gripperSub));
+    // Share is maped to rotate gripper
+    m_operatorController.share().onTrue(new InstantCommand(() -> m_gripperSub.intakeRotate(0.3), m_gripperSub));
+    // Options is maped to rotate gripper oposite to share
+    m_operatorController.options().onTrue(new InstantCommand(() -> m_gripperSub.intakeRotate(-0.3), m_gripperSub));
   }
 
   void autoChooserSetup() {
