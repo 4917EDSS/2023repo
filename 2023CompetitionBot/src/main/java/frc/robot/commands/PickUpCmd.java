@@ -46,14 +46,14 @@ public class PickUpCmd extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_armSub.setPosition(Mode.MANUAL,kMaxArmPower, m_armPosition); 
+    m_armSub.setPosition(Mode.MANUAL, kMaxArmPower, m_armPosition); 
     m_mastSub.setPosition(Mode.MANUAL, kMaxMastPower, m_mastPosition);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //m_manipulatorSub.autoSetMastPosition(m_mastPosition);
+
   }
 
   // Called once the command ends or is interrupted.
@@ -66,18 +66,6 @@ public class PickUpCmd extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    /*
-    boolean isArmInPosition = false;
-    boolean isMastInPosition = false;
-
-    if((m_armSub.getPosition() >= (m_armPosition - 5)) && (m_armSub.getPosition() <= (m_armPosition + 5))) {
-      isArmInPosition = true;
-    }
-    if((m_mastSub.getPosition() >= (m_mastPosition - 5))
-        && (m_mastSub.getPosition() <= (m_mastPosition + 5))) {
-      isMastInPosition = true;
-    }
-    */
     return (m_armSub.isFinished() && m_mastSub.isFinished());
   }
 }

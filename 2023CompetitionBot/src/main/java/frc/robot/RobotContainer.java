@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -21,10 +20,9 @@ import frc.robot.commands.DriveStraightCmd;
 import frc.robot.commands.DriveWithJoystickCmd;
 import frc.robot.commands.InterruptAllCommandsCmd;
 import frc.robot.commands.MastMoveWithJoystickCmd;
-import frc.robot.commands.PickUpCmd;
 import frc.robot.subsystems.ArmSub;
 import frc.robot.subsystems.DrivetrainSub;
-import frc.robot.subsystems.GripperSub;
+import frc.robot.subsystems.IntakeSub;
 import frc.robot.subsystems.LedSub;
 import frc.robot.subsystems.MastSub;
 import frc.robot.subsystems.VisionSub;
@@ -38,7 +36,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ArmSub m_armSub = new ArmSub();
   private final DrivetrainSub m_drivetrainSub = new DrivetrainSub();
-  private final GripperSub m_gripperSub = new GripperSub();
+  private final IntakeSub m_intakeSub = new IntakeSub();
   private final LedSub m_ledSub = new LedSub();
   private final MastSub m_mastSub = new MastSub();
   private final VisionSub m_visionSub = new VisionSub();
@@ -77,7 +75,7 @@ public class RobotContainer {
   private void configureBindings() {
     // Driver controller bindings
     m_driverController.L3().or(m_driverController.R3())
-        .whileTrue(new InterruptAllCommandsCmd(m_armSub, m_mastSub, m_gripperSub, m_drivetrainSub));
+        .onTrue(new InterruptAllCommandsCmd(m_armSub,m_mastSub, m_intakeSub, m_drivetrainSub));
 
     m_driverController.povUp().onTrue(new DriveAlignCmd(m_drivetrainSub, m_visionSub, 15.0));
 
@@ -90,16 +88,19 @@ public class RobotContainer {
     m_driverController.circle().onTrue(new DriveStraightCmd(m_drivetrainSub, 2));
 
     // Operator controller bindings
-    m_operatorController.L3().or(m_operatorController .R3())
-        .onTrue(new InterruptAllCommandsCmd(m_armSub,m_mastSub, m_gripperSub, m_drivetrainSub));
+    m_operatorController.L3().or(m_operatorController.R3())
+        .onTrue(new InterruptAllCommandsCmd(m_armSub,m_mastSub, m_intakeSub, m_drivetrainSub));
+
     // L2 is maped to Intakes in
-    m_operatorController.L2().onTrue(new InstantCommand(() -> m_gripperSub.spinWheelsIntake(0.3), m_gripperSub));
+    m_operatorController.L2().onTrue(new InstantCommand(() -> m_intakeSub.spinWheelsIntake(0.3), m_intakeSub));
+    
     // R2 is maped to the intake out
-    m_operatorController.R2().onTrue(new InstantCommand(() -> m_gripperSub.spinWheelsIntake(-0.3), m_gripperSub));
+    m_operatorController.R2().onTrue(new InstantCommand(() -> m_intakeSub.spinWheelsIntake(-0.3), m_intakeSub));
+    
     // Share is maped to rotate gripper
-    m_operatorController.share().onTrue(new InstantCommand(() -> m_gripperSub.intakeRotate(0.3), m_gripperSub));
-    // Options is maped to rotate gripper oposite to share
-    m_operatorController.options().onTrue(new InstantCommand(() -> m_gripperSub.intakeRotate(-0.3), m_gripperSub));
+    m_operatorController.share().onTrue(new InstantCommand(() -> m_intakeSub.intakeRotate(0.3), m_intakeSub));
+      
+    m_operatorController.options().onTrue(new InstantCommand(() -> m_intakeSub.intakeRotate(-0.3), m_intakeSub));
   }
 
   void autoChooserSetup() {
@@ -121,7 +122,7 @@ public class RobotContainer {
   public void initSubsystems() {
     m_armSub.init();
     m_drivetrainSub.init();
-    m_gripperSub.init();
+    m_intakeSub.init();
     m_ledSub.init();
     m_mastSub.init();
     m_visionSub.init();
