@@ -19,6 +19,7 @@ import frc.robot.commands.DriveAlignCmd;
 import frc.robot.commands.DriveSetGearCmd;
 import frc.robot.commands.DriveWithJoystickCmd;
 import frc.robot.commands.InterruptAllCommandsCmd;
+import frc.robot.commands.MastMoveWithJoystickCmd;
 import frc.robot.commands.PickUpCmd;
 import frc.robot.subsystems.ArmSub;
 import frc.robot.subsystems.DrivetrainSub;
@@ -60,6 +61,7 @@ public class RobotContainer {
     // Set default command for subsystems
     m_drivetrainSub.setDefaultCommand(new DriveWithJoystickCmd(m_driverController, m_drivetrainSub));
     m_armSub.setDefaultCommand(new ArmMoveWithJoystickCmd(m_operatorController, m_armSub));
+    m_mastSub.setDefaultCommand(new MastMoveWithJoystickCmd(m_driverController, m_mastSub));
 
   }
 
