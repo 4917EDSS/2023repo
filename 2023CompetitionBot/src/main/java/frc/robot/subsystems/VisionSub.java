@@ -46,6 +46,38 @@ public class VisionSub extends SubsystemBase {
     m_json = m_limelight.getEntry("json");
   }
 
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
+
+    SmartDashboard.putNumber("Horizontal Angle", getHorizontalAngle());
+    SmartDashboard.putNumber("Vertical Angle", getVerticalAngle());
+    SmartDashboard.putNumber("Target Area", getTargetArea());
+    SmartDashboard.putBoolean("Target Available", hasTarget());
+    SmartDashboard.putNumber("Apriltag ID", getPrimaryID());
+    //m_pipe = (int) SmartDashboard.getNumber("Pipeline", m_pipe);
+    //SmartDashboard.putNumber("Pipeline", m_pipe);
+
+    SmartDashboard.putNumber("Distance (m)", getDistance());
+    SmartDashboard.putNumber("Distance X", getDistanceX());
+  }
+
+  /**
+   * Use this method to reset all of the hardware and states to safe starting
+   * values
+   */
+  public void init() {
+    setPipeline(Constants.LimelightConstants.kApriltag);
+  }
+
+  /**
+   * This method puts the subsystem in a safe state when all commands are
+   * interrupted
+   */
+  public void interrupt() {
+
+  }
+
   public double getHorizontalAngle() { // Horizontal offset between -27 to 27 degrees or -29.8 to 29.8 degrees
     return m_tx.getDouble(0.0);
   }
@@ -134,21 +166,4 @@ public class VisionSub extends SubsystemBase {
     return 0.0; // No Apriltag vision
   }
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-
-    SmartDashboard.putNumber("Horizontal Angle", getHorizontalAngle());
-    SmartDashboard.putNumber("Vertical Angle", getVerticalAngle());
-    SmartDashboard.putNumber("Target Area", getTargetArea());
-    SmartDashboard.putBoolean("Target Available", hasTarget());
-    SmartDashboard.putNumber("Apriltag ID", getPrimaryID());
-    //m_pipe = (int) SmartDashboard.getNumber("Pipeline", m_pipe);
-    //SmartDashboard.putNumber("Pipeline", m_pipe);
-
-    SmartDashboard.putNumber("Distance (m)", getDistance());
-    SmartDashboard.putNumber("Distance X", getDistanceX());
-  }
-
-  public void init() {}
 }

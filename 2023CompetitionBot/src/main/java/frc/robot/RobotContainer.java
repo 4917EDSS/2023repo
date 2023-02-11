@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -15,23 +14,18 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.AlignToVisionCmd;
 import frc.robot.commands.ArmMoveWithJoystickCmd;
 import frc.robot.commands.DriveAlignCmd;
+import frc.robot.commands.DriveSetGearCmd;
 import frc.robot.commands.DriveWithJoystickCmd;
 import frc.robot.commands.InterruptAllCommandsCmd;
 import frc.robot.commands.PickUpCmd;
-import frc.robot.commands.DriveSetGearCmd;
 import frc.robot.subsystems.ArmSub;
 import frc.robot.subsystems.DrivetrainSub;
 import frc.robot.subsystems.GripperSub;
-import frc.robot.subsystems.ManipulatorSub;
+import frc.robot.subsystems.LedSub;
 import frc.robot.subsystems.MastSub;
 import frc.robot.subsystems.VisionSub;
-import frc.robot.subsystems.LedSub.LEDMode;
-import frc.robot.subsystems.LedSub;
-import frc.robot.subsystems.ManipulatorSub.OperationMode;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
@@ -40,17 +34,14 @@ import edu.wpi.first.wpilibj2.command.StartEndCommand;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-
-  //private final ManipulatorSub m_manipulatorSub = new ManipulatorSub();
   private final ArmSub m_armSub = new ArmSub();
-  private final MastSub m_mastSub = new MastSub();
   private final DrivetrainSub m_drivetrainSub = new DrivetrainSub();
   private final GripperSub m_gripperSub = new GripperSub();
   private final LedSub m_ledSub = new LedSub();
+  private final MastSub m_mastSub = new MastSub();
+  private final VisionSub m_visionSub = new VisionSub();
+
   SendableChooser<Command> m_Chooser = new SendableChooser<>();
-  private final VisionSub m_visionSub = new VisionSub(); // Uncomment when
-  // limelight connected
-  // TODO: Add vision subsystem when camera connected
 
   // Define controllers
   private final CommandPS4Controller m_driverController =
@@ -65,23 +56,11 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
     autoChooserSetup();
-    m_visionSub.setPipeline(Constants.LimelightConstants.kApriltag);
-    //
-    // LedPanell();
-    m_ledSub.setColor(-1, 255, 255, 0);
-
-    //
 
     // Set default command for subsystems
     m_drivetrainSub.setDefaultCommand(new DriveWithJoystickCmd(m_driverController, m_drivetrainSub));
     m_armSub.setDefaultCommand(new ArmMoveWithJoystickCmd(m_operatorController, m_armSub));
-    // m_manipulatorSub.setDefaultCommand(new
-    // RotateArmWithJoystickCmd(m_driverController, m_manipulatorSub));
 
-    // m_manipulatorSub.setDefaultCommand(new SetArmMastCmd(m_driverController,
-    // m_manipulatorSub)); // Testing for arm and mast
-    m_armSub.zeroEncoder(); 
-    m_mastSub.zeroEncoder(); 
   }
 
   /**
@@ -110,12 +89,10 @@ public class RobotContainer {
     m_operatorController.L3().or(m_operatorController.R3())
         .onTrue(new InterruptAllCommandsCmd(m_armSub,m_mastSub, m_gripperSub, m_drivetrainSub));
 
-
     m_operatorController.triangle().onTrue(
         new StartEndCommand(() -> m_gripperSub.setValve(true), () -> m_gripperSub.setValve(true), m_gripperSub));
 
     m_operatorController.cross().onTrue(new InstantCommand(() -> m_gripperSub.setValve(false), m_gripperSub));
-
 
     m_operatorController.square().onTrue(new PickUpCmd(m_armSub,m_mastSub, 0));
 
@@ -128,7 +105,6 @@ public class RobotContainer {
     SmartDashboard.putData("auto choices", m_Chooser);
   }
 
-  // frc::SmartDashboard::PutData("Auto Chooser", &m_autoChooser);
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
@@ -147,6 +123,7 @@ public class RobotContainer {
     m_mastSub.init();
     m_visionSub.init();
   }
+
   /*
    * public void LedPanell () { int r, g, b; r = 0; g = 1; b = 2;
    * 
