@@ -4,11 +4,13 @@
 
 package frc.robot.subsystems;
 
+import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel;
 
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
@@ -23,6 +25,7 @@ public class DrivetrainSub extends SubsystemBase {
 
   private final double kEncoderRotationsToMeterLowGear = 5.0 / 204.5;
   private final double kEncoderRotationsToMeterHighGear = 5.0 / 129.8;
+  private final boolean kGyroReversed = false;
 
   private final CANSparkMax m_leftMotor1 =
       new CANSparkMax(Constants.DrivetrainCanIds.kLeftDriveMotor1, CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -47,6 +50,8 @@ public class DrivetrainSub extends SubsystemBase {
 
   boolean m_isAutoShift = true;
 
+  private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
+
   /** Creates a new DrivetrainSub. */
   public DrivetrainSub() {
 
@@ -62,6 +67,8 @@ public class DrivetrainSub extends SubsystemBase {
     zeroDrivetrainEncoders();
 
     setIsAutoShift(true);
+
+    m_gyro.reset();
   }
 
   @Override
@@ -139,6 +146,7 @@ public class DrivetrainSub extends SubsystemBase {
     SmartDashboard.putBoolean("Coasting", isCoasting());
     // TODO Add high and low gear on Smart Dashboard
     // SmartDashboard.putBoolean("High Gear", ())
+    SmartDashboard.putNumber("Gyro Heading", getHeading());
   }
 
   public void tankDrive(double leftPower, double rightPower) {
@@ -189,5 +197,13 @@ public class DrivetrainSub extends SubsystemBase {
         shift(false);
       }
     }
+  }
+
+  public double getHeading() {
+    return m_gyro.getAngle() * (kGyroReversed ? -1. : 1.);
+  }
+
+  public void zeroHeading() {
+    m_gyro.reset();
   }
 }

@@ -27,26 +27,29 @@ public class DriveStraightCmd extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_drivetrainSub.zeroHeading();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double rotatePwr = 1;
-    double power = 1;
+    double rotatePwr = m_drivetrainSub.getHeading() * kRotateAdjustment;
+    double power = 0.40;
     m_distanceRemaining = m_targetDriveDistance - m_drivetrainSub.getEncoderDistanceM();
-    m_distanceRemaining = Math.abs(m_distanceRemaining);
     double dir = (m_distanceRemaining < 0) ? -1 : 1;
+    m_distanceRemaining = Math.abs(m_distanceRemaining);
+
 
     if(m_distanceRemaining <= 0.4) {
-      power = (m_distanceRemaining / 0.4) * (1 - kMinPower) + kMinPower;
+      power = ((m_distanceRemaining / 0.4) * (power - kMinPower)) + kMinPower;
     }
     if(m_distanceRemaining <= kTolerance) {
       power = 0;
     }
 
     // TODO:  Fix rotate power before testing this
-    //m_drivetrainSub.arcadeDrive(power * dir, -rotatePwr);//////////////////////////////////////////////////////////////////
+    m_drivetrainSub.arcadeDrive(power * dir, -rotatePwr);
   }
 
   // Called once the command ends or is interrupted.

@@ -17,6 +17,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ArmMoveWithJoystickCmd;
 import frc.robot.commands.DriveAlignCmd;
 import frc.robot.commands.DriveSetGearCmd;
+import frc.robot.commands.DriveStraightCmd;
 import frc.robot.commands.DriveWithJoystickCmd;
 import frc.robot.commands.InterruptAllCommandsCmd;
 import frc.robot.commands.MastMoveWithJoystickCmd;
@@ -76,7 +77,7 @@ public class RobotContainer {
   private void configureBindings() {
     // Driver controller bindings
     m_driverController.L3().or(m_driverController.R3())
-        .whileTrue(new InterruptAllCommandsCmd(m_armSub,m_mastSub, m_gripperSub, m_drivetrainSub));
+        .whileTrue(new InterruptAllCommandsCmd(m_armSub, m_mastSub, m_gripperSub, m_drivetrainSub));
 
     m_driverController.povUp().onTrue(new DriveAlignCmd(m_drivetrainSub, m_visionSub, 15.0));
 
@@ -84,11 +85,12 @@ public class RobotContainer {
 
     m_driverController.R1().onTrue(new DriveSetGearCmd(true, m_drivetrainSub));
 
-    m_driverController.triangle().onTrue(new InstantCommand(() -> m_drivetrainSub.setIsAutoShift(true), // Call on command start
-        m_drivetrainSub));
+    m_driverController.triangle().onTrue(new InstantCommand(() -> m_drivetrainSub.setIsAutoShift(true), /* Call on command start */ m_drivetrainSub));
+
+    m_driverController.circle().onTrue(new DriveStraightCmd(m_drivetrainSub, 2));
 
     // Operator controller bindings
-    m_operatorController.L3().or(m_operatorController.R3())
+    m_operatorController.L3().or(m_operatorController .R3())
         .onTrue(new InterruptAllCommandsCmd(m_armSub,m_mastSub, m_gripperSub, m_drivetrainSub));
     // L2 is maped to Intakes in
     m_operatorController.L2().onTrue(new InstantCommand(() -> m_gripperSub.spinWheelsIntake(0.3), m_gripperSub));
