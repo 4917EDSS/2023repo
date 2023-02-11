@@ -66,6 +66,7 @@ public class PickUpCmd extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    /*
     boolean isArmInPosition = false;
     boolean isMastInPosition = false;
 
@@ -76,7 +77,7 @@ public class PickUpCmd extends CommandBase {
         && (m_mastSub.getPosition() <= (m_mastPosition + 5))) {
       isMastInPosition = true;
     }
-
-    return (isArmInPosition && isMastInPosition);
+    */
+    return (m_armSub.isFinished() && m_mastSub.isFinished());
   }
 }
