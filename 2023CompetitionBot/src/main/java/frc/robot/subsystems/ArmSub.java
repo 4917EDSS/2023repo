@@ -6,26 +6,28 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.subsystems.SubControl.State;
 
 public class ArmSub extends SubsystemBase {
   // CONSTANTS ////////////////////////////////////////////////////////////////
-  private static final double kPositionMin = 0.0; // In encoder ticks
-  private static final double kPositionMax = 60.0; // In encoder ticks (straight up is 30)
+  private static final double kPositionMin = -80.0; // In encoder ticks
+  private static final double kPositionMax = 80.0; // In encoder ticks (straight up is 30)
   private static final double kManualModePowerDeadband = 0.03; // If manual power is less than this, assume power is 0
   private static final double kMaxPosDifference = 0.1; // Maximum difference between the target and current pos for the state to finish   <---- Must be tuned
   private static final double kMaxPowerStop = 0.1; // max amount of power for the state to finish                                         <--- Must be tuned
   //TODO: Tune the two constants above
 
   // STATE VARIABLES //////////////////////////////////////////////////////////
-  private SubControl m_currentControl = new SubControl(); // Current states of mechanism
-  private SubControl m_newControl = new SubControl(); // New state to copy to current state when newStateParameters is true
+  private SubControl m_currentControl; // Current states of mechanism
+  private SubControl m_newControl; // New state to copy to current state when newStateParameters is true
   private boolean m_newControlParameters; // Set to true when ready to switch to new state
+  private double m_lastPower = 0;
+  private double m_blockedPosition;
 
   // HARDWARE AND CONTROL OBJECTS /////////////////////////////////////////////
   private final CANSparkMax m_motor = new CANSparkMax((Constants.CanIds.kArmMotor),
@@ -91,6 +93,11 @@ public class ArmSub extends SubsystemBase {
   /** Returns the velocity of the mechanism in ticks per second */
   public double getVelocity() {
     return m_motor.getEncoder().getVelocity();
+  }
+
+  public boolean isBlocked(double currentPosition, double targetPosition) {
+    //TODO implement later
+    return false;
   }
 
   /**
@@ -190,10 +197,18 @@ public class ArmSub extends SubsystemBase {
 
       case MOVING:
         // If the mechanism is moving, check if it has arrived at it's target.
+        if(isBlocked(currentPosition, m_currentControl.targetPosition)) {
+          m_blockedPosition = currentPosition;
+          m_currentControl.state = State.INTERRUPTED;
+        } else if(isFinished()) { 
+          m_currentControl.state = State.HOLDING;
+        } else {
+          newPower = calcMovePower(currentPosition, m_currentControl.targetPosition, m_currentControl.targetPower);
+        }
+
         // If not, check if it's blocked
         // If not, the set then calculate the move power
         // TODO: Add missing logic (see 2019 Elevator state machine)
-        newPower = calcMovePower(currentPosition, m_currentControl.targetPosition, m_currentControl.targetPower);
         break;
 
       case HOLDING:
@@ -201,17 +216,28 @@ public class ArmSub extends SubsystemBase {
         // necessary
         // TODO: Check if we can use the calcMovePower function since the PID could take
         // care of both cases
-        newPower = calcHoldPower(currentPosition);
+        newPower = calcHoldPower(currentPosition, m_currentControl.targetPosition);
         break;
 
       case INTERRUPTED:
         // If the mechanism is no longer blocked, transition to MOVING
-        // Otherwise, hold this position
-        // TODO: Add missing logic (see 2019 Elevator state machine)
+        if(isBlocked(currentPosition, m_currentControl.targetPosition) == false) {
+          m_currentControl.state = State.MOVING;
+          // Otherwise, hold this position
+        } else {
+          newPower = calcHoldPower(currentPosition, m_blockedPosition);
+        }
+        break;
+
+      default:
+        m_currentControl.state = State.HOLDING;
         break;
     }
 
-    move(newPower);
+    if(newPower != m_lastPower) {
+      move(newPower);
+      m_lastPower = newPower;
+    }
   }
 
   /** Calculate the amount of power should use to get to the target position */
@@ -219,9 +245,9 @@ public class ArmSub extends SubsystemBase {
     return MathUtil.clamp(m_pid.calculate(currentPosition, newPosition), -targetPower, targetPower);
   }
 
-  private double calcHoldPower(double currentPosition) {
-    // TODO: Decide what is needed to hold the position
-    return 0.0;
+  private double calcHoldPower(double currentPosition, double targetPosition) {
+    double holdPower = (targetPosition - currentPosition) * 0.004;
+    return holdPower;
   }
 
   public boolean isFinished() {
