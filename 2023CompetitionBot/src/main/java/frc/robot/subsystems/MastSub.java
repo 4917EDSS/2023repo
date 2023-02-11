@@ -132,7 +132,7 @@ public class MastSub extends SubsystemBase {
         m_newControl.targetPower = 0.0;
         m_newControl.targetPosition = 0.0;
         m_newControlParameters = true; // Only set this to true after all the other parameters have been set
-        
+
         break;
 
       case AUTO:
@@ -198,7 +198,7 @@ public class MastSub extends SubsystemBase {
         if(isBlocked(currentPosition, m_currentControl.targetPosition)) {
           m_blockedPosition = currentPosition;
           m_currentControl.state = State.INTERRUPTED;
-        } else if(currentPosition == m_currentControl.targetPosition) { // TODO: replace with "isAtTarget"
+        } else if(isFinished()) { 
           m_currentControl.state = State.HOLDING;
         } else {
           newPower = calcMovePower(currentPosition, m_currentControl.targetPosition, m_currentControl.targetPower);
@@ -221,7 +221,7 @@ public class MastSub extends SubsystemBase {
         // If the mechanism is no longer blocked, transition to MOVING
         if(isBlocked(currentPosition, m_currentControl.targetPosition) == false) {
           m_currentControl.state = State.MOVING;
-        // Otherwise, hold this position
+          // Otherwise, hold this position
         } else {
           newPower = calcHoldPower(currentPosition, m_blockedPosition);
         }
@@ -268,7 +268,7 @@ public class MastSub extends SubsystemBase {
   }
 
   public boolean isFinished() {
-    if(Math.abs(getPosition()-m_currentControl.targetPosition) > kMaxPosDifference) {
+    if(Math.abs(getPosition() - m_currentControl.targetPosition) > kMaxPosDifference) {
       return false;
     }
     if(Math.abs(getVelocity()) > kMaxPowerStop) {
