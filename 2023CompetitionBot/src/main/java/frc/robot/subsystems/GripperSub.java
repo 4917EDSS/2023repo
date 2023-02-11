@@ -16,6 +16,7 @@ public class GripperSub extends SubsystemBase {
   private static final double kPositionMin = 0.0; // In encoder ticks
   private static final double kPositionMax = 60.0; // In encoder ticks (straight up is 30)
   private static final double kManualModePowerDeadband = 0.03; // If manual power is less than this, assume power is 0
+  
   // STATE VARIABLES //////////////////////////////////////////////////////////
   private SubControl m_currentControl = new SubControl(); // Current states of mechanism
   private SubControl m_newControl = new SubControl(); // New state to copy to current state when newStateParameters is true
@@ -223,13 +224,13 @@ public class GripperSub extends SubsystemBase {
   private void updateSmartDashboard() {
     SmartDashboard.putNumber("Rotate Intake Encoder", getPositionRotate());
 
-    double p = SmartDashboard.getNumber("Arm kP", m_p);
-    double i = SmartDashboard.getNumber("Arm kI", m_i);
-    double d = SmartDashboard.getNumber("Arm kD", m_d);
+    double p = SmartDashboard.getNumber("Intake kP", m_p);
+    double i = SmartDashboard.getNumber("Intake kI", m_i);
+    double d = SmartDashboard.getNumber("Intake kD", m_d);
 
-    SmartDashboard.putNumber("Arm kP", p);
-    SmartDashboard.putNumber("Arm kI", i);
-    SmartDashboard.putNumber("Arm kD", d);
+    SmartDashboard.putNumber("Intake kP", p);
+    SmartDashboard.putNumber("Intake kI", i);
+    SmartDashboard.putNumber("Intake kD", d);
 
     m_pid.setP(p);
     m_pid.setI(i);
