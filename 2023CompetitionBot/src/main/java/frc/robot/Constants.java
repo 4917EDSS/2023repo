@@ -14,48 +14,45 @@ package frc.robot;
  * reduce verbosity.
  */
 public final class Constants {
+  // HARDWARE IDs/PORTs MAPPING ///////////////////////////////////////////////
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
     public static final int kOperatorControllerPort = 1;
   }
+
   public final static class CanIds {
-    // public final static int kLeftDriveMotor = 1;	// This gives the code the network address of the motors
-    public final static int kArmMotor = 8;
-    public final static int kMastMotor = 5;
-    public final static int kIntakeMotor = 28; // To be added
-    public final static int kRotateMotor = 29; // To be added
-    /*
-     * public final static int kTopDriveMotor = 1; // This gives the code the network address of the motors public final
-     * static int kShaftDriveMotor = 2;
-     */
-  }
-
-  public final static class LimelightConstants {
-    public final static int kNoVision = 0;
-    public final static int kLimelimelight = 1;
-    public final static int kApriltag = 2;
-  }
-
-  public final static class DrivetrainCanIds {
     public final static int kLeftDriveMotor1 = 1;
     public final static int kLeftDriveMotor2 = 2;
     public final static int kLeftDriveMotor3 = 3;
     public final static int kRightDriveMotor1 = 4;
+    public final static int kMastMotor = 5;
     public final static int kRightDriveMotor2 = 6;
     public final static int kRightDriveMotor3 = 7;
+    public final static int kArmMotor = 8;
+    public final static int kRotateMotor = 9;
+    public final static int kIntakeMotor = 10;
   }
 
   public final static class SolenoidIds {
     public final static int kShifter = 1;
   }
 
-  public final static class LedConstants {
+  public final static class PwmIds {
     public final static int kLedStripPwmPort = 1;
+  }
+
+  // OTHER GLOBAL CONSTANTS ///////////////////////////////////////////////////
+  public final static class LimelightConstants {
+    public final static int kNoVision = 0;
+    public final static int kLimelimelight = 1;
+    public final static int kApriltag = 2;
+  }
+
+  public final static class LedConstants {
     public final static int kLedStripLength = 5;
     public final static int kLedStripDefaultRed = 0;
     public static final int kLedStripDefaultGreen = 0;
     public final static int kLedStripDefaultBlue = 0;
   }
-
 
 }

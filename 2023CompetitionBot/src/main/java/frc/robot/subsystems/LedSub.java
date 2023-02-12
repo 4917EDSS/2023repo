@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import frc.robot.Constants.PwmIds;
 import frc.robot.Constants.LedConstants;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -15,7 +16,7 @@ public class LedSub extends SubsystemBase {
   private int m_rr, m_gg, m_bb = 0;
 
   // Hardware setup.
-  AddressableLED m_ledStrip = new AddressableLED(LedConstants.kLedStripPwmPort);
+  AddressableLED m_ledStrip = new AddressableLED(PwmIds.kLedStripPwmPort);
   AddressableLEDBuffer m_ledBuffer = new AddressableLEDBuffer(LedConstants.kLedStripLength);
 
   /** Creates a new LedSub. */

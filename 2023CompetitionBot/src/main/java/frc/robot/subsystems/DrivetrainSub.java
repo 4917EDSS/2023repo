@@ -28,17 +28,17 @@ public class DrivetrainSub extends SubsystemBase {
   private final boolean kGyroReversed = false;
 
   private final CANSparkMax m_leftMotor1 =
-      new CANSparkMax(Constants.DrivetrainCanIds.kLeftDriveMotor1, CANSparkMaxLowLevel.MotorType.kBrushless);
+      new CANSparkMax(Constants.CanIds.kLeftDriveMotor1, CANSparkMaxLowLevel.MotorType.kBrushless);
   private final CANSparkMax m_leftMotor2 =
-      new CANSparkMax(Constants.DrivetrainCanIds.kLeftDriveMotor2, CANSparkMaxLowLevel.MotorType.kBrushless);
+      new CANSparkMax(Constants.CanIds.kLeftDriveMotor2, CANSparkMaxLowLevel.MotorType.kBrushless);
   private final CANSparkMax m_leftMotor3 =
-      new CANSparkMax(Constants.DrivetrainCanIds.kLeftDriveMotor3, CANSparkMaxLowLevel.MotorType.kBrushless);
+      new CANSparkMax(Constants.CanIds.kLeftDriveMotor3, CANSparkMaxLowLevel.MotorType.kBrushless);
   private final CANSparkMax m_rightMotor1 =
-      new CANSparkMax(Constants.DrivetrainCanIds.kRightDriveMotor1, CANSparkMaxLowLevel.MotorType.kBrushless);
+      new CANSparkMax(Constants.CanIds.kRightDriveMotor1, CANSparkMaxLowLevel.MotorType.kBrushless);
   private final CANSparkMax m_rightMotor2 =
-      new CANSparkMax(Constants.DrivetrainCanIds.kRightDriveMotor2, CANSparkMaxLowLevel.MotorType.kBrushless);
+      new CANSparkMax(Constants.CanIds.kRightDriveMotor2, CANSparkMaxLowLevel.MotorType.kBrushless);
   private final CANSparkMax m_rightMotor3 =
-      new CANSparkMax(Constants.DrivetrainCanIds.kRightDriveMotor3, CANSparkMaxLowLevel.MotorType.kBrushless);
+      new CANSparkMax(Constants.CanIds.kRightDriveMotor3, CANSparkMaxLowLevel.MotorType.kBrushless);
 
   private final MotorControllerGroup m_leftMotors = new MotorControllerGroup(m_leftMotor1, m_leftMotor2, m_leftMotor3);
   private final MotorControllerGroup m_rightMotors =
