@@ -193,12 +193,12 @@ public class MastSub extends SubsystemBase {
         newPower = 0.0;
         break;
 
-        case MOVING:
+      case MOVING:
         // If the mechanism is moving, check if it has arrived at it's target.
         if(isBlocked(currentPosition, m_currentControl.targetPosition)) {
           m_blockedPosition = currentPosition;
           m_currentControl.state = State.INTERRUPTED;
-        } else if(isFinished()) { 
+        } else if(isFinished()) {
           m_currentControl.state = State.HOLDING;
         } else {
           newPower = calcMovePower(currentPosition, m_currentControl.targetPosition, m_currentControl.targetPower);

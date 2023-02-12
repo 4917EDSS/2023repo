@@ -107,9 +107,4 @@ public class DriveWithJoystickCmd extends CommandBase {
   public boolean isFinished() {
     return false;
   }
-
-  // TODO #7: Add a methods for smoothing the drivetrain response (see 2022 code)
-  // - adjustSensativity
-  // - applyDeadband
-  // - capAcceleration
 }

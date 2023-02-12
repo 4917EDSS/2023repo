@@ -33,16 +33,14 @@ public class LedSub extends SubsystemBase {
   }
 
   /**
-   * Use this method to reset all of the hardware and states to safe starting
-   * values
+   * Use this method to reset all of the hardware and states to safe starting values
    */
   public void init() {
     setColor(-1, 255, 255, 0);
   }
 
   /**
-   * This method puts the subsystem in a safe state when all commands are
-   * interrupted
+   * This method puts the subsystem in a safe state when all commands are interrupted
    */
   public void interrupt() {
 

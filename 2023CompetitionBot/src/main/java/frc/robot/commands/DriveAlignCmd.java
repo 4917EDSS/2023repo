@@ -19,7 +19,7 @@ public class DriveAlignCmd extends CommandBase {
   private double kPower = 0.0;
   private double kOffsetAngle = 0.0;
   private double turn_dir = 1.0;
-  private long m_timeStart; // Time constraint incase it never aligns
+  //private long m_timeStart; // Time constraint incase it never aligns
 
   public DriveAlignCmd(DrivetrainSub drivetrain, VisionSub vision, double offset) { // Drive towards and align to target
     // Use addRequirements() here to declare subsystem dependencies.

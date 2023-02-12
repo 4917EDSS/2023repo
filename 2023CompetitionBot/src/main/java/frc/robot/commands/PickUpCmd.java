@@ -20,19 +20,20 @@ public class PickUpCmd extends CommandBase {
 
   private double m_armPosition = 0;
   private double m_mastPosition = 0;
-  private final static double kMaxArmPower = 0.5; // <----- Tune this value 
-  private final static double kMaxMastPower = 0.5; // <----- Tune this value 
+  private final static double kMaxArmPower = 0.5; //TODO <----- Tune this value 
+  private final static double kMaxMastPower = 0.5; //TODO <----- Tune this value 
 
   //private final ManipulatorSub m_manipulatorSub;
   private final ArmSub m_armSub;
   private final MastSub m_mastSub;
 
   /** Creates a new MoveManipulatorToHighPickUpCmd. */
+  // TODO:  Pass in the desired mast and arm position instead of a controller button
   public PickUpCmd(ArmSub armSub, MastSub mastSub, int button) {
     m_armSub = armSub;
     m_mastSub = mastSub;
-    addRequirements(armSub,mastSub);
 
+    // TODO: Remove this once we get the positions via parameters
     if(button == kSquareButton) {
       m_armPosition = kStationArmPosition;
       m_mastPosition = kStationMastPosition;
@@ -40,13 +41,16 @@ public class PickUpCmd extends CommandBase {
       m_armPosition = kGroundArmPosition;
       m_mastPosition = kGroundMastPosition;
     }
+
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(armSub, mastSub);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_armSub.setPosition(Mode.MANUAL, kMaxArmPower, m_armPosition); 
+    //TODO:  The mode here should be AUTO since we're asking the state machine to move the mechanisms to a specific location.  MANUAL is for joystick input.
+    m_armSub.setPosition(Mode.MANUAL, kMaxArmPower, m_armPosition);
     m_mastSub.setPosition(Mode.MANUAL, kMaxMastPower, m_mastPosition);
   }
 
@@ -59,8 +63,10 @@ public class PickUpCmd extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_armSub.setPosition(Mode.MANUAL,kMaxArmPower, 0); 
-    m_mastSub.setPosition(Mode.MANUAL, kMaxMastPower, 0);
+    //TODO:  Fix this code. Right now, on command end, it will set the mast and arms to position 0 at maximum possible speed!
+    //Also, only need to stop the motion if we were interrupt.  If it ended properly, it would be stopped already
+    // m_armSub.setPosition(Mode.MANUAL, kMaxArmPower, 0);
+    // m_mastSub.setPosition(Mode.MANUAL, kMaxMastPower, 0);
   }
 
   // Returns true when the command should end.

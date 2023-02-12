@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DrivetrainSub;
 
 public class DriveStraightCmd extends CommandBase {
-
   private final DrivetrainSub m_drivetrainSub;
   private double m_distanceRemaining = 0;
   private double kRotateAdjustment = 0.045;
@@ -48,7 +47,6 @@ public class DriveStraightCmd extends CommandBase {
       power = 0;
     }
 
-    // TODO:  Fix rotate power before testing this
     m_drivetrainSub.arcadeDrive(power * dir, -rotatePwr);
   }
 

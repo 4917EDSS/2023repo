@@ -34,7 +34,6 @@ public class InterruptAllCommandsCmd extends CommandBase {
   public void initialize() {
     m_armSub.interrupt();
     m_mastSub.interrupt();
-    //m_manipulatorSub.interrupt();
     m_drivetrainSub.interrupt();
     m_intakeSub.interrupt();
   }

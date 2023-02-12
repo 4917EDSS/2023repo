@@ -6,14 +6,14 @@
 
 package frc.robot.subsystems;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import org.json.simple.*;
-import org.json.simple.parser.*;
 import frc.robot.Constants;
 
 public class VisionSub extends SubsystemBase {
@@ -25,11 +25,11 @@ public class VisionSub extends SubsystemBase {
   private NetworkTableEntry m_ta;
   private NetworkTableEntry m_tv;
   private NetworkTableEntry m_tid;
-  private NetworkTableEntry m_getpipe;
+  //private NetworkTableEntry m_getpipe;
   private NetworkTableEntry m_pipeline; // Use constants for pipeline
   private NetworkTableEntry m_json;
 
-  private int m_pipe = 0;
+  //private int m_pipe = 0;
 
   private final double kSlope = 0.7667; // Conversion from robot space to meters
 
@@ -41,7 +41,7 @@ public class VisionSub extends SubsystemBase {
     m_ta = m_limelight.getEntry("ta");
     m_tv = m_limelight.getEntry("tv");
     m_tid = m_limelight.getEntry("tid");
-    m_getpipe = m_limelight.getEntry("getpipe");
+    //m_getpipe = m_limelight.getEntry("getpipe");
     m_pipeline = m_limelight.getEntry("pipeline");
     m_json = m_limelight.getEntry("json");
   }
@@ -63,16 +63,14 @@ public class VisionSub extends SubsystemBase {
   }
 
   /**
-   * Use this method to reset all of the hardware and states to safe starting
-   * values
+   * Use this method to reset all of the hardware and states to safe starting values
    */
   public void init() {
     setPipeline(Constants.LimelightConstants.kApriltag);
   }
 
   /**
-   * This method puts the subsystem in a safe state when all commands are
-   * interrupted
+   * This method puts the subsystem in a safe state when all commands are interrupted
    */
   public void interrupt() {
 
@@ -117,7 +115,7 @@ public class VisionSub extends SubsystemBase {
       JSONArray result_data;
       double dx = 0.0;
       double dz = 0.0;
-      double distance = 0.0;
+      //double distance = 0.0;
 
       try {
         json_data = (JSONObject) parser.parse(temp_json); // Go through the json dump to get the tag Z position
@@ -131,7 +129,7 @@ public class VisionSub extends SubsystemBase {
 
       } catch (Exception e) {
         json_data = null;
-        distance = -0.0; // -0.0 means error
+        //distance = -0.0; // -0.0 means error
         //System.out.println(e);
       }
       return Math.sqrt(dx * dx + dz * dz) * kSlope; // Convert to meters

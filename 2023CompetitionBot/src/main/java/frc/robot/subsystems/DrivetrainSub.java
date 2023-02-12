@@ -54,7 +54,6 @@ public class DrivetrainSub extends SubsystemBase {
 
   /** Creates a new DrivetrainSub. */
   public DrivetrainSub() {
-
     m_leftMotor1.setInverted(false);
     m_leftMotor2.setInverted(false);
     m_leftMotor3.setInverted(false);
