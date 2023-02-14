@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -15,6 +18,8 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  * project.
  */
 public class Robot extends TimedRobot {
+  private static Logger logger = Logger.getLogger(Robot.class.getName());
+
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
@@ -25,6 +30,14 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    
+    Logger root = Logger.getLogger("");
+    root.setLevel(Constants.kLogLevel);
+    for (Handler handler : root.getHandlers()) {
+        handler.setLevel(Constants.kLogLevel);
+    }
+    
+    
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
@@ -77,11 +90,27 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
+    logger.info("INSIDE TELEOPS INIT");
   }
+
+
+  int call_idx = 0;
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+
+    call_idx++;
+
+    if ((call_idx % 100) == 0) {
+      logger.info(" I : CALL IDX " + call_idx);
+      logger.warning(" W : CALL IDX " + call_idx);
+      call_idx = 0;
+    }
+    
+
+  }
 
   @Override
   public void testInit() {

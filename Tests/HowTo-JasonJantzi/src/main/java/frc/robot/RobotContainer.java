@@ -8,6 +8,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.DriveForwardCmd;
 import frc.robot.commands.DriveWithJoystickCmd;
 import frc.robot.subsystems.DrivetrainSub;
+import java.util.logging.Logger;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
@@ -20,6 +21,10 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+
+  private static Logger logger = Logger.getLogger(RobotContainer.class.getName());
+
+
   // The robot's subsystems and commands are defined here...
   private final DrivetrainSub m_drivetrainSub = new DrivetrainSub();
 
