@@ -22,8 +22,10 @@ public final class Constants {
   }
 
   public static class CanIds {
-    public static final int kLeftDriveMotor = 2;
-    public static final int kRightDriveMotor = 4;
+    public static final int kLeftFrontDriveMotor = 2;
+    public static final int kRightFrontDriveMotor = 4;
+    public static final int kLeftBackDriveMotor = 1;
+    public static final int kRightBackDriveMotor = 3;
   }
 
 }
