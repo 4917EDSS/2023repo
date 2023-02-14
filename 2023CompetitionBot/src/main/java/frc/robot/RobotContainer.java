@@ -18,10 +18,12 @@ import frc.robot.commands.DriveAlignCmd;
 import frc.robot.commands.DriveSetGearCmd;
 import frc.robot.commands.DriveStraightCmd;
 import frc.robot.commands.DriveWithJoystickCmd;
+import frc.robot.commands.IntakeSetPositionCmd;
 import frc.robot.commands.InterruptAllCommandsCmd;
 import frc.robot.commands.MastMoveWithJoystickCmd;
 import frc.robot.subsystems.ArmSub;
 import frc.robot.subsystems.DrivetrainSub;
+import frc.robot.subsystems.IntakePositions;
 import frc.robot.subsystems.IntakeSub;
 import frc.robot.subsystems.LedSub;
 import frc.robot.subsystems.MastSub;
@@ -101,6 +103,19 @@ public class RobotContainer {
     m_operatorController.share().onTrue(new InstantCommand(() -> m_intakeSub.intakeRotate(0.3), m_intakeSub));
       
     m_operatorController.options().onTrue(new InstantCommand(() -> m_intakeSub.intakeRotate(-0.3), m_intakeSub));
+
+    m_operatorController.triangle().onTrue(new IntakeSetPositionCmd(IntakePositions.HIGH, m_armSub, m_mastSub));
+
+    m_operatorController.circle().onTrue(new IntakeSetPositionCmd(IntakePositions.MEDIUM, m_armSub, m_mastSub));
+
+    m_operatorController.cross().onTrue(new IntakeSetPositionCmd(IntakePositions.LOW, m_armSub, m_mastSub));
+
+    m_operatorController.povLeft().onTrue(new IntakeSetPositionCmd(IntakePositions.STATION, m_armSub, m_mastSub));
+    
+    m_operatorController.povDown().onTrue(new IntakeSetPositionCmd(IntakePositions.GROUND, m_armSub, m_mastSub));
+
+    m_operatorController.square().onTrue(new IntakeSetPositionCmd(IntakePositions.START, m_armSub, m_mastSub));
+
   }
 
   void autoChooserSetup() {
