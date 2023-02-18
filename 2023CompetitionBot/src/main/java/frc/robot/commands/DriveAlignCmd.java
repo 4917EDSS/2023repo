@@ -14,7 +14,7 @@ public class DriveAlignCmd extends CommandBase {
   /** Creates a new DriveAlignCmd. */
   private final DrivetrainSub m_drivetrainSub;
   private final VisionSub m_visionSub;
-  private final PIDController m_angleController = new PIDController(0.2, 0.0, 0.); // Using a PID controller instead of a function
+  private final PIDController m_angleController = new PIDController(0.1, 0.0, 0.01); // Using a PID controller instead of a function
   private final double kMaxPower = 0.45; // Maximum possible motor power
   private double kPower = 0.0;
   private double kOffsetAngle = 0.0;
@@ -34,6 +34,7 @@ public class DriveAlignCmd extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    turn_dir = 1.0;
     if(m_visionSub.getHorizontalAngle() > 0) {
       turn_dir = -1.0;
     }
