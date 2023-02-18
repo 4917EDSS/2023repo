@@ -10,7 +10,7 @@ import frc.robot.subsystems.IntakeSub;
 
 public class ExpelGamePieceCmd extends CommandBase {
   /** Creates a new ExpelGamePieceCmd. */
-
+  
   private final IntakeSub m_intakeSub;
   private long m_timeStart; // The time it was at the time the command was initialized
   private double timeSpinning = 0.2; // How long the intake wheels spin (in seconds)
