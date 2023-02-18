@@ -60,14 +60,6 @@ public class DrivetrainSub extends SubsystemBase {
     m_rightMotor1.setInverted(true);
     m_rightMotor2.setInverted(true);
     m_rightMotor3.setInverted(true);
-
-    m_shifter.set(false);
-
-    zeroDrivetrainEncoders();
-
-    setIsAutoShift(true);
-
-    m_gyro.reset();
   }
 
   @Override
@@ -78,7 +70,10 @@ public class DrivetrainSub extends SubsystemBase {
 
   /** Use this method to reset all of the hardware and states to safe starting values */
   public void init() {
-    //TODO: Add resets here.  Call from constructor.
+    m_shifter.set(false);
+    zeroDrivetrainEncoders();
+    setIsAutoShift(true);
+    m_gyro.reset();
   }
 
   /** This method puts the subsystem in a safe state when all commands are interrupted */

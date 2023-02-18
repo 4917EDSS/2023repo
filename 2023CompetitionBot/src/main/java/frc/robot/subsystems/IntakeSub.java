@@ -45,7 +45,6 @@ public class IntakeSub extends SubsystemBase {
 
   /** Use this method to reset all of the hardware and states to safe starting values */
   public void init() {
-    //TODO: Add resets here.  Call from constructor.
   }
 
   /** This method puts the subsystem in a safe state when all commands are interrupted */
