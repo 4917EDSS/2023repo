@@ -38,7 +38,7 @@ public final class Constants {
   }
 
   public final static class PwmIds {
-    public final static int kLedStripPwmPort = 1;
+    public final static int kLedStripPwmPort = 0;
   }
 
   // OTHER GLOBAL CONSTANTS ///////////////////////////////////////////////////
@@ -49,7 +49,7 @@ public final class Constants {
   }
 
   public final static class LedConstants {
-    public final static int kLedStripLength = 5;
+    public final static int kLedStripLength = 10;
     public final static int kLedStripDefaultRed = 0;
     public static final int kLedStripDefaultGreen = 0;
     public final static int kLedStripDefaultBlue = 0;
