@@ -41,6 +41,10 @@ public final class Constants {
     public final static int kLedStripPwmPort = 0;
   }
 
+  public final static class DioIds {
+    public final static int kIntakeSensorPort = 1;
+  }
+
   // OTHER GLOBAL CONSTANTS ///////////////////////////////////////////////////
   public final static class LimelightConstants {
     public final static int kNoVision = 0;

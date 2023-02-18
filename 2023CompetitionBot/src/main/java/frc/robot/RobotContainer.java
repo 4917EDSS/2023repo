@@ -36,7 +36,7 @@ import frc.robot.subsystems.VisionSub;
  * Instead, the structure of the robot (including subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  private boolean m_coneMode = false;
+  private static boolean s_coneMode = false;
 
   // The robot's subsystems and commands are defined here...
   private final ArmSub m_armSub = new ArmSub();
@@ -153,12 +153,12 @@ public class RobotContainer {
     return new PrintCommand("No auto yet");
   }
 
-  public boolean isConeMode() {
-    return m_coneMode;
+  public static boolean isConeMode() {
+    return s_coneMode;
   }
   
-  public void setConeMode(boolean coneMode) {
-    m_coneMode = coneMode;
+  public static void setConeMode(boolean coneMode) {
+    s_coneMode = coneMode;
     System.out.println(coneMode ? "Cone Mode" : "Cube Mode");
   }
 

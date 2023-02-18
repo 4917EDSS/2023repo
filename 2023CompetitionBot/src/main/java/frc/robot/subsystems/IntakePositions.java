@@ -6,12 +6,28 @@ package frc.robot.subsystems;
 
 /** Add your docs here. */
 public enum IntakePositions {
-  HIGH(-93, 40),
-  MEDIUM(-62, 30),
-  LOW(-36, 42),
-  GROUND(-62, 60),
-  STATION(60, 0),
-  START(0, 0);
+  START(0, 0),
+// We are setting the values to zero, so that people use the cube or cone positions.
+  HIGH(0, 0),
+  MEDIUM(0, 0),
+  LOW(0, 0),
+  GROUND(0, 0),
+  STATION(0, 0),
+
+
+// Cone Positions
+  HIGH_CONE(-93, 40),
+  MEDIUM_CONE(-62, 30),
+  LOW_CONE(-36, 42),
+  GROUND_CONE(-62, 60),
+  STATION_CONE(60, 0),
+
+// Cube Positions
+  HIGH_CUBE(-92, 40),
+  MEDIUM_CUBE(-61, 30),
+  LOW_CUBE(-35, 42),
+  GROUND_CUBE(-61, 60),
+  STATION_CUBE(59, 0);
 
   public final double armEncoder;
   public final double mastEncoder;
@@ -20,4 +36,47 @@ public enum IntakePositions {
     this.armEncoder = armEncoder;
     this.mastEncoder = mastEncoder;
   }
+
+  public static IntakePositions convert(IntakePositions unConverted, boolean coneMode){
+  // Converts positions depending on which mode is enabled (Cone, Cube)
+    switch(unConverted){
+      case HIGH:
+        if(coneMode){
+          return HIGH_CONE;
+        } else {
+          return HIGH_CUBE;
+        }
+
+      case MEDIUM:
+        if(coneMode){
+          return MEDIUM_CONE;
+        } else {
+          return MEDIUM_CUBE;
+        }
+
+      case LOW:
+        if(coneMode){
+          return LOW_CONE;
+        } else {
+          return LOW_CUBE;
+        }
+      
+      case GROUND:
+        if(coneMode){
+          return GROUND_CONE;
+        } else {
+          return GROUND_CUBE;
+        }
+
+      case STATION:
+       if(coneMode){
+          return STATION_CONE;
+        } else {
+          return STATION_CUBE;
+        }
+        
+    }
+    return unConverted;
+  }
+
 }

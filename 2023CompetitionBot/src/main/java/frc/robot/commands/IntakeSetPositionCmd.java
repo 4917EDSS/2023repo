@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.ArmSub;
 import frc.robot.subsystems.IntakePositions;
 import frc.robot.subsystems.MastSub;
@@ -15,8 +16,7 @@ public class IntakeSetPositionCmd extends CommandBase {
   public final static int kSquareButton = 0;
   public final static int kOptionsButton = 1;
 
-  private double m_armPosition = 0;
-  private double m_mastPosition = 0;
+  private IntakePositions m_intakePositions;
   private final static double kMaxArmPower = 0.5; //TODO <----- Tune this value 
   private final static double kMaxMastPower = 0.5; //TODO <----- Tune this value 
 
@@ -29,9 +29,7 @@ public class IntakeSetPositionCmd extends CommandBase {
   public IntakeSetPositionCmd(IntakePositions positions, ArmSub armSub, MastSub mastSub) {
     m_armSub = armSub;
     m_mastSub = mastSub;
-
-      m_armPosition = positions.armEncoder;
-      m_mastPosition = positions.mastEncoder;
+    m_intakePositions = positions;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(armSub, mastSub);
@@ -39,9 +37,10 @@ public class IntakeSetPositionCmd extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    m_armSub.setPosition(Mode.AUTO, kMaxArmPower, m_armPosition);
-    m_mastSub.setPosition(Mode.AUTO, kMaxMastPower, m_mastPosition);
+  public void initialize() { 
+    IntakePositions converted = IntakePositions.convert(m_intakePositions, RobotContainer.isConeMode());
+    m_armSub.setPosition(Mode.AUTO, kMaxArmPower, converted.armEncoder);
+    m_mastSub.setPosition(Mode.AUTO, kMaxMastPower, converted.mastEncoder);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
