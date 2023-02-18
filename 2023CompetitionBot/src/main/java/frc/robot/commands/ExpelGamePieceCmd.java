@@ -26,12 +26,12 @@ public class ExpelGamePieceCmd extends CommandBase {
   @Override
   public void initialize() {
     m_timeStart = RobotController.getFPGATime();
+    m_intakeSub.spinWheelsIntake(power);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_intakeSub.spinWheelsIntake(power);
   }
 
   // Called once the command ends or is interrupted.
