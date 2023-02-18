@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DrivetrainSub;
 import frc.robot.subsystems.VisionSub;
 
-public class AlignToVisionCmd extends CommandBase {
+public class DriveAlignToVisionCmd extends CommandBase {
   /** Creates a new AlignToVisionCmd. */
 
   private final DrivetrainSub m_drivetrainSub;
@@ -21,7 +21,7 @@ public class AlignToVisionCmd extends CommandBase {
   private double kPower = 0.0;
   private long m_timeStart; // Time constraint incase it never aligns
 
-  public AlignToVisionCmd(DrivetrainSub drivetrain, VisionSub vision) {
+  public DriveAlignToVisionCmd(DrivetrainSub drivetrain, VisionSub vision) {
     // Use addRequirements() here to declare subsystem dependencies.
 
     m_drivetrainSub = drivetrain;
