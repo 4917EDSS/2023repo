@@ -21,6 +21,7 @@ import frc.robot.commands.DriveWithJoystickCmd;
 import frc.robot.commands.IntakeSetPositionCmd;
 import frc.robot.commands.InterruptAllCommandsCmd;
 import frc.robot.commands.MastMoveWithJoystickCmd;
+import frc.robot.commands.SetGamePieceTypeCmd;
 import frc.robot.subsystems.ArmSub;
 import frc.robot.subsystems.DrivetrainSub;
 import frc.robot.subsystems.IntakePositions;
@@ -35,7 +36,7 @@ import frc.robot.subsystems.VisionSub;
  * Instead, the structure of the robot (including subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  public boolean m_coneMode = false;
+  private boolean m_coneMode = false;
 
   // The robot's subsystems and commands are defined here...
   private final ArmSub m_armSub = new ArmSub();
@@ -106,9 +107,9 @@ public class RobotContainer {
     
     m_operatorController.square().onTrue(new IntakeSetPositionCmd(IntakePositions.START, m_armSub, m_mastSub));
    
-    m_operatorController.L1().onTrue(new InstantCommand(() -> m_coneMode = false));
+    m_operatorController.L1().onTrue(new SetGamePieceTypeCmd(false, this, m_ledSub));
     
-    m_operatorController.R1().onTrue(new InstantCommand(() -> m_coneMode = true));
+    m_operatorController.R1().onTrue(new SetGamePieceTypeCmd(true, this, m_ledSub));
    
     // L2 is maped to Intakes in
     m_operatorController.L2().onTrue(new InstantCommand(() -> m_intakeSub.spinWheelsIntake(0.3), m_intakeSub));
@@ -141,6 +142,15 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     return new PrintCommand("No auto yet");
+  }
+
+  public boolean isConeMode() {
+    return m_coneMode;
+  }
+  
+  public void setConeMode(boolean coneMode) {
+    m_coneMode = coneMode;
+    System.out.println(coneMode ? "Cone Mode" : "Cube Mode");
   }
 
   public void initSubsystems() {
