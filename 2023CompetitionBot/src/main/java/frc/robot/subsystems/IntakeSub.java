@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -26,6 +27,8 @@ public class IntakeSub extends SubsystemBase {
       new CANSparkMax((Constants.CanIds.kIntakeMotor), CANSparkMaxLowLevel.MotorType.kBrushless);
   private final CANSparkMax m_rotateMotor =
       new CANSparkMax((Constants.CanIds.kRotateMotor), CANSparkMaxLowLevel.MotorType.kBrushless);
+
+  private final DigitalInput m_intakeSensor = new DigitalInput(Constants.DioIds.kIntakeSensorPort);
 
   private double m_p = 0.1;
   private double m_i = 0.0;
@@ -88,6 +91,10 @@ public class IntakeSub extends SubsystemBase {
   /** Returns the velocity of the mechanism in ticks per second */
   public double getVelocityRotate() {
     return m_rotateMotor.getEncoder().getVelocity();
+  }
+
+  public boolean isIntakeLoaded() {
+    return m_intakeSensor.get();
   }
 
   /**
