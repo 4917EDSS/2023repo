@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.LedSub;
+import frc.robot.subsystems.LedSub.LedZones;
 
 public class SetGamePieceTypeCmd extends CommandBase {
   private final LedSub m_ledSub;
@@ -28,7 +29,11 @@ public class SetGamePieceTypeCmd extends CommandBase {
   public void initialize() {
     m_robotContainer.setConeMode(m_coneMode);
 
-    m_ledSub.setColor(-1, 0, 128, 128);
+    if (m_coneMode) {
+      m_ledSub.setZoneColour(LedZones.ZONE1, 0, 0, 128);
+    } else {
+      m_ledSub.setZoneColour(LedZones.ZONE1, 0, 128, 0);
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.

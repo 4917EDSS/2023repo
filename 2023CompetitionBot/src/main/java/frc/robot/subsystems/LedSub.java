@@ -38,7 +38,7 @@ public class LedSub extends SubsystemBase {
 
   /** Creates a new LedSub. */
   public LedSub() {
-    m_ledStrip.setLength(LedConstants.kLedStripLength);
+    m_ledStrip.setLength(m_ledBuffer.getLength());
     setColor(-1, LedConstants.kLedStripDefaultRed, LedConstants.kLedStripDefaultGreen,
         LedConstants.kLedStripDefaultBlue);
     m_ledStrip.setData(m_ledBuffer);
@@ -56,8 +56,9 @@ public class LedSub extends SubsystemBase {
    * Use this method to reset all of the hardware and states to safe starting values
    */
   public void init() {
-    setColor(-1, 255, 255, 0);
+    setColor(-1, 50, 50, 50);
   }
+
 
   /**
    * This method puts the subsystem in a safe state when all commands are interrupted
@@ -66,9 +67,12 @@ public class LedSub extends SubsystemBase {
 
   }
   public void setZoneColour (LedZones zone, int r, int g, int b) {
+    System.out.println("Zone " + zone.name() + " RGB " + r + " " + g + " " + b + " " + zone.start + " " + zone.end);
+
     for (int i = zone.start; i <= zone.end; i++) {
       setColor(i, r, g, b);
     }
+    m_ledStrip.setData(m_ledBuffer);
   }
   public void setColor(int i, int r, int g, int b) {
     // Sets the RGB color of an LED, or of all of them.
@@ -113,7 +117,9 @@ public class LedSub extends SubsystemBase {
       m_ledBuffer.setRGB(i, r, g, b);
     }
 
-    m_ledStrip.setData(m_ledBuffer);
+    if(i < 0) {
+      m_ledStrip.setData(m_ledBuffer);
+    }
   }
 
   // LED state enums
@@ -133,11 +139,9 @@ public class LedSub extends SubsystemBase {
 
   public void smartDashboardSet() {
 
-    setLEDState(LEDMode.ConeMode);
+    // double[] colour = {Double.valueOf(m_rr), Double.valueOf(m_gg), Double.valueOf(m_bb)};
 
-    double[] colour = {Double.valueOf(m_rr), Double.valueOf(m_gg), Double.valueOf(m_bb)};
-
-    SmartDashboard.putNumberArray("null", colour);
+    // SmartDashboard.putNumberArray("null", colour);
 
 
   }

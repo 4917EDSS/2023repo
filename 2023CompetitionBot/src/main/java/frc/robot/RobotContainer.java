@@ -127,10 +127,10 @@ public class RobotContainer {
     //m_operatorController.options().onTrue(new InstantCommand(() -> m_intakeSub.intakeRotate(-0.3), m_intakeSub));
 
    //Option is maped to Led Subsystem
-    m_operatorController.options().onTrue(new InstantCommand(() ->  m_ledSub.setZoneColour(LedSub.LedZones.ZONE0, 240, 250, 80)));
+    m_operatorController.options().onTrue(new InstantCommand(() ->  m_ledSub.setZoneColour(LedSub.LedZones.ZONE0, 255, 255, 255)));
 
     //Share is maped to Led Subsystem
-    m_operatorController.share().onTrue(new InstantCommand(() -> m_ledSub.setZoneColour(LedSub.LedZones.ZONE0, 120, 0, 0)));
+    m_operatorController.share().onTrue(new InstantCommand(() -> m_ledSub.setZoneColour(LedSub.LedZones.ZONE0, 128, 0, 0)));
    
     
     m_operatorController.L3().or(m_operatorController.R3())
