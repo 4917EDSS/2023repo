@@ -35,6 +35,8 @@ import frc.robot.subsystems.VisionSub;
  * Instead, the structure of the robot (including subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+  public boolean m_coneMode = false;
+
   // The robot's subsystems and commands are defined here...
   private final ArmSub m_armSub = new ArmSub();
   private final DrivetrainSub m_drivetrainSub = new DrivetrainSub();
@@ -90,9 +92,24 @@ public class RobotContainer {
     m_driverController.circle().onTrue(new DriveStraightCmd(m_drivetrainSub, 2));
 
     // Operator controller bindings
-    m_operatorController.L3().or(m_operatorController.R3())
-        .onTrue(new InterruptAllCommandsCmd(m_armSub,m_mastSub, m_intakeSub, m_drivetrainSub));
+    
 
+     m_operatorController.povLeft().onTrue(new IntakeSetPositionCmd(IntakePositions.STATION, m_armSub, m_mastSub));
+    
+    m_operatorController.povDown().onTrue(new IntakeSetPositionCmd(IntakePositions.GROUND, m_armSub, m_mastSub));
+    
+    m_operatorController.triangle().onTrue(new IntakeSetPositionCmd(IntakePositions.HIGH, m_armSub, m_mastSub));
+
+    m_operatorController.circle().onTrue(new IntakeSetPositionCmd(IntakePositions.MEDIUM, m_armSub, m_mastSub));
+
+    m_operatorController.cross().onTrue(new IntakeSetPositionCmd(IntakePositions.LOW, m_armSub, m_mastSub));
+    
+    m_operatorController.square().onTrue(new IntakeSetPositionCmd(IntakePositions.START, m_armSub, m_mastSub));
+   
+    m_operatorController.L1().onTrue(new InstantCommand(() -> m_coneMode = false));
+    
+    m_operatorController.R1().onTrue(new InstantCommand(() -> m_coneMode = true));
+   
     // L2 is maped to Intakes in
     m_operatorController.L2().onTrue(new InstantCommand(() -> m_intakeSub.spinWheelsIntake(0.3), m_intakeSub));
     
@@ -104,18 +121,10 @@ public class RobotContainer {
       
     m_operatorController.options().onTrue(new InstantCommand(() -> m_intakeSub.intakeRotate(-0.3), m_intakeSub));
 
-    m_operatorController.triangle().onTrue(new IntakeSetPositionCmd(IntakePositions.HIGH, m_armSub, m_mastSub));
-
-    m_operatorController.circle().onTrue(new IntakeSetPositionCmd(IntakePositions.MEDIUM, m_armSub, m_mastSub));
-
-    m_operatorController.cross().onTrue(new IntakeSetPositionCmd(IntakePositions.LOW, m_armSub, m_mastSub));
-
-    m_operatorController.povLeft().onTrue(new IntakeSetPositionCmd(IntakePositions.STATION, m_armSub, m_mastSub));
+   
     
-    m_operatorController.povDown().onTrue(new IntakeSetPositionCmd(IntakePositions.GROUND, m_armSub, m_mastSub));
-
-    m_operatorController.square().onTrue(new IntakeSetPositionCmd(IntakePositions.START, m_armSub, m_mastSub));
-
+    m_operatorController.L3().or(m_operatorController.R3())
+        .onTrue(new InterruptAllCommandsCmd(m_armSub,m_mastSub, m_intakeSub, m_drivetrainSub));
   }
 
   void autoChooserSetup() {

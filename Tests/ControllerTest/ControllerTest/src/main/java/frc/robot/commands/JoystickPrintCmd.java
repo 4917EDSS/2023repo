@@ -9,18 +9,22 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.JoystickSub;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 
+
 public class JoystickPrintCmd extends CommandBase {
 
+  private int count = 0; 
+  
   private final JoystickSub m_JoystickSub;
 
-  private final CommandPS4Controller m_driverController = 
-  new CommandPS4Controller(OperatorConstants.kDriverControllerPort);
+  private final CommandPS4Controller m_driverController;
+  //new CommandPS4Controller(OperatorConstants.kDriverControllerPort);
 
   /** Creates a new JoystickPrintCmd. */
   public JoystickPrintCmd(JoystickSub joystickSub, CommandPS4Controller driverController) {
     // Use addRequirements() here to declare subsystem dependencies.
     
     m_JoystickSub = joystickSub;
+    m_driverController = driverController;
 
     addRequirements(joystickSub);
 
@@ -34,29 +38,36 @@ public class JoystickPrintCmd extends CommandBase {
   @Override
   public void execute() 
   {
-    //if(m_driverController.getLeftX() > 0.1f || m_driverController.getLeftX() < 0.1f)
-    //{
+    count++;
+    
+    if(m_driverController.getLeftX() < -0.2f && count >= 25 || m_driverController.getLeftX() > 0.2f && count >= 25)
+    {
       System.out.print("Left X Axis: ");
       System.out.println(m_driverController.getLeftX());
-    //}
+    }
 
-    //if(m_driverController.getLeftY() > 0.1f || m_driverController.getLeftY() < 0.1f)
-    //{
+    if(m_driverController.getLeftY() < -0.2f && count >= 25 || m_driverController.getLeftY() > 0.2f && count >= 25)
+    {
       System.out.print("Left Y Axis: ");
       System.out.println(m_driverController.getLeftY());
-    //}
+    }
 
-    //if(m_driverController.getRightX() > 0.1f || m_driverController.getRightX() < 0.1f)
-   // {
+    if(m_driverController.getRightX() < -0.2f && count >= 25 || m_driverController.getRightX() > 0.2f && count >= 25)
+    {
       System.out.print("Right X Axis: ");
       System.out.println(m_driverController.getRightX());
- //   }
+    }
 
-  //  if(m_driverController.getRightY() > 0.1f || m_driverController.getRightY() < 0.1f)
-  //  {
+    if(m_driverController.getRightY() < -0.2f && count >= 25 || m_driverController.getRightY() > 0.2f && count >= 25)
+   {
       System.out.print("Right Y Axis: ");
-      System.out.println(m_driverController.getLeftX());
- //   }
+      System.out.println(m_driverController.getRightY());
+    }
+
+    if(count >= 25)
+    {
+      count = 0;
+    }
   }
 
   // Called once the command ends or is interrupted.

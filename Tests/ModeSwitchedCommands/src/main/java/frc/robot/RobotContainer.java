@@ -52,8 +52,8 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
 
-    m_mastSub.setDefaultCommand(m_mastJoystickSelectCommand);
-    m_armSub.setDefaultCommand(m_armJoystickSelectCommand);
+   // m_mastSub.setDefaultCommand(m_mastJoystickSelectCommand);
+   // m_armSub.setDefaultCommand(m_armJoystickSelectCommand);
   }
 
   /**
@@ -79,7 +79,7 @@ public class RobotContainer {
     m_driverController.povUp().onTrue(new InstantCommand(() -> setTargetLocation(TargetLocation.PICKUP_DOUBLE_SUBSTATION)));
     m_driverController.povLeft().onTrue(new InstantCommand(() -> setTargetLocation(TargetLocation.PICKUP_SINGLE_SUBSTATION)));
     m_driverController.povDown().onTrue(new InstantCommand(() -> setTargetLocation(TargetLocation.PICKUP_GROUND)));
-    m_driverController.square().onTrue(new InstantCommand(() -> setTargetLocation(TargetLocation.PICKUP_GROUND)));
+    m_driverController.square().onTrue(new InstantCommand(() -> setTargetLocation(TargetLocation.RETRACT)));
     m_driverController.triangle().onTrue(new InstantCommand(() -> setTargetLocation(TargetLocation.DELIVER_HIGH)));
     m_driverController.circle().onTrue(new InstantCommand(() -> setTargetLocation(TargetLocation.DELIVER_MID)));
     m_driverController.cross().onTrue(new InstantCommand(() -> setTargetLocation(TargetLocation.DELIVER_LOW)));
@@ -122,6 +122,7 @@ public class RobotContainer {
 
   private void setTargetLocation(TargetLocation targetLocation) {
     m_currentTargetLocation = targetLocation;
+    System.out.println(targetLocation.name());
   }
 
   /**
