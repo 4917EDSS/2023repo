@@ -84,6 +84,10 @@ public class RobotContainer {
 
     m_driverController.povUp().onTrue(new DriveAlignCmd(m_drivetrainSub, m_visionSub, 15.0));
 
+    m_driverController.circle().onTrue(new InstantCommand(() -> m_drivetrainSub.setBrakeCmd(true), m_drivetrainSub));
+
+    m_driverController.cross().onTrue(new InstantCommand(() -> m_drivetrainSub.setBrakeCmd(false), m_drivetrainSub));
+
     m_driverController.L1().onTrue(new DriveSetGearCmd(false, m_drivetrainSub));
 
     m_driverController.R1().onTrue(new DriveSetGearCmd(true, m_drivetrainSub));
