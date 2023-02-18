@@ -60,6 +60,16 @@ public class VisionSub extends SubsystemBase {
 
     SmartDashboard.putNumber("Distance (m)", getDistance());
     SmartDashboard.putNumber("Distance X", getDistanceX());
+    SmartDashboard.putNumber("Y angle", getRY());
+    if((getRY()-getHorizontalAngle()) < -10.0) {
+      SmartDashboard.putString("Side of apriltag", "Left"); // Robot on Left side of april tag
+    }
+    else if((getRY()-getHorizontalAngle()) > 10) {
+      SmartDashboard.putString("Side of apriltag", "Right"); // Robot on right side of april tag
+    }
+    else {
+      SmartDashboard.putString("Side of apriltag", "Center");
+    }
   }
 
   /**
@@ -93,8 +103,8 @@ public class VisionSub extends SubsystemBase {
   }
 
   public int getVisionMode() { // Gets current vision pipeline number
-    Long val = m_tid.getInteger(0);
-    return val.intValue();
+    double val = m_tid.getDouble(0.0);
+    return (int)val;
   }
 
   public int getPrimaryID() { // Get primary apriltag ID (-1 means nothing)
@@ -105,17 +115,42 @@ public class VisionSub extends SubsystemBase {
   public void setPipeline(int line) { // Set the currect pipeline (NO_VISION, LIMELIGHT, or APRILTAG)
     m_pipeline.setNumber(line);
   }
+  public double getRY() { // Get the Y angle relative to the april tag
+    if(1==1/*getVisionMode() == Constants.LimelightConstants.kApriltag*/) {
+      JSONParser parser = new JSONParser();
+      String temp_json = m_json.getString("");
+      JSONObject json_data;
+      JSONArray result_data;
+      double yAngle = 0.0;
 
+      try {
+        json_data = (JSONObject) parser.parse(temp_json); // Go through the json dump to get the tag Z position
+        json_data = (JSONObject) json_data.get("Results");
+
+        result_data = (JSONArray) json_data.get("Fiducial");
+        json_data = (JSONObject) result_data.get(0);
+        result_data = (JSONArray) json_data.get("t6t_cs");
+        yAngle = (double) result_data.get(4); // X value of apriltag
+
+      } catch (Exception e) {
+        json_data = null;
+        yAngle = -0.0; // -0.0 means error
+        //System.out.println(e);
+      }
+      return yAngle; // Convert to meters
+    }
+    return 0.0; // No Apriltag vision
+  }
   public double getDistance() { // Returns distance in meters, 0 if no distance [ Must have apriltag pipeline enabled]
 
-    if(getVisionMode() == Constants.LimelightConstants.kApriltag) {
+    if(1==1/*getVisionMode() == Constants.LimelightConstants.kApriltag*/) {
       JSONParser parser = new JSONParser();
       String temp_json = m_json.getString("");
       JSONObject json_data;
       JSONArray result_data;
       double dx = 0.0;
       double dz = 0.0;
-      //double distance = 0.0;
+      double distance = 0.0;
 
       try {
         json_data = (JSONObject) parser.parse(temp_json); // Go through the json dump to get the tag Z position
@@ -126,13 +161,14 @@ public class VisionSub extends SubsystemBase {
         result_data = (JSONArray) json_data.get("t6t_cs");
         dx = (double) result_data.get(0); // X value of apriltag
         dz = (double) result_data.get(2); // Z value of apriltag
+        distance = Math.sqrt(dx * dx + dz * dz) * kSlope;
 
       } catch (Exception e) {
         json_data = null;
-        //distance = -0.0; // -0.0 means error
+        distance = -0.0; // -0.0 means error
         //System.out.println(e);
       }
-      return Math.sqrt(dx * dx + dz * dz) * kSlope; // Convert to meters
+      return distance; // Convert to meters
     }
     return 0.0; // No Apriltag vision
   }
