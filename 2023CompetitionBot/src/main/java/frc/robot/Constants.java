@@ -21,11 +21,11 @@ public final class Constants {
   }
 
   public final static class CanIds {
-    public final static int kLeftDriveMotor1 = 1;
-    public final static int kLeftDriveMotor2 = 2;
-    public final static int kLeftDriveMotor3 = 3;
-    public final static int kRightDriveMotor1 = 4;
-    public final static int kMastMotor = 5;
+    public final static int kMastMotor = 1;
+    public final static int kLeftDriveMotor1 = 2;
+    public final static int kLeftDriveMotor2 = 3;
+    public final static int kLeftDriveMotor3 = 4;
+    public final static int kRightDriveMotor1 = 5;
     public final static int kRightDriveMotor2 = 6;
     public final static int kRightDriveMotor3 = 7;
     public final static int kArmMotor = 8;
