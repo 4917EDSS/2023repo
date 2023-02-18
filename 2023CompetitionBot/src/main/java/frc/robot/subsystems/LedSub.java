@@ -11,10 +11,27 @@ import frc.robot.Constants.PwmIds;
 import frc.robot.Constants.LedConstants;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+/** Add your docs here. */
+
+
 public class LedSub extends SubsystemBase {
   //previous RGB colour vars
   private int m_rr, m_gg, m_bb = 0;
 
+
+  public enum LedZones {
+    ZONE0(0, 2),
+    ZONE1(3, 5),
+    ZONE3(6, 9);
+  
+    public final int start;
+    public final int end;
+  
+    LedZones(int start, int end) {
+      this.start = start;
+      this.end = end;
+    }
+  }
   // Hardware setup.
   AddressableLED m_ledStrip = new AddressableLED(PwmIds.kLedStripPwmPort);
   AddressableLEDBuffer m_ledBuffer = new AddressableLEDBuffer(LedConstants.kLedStripLength);
@@ -26,6 +43,8 @@ public class LedSub extends SubsystemBase {
         LedConstants.kLedStripDefaultBlue);
     m_ledStrip.setData(m_ledBuffer);
     m_ledStrip.start();
+
+    init();
   }
 
   @Override
@@ -46,7 +65,11 @@ public class LedSub extends SubsystemBase {
   public void interrupt() {
 
   }
-
+  public void setZoneColour (LedZones zone, int r, int g, int b) {
+    for (int i = zone.start; i <= zone.end; i++) {
+      setColor(i, r, g, b);
+    }
+  }
   public void setColor(int i, int r, int g, int b) {
     // Sets the RGB color of an LED, or of all of them.
     // The r, g, and b parameters are quite self-explanatory (representing the r, g,
