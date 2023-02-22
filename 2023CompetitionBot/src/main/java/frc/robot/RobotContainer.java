@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import java.util.logging.Logger;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -39,6 +40,8 @@ import frc.robot.subsystems.LedSub.LedColour;
 public class RobotContainer {
   private static boolean s_coneMode = false;
 
+  private static Logger logger = Logger.getLogger(RobotContainer.class.getName());
+  
   // The robot's subsystems and commands are defined here...
   private final ArmSub m_armSub = new ArmSub();
   private final DrivetrainSub m_drivetrainSub = new DrivetrainSub();

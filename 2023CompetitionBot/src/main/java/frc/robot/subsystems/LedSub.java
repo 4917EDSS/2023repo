@@ -30,9 +30,9 @@ public class LedSub extends SubsystemBase {
       this.end = end;
     }
   }
-
+  
   public enum LedColour {
-    YELLOW(128, 128, 0), PURPLE(80, 20, 60), RED(128, 0, 0), GREEN(0, 128, 0), BLUE(0, 0, 128), WHITE(128, 128, 128);
+    YELLOW(128, 128, 0), PURPLE(80, 20, 60), RED(128, 0, 0), GREEN(0, 128, 0),START_GREEN(0, 64, 0), BLUE(0, 0, 128), WHITE(128, 128, 128);
 
     public final int red, blue, green;
 
@@ -74,7 +74,7 @@ public class LedSub extends SubsystemBase {
   /** Creates a new LedSub. */
   public LedSub() {
     m_ledStrip.setLength(m_ledBuffer.getLength());
-    setColor(-1, LedColour.WHITE);
+    setColor(-1, LedColour.START_GREEN);
     m_ledStrip.setData(m_ledBuffer);
     m_ledStrip.start();
 
@@ -90,7 +90,7 @@ public class LedSub extends SubsystemBase {
    * Use this method to reset all of the hardware and states to safe starting values
    */
   public void init() {
-    setColor(-1, LedColour.WHITE);
+    setColor(-1, LedColour.START_GREEN);
   }
 
 
