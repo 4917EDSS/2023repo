@@ -4,11 +4,13 @@
 
 package frc.robot;
 
+import java.util.Map;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -57,6 +59,9 @@ public class RobotContainer {
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
+
+   IntakePositions m_currentTargetLocation = IntakePositions.START;
+
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
@@ -80,7 +85,7 @@ public class RobotContainer {
   private void configureBindings() {
     // Driver controller bindings
     m_driverController.L3().or(m_driverController.R3())
-        .onTrue(new InterruptAllCommandsCmd(m_armSub,m_mastSub, m_intakeSub, m_drivetrainSub));
+        .onTrue(new InterruptAllCommandsCmd(m_armSub, m_mastSub, m_intakeSub, m_drivetrainSub));
 
     m_driverController.povUp().onTrue(new DriveAlignCmd(m_drivetrainSub, m_visionSub, 15.0));
 
@@ -92,49 +97,64 @@ public class RobotContainer {
 
     m_driverController.R1().onTrue(new DriveSetGearCmd(true, m_drivetrainSub));
 
-    m_driverController.triangle().onTrue(new InstantCommand(() -> m_drivetrainSub.setIsAutoShift(true), /* Call on command start */ m_drivetrainSub));
+    m_driverController.triangle().onTrue(
+        new InstantCommand(() -> m_drivetrainSub.setIsAutoShift(true), /* Call on command start */ m_drivetrainSub));
 
     m_driverController.circle().onTrue(new DriveStraightCmd(m_drivetrainSub, 2));
 
     // Operator controller bindings
-    
+    m_operatorController.povUp().onTrue(new InstantCommand(() -> m_currentTargetLocation = IntakePositions.DOUBLE_STATION));
 
-     m_operatorController.povLeft().onTrue(new IntakeSetPositionCmd(IntakePositions.STATION, m_armSub, m_mastSub));
-    
-    m_operatorController.povDown().onTrue(new IntakeSetPositionCmd(IntakePositions.GROUND, m_armSub, m_mastSub));
-    
-    m_operatorController.triangle().onTrue(new IntakeSetPositionCmd(IntakePositions.HIGH, m_armSub, m_mastSub));
+    m_operatorController.povLeft().onTrue(new InstantCommand(() -> m_currentTargetLocation = IntakePositions.SINGLE_STATION));
 
-    m_operatorController.circle().onTrue(new IntakeSetPositionCmd(IntakePositions.MEDIUM, m_armSub, m_mastSub));
+    m_operatorController.povDown().onTrue(new InstantCommand(() -> m_currentTargetLocation = IntakePositions.GROUND));
 
-    m_operatorController.cross().onTrue(new IntakeSetPositionCmd(IntakePositions.LOW, m_armSub, m_mastSub));
-    
-    m_operatorController.square().onTrue(new IntakeSetPositionCmd(IntakePositions.START, m_armSub, m_mastSub));
-   
+    m_operatorController.triangle().onTrue(new InstantCommand(() -> m_currentTargetLocation = IntakePositions.HIGH));
+
+    m_operatorController.circle().onTrue(new InstantCommand(() -> m_currentTargetLocation = IntakePositions.MEDIUM));
+
+    m_operatorController.cross().onTrue(new InstantCommand(() -> m_currentTargetLocation = IntakePositions.LOW));
+
+    m_operatorController.square().onTrue(new InstantCommand(() -> m_currentTargetLocation = IntakePositions.START));
+
     m_operatorController.L1().onTrue(new SetGamePieceTypeCmd(false, this, m_ledSub));
-    
-    m_operatorController.R1().onTrue(new SetGamePieceTypeCmd(true, this, m_ledSub));
-   
-    // L2 is maped to Intakes in
-    m_operatorController.L2().onTrue(new InstantCommand(() -> m_intakeSub.spinWheelsIntake(0.3), m_intakeSub));
-    
-    // R2 is maped to the intake out
-    m_operatorController.R2().onTrue(new InstantCommand(() -> m_intakeSub.spinWheelsIntake(-0.3), m_intakeSub));
-    
-    // Share is maped to rotate gripper
-    //m_operatorController.share().onTrue(new InstantCommand(() -> m_intakeSub.intakeRotate(0.3), m_intakeSub));
-      
-    //m_operatorController.options().onTrue(new InstantCommand(() -> m_intakeSub.intakeRotate(-0.3), m_intakeSub));
 
-   //Option is maped to Led Subsystem
-    m_operatorController.options().onTrue(new InstantCommand(() ->  m_ledSub.setZoneColour(LedSub.LedZones.ZONE0, 255, 255, 255)));
+    m_operatorController.R1().onTrue(new SetGamePieceTypeCmd(true, this, m_ledSub));
+
+    // The command that runs is dynamically based on the selected position
+    m_operatorController.R2().onTrue(m_IntakePositionsSelectCommand);
+
+    //Option is maped to Led Subsystem
+    m_operatorController.options()
+        .onTrue(new InstantCommand(() -> m_ledSub.setZoneColour(LedSub.LedZones.ZONE0, 255, 255, 255)));
 
     //Share is maped to Led Subsystem
-    m_operatorController.share().onTrue(new InstantCommand(() -> m_ledSub.setZoneColour(LedSub.LedZones.ZONE0, 128, 0, 0)));
-   
-    
+    m_operatorController.share()
+        .onTrue(new InstantCommand(() -> m_ledSub.setZoneColour(LedSub.LedZones.ZONE0, 128, 0, 0)));
+
+
     m_operatorController.L3().or(m_operatorController.R3())
-        .onTrue(new InterruptAllCommandsCmd(m_armSub,m_mastSub, m_intakeSub, m_drivetrainSub));
+        .onTrue(new InterruptAllCommandsCmd(m_armSub, m_mastSub, m_intakeSub, m_drivetrainSub));
+  }
+
+  private SelectCommand m_IntakePositionsSelectCommand = new SelectCommand(
+    Map.ofEntries(
+          Map.entry(IntakePositions.DOUBLE_STATION, new PrintCommand("Pick-up at double station")),
+          Map.entry(IntakePositions.SINGLE_STATION, new PrintCommand("Pick-up at single station")),
+          Map.entry(IntakePositions.GROUND, new PrintCommand("Pick-up off of ground")),
+          Map.entry(IntakePositions.START, new PrintCommand("Retract mast and arm to starting position")),
+          Map.entry(IntakePositions.HIGH, new PrintCommand("Deliver high")),
+          Map.entry(IntakePositions.MEDIUM, new PrintCommand("Deliver mid")),
+          Map.entry(IntakePositions.LOW, new PrintCommand("Deliver low"))),
+      this::getTargetLocation);
+
+  private IntakePositions getTargetLocation() {
+      return m_currentTargetLocation;
+  }
+
+  private void setTargetLocation(IntakePositions targetLocation) {
+    m_currentTargetLocation = targetLocation;
+    System.out.println(targetLocation.name());
   }
 
   void autoChooserSetup() {
@@ -156,7 +176,7 @@ public class RobotContainer {
   public static boolean isConeMode() {
     return s_coneMode;
   }
-  
+
   public static void setConeMode(boolean coneMode) {
     s_coneMode = coneMode;
     System.out.println(coneMode ? "Cone Mode" : "Cube Mode");
