@@ -22,6 +22,7 @@ import frc.robot.commands.IntakeSetPositionCmd;
 import frc.robot.commands.InterruptAllCommandsCmd;
 import frc.robot.commands.MastMoveWithJoystickCmd;
 import frc.robot.commands.SetGamePieceTypeCmd;
+import frc.robot.commands.StraightenToApriltagCmd;
 import frc.robot.subsystems.ArmSub;
 import frc.robot.subsystems.DrivetrainSub;
 import frc.robot.subsystems.IntakePositions;
@@ -82,7 +83,7 @@ public class RobotContainer {
     m_driverController.L3().or(m_driverController.R3())
         .onTrue(new InterruptAllCommandsCmd(m_armSub,m_mastSub, m_intakeSub, m_drivetrainSub));
 
-    m_driverController.povUp().onTrue(new DriveAlignCmd(m_drivetrainSub, m_visionSub, 15.0));
+    m_driverController.povUp().onTrue(new StraightenToApriltagCmd(m_drivetrainSub, m_visionSub));
 
     m_driverController.circle().onTrue(new InstantCommand(() -> m_drivetrainSub.setBrakeCmd(true), m_drivetrainSub));
 
