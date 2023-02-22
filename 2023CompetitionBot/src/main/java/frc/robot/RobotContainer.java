@@ -29,6 +29,7 @@ import frc.robot.subsystems.IntakeSub;
 import frc.robot.subsystems.LedSub;
 import frc.robot.subsystems.MastSub;
 import frc.robot.subsystems.VisionSub;
+import frc.robot.subsystems.LedSub.LedColour;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
@@ -127,12 +128,12 @@ public class RobotContainer {
     //m_operatorController.options().onTrue(new InstantCommand(() -> m_intakeSub.intakeRotate(-0.3), m_intakeSub));
 
    //Option is maped to Led Subsystem
-    m_operatorController.options().onTrue(new InstantCommand(() ->  m_ledSub.setZoneColour(LedSub.LedZones.ZONE0, 255, 255, 255)));
+    m_operatorController.options().onTrue(new InstantCommand(() ->  m_ledSub.setZoneColour(LedSub.LedZones.ZONE0, LedColour.GREEN)));
 
     //Share is maped to Led Subsystem
-    m_operatorController.share().onTrue(new InstantCommand(() -> m_ledSub.setZoneColour(LedSub.LedZones.ZONE0, 128, 0, 0)));
+    m_operatorController.share().onTrue(new InstantCommand(() -> m_ledSub.setZoneColour(LedSub.LedZones.ZONE0, LedColour.PURPLE)));
+    m_operatorController.L2().onTrue(new InstantCommand(() ->  m_ledSub.setZoneColour(LedSub.LedZones.ZONE0, LedColour.YELLOW)));
    
-    
     m_operatorController.L3().or(m_operatorController.R3())
         .onTrue(new InterruptAllCommandsCmd(m_armSub,m_mastSub, m_intakeSub, m_drivetrainSub));
   }
