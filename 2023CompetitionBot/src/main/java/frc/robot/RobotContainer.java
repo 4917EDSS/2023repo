@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ArmMoveWithJoystickCmd;
 import frc.robot.commands.DriveAlignCmd;
+import frc.robot.commands.DriveAlignTapeCmd;
 import frc.robot.commands.DriveSetGearCmd;
 import frc.robot.commands.DriveStraightCmd;
 import frc.robot.commands.DriveWithJoystickCmd;
@@ -89,7 +90,7 @@ public class RobotContainer {
     m_driverController.L3().or(m_driverController.R3())
         .onTrue(new InterruptAllCommandsCmd(m_armSub,m_mastSub, m_intakeSub, m_drivetrainSub));
 
-    m_driverController.povUp().onTrue(new StraightenToApriltagCmd(m_drivetrainSub, m_visionSub));
+    m_driverController.povUp().onTrue(new DriveAlignTapeCmd(m_drivetrainSub, m_visionSub,15.0));
 
     m_driverController.circle().onTrue(new InstantCommand(() -> m_drivetrainSub.setBrakeCmd(true), m_drivetrainSub));
 
