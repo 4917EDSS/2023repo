@@ -66,6 +66,7 @@ public class Robot extends TimedRobot {
         /*if(HALUtil.getFPGAButton() == true){
       System.out.println("User button pressed");
     }*/
+    m_robotContainer.disabledPeriodic();
   }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */

@@ -176,12 +176,12 @@ public class RobotContainer {
     m_visionSub.init();
   }
 
-  /*
-   * public void LedPanell () { int r, g, b; r = 0; g = 1; b = 2;
-   * 
-   * m_ledSub.setLEDState(LEDMode.ConeMode); double[] colour = {Double.valueOf(m_ledSub.m_rr),
-   * Double.valueOf(m_ledSub.gg), Double.valueOf(m_ledSub.bb)}; SmartDashboard.putNumberArray("null", colour);
-   * 
-   * }
-   */
+  public void disabledPeriodic(){
+    if(m_intakeSub.isIntakeLoaded()){
+      m_ledSub.setColor(0, LedColour.GREEN);
+    } else{
+      m_ledSub.setColor(0, LedColour.RED);
+    }
+  }
+
 }
