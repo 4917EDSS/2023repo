@@ -121,8 +121,9 @@ public class RobotContainer {
 
     m_operatorController.R1().onTrue(new SetGamePieceTypeCmd(true, this, m_ledSub));
 
+    m_operatorController.L2().onTrue(m_moveToIntakePositionSelectCmd);
     // The command that runs is dynamically based on the selected position
-    m_operatorController.R2().onTrue(m_IntakePositionsSelectCommand);
+    m_operatorController.R2().onTrue(m_autoIntakePositionsSelectCmd);
 
     //Option is maped to Led Subsystem
     m_operatorController.options()
@@ -137,7 +138,18 @@ public class RobotContainer {
         .onTrue(new InterruptAllCommandsCmd(m_armSub, m_mastSub, m_intakeSub, m_drivetrainSub));
   }
 
-  private SelectCommand m_IntakePositionsSelectCommand = new SelectCommand(
+  private SelectCommand m_moveToIntakePositionSelectCmd = new SelectCommand(
+    Map.ofEntries(
+          Map.entry(IntakePositions.DOUBLE_STATION, new IntakeSetPositionCmd(IntakePositions.DOUBLE_STATION, m_armSub, m_mastSub)),
+          Map.entry(IntakePositions.SINGLE_STATION, new IntakeSetPositionCmd(IntakePositions.SINGLE_STATION, m_armSub, m_mastSub)),
+          Map.entry(IntakePositions.GROUND, new IntakeSetPositionCmd(IntakePositions.GROUND, m_armSub, m_mastSub)),
+          Map.entry(IntakePositions.START, new IntakeSetPositionCmd(IntakePositions.START, m_armSub, m_mastSub)),
+          Map.entry(IntakePositions.HIGH, new IntakeSetPositionCmd(IntakePositions.HIGH, m_armSub, m_mastSub)),
+          Map.entry(IntakePositions.MEDIUM, new IntakeSetPositionCmd(IntakePositions.MEDIUM, m_armSub, m_mastSub)),
+          Map.entry(IntakePositions.LOW, new IntakeSetPositionCmd(IntakePositions.LOW, m_armSub, m_mastSub))),
+      this::getTargetLocation);
+
+  private SelectCommand m_autoIntakePositionsSelectCmd = new SelectCommand(
     Map.ofEntries(
           Map.entry(IntakePositions.DOUBLE_STATION, new PrintCommand("Pick-up at double station")),
           Map.entry(IntakePositions.SINGLE_STATION, new PrintCommand("Pick-up at single station")),
