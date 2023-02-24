@@ -16,12 +16,14 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ArmMoveWithJoystickCmd;
 import frc.robot.commands.DriveAlignCmd;
+import frc.robot.commands.DriveAlignTapeCmd;
 import frc.robot.commands.DriveSetGearCmd;
 import frc.robot.commands.DriveStraightCmd;
 import frc.robot.commands.DriveWithJoystickCmd;
 import frc.robot.commands.IntakeSetPositionCmd;
 import frc.robot.commands.InterruptAllCommandsCmd;
 import frc.robot.commands.MastMoveWithJoystickCmd;
+import frc.robot.commands.IntakeRotateWithJoystickCmd;
 import frc.robot.commands.SetGamePieceTypeCmd;
 import frc.robot.commands.StraightenToApriltagCmd;
 import frc.robot.subsystems.ArmSub;
@@ -69,8 +71,9 @@ public class RobotContainer {
 
     // Set default command for subsystems
     m_drivetrainSub.setDefaultCommand(new DriveWithJoystickCmd(m_driverController, m_drivetrainSub));
-    m_armSub.setDefaultCommand(new ArmMoveWithJoystickCmd(m_operatorController, m_armSub));
-    m_mastSub.setDefaultCommand(new MastMoveWithJoystickCmd(m_operatorController, m_mastSub));
+  //  m_armSub.setDefaultCommand(new ArmMoveWithJoystickCmd(m_operatorController, m_armSub));
+  //  m_mastSub.setDefaultCommand(new MastMoveWithJoystickCmd(m_operatorController, m_mastSub));
+    m_intakeSub.setDefaultCommand(new IntakeRotateWithJoystickCmd(m_operatorController, m_intakeSub));
 
   }
 
@@ -87,7 +90,7 @@ public class RobotContainer {
     m_driverController.L3().or(m_driverController.R3())
         .onTrue(new InterruptAllCommandsCmd(m_armSub,m_mastSub, m_intakeSub, m_drivetrainSub));
 
-    m_driverController.povUp().onTrue(new StraightenToApriltagCmd(m_drivetrainSub, m_visionSub));
+    m_driverController.povUp().onTrue(new DriveAlignTapeCmd(m_drivetrainSub, m_visionSub,15.0));
 
     m_driverController.circle().onTrue(new InstantCommand(() -> m_drivetrainSub.setBrakeCmd(true), m_drivetrainSub));
 
@@ -176,12 +179,12 @@ public class RobotContainer {
     m_visionSub.init();
   }
 
-  /*
-   * public void LedPanell () { int r, g, b; r = 0; g = 1; b = 2;
-   * 
-   * m_ledSub.setLEDState(LEDMode.ConeMode); double[] colour = {Double.valueOf(m_ledSub.m_rr),
-   * Double.valueOf(m_ledSub.gg), Double.valueOf(m_ledSub.bb)}; SmartDashboard.putNumberArray("null", colour);
-   * 
-   * }
-   */
+  public void disabledPeriodic(){
+    if(m_intakeSub.isIntakeLoaded()){
+      m_ledSub.setColor(0, LedColour.GREEN);
+    } else{
+      m_ledSub.setColor(0, LedColour.RED);
+    }
+  }
+
 }

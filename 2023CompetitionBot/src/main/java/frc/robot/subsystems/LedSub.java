@@ -151,7 +151,7 @@ public class LedSub extends SubsystemBase {
 
       for(int led = 0; led < LedConstants.kLedStripLength; led++) {
         //Light string takes BRG
-        m_ledBuffer.setRGB(led, ledColour.red,ledColour.blue,  ledColour.green);
+        m_ledBuffer.setRGB(led, ledColour.red, ledColour.blue, ledColour.green);
       }
     } else {
       //Light string takes BRG

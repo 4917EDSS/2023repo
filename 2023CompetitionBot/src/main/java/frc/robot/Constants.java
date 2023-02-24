@@ -57,6 +57,13 @@ public final class Constants {
     public final static int kApriltag = 2;
   }
 
+  public final static class VisionConstants {
+    public final static double kMountAngle = 0.0; // All measurements in meters
+    public final static double kHighTapeHeight = 1.06;
+    public final static double kLowTapeHeight = 0.56;
+    public final static double kLensHeight = 0.0;
+  }
+
   public final static class LedConstants {
     public final static int kLedStripLength = 10;
     public final static int kLedStripDefaultRed = 0;
