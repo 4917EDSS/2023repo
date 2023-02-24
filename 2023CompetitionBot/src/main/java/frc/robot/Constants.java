@@ -39,6 +39,7 @@ public final class Constants {
 
   public final static class SolenoidIds {
     public final static int kShifter = 1;
+    public final static int kArmLock = 3;
   }
 
   public final static class PwmIds {

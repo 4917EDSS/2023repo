@@ -8,6 +8,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -33,6 +35,8 @@ public class ArmSub extends SubsystemBase {
   private final CANSparkMax m_motor =
       new CANSparkMax((Constants.CanIds.kArmMotor), CANSparkMaxLowLevel.MotorType.kBrushless);
 
+  private final Solenoid m_lock = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.SolenoidIds.kArmLock);
+
   private double m_p = 0.1;
   private double m_i = 0.0;
   private double m_d = 0.0;
@@ -48,6 +52,7 @@ public class ArmSub extends SubsystemBase {
 
     init();
   }
+
 
   @Override
   public void periodic() {
@@ -95,6 +100,10 @@ public class ArmSub extends SubsystemBase {
   public boolean isBlocked(double currentPosition, double targetPosition) {
     //TODO implement later
     return false;
+  }
+
+  public void lockArm (boolean lock){
+    m_lock.set(lock);
   }
 
   /**
@@ -177,6 +186,7 @@ public class ArmSub extends SubsystemBase {
 
     // Check if there are new control parameters to set
     if(m_newControlParameters) {
+      //TODO: Unlock motor
       m_currentControl.state = m_newControl.state;
       m_currentControl.mode = m_newControl.mode;
       m_currentControl.targetPower = m_newControl.targetPower;
@@ -197,6 +207,7 @@ public class ArmSub extends SubsystemBase {
           m_blockedPosition = currentPosition;
           m_currentControl.state = State.INTERRUPTED;
         } else if(isFinished()) {
+          //TODO: Lock motor
           m_currentControl.state = State.HOLDING;
         } else {
           newPower = calcMovePower(currentPosition, m_currentControl.targetPosition, m_currentControl.targetPower);
@@ -218,6 +229,7 @@ public class ArmSub extends SubsystemBase {
       case INTERRUPTED:
         // If the mechanism is no longer blocked, transition to MOVING
         if(isBlocked(currentPosition, m_currentControl.targetPosition) == false) {
+          //TODO: Unlock motor
           m_currentControl.state = State.MOVING;
           // Otherwise, hold this position
         } else {
