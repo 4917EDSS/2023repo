@@ -4,8 +4,8 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -30,9 +30,11 @@ public class ArmSub extends SubsystemBase {
   private double m_blockedPosition;
 
   // HARDWARE AND CONTROL OBJECTS /////////////////////////////////////////////
-  private final CANSparkMax m_motor =
-      new CANSparkMax((Constants.CanIds.kArmMotor), CANSparkMaxLowLevel.MotorType.kBrushless);
-
+  //public class TalonFxSub extends SubsystemBase {
+    // The ID is the CAN ID that the motor was programmed with (using the CTRE Phoenix software)
+    private final TalonFX m_motor = new TalonFX(Constants.CanIds.kArmMotor);
+    
+  
   private double m_p = 0.1;
   private double m_i = 0.0;
   private double m_d = 0.0;
@@ -74,22 +76,22 @@ public class ArmSub extends SubsystemBase {
    * Blindly sets the mechanism power (-1.0 to 1.0). Use setPosition for smart operation
    */
   public void move(double power) {
-    m_motor.set(power);
+    m_motor.set(ControlMode.PercentOutput, power);
   }
 
   /** Sets the current position as the starting position - use wisely */
   public void zeroEncoder() {
-    m_motor.getEncoder().setPosition(0);
+    m_motor.setSelectedSensorPosition(0);
   }
 
   /** Returns the position of the mechanism in encoder ticks */
   public double getPosition() {
-    return m_motor.getEncoder().getPosition();
+    return m_motor.getSelectedSensorPosition();
   }
 
   /** Returns the velocity of the mechanism in ticks per second */
   public double getVelocity() {
-    return m_motor.getEncoder().getVelocity();
+    return m_motor.getSelectedSensorVelocity();
   }
 
   public boolean isBlocked(double currentPosition, double targetPosition) {
