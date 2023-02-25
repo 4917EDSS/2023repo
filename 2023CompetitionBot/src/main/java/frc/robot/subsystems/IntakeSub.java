@@ -238,6 +238,7 @@ public class IntakeSub extends SubsystemBase {
     SmartDashboard.putNumber("Intake kP", p);
     SmartDashboard.putNumber("Intake kI", i);
     SmartDashboard.putNumber("Intake kD", d);
+    SmartDashboard.putNumber("Arm Voltage", m_intakeMotor.getOutputCurrent());
 
     m_pid.setP(p);
     m_pid.setI(i);
