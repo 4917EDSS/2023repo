@@ -38,8 +38,6 @@ import frc.robot.subsystems.VisionSub;
  * Instead, the structure of the robot (including subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  private static boolean s_coneMode = false;
-
   // The robot's subsystems and commands are defined here...
   private final ArmSub m_armSub = new ArmSub();
   private final DrivetrainSub m_drivetrainSub = new DrivetrainSub();
@@ -60,7 +58,6 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
 
-   IntakePositions m_currentTargetLocation = IntakePositions.START;
 
   public RobotContainer() {
     // Configure the trigger bindings
@@ -103,27 +100,32 @@ public class RobotContainer {
     m_driverController.circle().onTrue(new DriveStraightCmd(m_drivetrainSub, 2));
 
     // Operator controller bindings
-    m_operatorController.povUp().onTrue(new InstantCommand(() -> m_currentTargetLocation = IntakePositions.DOUBLE_STATION));
+    m_operatorController.povUp().onTrue(new InstantCommand(() -> StateOfRobot.m_currentTargetLocation = IntakePositions.DOUBLE_STATION));
 
-    m_operatorController.povLeft().onTrue(new InstantCommand(() -> m_currentTargetLocation = IntakePositions.SINGLE_STATION));
+    m_operatorController.povLeft().onTrue(new InstantCommand(() -> StateOfRobot.m_currentTargetLocation = IntakePositions.SINGLE_STATION));
 
-    m_operatorController.povDown().onTrue(new InstantCommand(() -> m_currentTargetLocation = IntakePositions.GROUND));
+    m_operatorController.povDown().onTrue(new InstantCommand(() -> StateOfRobot.m_currentTargetLocation = IntakePositions.GROUND));
 
-    m_operatorController.triangle().onTrue(new InstantCommand(() -> m_currentTargetLocation = IntakePositions.HIGH));
+    m_operatorController.triangle().onTrue(new InstantCommand(() -> StateOfRobot.m_currentTargetLocation = IntakePositions.HIGH));
 
-    m_operatorController.circle().onTrue(new InstantCommand(() -> m_currentTargetLocation = IntakePositions.MEDIUM));
+    m_operatorController.circle().onTrue(new InstantCommand(() -> StateOfRobot.m_currentTargetLocation = IntakePositions.MEDIUM));
 
-    m_operatorController.cross().onTrue(new InstantCommand(() -> m_currentTargetLocation = IntakePositions.LOW));
+    m_operatorController.cross().onTrue(new InstantCommand(() -> StateOfRobot.m_currentTargetLocation = IntakePositions.LOW));
 
-    m_operatorController.square().onTrue(new InstantCommand(() -> m_currentTargetLocation = IntakePositions.START));
+    m_operatorController.square().onTrue(new InstantCommand(() -> StateOfRobot.m_currentTargetLocation = IntakePositions.START));
 
     m_operatorController.L1().onTrue(new SetGamePieceTypeCmd(false, this, m_ledSub));
 
     m_operatorController.R1().onTrue(new SetGamePieceTypeCmd(true, this, m_ledSub));
 
+
     m_operatorController.L2().onTrue(m_moveToIntakePositionSelectCmd);
     // The command that runs is dynamically based on the selected position
     m_operatorController.R2().onTrue(m_autoIntakePositionsSelectCmd);
+
+    m_operatorController.PS().onTrue(new InstantCommand(()-> StateOfRobot.m_operatorJoystickforIntake = false));
+
+    m_operatorController.touchpad().onTrue(new InstantCommand(()-> StateOfRobot.m_operatorJoystickforIntake = true));
 
     //Option is maped to Led Subsystem
     m_operatorController.options()
@@ -161,11 +163,11 @@ public class RobotContainer {
       this::getTargetLocation);
 
   private IntakePositions getTargetLocation() {
-      return m_currentTargetLocation;
+      return StateOfRobot.m_currentTargetLocation;
   }
 
   private void setTargetLocation(IntakePositions targetLocation) {
-    m_currentTargetLocation = targetLocation;
+    StateOfRobot.m_currentTargetLocation = targetLocation;
     System.out.println(targetLocation.name());
   }
 
@@ -186,11 +188,11 @@ public class RobotContainer {
   }
 
   public static boolean isConeMode() {
-    return s_coneMode;
+    return StateOfRobot.m_coneMode;
   }
 
   public static void setConeMode(boolean coneMode) {
-    s_coneMode = coneMode;
+    StateOfRobot.m_coneMode = coneMode;
     System.out.println(coneMode ? "Cone Mode" : "Cube Mode");
   }
 
