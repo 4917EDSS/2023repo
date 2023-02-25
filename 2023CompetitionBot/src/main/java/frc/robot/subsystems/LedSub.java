@@ -20,7 +20,7 @@ public class LedSub extends SubsystemBase {
 
 
   public enum LedZones {
-    ZONE0(0, 2), ZONE1(3, 5), ZONE3(6, 9);
+    ZONE0(0, 2), ZONE1(3, 5), ZONE2(6, 9), ALL(0, 9);
 
     public final int start;
     public final int end;
@@ -74,7 +74,7 @@ public class LedSub extends SubsystemBase {
   /** Creates a new LedSub. */
   public LedSub() {
     m_ledStrip.setLength(m_ledBuffer.getLength());
-    setColor(-1, LedColour.START_GREEN);
+    setZoneColour(LedZones.ALL, LedColour.START_GREEN);
     m_ledStrip.setData(m_ledBuffer);
     m_ledStrip.start();
 
@@ -90,7 +90,7 @@ public class LedSub extends SubsystemBase {
    * Use this method to reset all of the hardware and states to safe starting values
    */
   public void init() {
-    setColor(-1, LedColour.START_GREEN);
+    setZoneColour(LedZones.ALL, LedColour.START_GREEN);
   }
 
 
@@ -101,32 +101,73 @@ public class LedSub extends SubsystemBase {
 
   }
 
-  public void setZoneColour(LedZones zone, LedColour ledColour) {
+  // setZoneColou(zone, colour) {
+  //  r = colour.r;
+  //  g = 
+  //  setzoneRGB(zone, r, g, b)
+  // }
 
-    for(int i = zone.start; i <= zone.end; i++) {
-      setLedBuffer(i, ledColour);
+  // setzoneRBG()
+  // {\
+  // setbuffer(r, g, b)
+  //  }
+
+
+   public void setZoneColour(LedZones zone, LedColour ledColour){
+    setZoneRGB(zone, ledColour.red, ledColour.green, ledColour.blue);
+   }
+
+   public void setZoneRGB(LedZones zone, int r, int g, int b){
+    if(r < 0) {
+      r = 0;
+    }
+    if(r > 255) {
+      r = 255;
+    }
+    if(g < 0) {
+      g = 0;
+    }
+    if(g > 255) {
+      g = 255;
+    }
+    if(b < 0) {
+      b = 0;
+    }
+    if(b > 255) {
+      b = 255;
+    }
+    for(int i = zone.start; i <= zone.end; i++){
+      m_ledBuffer.setRGB(i, r, b, g); //this function takes in RBG
     }
     m_ledStrip.setData(m_ledBuffer);
-  }
+   }
 
-  public void setColor(int i, LedColour ledColour) {
-    // Sets the RGB color of an LED, or of all of them.
-    // The r, g, and b parameters are quite self-explanatory (representing the r, g,
-    // and b in rgb color.)
-    // The i parameter represents the index of the LED whose color should be
-    // changed, from 0 to kLedStripLength-1.
-    // If i is negative, all LEDs on the strip will be changed.
-    // Note that the rgb color system uses 3 values (r, g, and b) to represent
-    // color.
-    // r represents the amount of red (from 0 to 255) g represents the amount of
-    // green (from 0 to 255) and b represents the amount of blue (from 0 to 255.)
-    // Colors are made by combining various amounts of these 3 basic colors.
+  // public void setZoneColour1(LedZones zone, LedColour ledColour) {
+
+  //   for(int i = zone.start; i <= zone.end; i++) {
+  //     setLedBuffer(i, ledColour);
+  //   }
+  //   m_ledStrip.setData(m_ledBuffer);
+  // }
+
+  // public void setColor(int i, LedColour ledColour) {
+  //   // Sets the RGB color of an LED, or of all of them.
+  //   // The r, g, and b parameters are quite self-explanatory (representing the r, g,
+  //   // and b in rgb color.)
+  //   // The i parameter represents the index of the LED whose color should be
+  //   // changed, from 0 to kLedStripLength-1.
+  //   // If i is negative, all LEDs on the strip will be changed.
+  //   // Note that the rgb color system uses 3 values (r, g, and b) to represent
+  //   // color.
+  //   // r represents the amount of red (from 0 to 255) g represents the amount of
+  //   // green (from 0 to 255) and b represents the amount of blue (from 0 to 255.)
+  //   // Colors are made by combining various amounts of these 3 basic colors.
  
-    setLedBuffer(i, ledColour);
-    if(i < 0) {
-      m_ledStrip.setData(m_ledBuffer);
-    }
-  }
+  //   setLedBuffer(i, ledColour);
+  //   if(i < 0) {
+  //     m_ledStrip.setData(m_ledBuffer);
+  //   }
+  // }
 
   // LED state enums
   public enum LEDMode {
@@ -134,41 +175,48 @@ public class LedSub extends SubsystemBase {
 
   }
 
-  public void setLedBuffer(int i, LedColour ledColour) {
-    // Sets the RGB color of an LED, or of all of them.
-    // The r, g, and b parameters are quite self-explanatory (representing the r, g,
-    // and b in rgb color.)
-    // The i parameter represents the index of the LED whose color should be
-    // changed, from 0 to kLedStripLength-1.
-    // If i is negative, all LEDs on the strip will be changed.
-    // Note that the rgb color system uses 3 values (r, g, and b) to represent
-    // color.
-    // r represents the amount of red (from 0 to 255) g represents the amount of
-    // green (from 0 to 255) and b represents the amount of blue (from 0 to 255.)
-    // Colors are made by combining various amounts of these 3 basic colors.
-    //
-    if(i < 0) {
+  // public void setLedBuffer(int i, LedColour ledColour) {
+  //   // Sets the RGB color of an LED, or of all of them.
+  //   // The r, g, and b parameters are quite self-explanatory (representing the r, g,
+  //   // and b in rgb color.)
+  //   // The i parameter represents the index of the LED whose color should be
+  //   // changed, from 0 to kLedStripLength-1.
+  //   // If i is negative, all LEDs on the strip will be changed.
+  //   // Note that the rgb color system uses 3 values (r, g, and b) to represent
+  //   // color.
+  //   // r represents the amount of red (from 0 to 255) g represents the amount of
+  //   // green (from 0 to 255) and b represents the amount of blue (from 0 to 255.)
+  //   // Colors are made by combining various amounts of these 3 basic colors.
+  //   //
+  //   if(i < 0) {
 
-      for(int led = 0; led < LedConstants.kLedStripLength; led++) {
-        //Light string takes BRG
-        m_ledBuffer.setRGB(led, ledColour.red, ledColour.blue, ledColour.green);
-      }
-    } else {
-      //Light string takes BRG
-      m_ledBuffer.setRGB(i, ledColour.red, ledColour.blue, ledColour.green);
-    }
-  }
+  //     for(int led = 0; led < LedConstants.kLedStripLength; led++) {
+  //       //Light string takes BRG
+  //       m_ledBuffer.setRGB(led, ledColour.red, ledColour.blue, ledColour.green);
+  //     }
+  //   } else {
+  //     //Light string takes BRG
+  //     m_ledBuffer.setRGB(i, ledColour.red, ledColour.blue, ledColour.green);
+  //   }
+  // }
 
-  public void setCustomRGB(int i, int r, int g, int b){
-    m_ledBuffer.setRGB(i, r, b, g); // the function setRGB takes the colours in RBG order
-  }
+  // public void setCustomRGB(int i, int r, int g, int b){
+  //   if(i < 0){
+  //     for(int led = 0; led < LedConstants.kLedStripLength; led++) {
+  //       //Light string takes RGB
+  //       m_ledBuffer.setRGB(led, r, b, g);
+  //     }
+  //   } else{
+  //     m_ledBuffer.setRGB(i, r, b, g);
+  //   }
+  // }
 
   //Set Colours according to state
   public void setLEDState(LEDMode LEDState) {
     if(LEDState == LEDMode.ConeMode) {
-      setColor(0, LedColour.YELLOW); //Set LED colour to yellow 
+      setZoneColour(LedZones.ZONE0, LedColour.YELLOW); //Set LED colour to yellow 
     } else if(LEDState == LEDMode.CubeMode) {
-      setColor(0, LedColour.PURPLE); //Set LED colour to purple
+      setZoneColour(LedZones.ZONE0, LedColour.PURPLE); //Set LED colour to purple
     }
   }
 
