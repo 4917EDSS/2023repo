@@ -20,6 +20,7 @@ public class LedSub extends SubsystemBase {
 
 
   public enum LedZones {
+    DIAG_MAST_ENC(0,0), DIAG_ARM_ENC(1,1), DIAG_INTAKE_LIMSWITCH(2,2), 
     ZONE0(0, 2), ZONE1(3, 5), ZONE2(6, 9), ALL(0, 9);
 
     public final int start;

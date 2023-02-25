@@ -182,22 +182,22 @@ public class RobotContainer {
 
   public void disabledPeriodic() {
     if(m_intakeSub.isIntakeLoaded()) {
-      m_ledSub.setZoneColour(LedZones.ZONE0, LedColour.GREEN);
+      m_ledSub.setZoneColour(LedZones.DIAG_INTAKE_LIMSWITCH, LedColour.GREEN);
     } else {
-      m_ledSub.setZoneColour(LedZones.ZONE0, LedColour.RED);
+      m_ledSub.setZoneColour(LedZones.DIAG_INTAKE_LIMSWITCH, LedColour.RED);
     }
 
     if(m_armSub.getPosition() < 0) {
-      m_ledSub.setZoneRGB(LedZones.ZONE1, 200, 200 + (int) (m_armSub.getPosition() / 50000 * 200),
+      m_ledSub.setZoneRGB(LedZones.DIAG_ARM_ENC, 200, 200 + (int) (m_armSub.getPosition() / 50000 * 200),
           200 + (int) (m_armSub.getPosition() / 50000 * 200));
           System.out.println((int) (m_armSub.getPosition() / 50000 * 200));
     } else {
-      m_ledSub.setZoneRGB(LedZones.ZONE1, 200 - (int) (m_armSub.getPosition() / 50000 * 200), 200,
+      m_ledSub.setZoneRGB(LedZones.DIAG_ARM_ENC, 200 - (int) (m_armSub.getPosition() / 50000 * 200), 200,
           200 - (int) (m_armSub.getPosition() / 50000 * 200));
           System.out.println((int) (m_armSub.getPosition() / 50000 * 200));
     }
 
-    m_ledSub.setZoneRGB(LedZones.ZONE2, 200 - (int) m_mastSub.getPosition() * 12, 200, 
+    m_ledSub.setZoneRGB(LedZones.DIAG_MAST_ENC, 200 - (int) m_mastSub.getPosition() * 12, 200, 
     200 - (int) m_mastSub.getPosition() * 12);
   }
 }
