@@ -34,6 +34,7 @@ import frc.robot.subsystems.LedSub;
 import frc.robot.subsystems.MastSub;
 import frc.robot.subsystems.VisionSub;
 import frc.robot.subsystems.LedSub.LedColour;
+import frc.robot.subsystems.LedSub.LedZones;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
@@ -139,7 +140,7 @@ public class RobotContainer {
 
     //Share is maped to Led Subsystem
     m_operatorController.share().onTrue(new InstantCommand(() -> m_ledSub.setZoneColour(LedSub.LedZones.ZONE0, LedColour.PURPLE)));
-    m_operatorController.L2().onTrue(new InstantCommand(() ->  m_ledSub.setZoneColour(LedSub.LedZones.ZONE0, LedColour.YELLOW)));
+    m_operatorController.L2().onTrue(new InstantCommand(() ->  m_ledSub.setZoneColour(LedSub.LedZones.ALL, LedColour.YELLOW)));
    
     m_operatorController.L3().or(m_operatorController.R3())
         .onTrue(new InterruptAllCommandsCmd(m_armSub,m_mastSub, m_intakeSub, m_drivetrainSub));
@@ -179,12 +180,24 @@ public class RobotContainer {
     m_visionSub.init();
   }
 
-  public void disabledPeriodic(){
-    if(m_intakeSub.isIntakeLoaded()){
-      m_ledSub.setColor(0, LedColour.GREEN);
-    } else{
-      m_ledSub.setColor(0, LedColour.RED);
+  public void disabledPeriodic() {
+    if(m_intakeSub.isIntakeLoaded()) {
+      m_ledSub.setZoneColour(LedZones.DIAG_INTAKE_LIMSWITCH, LedColour.GREEN);
+    } else {
+      m_ledSub.setZoneColour(LedZones.DIAG_INTAKE_LIMSWITCH, LedColour.RED);
     }
-  }
 
+    if(m_armSub.getPosition() < 0) {
+      m_ledSub.setZoneRGB(LedZones.DIAG_ARM_ENC, 200, 200 + (int) (m_armSub.getPosition() / 50000 * 200),
+          200 + (int) (m_armSub.getPosition() / 50000 * 200));
+          System.out.println((int) (m_armSub.getPosition() / 50000 * 200));
+    } else {
+      m_ledSub.setZoneRGB(LedZones.DIAG_ARM_ENC, 200 - (int) (m_armSub.getPosition() / 50000 * 200), 200,
+          200 - (int) (m_armSub.getPosition() / 50000 * 200));
+          System.out.println((int) (m_armSub.getPosition() / 50000 * 200));
+    }
+
+    m_ledSub.setZoneRGB(LedZones.DIAG_MAST_ENC, 200 - (int) m_mastSub.getPosition() * 12, 200, 
+    200 - (int) m_mastSub.getPosition() * 12);
+  }
 }
