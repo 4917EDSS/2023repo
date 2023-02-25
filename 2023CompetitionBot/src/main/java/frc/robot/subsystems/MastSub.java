@@ -41,7 +41,7 @@ public class MastSub extends SubsystemBase {
   // SUBSYSTEM METHODS ////////////////////////////////////////////////////////
   /** Creates a new MastSub. */
   public MastSub() {
-    m_motor.setInverted(true);
+    m_motor.setInverted(false);
 
     SmartDashboard.putNumber("Mast kP", m_p);
     SmartDashboard.putNumber("Mast kI", m_i);

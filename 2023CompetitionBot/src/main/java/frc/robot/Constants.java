@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.util.logging.Level;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean constants. This
  * class should not be used for any other purpose. All constants should be declared globally (i.e. public static). Do
@@ -20,6 +22,8 @@ public final class Constants {
     public static final int kOperatorControllerPort = 1;
   }
 
+  public static final Level kLogLevel = Level.WARNING;
+  
   public final static class CanIds {
     public final static int kMastMotor = 1;
     public final static int kLeftDriveMotor1 = 2;
@@ -35,6 +39,7 @@ public final class Constants {
 
   public final static class SolenoidIds {
     public final static int kShifter = 1;
+    public final static int kArmLock = 3;
   }
 
   public final static class PwmIds {
@@ -50,6 +55,13 @@ public final class Constants {
     public final static int kNoVision = 0;
     public final static int kLimelimelight = 1;
     public final static int kApriltag = 2;
+  }
+
+  public final static class VisionConstants {
+    public final static double kMountAngle = 0.0; // All measurements in meters
+    public final static double kHighTapeHeight = 1.06;
+    public final static double kLowTapeHeight = 0.56;
+    public final static double kLensHeight = 0.0;
   }
 
   public final static class LedConstants {
