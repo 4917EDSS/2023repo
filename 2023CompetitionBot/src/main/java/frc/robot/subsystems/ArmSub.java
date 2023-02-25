@@ -17,8 +17,8 @@ import frc.robot.subsystems.SubControl.State;
 
 public class ArmSub extends SubsystemBase {
   // CONSTANTS ////////////////////////////////////////////////////////////////
-  private static final double kPositionMin = -95.0; // In encoder ticks
-  private static final double kPositionMax = 80.0; // In encoder ticks (straight up is 30)
+  private static final double kPositionMin = -146888.0; // In encoder ticks
+  private static final double kPositionMax = 141510.0; // In encoder ticks (straight up is 30)
   private static final double kManualModePowerDeadband = 0.05; // If manual power is less than this, assume power is 0
   private static final double kMaxPosDifference = 0.1; // Maximum difference between the target and current pos for the state to finish   <---- Must be tuned
   private static final double kMaxPowerStop = 0.1; // Max amount of power for the state to finish                                         <--- Must be tuned
@@ -36,7 +36,7 @@ public class ArmSub extends SubsystemBase {
 
   private final Solenoid m_lock = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.SolenoidIds.kArmLock);
   
-  private double m_p = 0.1;
+  private double m_p = 0.00001;
   private double m_i = 0.0;
   private double m_d = 0.0;
   private final PIDController m_pid = new PIDController(m_p, m_i, m_d);
@@ -222,7 +222,7 @@ public class ArmSub extends SubsystemBase {
         // necessary
         // TODO: Check if we can use the calcMovePower function since the PID could take
         // care of both cases
-        newPower = calcHoldPower(currentPosition, m_currentControl.targetPosition);
+        newPower = calcMovePower(currentPosition, m_currentControl.targetPosition, 0.5);
         break;
 
       case INTERRUPTED:
@@ -232,7 +232,7 @@ public class ArmSub extends SubsystemBase {
           m_currentControl.state = State.MOVING;
           // Otherwise, hold this position
         } else {
-          newPower = calcHoldPower(currentPosition, m_blockedPosition);
+          newPower = calcMovePower(currentPosition, m_blockedPosition, 0.5);
         }
         break;
 
