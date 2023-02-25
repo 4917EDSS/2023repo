@@ -159,6 +159,10 @@ public class LedSub extends SubsystemBase {
     }
   }
 
+  public void setCustomRGB(int i, int r, int g, int b){
+    m_ledBuffer.setRGB(i, r, b, g); // the function setRGB takes the colours in RBG order
+  }
+
   //Set Colours according to state
   public void setLEDState(LEDMode LEDState) {
     if(LEDState == LEDMode.ConeMode) {
