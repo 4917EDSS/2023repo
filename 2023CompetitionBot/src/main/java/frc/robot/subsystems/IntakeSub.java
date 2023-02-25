@@ -14,8 +14,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class IntakeSub extends SubsystemBase {
-  private static final double kPositionMin = 0.0; // In encoder ticks
-  private static final double kPositionMax = 60.0; // In encoder ticks (straight up is 30)
+  private static final double kPositionMin = -36.0; // In encoder ticks
+  private static final double kPositionMax = 36.0; // In encoder ticks (straight up is 30)
   private static final double kManualModePowerDeadband = 0.05; // If manual power is less than this, assume power is 0
 
   // STATE VARIABLES //////////////////////////////////////////////////////////
@@ -214,7 +214,7 @@ public class IntakeSub extends SubsystemBase {
         break;
     }
 
-    spinWheelsIntake(newPower);
+    intakeRotate(newPower);
   }
 
   /** Calculate the amount of power should use to get to the target position */
