@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import frc.robot.subsystems.SubControl.Mode;
+import frc.robot.StateOfRobot;
 import frc.robot.subsystems.IntakeSub;
 
 public class IntakeRotateWithJoystickCmd extends CommandBase {
@@ -30,8 +31,11 @@ public class IntakeRotateWithJoystickCmd extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_intakeSub.setPosition(Mode.MANUAL, -m_controller.getLeftY(), 0);
-    m_intakeSub.spinWheelsIntake(-m_controller.getRightY());
+    if (StateOfRobot.m_operatorJoystickforIntake) {
+      m_intakeSub.intakeRotate(m_controller.getLeftY());
+      //m_intakeSub.setPosition(Mode.MANUAL, -m_controller.getLeftY(), 0);
+      m_intakeSub.spinWheelsIntake(-m_controller.getRightY());
+    }
   }
 
   // Called once the command ends or is interrupted.
