@@ -11,6 +11,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
+import frc.robot.StateOfRobot;
 import frc.robot.subsystems.MastSub;
 import frc.robot.subsystems.SubControl.Mode;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -37,7 +38,9 @@ public class MastMoveWithJoystickCmd extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_mastSub.setPosition(Mode.MANUAL, -m_controller.getLeftY(), 0);
+    if(!StateOfRobot.m_operatorJoystickforIntake) {
+      m_mastSub.setPosition(Mode.MANUAL, -m_controller.getLeftY(), 0);
+    }
   }
 
   // Called once the command ends or is interrupted.

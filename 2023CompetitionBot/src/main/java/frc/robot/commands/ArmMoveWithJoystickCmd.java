@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
+import frc.robot.StateOfRobot;
 import frc.robot.subsystems.ArmSub;
 import frc.robot.subsystems.SubControl;
 
@@ -29,7 +30,9 @@ public class ArmMoveWithJoystickCmd extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_armSub.setPosition(SubControl.Mode.MANUAL, m_controller.getRightY(), 0);
+    if(!StateOfRobot.m_operatorJoystickforIntake) {
+      m_armSub.setPosition(SubControl.Mode.MANUAL, m_controller.getRightY(), 0);
+    }
   }
 
   // Called once the command ends or is interrupted.

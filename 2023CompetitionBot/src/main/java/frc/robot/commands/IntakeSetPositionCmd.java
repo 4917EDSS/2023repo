@@ -39,6 +39,8 @@ public class IntakeSetPositionCmd extends CommandBase {
   @Override
   public void initialize() { 
     IntakePositions converted = IntakePositions.convert(m_intakePositions, RobotContainer.isConeMode());
+
+    System.out.println("ISPC: " + m_intakePositions.name() + " " + converted.name()); 
     m_armSub.setPosition(Mode.AUTO, kMaxArmPower, converted.armEncoder);
     m_mastSub.setPosition(Mode.AUTO, kMaxMastPower, converted.mastEncoder);
   }
