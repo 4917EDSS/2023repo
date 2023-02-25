@@ -16,6 +16,7 @@ import java.util.logging.Level;
  */
 public final class Constants {
   public static final Level kLogLevel = Level.WARNING;
+  
 
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;

@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.util.logging.Handler;
+import java.util.logging.Logger;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -16,6 +18,8 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
+  private static Logger logger = Logger.getLogger(Robot.class.getName());
+
   private RobotContainer m_robotContainer;
 
   private boolean m_isInitialized = false;
@@ -27,6 +31,11 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
+    Logger root = Logger.getLogger("");
+    root.setLevel(Constants.kLogLevel);
+    for (Handler handler : root.getHandlers()) {
+        handler.setLevel(Constants.kLogLevel);
+    }
     m_robotContainer = new RobotContainer();
   }
 
@@ -57,6 +66,7 @@ public class Robot extends TimedRobot {
         /*if(HALUtil.getFPGAButton() == true){
       System.out.println("User button pressed");
     }*/
+    m_robotContainer.disabledPeriodic();
   }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
@@ -101,6 +111,7 @@ public class Robot extends TimedRobot {
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
+    logger.info("Im in teleop Mode");
   }
 
   /** This function is called periodically during test mode. */

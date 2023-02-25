@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.LedSub;
+import frc.robot.subsystems.LedSub.LedColour;
 import frc.robot.subsystems.LedSub.LedZones;
 
 public class SetGamePieceTypeCmd extends CommandBase {
@@ -30,9 +31,9 @@ public class SetGamePieceTypeCmd extends CommandBase {
     m_robotContainer.setConeMode(m_coneMode);
 
     if (m_coneMode) {
-      m_ledSub.setZoneColour(LedZones.ZONE1, 0, 0, 128);
+      m_ledSub.setZoneColour(LedZones.ZONE1, LedColour.BLUE);
     } else {
-      m_ledSub.setZoneColour(LedZones.ZONE1, 0, 128, 0);
+      m_ledSub.setZoneColour(LedZones.ZONE1, LedColour.GREEN);
     }
   }
 
