@@ -260,10 +260,11 @@ public class ArmSub extends SubsystemBase {
 
   public boolean isFinished() {
     if(Math.abs(getPosition() - m_currentControl.targetPosition) > kMaxPosDifference) {
-      //System.out.print()
+      System.out.println("Difference: " + (Math.abs(getPosition() - m_currentControl.targetPosition)));
       return false;
     }
     if(Math.abs(getVelocity()) > kMaxVelocityDifference) {
+      System.out.println("Velocity: " + (Math.abs(getVelocity())));
       return false;
     }
     if(m_newControlParameters) {

@@ -102,18 +102,6 @@ public class LedSub extends SubsystemBase {
 
   }
 
-  // setZoneColou(zone, colour) {
-  //  r = colour.r;
-  //  g = 
-  //  setzoneRGB(zone, r, g, b)
-  // }
-
-  // setzoneRBG()
-  // {\
-  // setbuffer(r, g, b)
-  //  }
-
-
    public void setZoneColour(LedZones zone, LedColour ledColour){
     setZoneRGB(zone, ledColour.red, ledColour.green, ledColour.blue);
    }
@@ -143,74 +131,10 @@ public class LedSub extends SubsystemBase {
     m_ledStrip.setData(m_ledBuffer);
    }
 
-  // public void setZoneColour1(LedZones zone, LedColour ledColour) {
-
-  //   for(int i = zone.start; i <= zone.end; i++) {
-  //     setLedBuffer(i, ledColour);
-  //   }
-  //   m_ledStrip.setData(m_ledBuffer);
-  // }
-
-  // public void setColor(int i, LedColour ledColour) {
-  //   // Sets the RGB color of an LED, or of all of them.
-  //   // The r, g, and b parameters are quite self-explanatory (representing the r, g,
-  //   // and b in rgb color.)
-  //   // The i parameter represents the index of the LED whose color should be
-  //   // changed, from 0 to kLedStripLength-1.
-  //   // If i is negative, all LEDs on the strip will be changed.
-  //   // Note that the rgb color system uses 3 values (r, g, and b) to represent
-  //   // color.
-  //   // r represents the amount of red (from 0 to 255) g represents the amount of
-  //   // green (from 0 to 255) and b represents the amount of blue (from 0 to 255.)
-  //   // Colors are made by combining various amounts of these 3 basic colors.
- 
-  //   setLedBuffer(i, ledColour);
-  //   if(i < 0) {
-  //     m_ledStrip.setData(m_ledBuffer);
-  //   }
-  // }
-
   // LED state enums
   public enum LEDMode {
     ConeMode, CubeMode,
-
   }
-
-  // public void setLedBuffer(int i, LedColour ledColour) {
-  //   // Sets the RGB color of an LED, or of all of them.
-  //   // The r, g, and b parameters are quite self-explanatory (representing the r, g,
-  //   // and b in rgb color.)
-  //   // The i parameter represents the index of the LED whose color should be
-  //   // changed, from 0 to kLedStripLength-1.
-  //   // If i is negative, all LEDs on the strip will be changed.
-  //   // Note that the rgb color system uses 3 values (r, g, and b) to represent
-  //   // color.
-  //   // r represents the amount of red (from 0 to 255) g represents the amount of
-  //   // green (from 0 to 255) and b represents the amount of blue (from 0 to 255.)
-  //   // Colors are made by combining various amounts of these 3 basic colors.
-  //   //
-  //   if(i < 0) {
-
-  //     for(int led = 0; led < LedConstants.kLedStripLength; led++) {
-  //       //Light string takes BRG
-  //       m_ledBuffer.setRGB(led, ledColour.red, ledColour.blue, ledColour.green);
-  //     }
-  //   } else {
-  //     //Light string takes BRG
-  //     m_ledBuffer.setRGB(i, ledColour.red, ledColour.blue, ledColour.green);
-  //   }
-  // }
-
-  // public void setCustomRGB(int i, int r, int g, int b){
-  //   if(i < 0){
-  //     for(int led = 0; led < LedConstants.kLedStripLength; led++) {
-  //       //Light string takes RGB
-  //       m_ledBuffer.setRGB(led, r, b, g);
-  //     }
-  //   } else{
-  //     m_ledBuffer.setRGB(i, r, b, g);
-  //   }
-  // }
 
   //Set Colours according to state
   public void setLEDState(LEDMode LEDState) {
