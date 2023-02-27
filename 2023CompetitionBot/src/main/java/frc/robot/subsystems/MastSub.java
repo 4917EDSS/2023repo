@@ -246,7 +246,7 @@ public class MastSub extends SubsystemBase {
 
 
   private double calcHoldPower(double currentPosition, double targetPosition) {
-    double holdPower = (targetPosition - currentPosition) * 0.004;
+    double holdPower = (targetPosition - currentPosition) * 0.004; // TODO:  Make this a constant and tune (if used)
     return holdPower;
   }
 

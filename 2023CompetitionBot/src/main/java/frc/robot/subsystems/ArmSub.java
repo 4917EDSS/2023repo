@@ -32,8 +32,6 @@ public class ArmSub extends SubsystemBase {
   // HARDWARE AND CONTROL OBJECTS /////////////////////////////////////////////
   private final TalonFX m_motor = new TalonFX(Constants.CanIds.kArmMotor);
 
-  //private final Solenoid m_lock = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.SolenoidIds.kArmLock);
-
   private double m_p = 0.00001;
   private double m_i = 0.0;
   private double m_d = 0.0;
@@ -49,7 +47,6 @@ public class ArmSub extends SubsystemBase {
 
     init();
   }
-
 
   @Override
   public void periodic() {
@@ -98,11 +95,6 @@ public class ArmSub extends SubsystemBase {
     //TODO implement later
     return false;
   }
-
-  // public void lockArm(boolean lock) {
-  // //  m_lock.set(lock);
-  // System.err.println("Lock arm is not implemented");
-  // }
 
   /**
    * Move the mechanism to the desired position using the state machine - In mode DISABLED, the mechanism is disabled -
@@ -184,7 +176,6 @@ public class ArmSub extends SubsystemBase {
 
     // Check if there are new control parameters to set
     if(m_newControlParameters) {
-      //TODO: Unlock motor
       m_currentControl.state = m_newControl.state;
       m_currentControl.mode = m_newControl.mode;
       m_currentControl.targetPower = m_newControl.targetPower;
@@ -205,7 +196,6 @@ public class ArmSub extends SubsystemBase {
           m_blockedPosition = currentPosition;
           m_currentControl.state = State.INTERRUPTED;
         } else if(isFinished()) {
-          //TODO: Lock motor
           m_currentControl.state = State.HOLDING;
         } else {
           newPower = calcMovePower(currentPosition, m_currentControl.targetPosition, m_currentControl.targetPower);
@@ -219,18 +209,16 @@ public class ArmSub extends SubsystemBase {
       case HOLDING:
         // If the mechanism is at it's target location, apply power to hold it there if
         // necessary
-        // TODO: Check if we can use the calcMovePower function since the PID could take
-        // care of both cases
         newPower = calcMovePower(currentPosition, m_currentControl.targetPosition, 0.5);
         break;
 
       case INTERRUPTED:
         // If the mechanism is no longer blocked, transition to MOVING
         if(isBlocked(currentPosition, m_currentControl.targetPosition) == false) {
-          //TODO: Unlock motor
           m_currentControl.state = State.MOVING;
           // Otherwise, hold this position
         } else {
+          // Use the move PID to hold our position but limit it to 50% power (should need way less than that)
           newPower = calcMovePower(currentPosition, m_blockedPosition, 0.5);
         }
         break;
@@ -249,11 +237,6 @@ public class ArmSub extends SubsystemBase {
   /** Calculate the amount of power should use to get to the target position */
   private double calcMovePower(double currentPosition, double newPosition, double targetPower) {
     return MathUtil.clamp(m_pid.calculate(currentPosition, newPosition), -targetPower, targetPower);
-  }
-
-  private double calcHoldPower(double currentPosition, double targetPosition) {
-    double holdPower = (targetPosition - currentPosition) * 0.004;
-    return holdPower;
   }
 
   public boolean isFinished() {

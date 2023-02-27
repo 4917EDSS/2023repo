@@ -25,7 +25,6 @@ public class IntakeSetPositionCmd extends CommandBase {
   private final MastSub m_mastSub;
 
   /** Creates a new MoveManipulatorToHighPickUpCmd. */
-  // TODO:  Pass in the desired mast and arm position instead of a controller button
   public IntakeSetPositionCmd(IntakePositions positions, ArmSub armSub, MastSub mastSub) {
     m_armSub = armSub;
     m_mastSub = mastSub;
@@ -37,10 +36,12 @@ public class IntakeSetPositionCmd extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() { 
+  public void initialize() {
     IntakePositions converted = IntakePositions.convert(m_intakePositions, RobotContainer.isConeMode());
 
-    System.out.println("ISPC: " + m_intakePositions.name() + " " + converted.name()); 
+    // TODO:  Remove the println when done or convert to a logger message
+    System.out.println("ISPC: " + m_intakePositions.name() + " " + converted.name());
+
     m_armSub.setPosition(Mode.AUTO, kMaxArmPower, converted.armEncoder);
     m_mastSub.setPosition(Mode.AUTO, kMaxMastPower, converted.mastEncoder);
   }
@@ -55,7 +56,7 @@ public class IntakeSetPositionCmd extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     // if inturrupted, stop otherwise already stopped
-    if (interrupted) {
+    if(interrupted) {
       m_armSub.setPosition(Mode.MANUAL, 0, 0);
       m_mastSub.setPosition(Mode.MANUAL, 0, 0);
     }

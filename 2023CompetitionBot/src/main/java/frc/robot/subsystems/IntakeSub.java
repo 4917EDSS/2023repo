@@ -47,8 +47,7 @@ public class IntakeSub extends SubsystemBase {
   }
 
   /** Use this method to reset all of the hardware and states to safe starting values */
-  public void init() {
-  }
+  public void init() {}
 
   /** This method puts the subsystem in a safe state when all commands are interrupted */
   public void interrupt() {
@@ -224,6 +223,7 @@ public class IntakeSub extends SubsystemBase {
 
   private double calcHoldPower(double currentPosition) {
     // TODO: Decide what is needed to hold the position
+    // We probalby just want to use calcMovePower
     return 0.0;
   }
 

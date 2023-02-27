@@ -128,9 +128,9 @@ public class RobotContainer {
     m_operatorController.square()
         .onTrue(new InstantCommand(() -> StateOfRobot.m_currentTargetLocation = IntakePositions.START));
 
-    m_operatorController.L1().onTrue(new SetGamePieceTypeCmd(false, this, m_ledSub));
+    m_operatorController.L1().onTrue(new SetGamePieceTypeCmd(false, m_ledSub));
 
-    m_operatorController.R1().onTrue(new SetGamePieceTypeCmd(true, this, m_ledSub));
+    m_operatorController.R1().onTrue(new SetGamePieceTypeCmd(true, m_ledSub));
 
     m_operatorController.L2().onTrue(m_moveToIntakePositionSelectCmd);
     // The command that runs is dynamically based on the selected position
