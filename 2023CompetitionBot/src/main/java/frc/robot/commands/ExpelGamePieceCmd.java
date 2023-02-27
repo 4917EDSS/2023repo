@@ -9,13 +9,12 @@ import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.subsystems.IntakeSub;
 
 public class ExpelGamePieceCmd extends CommandBase {
-  /** Creates a new ExpelGamePieceCmd. */
-  
   private final IntakeSub m_intakeSub;
   private long m_timeStart; // The time it was at the time the command was initialized
   private double timeSpinning = 0.2; // How long the intake wheels spin (in seconds)
   private double power = 1; // What power the motors spin at
 
+  /** Creates a new ExpelGamePieceCmd. */
   public ExpelGamePieceCmd(IntakeSub intakeSub) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_intakeSub = intakeSub;
@@ -31,8 +30,7 @@ public class ExpelGamePieceCmd extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override

@@ -16,14 +16,14 @@ import java.util.logging.Level;
  * reduce verbosity.
  */
 public final class Constants {
+  public static final Level kLogLevel = Level.WARNING;
+
   // HARDWARE IDs/PORTs MAPPING ///////////////////////////////////////////////
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
     public static final int kOperatorControllerPort = 1;
   }
 
-  public static final Level kLogLevel = Level.WARNING;
-  
   public final static class CanIds {
     public final static int kMastMotor = 1;
     public final static int kLeftDriveMotor1 = 2;

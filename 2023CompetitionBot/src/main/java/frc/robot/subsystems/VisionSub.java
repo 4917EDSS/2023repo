@@ -61,16 +61,14 @@ public class VisionSub extends SubsystemBase {
     if(getVisionMode() == Constants.LimelightConstants.kApriltag)
       SmartDashboard.putNumber("Distance (m)", getDistance());
     else if(getVisionMode() == Constants.LimelightConstants.kLimelimelight)
-    SmartDashboard.putNumber("Distance (m)", estimateDistance());
+      SmartDashboard.putNumber("Distance (m)", estimateDistance());
     SmartDashboard.putNumber("Distance X", getDistanceX());
     SmartDashboard.putNumber("Y angle", getRY());
-    if((getRY()-getHorizontalAngle()) < -10.0) {
+    if((getRY() - getHorizontalAngle()) < -10.0) {
       SmartDashboard.putString("Side of apriltag", "Left"); // Robot on Left side of april tag
-    }
-    else if((getRY()-getHorizontalAngle()) > 10) {
+    } else if((getRY() - getHorizontalAngle()) > 10) {
       SmartDashboard.putString("Side of apriltag", "Right"); // Robot on right side of april tag
-    }
-    else {
+    } else {
       SmartDashboard.putString("Side of apriltag", "Center");
     }
   }
@@ -107,7 +105,7 @@ public class VisionSub extends SubsystemBase {
 
   public int getVisionMode() { // Gets current vision pipeline number
     double val = m_getpipe.getDouble(0.0);
-    return (int)val;
+    return (int) val;
   }
 
   public int getPrimaryID() { // Get primary apriltag ID (-1 means nothing)
@@ -118,6 +116,7 @@ public class VisionSub extends SubsystemBase {
   public void setPipeline(int line) { // Set the currect pipeline (NO_VISION, LIMELIGHT, or APRILTAG)
     m_pipeline.setNumber(line);
   }
+
   public double getRY() { // Get the Y angle relative to the april tag
     if(getVisionMode() == Constants.LimelightConstants.kApriltag) {
       JSONParser parser = new JSONParser();
@@ -144,17 +143,20 @@ public class VisionSub extends SubsystemBase {
     }
     return 0.0; // No Apriltag vision
   }
+
   public double estimateDistance() { // In meters
     if(getTargetArea() > 0.0) {
-      double angleTarget = Constants.VisionConstants.kMountAngle+getVerticalAngle(); // angle to target
-      double goalRadians = angleTarget*(3.14159/180.0);
+      double angleTarget = Constants.VisionConstants.kMountAngle + getVerticalAngle(); // angle to target
+      double goalRadians = angleTarget * (3.14159 / 180.0);
 
-      double distInches = (Constants.VisionConstants.kHighTapeHeight-Constants.VisionConstants.kLensHeight)/Math.tan(goalRadians);
+      double distInches =
+          (Constants.VisionConstants.kHighTapeHeight - Constants.VisionConstants.kLensHeight) / Math.tan(goalRadians);
       return distInches; // Convert from inches to meters
     }
-    
+
     return 0.0;
   }
+
   public double getDistance() { // Returns distance in meters, 0 if no distance [ Must have apriltag pipeline enabled]
 
     if(getVisionMode() == Constants.LimelightConstants.kApriltag) {
@@ -186,6 +188,7 @@ public class VisionSub extends SubsystemBase {
     }
     return 0.0; // No Apriltag vision
   }
+
   public double getDistanceX() { // Get horizontal distance from target
     if(getVisionMode() == Constants.LimelightConstants.kApriltag) {
       JSONParser parser = new JSONParser();

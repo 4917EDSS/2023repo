@@ -17,26 +17,24 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ArmMoveWithJoystickCmd;
-import frc.robot.commands.DriveAlignCmd;
 import frc.robot.commands.DriveAlignTapeCmd;
 import frc.robot.commands.DriveSetGearCmd;
 import frc.robot.commands.DriveStraightCmd;
 import frc.robot.commands.DriveWithJoystickCmd;
+import frc.robot.commands.IntakeRotateWithJoystickCmd;
 import frc.robot.commands.IntakeSetPositionCmd;
 import frc.robot.commands.InterruptAllCommandsCmd;
 import frc.robot.commands.MastMoveWithJoystickCmd;
-import frc.robot.commands.IntakeRotateWithJoystickCmd;
 import frc.robot.commands.SetGamePieceTypeCmd;
-import frc.robot.commands.StraightenToApriltagCmd;
 import frc.robot.subsystems.ArmSub;
 import frc.robot.subsystems.DrivetrainSub;
 import frc.robot.subsystems.IntakePositions;
 import frc.robot.subsystems.IntakeSub;
 import frc.robot.subsystems.LedSub;
-import frc.robot.subsystems.MastSub;
-import frc.robot.subsystems.VisionSub;
 import frc.robot.subsystems.LedSub.LedColour;
 import frc.robot.subsystems.LedSub.LedZones;
+import frc.robot.subsystems.MastSub;
+import frc.robot.subsystems.VisionSub;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
@@ -45,7 +43,7 @@ import frc.robot.subsystems.LedSub.LedZones;
  */
 public class RobotContainer {
   private static Logger logger = Logger.getLogger(RobotContainer.class.getName());
-  
+
   // The robot's subsystems and commands are defined here...
   private final ArmSub m_armSub = new ArmSub();
   private final DrivetrainSub m_drivetrainSub = new DrivetrainSub();
@@ -93,7 +91,7 @@ public class RobotContainer {
     m_driverController.L3().or(m_driverController.R3())
         .onTrue(new InterruptAllCommandsCmd(m_armSub, m_mastSub, m_intakeSub, m_drivetrainSub));
 
-    m_driverController.povUp().onTrue(new DriveAlignTapeCmd(m_drivetrainSub, m_visionSub,15.0));
+    m_driverController.povUp().onTrue(new DriveAlignTapeCmd(m_drivetrainSub, m_visionSub, 15.0));
 
     m_driverController.circle().onTrue(new InstantCommand(() -> m_drivetrainSub.setBrakeCmd(true), m_drivetrainSub));
 
@@ -109,19 +107,26 @@ public class RobotContainer {
     m_driverController.circle().onTrue(new DriveStraightCmd(m_drivetrainSub, 2));
 
     // Operator controller bindings
-    m_operatorController.povUp().onTrue(new InstantCommand(() -> StateOfRobot.m_currentTargetLocation = IntakePositions.DOUBLE_STATION));
+    m_operatorController.povUp()
+        .onTrue(new InstantCommand(() -> StateOfRobot.m_currentTargetLocation = IntakePositions.DOUBLE_STATION));
 
-    m_operatorController.povLeft().onTrue(new InstantCommand(() -> StateOfRobot.m_currentTargetLocation = IntakePositions.SINGLE_STATION));
+    m_operatorController.povLeft()
+        .onTrue(new InstantCommand(() -> StateOfRobot.m_currentTargetLocation = IntakePositions.SINGLE_STATION));
 
-    m_operatorController.povDown().onTrue(new InstantCommand(() -> StateOfRobot.m_currentTargetLocation = IntakePositions.GROUND));
+    m_operatorController.povDown()
+        .onTrue(new InstantCommand(() -> StateOfRobot.m_currentTargetLocation = IntakePositions.GROUND));
 
-    m_operatorController.triangle().onTrue(new InstantCommand(() -> StateOfRobot.m_currentTargetLocation = IntakePositions.HIGH));
+    m_operatorController.triangle()
+        .onTrue(new InstantCommand(() -> StateOfRobot.m_currentTargetLocation = IntakePositions.HIGH));
 
-    m_operatorController.circle().onTrue(new InstantCommand(() -> StateOfRobot.m_currentTargetLocation = IntakePositions.MEDIUM));
+    m_operatorController.circle()
+        .onTrue(new InstantCommand(() -> StateOfRobot.m_currentTargetLocation = IntakePositions.MEDIUM));
 
-    m_operatorController.cross().onTrue(new InstantCommand(() -> StateOfRobot.m_currentTargetLocation = IntakePositions.LOW));
+    m_operatorController.cross()
+        .onTrue(new InstantCommand(() -> StateOfRobot.m_currentTargetLocation = IntakePositions.LOW));
 
-    m_operatorController.square().onTrue(new InstantCommand(() -> StateOfRobot.m_currentTargetLocation = IntakePositions.START));
+    m_operatorController.square()
+        .onTrue(new InstantCommand(() -> StateOfRobot.m_currentTargetLocation = IntakePositions.START));
 
     m_operatorController.L1().onTrue(new SetGamePieceTypeCmd(false, this, m_ledSub));
 
@@ -131,18 +136,20 @@ public class RobotContainer {
     // The command that runs is dynamically based on the selected position
     m_operatorController.R2().onTrue(m_autoIntakePositionsSelectCmd);
 
-    m_operatorController.PS().onTrue(new InstantCommand(()-> StateOfRobot.m_operatorJoystickforIntake = false));
+    m_operatorController.PS().onTrue(new InstantCommand(() -> StateOfRobot.m_operatorJoystickforIntake = false));
 
-    m_operatorController.touchpad().onTrue(new InstantCommand(()-> StateOfRobot.m_operatorJoystickforIntake = true));
+    m_operatorController.touchpad().onTrue(new InstantCommand(() -> StateOfRobot.m_operatorJoystickforIntake = true));
 
     m_operatorController.L3().or(m_operatorController.R3())
         .onTrue(new InterruptAllCommandsCmd(m_armSub, m_mastSub, m_intakeSub, m_drivetrainSub));
   }
 
   private SelectCommand m_moveToIntakePositionSelectCmd = new SelectCommand(
-    Map.ofEntries(
-          Map.entry(IntakePositions.DOUBLE_STATION, new IntakeSetPositionCmd(IntakePositions.DOUBLE_STATION, m_armSub, m_mastSub)),
-          Map.entry(IntakePositions.SINGLE_STATION, new IntakeSetPositionCmd(IntakePositions.SINGLE_STATION, m_armSub, m_mastSub)),
+      Map.ofEntries(
+          Map.entry(IntakePositions.DOUBLE_STATION,
+              new IntakeSetPositionCmd(IntakePositions.DOUBLE_STATION, m_armSub, m_mastSub)),
+          Map.entry(IntakePositions.SINGLE_STATION,
+              new IntakeSetPositionCmd(IntakePositions.SINGLE_STATION, m_armSub, m_mastSub)),
           Map.entry(IntakePositions.GROUND, new IntakeSetPositionCmd(IntakePositions.GROUND, m_armSub, m_mastSub)),
           Map.entry(IntakePositions.START, new IntakeSetPositionCmd(IntakePositions.START, m_armSub, m_mastSub)),
           Map.entry(IntakePositions.HIGH, new IntakeSetPositionCmd(IntakePositions.HIGH, m_armSub, m_mastSub)),
@@ -151,8 +158,7 @@ public class RobotContainer {
       this::getTargetLocation);
 
   private SelectCommand m_autoIntakePositionsSelectCmd = new SelectCommand(
-    Map.ofEntries(
-          Map.entry(IntakePositions.DOUBLE_STATION, new PrintCommand("Pick-up at double station")),
+      Map.ofEntries(Map.entry(IntakePositions.DOUBLE_STATION, new PrintCommand("Pick-up at double station")),
           Map.entry(IntakePositions.SINGLE_STATION, new PrintCommand("Pick-up at single station")),
           Map.entry(IntakePositions.GROUND, new PrintCommand("Pick-up off of ground")),
           Map.entry(IntakePositions.START, new PrintCommand("Retract mast and arm to starting position")),
@@ -162,12 +168,7 @@ public class RobotContainer {
       this::getTargetLocation);
 
   private IntakePositions getTargetLocation() {
-      return StateOfRobot.m_currentTargetLocation;
-  }
-
-  private void setTargetLocation(IntakePositions targetLocation) {
-    StateOfRobot.m_currentTargetLocation = targetLocation;
-    System.out.println(targetLocation.name());
+    return StateOfRobot.m_currentTargetLocation;
   }
 
   void autoChooserSetup() {
@@ -205,6 +206,7 @@ public class RobotContainer {
   }
 
   public void disabledPeriodic() {
+    // Show sensor and encoder status on LEDs when the robot isn't enabled
     if(m_intakeSub.isIntakeLoaded()) {
       m_ledSub.setZoneColour(LedZones.DIAG_INTAKE_LIMSWITCH, LedColour.GREEN);
     } else {
@@ -214,14 +216,14 @@ public class RobotContainer {
     if(m_armSub.getPosition() < 0) {
       m_ledSub.setZoneRGB(LedZones.DIAG_ARM_ENC, 200, 200 + (int) (m_armSub.getPosition() / 50000 * 200),
           200 + (int) (m_armSub.getPosition() / 50000 * 200));
-          System.out.println((int) (m_armSub.getPosition() / 50000 * 200));
+      System.out.println((int) (m_armSub.getPosition() / 50000 * 200)); // TODO: Remove this extra math when no longer needed
     } else {
       m_ledSub.setZoneRGB(LedZones.DIAG_ARM_ENC, 200 - (int) (m_armSub.getPosition() / 50000 * 200), 200,
           200 - (int) (m_armSub.getPosition() / 50000 * 200));
-          System.out.println((int) (m_armSub.getPosition() / 50000 * 200));
+      System.out.println((int) (m_armSub.getPosition() / 50000 * 200)); // TODO: Remove this extra math when no longer needed
     }
 
-    m_ledSub.setZoneRGB(LedZones.DIAG_MAST_ENC, 200 - (int) m_mastSub.getPosition() * 12, 200, 
-    200 - (int) m_mastSub.getPosition() * 12);
+    m_ledSub.setZoneRGB(LedZones.DIAG_MAST_ENC, 200 - (int) m_mastSub.getPosition() * 12, 200,
+        200 - (int) m_mastSub.getPosition() * 12);
   }
 }
