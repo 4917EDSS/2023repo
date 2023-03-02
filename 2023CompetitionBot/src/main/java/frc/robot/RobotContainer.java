@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ArmMoveWithJoystickCmd;
+import frc.robot.commands.AutoDoNothingCmd;
 import frc.robot.commands.DriveAlignTapeCmd;
 import frc.robot.commands.DriveSetGearCmd;
 import frc.robot.commands.DriveStraightCmd;
@@ -152,19 +153,14 @@ public class RobotContainer {
 
 
   void autoChooserSetup() {
-    m_Chooser.setDefaultOption("do nothing", getAutonomousCommand());
-    m_Chooser.addOption("do nothing2", getAutonomousCommand());
+    m_Chooser.setDefaultOption("do nothing", new AutoDoNothingCmd());
+    m_Chooser.addOption("drive straight", new DriveStraightCmd(m_drivetrainSub, 300));
     SmartDashboard.putData("auto choices", m_Chooser);
   }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return new PrintCommand("No auto yet");
+    return m_Chooser.getSelected();
   }
 
   public static boolean isConeMode() {
