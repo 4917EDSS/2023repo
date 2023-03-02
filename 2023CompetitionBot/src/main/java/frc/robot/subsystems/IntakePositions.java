@@ -6,38 +6,40 @@ package frc.robot.subsystems;
 
 /** Add your docs here. */
 public enum IntakePositions {
-  START(0, 0),
+  START(0, 0, 0),
   // We are setting the values to zero, so that people use the cube or cone positions.
-  HIGH(0, 0), 
-  MEDIUM(0, 0), 
-  LOW(0, 0), 
-  GROUND(0, 0), 
-  SINGLE_STATION(0, 0), 
-  DOUBLE_STATION(0, 0),
+  HIGH(0, 0, 0), 
+  MEDIUM(0, 0, 0), 
+  LOW(0, 0, 0), 
+  GROUND(0, 0, 0), 
+  SINGLE_STATION(0, 0, 0), 
+  DOUBLE_STATION(0, 0, 0),
 
   // Cone Positions
-  HIGH_CONE(-171291, 40), 
-  MEDIUM_CONE(-136108, 30), 
-  LOW_CONE(-78171, 42), 
-  GROUND_CONE(-122139, 60), 
-  SINGLE_STATION_CONE(87205, 0), 
-  DOUBLE_STATION_CONE(123198, 25),
+  HIGH_CONE(-171291, 40, 0), 
+  MEDIUM_CONE(-136108, 30, 0), 
+  LOW_CONE(-78171, 42, 0), 
+  GROUND_CONE(-122139, 60, 0), 
+  SINGLE_STATION_CONE(87205, 0, 0), 
+  DOUBLE_STATION_CONE(123198, 25, 0),
 
   // Cube Positions
-  HIGH_CUBE(-171291, 40), 
-  MEDIUM_CUBE(-136108, 30), 
-  LOW_CUBE(-78171, 42), 
-  GROUND_CUBE(-122139, 60), 
-  SINGLE_STATION_CUBE(87205, 0), 
-  DOUBLE_STATION_CUBE(123198, 64);
+  HIGH_CUBE(-171291, 40, 0), 
+  MEDIUM_CUBE(-136108, 30, 0), 
+  LOW_CUBE(-78171, 42, 0), 
+  GROUND_CUBE(-122139, 60, 0), 
+  SINGLE_STATION_CUBE(87205, 0, 0), 
+  DOUBLE_STATION_CUBE(123198, 64, 0);
 
 
   public final double armEncoder;
   public final double mastEncoder;
+  public final double wristEncoder;
 
-  IntakePositions(double armEncoder, double mastEncoder) {
+  IntakePositions(double armEncoder, double mastEncoder, double wristEncoder) {
     this.armEncoder = armEncoder;
     this.mastEncoder = mastEncoder;
+    this.wristEncoder = wristEncoder;
   }
 
   public static IntakePositions convert(IntakePositions unConverted, boolean coneMode) {
@@ -84,9 +86,10 @@ public enum IntakePositions {
         } else {
           return DOUBLE_STATION_CUBE;
         }
+      default:
+        return unConverted;
 
     }
-    return unConverted;
   }
 
 }

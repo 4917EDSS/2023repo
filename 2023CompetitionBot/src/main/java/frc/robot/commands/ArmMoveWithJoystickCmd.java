@@ -30,10 +30,10 @@ public class ArmMoveWithJoystickCmd extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(!StateOfRobot.m_operatorJoystickforIntake) {
+    if(!StateOfRobot.m_operatorJoystickforIntake){
       m_armSub.setPosition(SubControl.Mode.MANUAL, m_controller.getRightY(), 0);
-    }
   }
+}
 
   // Called once the command ends or is interrupted.
   @Override
