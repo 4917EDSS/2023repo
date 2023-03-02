@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import com.revrobotics.CANSparkMax.IdleMode;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -47,7 +48,10 @@ public class IntakeSub extends SubsystemBase {
   }
 
   /** Use this method to reset all of the hardware and states to safe starting values */
-  public void init() {}
+  public void init() {
+    m_intakeMotor.setIdleMode(IdleMode.kBrake);
+    m_rotateMotor.setIdleMode(IdleMode.kBrake);
+  }
 
   /** This method puts the subsystem in a safe state when all commands are interrupted */
   public void interrupt() {

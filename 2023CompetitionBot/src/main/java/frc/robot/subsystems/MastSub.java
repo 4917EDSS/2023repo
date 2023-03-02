@@ -4,8 +4,10 @@
 
 package frc.robot.subsystems;
 
+import com.fasterxml.jackson.annotation.JsonCreator.Mode;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import com.revrobotics.CANSparkMax.IdleMode;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -16,7 +18,7 @@ import frc.robot.subsystems.SubControl.State;
 public class MastSub extends SubsystemBase {
   // CONSTANTS ////////////////////////////////////////////////////////////////
   private static final double kPositionMin = 0.0; // In endcoder ticks
-  private static final double kPositionMax = 60.0; // In encoder ticks (straight up is 30)
+  private static final double kPositionMax = 308.0; // In encoder ticks (straight up is 30)
   private static final double kManualModePowerDeadband = 0.05; // If manual power is less than this, assume power is 0
   private static final double kMaxPosDifference = 0.1; // Maximum difference between the target and current pos for the state to finish  <---- Must be tuned
   private static final double kMaxPowerStop = 0.1; // max amount of power for the state to finish                                        <--- Must be tuned
@@ -62,6 +64,7 @@ public class MastSub extends SubsystemBase {
    */
   public void init() {
     zeroEncoder();
+    m_motor.setIdleMode(IdleMode.kBrake);
   }
 
   /**
