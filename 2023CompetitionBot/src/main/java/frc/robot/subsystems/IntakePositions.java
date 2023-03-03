@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 /** Add your docs here. */
 public enum IntakePositions {
   START(0, 0, 0),
+  HOME(118,0,0),
   // We are setting the values to zero, so that people use the cube or cone positions.
   HIGH(0, 0, 0), 
   MEDIUM(0, 0, 0), 
@@ -16,12 +17,12 @@ public enum IntakePositions {
   DOUBLE_STATION(0, 0, 0),
 
   // Cone Positions
-  HIGH_CONE(-171291, 40, 0), 
-  MEDIUM_CONE(-136108, 30, 0), 
-  LOW_CONE(-78171, 42, 0), 
-  GROUND_CONE(-122139, 60, 0), 
-  SINGLE_STATION_CONE(87205, 0, 0), 
-  DOUBLE_STATION_CONE(123198, 25, 0),
+  HIGH_CONE(300, 40, 0), 
+  MEDIUM_CONE(250, 30, 0), 
+  LOW_CONE(150, 42, 0), 
+  GROUND_CONE(200, 60, 0), 
+  SINGLE_STATION_CONE(250, 0, 0), 
+  DOUBLE_STATION_CONE(300, 25, 0),
 
   // Cube Positions
   HIGH_CUBE(-171291, 40, 0), 

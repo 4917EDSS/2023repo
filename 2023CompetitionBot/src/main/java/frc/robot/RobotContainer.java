@@ -106,19 +106,19 @@ public class RobotContainer {
 
     // Operator controller bindings
     
-    m_operatorController.povUp().onTrue(new IntakeSetPositionCmd(IntakePositions.DOUBLE_STATION, m_armSub, m_mastSub));
+    m_operatorController.povUp().onTrue(new IntakeSetPositionCmd(IntakePositions.DOUBLE_STATION, m_armSub, m_mastSub, m_intakeSub));
 
-     m_operatorController.povLeft().onTrue(new IntakeSetPositionCmd(IntakePositions.SINGLE_STATION, m_armSub, m_mastSub));
+     m_operatorController.povLeft().onTrue(new IntakeSetPositionCmd(IntakePositions.SINGLE_STATION, m_armSub, m_mastSub, m_intakeSub));
     
-    m_operatorController.povDown().onTrue(new IntakeSetPositionCmd(IntakePositions.GROUND, m_armSub, m_mastSub));
+    m_operatorController.povDown().onTrue(new IntakeSetPositionCmd(IntakePositions.GROUND, m_armSub, m_mastSub, m_intakeSub));
     
-    m_operatorController.triangle().onTrue(new IntakeSetPositionCmd(IntakePositions.HIGH, m_armSub, m_mastSub));
+    m_operatorController.triangle().onTrue(new IntakeSetPositionCmd(IntakePositions.HIGH, m_armSub, m_mastSub, m_intakeSub));
 
-    m_operatorController.circle().onTrue(new IntakeSetPositionCmd(IntakePositions.MEDIUM, m_armSub, m_mastSub));
+    m_operatorController.circle().onTrue(new IntakeSetPositionCmd(IntakePositions.MEDIUM, m_armSub, m_mastSub, m_intakeSub));
 
-    m_operatorController.cross().onTrue(new IntakeSetPositionCmd(IntakePositions.LOW, m_armSub, m_mastSub));
+    m_operatorController.cross().onTrue(new IntakeSetPositionCmd(IntakePositions.LOW, m_armSub, m_mastSub, m_intakeSub));
     
-    m_operatorController.square().onTrue(new IntakeSetPositionCmd(IntakePositions.START, m_armSub, m_mastSub));
+    m_operatorController.square().onTrue(new IntakeSetPositionCmd(IntakePositions.HOME, m_armSub, m_mastSub, m_intakeSub));
    
     m_operatorController.L1().onTrue(new SetGamePieceTypeCmd(false, m_ledSub));
     

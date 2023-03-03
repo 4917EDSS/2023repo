@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.ArmSub;
 import frc.robot.subsystems.IntakePositions;
+import frc.robot.subsystems.IntakeSub;
 import frc.robot.subsystems.MastSub;
 import frc.robot.subsystems.SubControl.Mode;
 
@@ -23,12 +24,14 @@ public class IntakeSetPositionCmd extends CommandBase {
   //private final ManipulatorSub m_manipulatorSub;
   private final ArmSub m_armSub;
   private final MastSub m_mastSub;
+  private final IntakeSub m_intakeSub;
 
   /** Creates a new MoveManipulatorToHighPickUpCmd. */
-  public IntakeSetPositionCmd(IntakePositions positions, ArmSub armSub, MastSub mastSub) {
+  public IntakeSetPositionCmd(IntakePositions positions, ArmSub armSub, MastSub mastSub, IntakeSub intakeSub) {
     m_armSub = armSub;
     m_mastSub = mastSub;
     m_intakePositions = positions;
+    m_intakeSub = intakeSub;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(armSub, mastSub);
@@ -44,6 +47,7 @@ public class IntakeSetPositionCmd extends CommandBase {
 
     m_armSub.setPosition(Mode.AUTO, kMaxArmPower, converted.armEncoder);
     m_mastSub.setPosition(Mode.AUTO, kMaxMastPower, converted.mastEncoder);
+    m_intakeSub.setPosition(Mode.AUTO, kMaxMastPower, converted.mastEncoder);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
