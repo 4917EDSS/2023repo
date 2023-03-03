@@ -74,6 +74,7 @@ public class DrivetrainSub extends SubsystemBase {
     zeroDrivetrainEncoders();
     setIsAutoShift(true);
     m_gyro.reset();
+    setBrakeCmd(true);
   }
 
   /** This method puts the subsystem in a safe state when all commands are interrupted */

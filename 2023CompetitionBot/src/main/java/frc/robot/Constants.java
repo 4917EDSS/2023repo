@@ -48,6 +48,8 @@ public final class Constants {
 
   public final static class DioIds {
     public final static int kIntakeSensorPort = 1;
+    public final static int kMastBack = 27; // Need ID
+    public final static int kMastFront = 28; // Need ID
   }
 
   // OTHER GLOBAL CONSTANTS ///////////////////////////////////////////////////
