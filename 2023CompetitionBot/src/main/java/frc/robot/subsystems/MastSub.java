@@ -116,7 +116,7 @@ public class MastSub extends SubsystemBase {
   }
 
   public boolean isMastAtFront() {
-    return m_frontMast.get();
+    return !m_frontMast.get();
   }
 
   /**
@@ -284,6 +284,8 @@ public class MastSub extends SubsystemBase {
     SmartDashboard.putNumber("Mast kP", p);
     SmartDashboard.putNumber("Mast kI", i);
     SmartDashboard.putNumber("Mast kD", d);
+    SmartDashboard.putBoolean("Mast back", isMastAtBack());
+    SmartDashboard.putBoolean("Mast front", isMastAtFront());
 
     m_pid.setP(p);
     m_pid.setI(i);

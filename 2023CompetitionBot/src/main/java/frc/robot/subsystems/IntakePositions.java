@@ -25,21 +25,21 @@ public enum IntakePositions {
   DOUBLE_STATION_CONE(300, 25, 0),
 
   // Cube Positions
-  HIGH_CUBE(-171291, 40, 0), 
-  MEDIUM_CUBE(-136108, 30, 0), 
-  LOW_CUBE(-78171, 42, 0), 
-  GROUND_CUBE(-122139, 60, 0), 
-  SINGLE_STATION_CUBE(87205, 0, 0), 
-  DOUBLE_STATION_CUBE(123198, 64, 0);
+  HIGH_CUBE(300, 40, 0), 
+  MEDIUM_CUBE(250, 30, 0), 
+  LOW_CUBE(150, 42, 0), 
+  GROUND_CUBE(200, 60, 0), 
+  SINGLE_STATION_CUBE(250, 0, 0), 
+  DOUBLE_STATION_CUBE(300, 64, 0);
 
 
   public final double armEncoder;
   public final double mastEncoder;
   public final double wristEncoder;
 
-  IntakePositions(double armEncoder, double mastEncoder, double wristEncoder) {
-    this.armEncoder = armEncoder;
+  IntakePositions(double mastEncoder, double armEncoder, double wristEncoder) {
     this.mastEncoder = mastEncoder;
+    this.armEncoder = armEncoder;
     this.wristEncoder = wristEncoder;
   }
 

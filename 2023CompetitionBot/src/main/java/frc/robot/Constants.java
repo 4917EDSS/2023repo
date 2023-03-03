@@ -32,7 +32,7 @@ public final class Constants {
     public final static int kRightDriveMotor1 = 5;
     public final static int kRightDriveMotor2 = 6;
     public final static int kRightDriveMotor3 = 7;
-    public final static int kArmMotor = 8;
+    public final static int kArmMotor = 12;
     public final static int kRotateMotor = 9;
     public final static int kIntakeMotor = 10;
   }
@@ -48,7 +48,7 @@ public final class Constants {
 
   public final static class DioIds {
     public final static int kIntakeSensorPort = 1;
-    public final static int kMastBack = 27; // Need ID
+    public final static int kMastBack = 0; // Need ID
     public final static int kMastFront = 28; // Need ID
   }
 
