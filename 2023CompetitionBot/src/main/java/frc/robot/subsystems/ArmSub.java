@@ -258,8 +258,7 @@ public class ArmSub extends SubsystemBase {
   }
 
   private double calcHoldPower(double currentPosition, double targetPosition) {
-    double holdPower = (targetPosition - currentPosition) * 0.004;
-    return holdPower;
+    return 0;
   }
 
   public boolean isFinished() {
