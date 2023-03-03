@@ -5,21 +5,27 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.fasterxml.jackson.annotation.JsonCreator.Mode;
+import com.revrobotics.CANSparkMax.IdleMode;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.SubControl.State;
+import frc.robot.subsystems.DrivetrainSub;
 
 public class ArmSub extends SubsystemBase {
   // CONSTANTS ////////////////////////////////////////////////////////////////
-  private static final double kPositionMin = -146888.0; // In encoder ticks
-  private static final double kPositionMax = 141510.0; // In encoder ticks (straight up is 30)
+  private static final double kPositionMin = -95.0; // In encoder ticks
+  private static final double kPositionMax = 80.0; // In encoder ticks (straight up is 30)
   private static final double kManualModePowerDeadband = 0.05; // If manual power is less than this, assume power is 0
-  private static final double kMaxPosDifference = 10000; // Maximum difference between the target and current pos for the state to finish   <---- Must be tuned
-  private static final double kMaxVelocityDifference = 100; // Max amount of velocity for the state to finish                                         <--- Must be tuned
+  private static final double kMaxPosDifference = 0.1; // Maximum difference between the target and current pos for the state to finish   <---- Must be tuned
+  private static final double kMaxPowerStop = 0.1; // Max amount of power for the state to finish                                         <--- Must be tuned
   //TODO: Tune the two constants above
 
   // STATE VARIABLES //////////////////////////////////////////////////////////
@@ -32,7 +38,9 @@ public class ArmSub extends SubsystemBase {
   // HARDWARE AND CONTROL OBJECTS /////////////////////////////////////////////
   private final TalonFX m_motor = new TalonFX(Constants.CanIds.kArmMotor);
 
-  private double m_p = 0.00001;
+  private final Solenoid m_lock = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.SolenoidIds.kArmLock);
+  
+  private double m_p = 0.1;
   private double m_i = 0.0;
   private double m_d = 0.0;
   private final PIDController m_pid = new PIDController(m_p, m_i, m_d);
@@ -48,6 +56,7 @@ public class ArmSub extends SubsystemBase {
     init();
   }
 
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -60,6 +69,7 @@ public class ArmSub extends SubsystemBase {
    */
   public void init() {
     zeroEncoder();
+    m_motor.setNeutralMode(NeutralMode.Brake);
   }
 
   /**
@@ -94,6 +104,10 @@ public class ArmSub extends SubsystemBase {
   public boolean isBlocked(double currentPosition, double targetPosition) {
     //TODO implement later
     return false;
+  }
+
+  public void lockArm(boolean lock) {
+    m_lock.set(lock);
   }
 
   /**
@@ -176,6 +190,7 @@ public class ArmSub extends SubsystemBase {
 
     // Check if there are new control parameters to set
     if(m_newControlParameters) {
+      //TODO: Unlock motor
       m_currentControl.state = m_newControl.state;
       m_currentControl.mode = m_newControl.mode;
       m_currentControl.targetPower = m_newControl.targetPower;
@@ -196,6 +211,7 @@ public class ArmSub extends SubsystemBase {
           m_blockedPosition = currentPosition;
           m_currentControl.state = State.INTERRUPTED;
         } else if(isFinished()) {
+          //TODO: Lock motor
           m_currentControl.state = State.HOLDING;
         } else {
           newPower = calcMovePower(currentPosition, m_currentControl.targetPosition, m_currentControl.targetPower);
@@ -209,17 +225,19 @@ public class ArmSub extends SubsystemBase {
       case HOLDING:
         // If the mechanism is at it's target location, apply power to hold it there if
         // necessary
-        newPower = calcMovePower(currentPosition, m_currentControl.targetPosition, 0.5);
+        // TODO: Check if we can use the calcMovePower function since the PID could take
+        // care of both cases
+        newPower = calcHoldPower(currentPosition, m_currentControl.targetPosition);
         break;
 
       case INTERRUPTED:
         // If the mechanism is no longer blocked, transition to MOVING
         if(isBlocked(currentPosition, m_currentControl.targetPosition) == false) {
+          //TODO: Unlock motor
           m_currentControl.state = State.MOVING;
           // Otherwise, hold this position
         } else {
-          // Use the move PID to hold our position but limit it to 50% power (should need way less than that)
-          newPower = calcMovePower(currentPosition, m_blockedPosition, 0.5);
+          newPower = calcHoldPower(currentPosition, m_blockedPosition);
         }
         break;
 
@@ -239,13 +257,16 @@ public class ArmSub extends SubsystemBase {
     return MathUtil.clamp(m_pid.calculate(currentPosition, newPosition), -targetPower, targetPower);
   }
 
+  private double calcHoldPower(double currentPosition, double targetPosition) {
+    double holdPower = (targetPosition - currentPosition) * 0.004;
+    return holdPower;
+  }
+
   public boolean isFinished() {
     if(Math.abs(getPosition() - m_currentControl.targetPosition) > kMaxPosDifference) {
-      System.out.println("Difference: " + (Math.abs(getPosition() - m_currentControl.targetPosition)));
       return false;
     }
-    if(Math.abs(getVelocity()) > kMaxVelocityDifference) {
-      System.out.println("Velocity: " + (Math.abs(getVelocity())));
+    if(Math.abs(getVelocity()) > kMaxPowerStop) {
       return false;
     }
     if(m_newControlParameters) {
