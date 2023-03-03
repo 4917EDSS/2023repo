@@ -71,7 +71,7 @@ public class RobotContainer {
 
     // Set default command for subsystems
     m_drivetrainSub.setDefaultCommand(new DriveWithJoystickCmd(m_driverController, m_drivetrainSub));
-    //m_armSub.setDefaultCommand(new ArmMoveWithJoystickCmd(m_operatorController, m_armSub));
+    m_armSub.setDefaultCommand(new ArmMoveWithJoystickCmd(m_operatorController, m_armSub));
     m_mastSub.setDefaultCommand(new MastMoveWithJoystickCmd(m_operatorController, m_mastSub));
     m_intakeSub.setDefaultCommand(new IntakeRotateWithJoystickCmd(m_operatorController, m_intakeSub));
 
@@ -155,7 +155,7 @@ public class RobotContainer {
 
   void autoChooserSetup() {
     m_Chooser.setDefaultOption("do nothing", new AutoDoNothingCmd());
-    m_Chooser.addOption("drive straight", new DriveStraightCmd(m_drivetrainSub, 300));
+    m_Chooser.addOption("drive straight", new DriveStraightCmd(m_drivetrainSub, 3000));
     SmartDashboard.putData("auto choices", m_Chooser);
   }
 
