@@ -10,6 +10,7 @@ import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.CANSparkMax.IdleMode;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -34,6 +35,9 @@ public class MastSub extends SubsystemBase {
   // HARDWARE AND CONTROL OBJECTS /////////////////////////////////////////////
   private final CANSparkMax m_motor =
       new CANSparkMax((Constants.CanIds.kMastMotor), CANSparkMaxLowLevel.MotorType.kBrushless);
+
+  private final DigitalInput m_backMast = new DigitalInput(Constants.DioIds.kMastBack);
+  private final DigitalInput m_frontMast = new DigitalInput(Constants.DioIds.kMastFront);
 
   private double m_p = 0.1;
   private double m_i = 0.0;
@@ -98,7 +102,21 @@ public class MastSub extends SubsystemBase {
 
   public boolean isBlocked(double currentPosition, double targetPosition) {
     //TODO implement later
+    if((currentPosition > targetPosition && isMastAtBack())) {
+      return true;
+    } 
+    if((currentPosition < targetPosition && isMastAtFront())) {
+      return true;
+    } 
     return false;
+  }
+
+  public boolean isMastAtBack() {
+    return m_backMast.get();
+  }
+
+  public boolean isMastAtFront() {
+    return m_frontMast.get();
   }
 
   /**
@@ -177,6 +195,9 @@ public class MastSub extends SubsystemBase {
 
   /** Run the mechanism state machine */
   private void updateStateMachine() {
+    if(isMastAtBack()) {
+      zeroEncoder();
+    }
     double newPower = 0.0;
     double currentPosition = getPosition();
 
@@ -222,7 +243,7 @@ public class MastSub extends SubsystemBase {
 
       case INTERRUPTED:
         // If the mechanism is no longer blocked, transition to MOVING
-        if(isBlocked(currentPosition, m_currentControl.targetPosition) == false) {
+        if(!isBlocked(currentPosition, m_currentControl.targetPosition)) {
           m_currentControl.state = State.MOVING;
           // Otherwise, hold this position
         } else {
@@ -249,8 +270,7 @@ public class MastSub extends SubsystemBase {
 
 
   private double calcHoldPower(double currentPosition, double targetPosition) {
-    double holdPower = (targetPosition - currentPosition) * 0.004; // TODO:  Make this a constant and tune (if used)
-    return holdPower;
+    return 0;
   }
 
   /** Display/get subsystem information to/from the Smart Dashboard */
@@ -282,4 +302,5 @@ public class MastSub extends SubsystemBase {
     }
     return true;
   }
+
 }
