@@ -5,16 +5,16 @@
 package frc.robot.subsystems;
 
 /** Add your docs here. */
-public enum IntakePositions {
+public enum ManipulatorsPositions {
   START(0, 0, 0),
-  HOME(118,0,0),
+  HOME(MastSub.kVertical,ArmSub.kVertical,IntakeSub.kWristThrough),
   // We are setting the values to zero, so that people use the cube or cone positions.
-  HIGH(0, 0, 0), 
-  MEDIUM(0, 0, 0), 
-  LOW(0, 0, 0), 
-  GROUND(0, 0, 0), 
-  SINGLE_STATION(0, 0, 0), 
-  DOUBLE_STATION(0, 0, 0),
+  HIGH(MastSub.kVertical,ArmSub.kVertical,IntakeSub.kWristThrough), 
+  MEDIUM(MastSub.kVertical,ArmSub.kVertical,IntakeSub.kWristThrough), 
+  LOW(MastSub.kVertical,ArmSub.kVertical,IntakeSub.kWristThrough), 
+  GROUND(MastSub.kVertical,ArmSub.kVertical,IntakeSub.kWristThrough), 
+  SINGLE_STATION(MastSub.kVertical,ArmSub.kVertical,IntakeSub.kWristThrough), 
+  DOUBLE_STATION(MastSub.kVertical,ArmSub.kVertical,IntakeSub.kWristThrough),
 
   // Cone Positions
   HIGH_CONE(300, 40, 0), 
@@ -37,13 +37,13 @@ public enum IntakePositions {
   public final double mastEncoder;
   public final double wristEncoder;
 
-  IntakePositions(double mastEncoder, double armEncoder, double wristEncoder) {
+  ManipulatorsPositions(double mastEncoder, double armEncoder, double wristEncoder) {
     this.mastEncoder = mastEncoder;
     this.armEncoder = armEncoder;
     this.wristEncoder = wristEncoder;
   }
 
-  public static IntakePositions convert(IntakePositions unConverted, boolean coneMode) {
+  public static ManipulatorsPositions convert(ManipulatorsPositions unConverted, boolean coneMode) {
     // Converts positions depending on which mode is enabled (Cone, Cube)
     switch(unConverted) {
       case HIGH:

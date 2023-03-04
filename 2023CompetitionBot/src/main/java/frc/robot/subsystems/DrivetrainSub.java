@@ -27,6 +27,8 @@ public class DrivetrainSub extends SubsystemBase {
   private final double kEncoderRotationsToMeterHighGear = 5.0 / 129.8;
   private final boolean kGyroReversed = false;
 
+  public static boolean hasBrakeButtonPressed = false;
+
   private final CANSparkMax m_leftMotor1 =
       new CANSparkMax(Constants.CanIds.kLeftDriveMotor1, CANSparkMaxLowLevel.MotorType.kBrushless);
   private final CANSparkMax m_leftMotor2 =
@@ -70,7 +72,7 @@ public class DrivetrainSub extends SubsystemBase {
 
   /** Use this method to reset all of the hardware and states to safe starting values */
   public void init() {
-    m_shifter.set(false);
+    shift(false);
     zeroDrivetrainEncoders();
     setIsAutoShift(true);
     m_gyro.reset();
@@ -160,6 +162,11 @@ public class DrivetrainSub extends SubsystemBase {
 
   public boolean isCoasting() {
     return m_rightMotor3.getIdleMode().equals(IdleMode.kCoast);
+  }
+
+  public void setBrakeButtonCmd(boolean isBrakeOn){
+    hasBrakeButtonPressed = isBrakeOn;
+    setBrakeCmd(isBrakeOn);
   }
 
   public void setBrakeCmd(boolean isBrakeOn) {

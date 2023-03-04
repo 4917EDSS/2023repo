@@ -27,7 +27,7 @@ import frc.robot.commands.MastMoveWithJoystickCmd;
 import frc.robot.commands.SetGamePieceTypeCmd;
 import frc.robot.subsystems.ArmSub;
 import frc.robot.subsystems.DrivetrainSub;
-import frc.robot.subsystems.IntakePositions;
+import frc.robot.subsystems.ManipulatorsPositions;
 import frc.robot.subsystems.IntakeSub;
 import frc.robot.subsystems.LedSub;
 import frc.robot.subsystems.LedSub.LedColour;
@@ -46,11 +46,11 @@ public class RobotContainer {
   private static Logger logger = Logger.getLogger(RobotContainer.class.getName());
 
   // The robot's subsystems and commands are defined here...
-  private final ArmSub m_armSub = new ArmSub();
+  public final MastSub m_mastSub = new MastSub();
+  public final IntakeSub m_intakeSub = new IntakeSub();
+  public final ArmSub m_armSub = new ArmSub(m_mastSub, m_intakeSub);
   private final DrivetrainSub m_drivetrainSub = new DrivetrainSub();
-  private final IntakeSub m_intakeSub = new IntakeSub();
   private final LedSub m_ledSub = new LedSub();
-  private final MastSub m_mastSub = new MastSub();
   private final VisionSub m_visionSub = new VisionSub();
 
   SendableChooser<Command> m_Chooser = new SendableChooser<>();
@@ -71,9 +71,12 @@ public class RobotContainer {
 
     // Set default command for subsystems
     m_drivetrainSub.setDefaultCommand(new DriveWithJoystickCmd(m_driverController, m_drivetrainSub));
-    //m_armSub.setDefaultCommand(new ArmMoveWithJoystickCmd(m_operatorController, m_armSub));
+    m_armSub.setDefaultCommand(new ArmMoveWithJoystickCmd(m_operatorController, m_armSub));
     m_mastSub.setDefaultCommand(new MastMoveWithJoystickCmd(m_operatorController, m_mastSub));
+   m_intakeSub.setDefaultCommand(new IntakeRotateWithJoystickCmd(m_operatorController, m_intakeSub));
+
     m_intakeSub.setDefaultCommand(new IntakeRotateWithJoystickCmd(m_operatorController, m_intakeSub));
+
 
   }
 
@@ -93,9 +96,9 @@ public class RobotContainer {
     m_driverController.povUp().onTrue(new DriveAlignTapeCmd(m_drivetrainSub, m_visionSub, 15.0));
 
 
-    m_driverController.circle().onTrue(new InstantCommand(() -> m_drivetrainSub.setBrakeCmd(true), m_drivetrainSub));
+    m_driverController.circle().onTrue(new InstantCommand(() -> m_drivetrainSub.setBrakeButtonCmd(true), m_drivetrainSub));
 
-    m_driverController.cross().onTrue(new InstantCommand(() -> m_drivetrainSub.setBrakeCmd(false), m_drivetrainSub));
+    m_driverController.cross().onTrue(new InstantCommand(() -> m_drivetrainSub.setBrakeButtonCmd(false), m_drivetrainSub));
 
     m_driverController.L1().onTrue(new DriveSetGearCmd(false, m_drivetrainSub));
 
@@ -103,23 +106,21 @@ public class RobotContainer {
 
     m_driverController.triangle().onTrue(new InstantCommand(() -> m_drivetrainSub.setIsAutoShift(true), /* Call on command start */ m_drivetrainSub));
 
-    m_driverController.circle().onTrue(new DriveStraightCmd(m_drivetrainSub, 2));
-
     // Operator controller bindings
     
-    m_operatorController.povUp().onTrue(new IntakeSetPositionCmd(IntakePositions.DOUBLE_STATION, m_armSub, m_mastSub, m_intakeSub));
+    m_operatorController.povUp().onTrue(new IntakeSetPositionCmd(ManipulatorsPositions.DOUBLE_STATION, m_armSub, m_mastSub, m_intakeSub));
 
-     m_operatorController.povLeft().onTrue(new IntakeSetPositionCmd(IntakePositions.SINGLE_STATION, m_armSub, m_mastSub, m_intakeSub));
+     m_operatorController.povLeft().onTrue(new IntakeSetPositionCmd(ManipulatorsPositions.SINGLE_STATION, m_armSub, m_mastSub, m_intakeSub));
     
-    m_operatorController.povDown().onTrue(new IntakeSetPositionCmd(IntakePositions.GROUND, m_armSub, m_mastSub, m_intakeSub));
+    m_operatorController.povDown().onTrue(new IntakeSetPositionCmd(ManipulatorsPositions.GROUND, m_armSub, m_mastSub, m_intakeSub));
     
-    m_operatorController.triangle().onTrue(new IntakeSetPositionCmd(IntakePositions.HIGH, m_armSub, m_mastSub, m_intakeSub));
+    m_operatorController.triangle().onTrue(new IntakeSetPositionCmd(ManipulatorsPositions.HIGH, m_armSub, m_mastSub, m_intakeSub));
 
-    m_operatorController.circle().onTrue(new IntakeSetPositionCmd(IntakePositions.MEDIUM, m_armSub, m_mastSub, m_intakeSub));
+    m_operatorController.circle().onTrue(new IntakeSetPositionCmd(ManipulatorsPositions.MEDIUM, m_armSub, m_mastSub, m_intakeSub));
 
-    m_operatorController.cross().onTrue(new IntakeSetPositionCmd(IntakePositions.LOW, m_armSub, m_mastSub, m_intakeSub));
+    m_operatorController.cross().onTrue(new IntakeSetPositionCmd(ManipulatorsPositions.LOW, m_armSub, m_mastSub, m_intakeSub));
     
-    m_operatorController.square().onTrue(new IntakeSetPositionCmd(IntakePositions.HOME, m_armSub, m_mastSub, m_intakeSub));
+    m_operatorController.square().onTrue(new IntakeSetPositionCmd(ManipulatorsPositions.HOME, m_armSub, m_mastSub, m_intakeSub));
    
     m_operatorController.L1().onTrue(new SetGamePieceTypeCmd(false, m_ledSub));
     
@@ -155,7 +156,7 @@ public class RobotContainer {
 
   void autoChooserSetup() {
     m_Chooser.setDefaultOption("do nothing", new AutoDoNothingCmd());
-    m_Chooser.addOption("drive straight", new DriveStraightCmd(m_drivetrainSub, 300));
+    m_Chooser.addOption("drive straight", new DriveStraightCmd(m_drivetrainSub, 3000));
     SmartDashboard.putData("auto choices", m_Chooser);
   }
 
@@ -193,11 +194,9 @@ public class RobotContainer {
     if(m_armSub.getPosition() < 0) {
       m_ledSub.setZoneRGB(LedZones.DIAG_ARM_ENC, 200, 200 + (int) (m_armSub.getPosition() / 50000 * 200),
           200 + (int) (m_armSub.getPosition() / 50000 * 200));
-      System.out.println((int) (m_armSub.getPosition() / 50000 * 200)); // TODO: Remove this extra math when no longer needed
     } else {
       m_ledSub.setZoneRGB(LedZones.DIAG_ARM_ENC, 200 - (int) (m_armSub.getPosition() / 50000 * 200), 200,
           200 - (int) (m_armSub.getPosition() / 50000 * 200));
-      System.out.println((int) (m_armSub.getPosition() / 50000 * 200)); // TODO: Remove this extra math when no longer needed
     }
 
     m_ledSub.setZoneRGB(LedZones.DIAG_MAST_ENC, 200 - (int) m_mastSub.getPosition() * 12, 200,

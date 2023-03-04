@@ -12,7 +12,7 @@ import frc.robot.subsystems.DrivetrainSub;
 public class DriveWithJoystickCmd extends CommandBase {
   private final int kForwardSensitivityPower = 2;
   private final int kTurnSensitivityPower = 1;
-  private final double kDeadband = 0.0075;
+  private final double kDeadband = 0.03;
   private final double kForwardMaxAcceleration = 0.1;
   private final double kTurnMaxAcceleration = 0.2;
 
@@ -71,7 +71,9 @@ public class DriveWithJoystickCmd extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_drivetrainSub.setBrakeCmd(false);
+    if(!DrivetrainSub.hasBrakeButtonPressed){
+      m_drivetrainSub.setBrakeCmd(false);
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -103,7 +105,9 @@ public class DriveWithJoystickCmd extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     // m_drivetrainSub.tankDrive(0.0, 0.0); // Dont end or it will break the motors
-    m_drivetrainSub.setBrakeCmd(true);
+    if(!DrivetrainSub.hasBrakeButtonPressed){
+      m_drivetrainSub.setBrakeCmd(true);
+    }
   }
 
   // Returns true when the command should end.
