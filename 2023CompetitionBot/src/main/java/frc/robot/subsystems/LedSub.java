@@ -4,20 +4,25 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.LedConstants;
 import frc.robot.Constants.PwmIds;
+import frc.robot.Constants.LedConstants;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /** Add your docs here. */
 
 
 public class LedSub extends SubsystemBase {
+  //previous RGB colour vars
+
+  private int m_rr, m_gg, m_bb = 0;
+
 
   public enum LedZones {
-    DIAG_MAST_ENC(0, 0), DIAG_ARM_ENC(1, 1), DIAG_INTAKE_LIMSWITCH(2, 2), ZONE0(0, 2), ZONE1(3, 5), ZONE2(6, 9), ALL(0,
-        9);
+    DIAG_MAST_ENC(0,0), DIAG_ARM_ENC(1,1), DIAG_INTAKE_LIMSWITCH(2,2), 
+    ZONE0(0, 2), ZONE1(3, 5), ZONE2(6, 9), ALL(0, 9);
 
     public final int start;
     public final int end;
@@ -27,10 +32,9 @@ public class LedSub extends SubsystemBase {
       this.end = end;
     }
   }
-
+  
   public enum LedColour {
-    YELLOW(128, 128, 0), PURPLE(80, 20, 60), RED(128, 0, 0), GREEN(0, 128, 0), START_GREEN(0, 64, 0), BLUE(0, 0,
-        128), WHITE(128, 128, 128);
+    YELLOW(128, 128, 0), PURPLE(80, 20, 60), RED(128, 0, 0), GREEN(0, 128, 0),START_GREEN(0, 64, 0), BLUE(0, 0, 128), WHITE(128, 128, 128);
 
     public final int red, blue, green;
 
@@ -61,6 +65,7 @@ public class LedSub extends SubsystemBase {
       this.red = r;
       this.green = g;
       this.blue = b;
+      
     }
   }
 
@@ -90,6 +95,7 @@ public class LedSub extends SubsystemBase {
     setZoneColour(LedZones.ALL, LedColour.START_GREEN);
   }
 
+
   /**
    * This method puts the subsystem in a safe state when all commands are interrupted
    */
@@ -97,11 +103,11 @@ public class LedSub extends SubsystemBase {
 
   }
 
-  public void setZoneColour(LedZones zone, LedColour ledColour) {
+   public void setZoneColour(LedZones zone, LedColour ledColour){
     setZoneRGB(zone, ledColour.red, ledColour.green, ledColour.blue);
-  }
+   }
 
-  public void setZoneRGB(LedZones zone, int r, int g, int b) {
+   public void setZoneRGB(LedZones zone, int r, int g, int b){
     if(r < 0) {
       r = 0;
     }
@@ -120,11 +126,11 @@ public class LedSub extends SubsystemBase {
     if(b > 255) {
       b = 255;
     }
-    for(int i = zone.start; i <= zone.end; i++) {
+    for(int i = zone.start; i <= zone.end; i++){
       m_ledBuffer.setRGB(i, r, b, g); //this function takes in RBG
     }
     m_ledStrip.setData(m_ledBuffer);
-  }
+   }
 
   // LED state enums
   public enum LEDMode {
@@ -138,6 +144,15 @@ public class LedSub extends SubsystemBase {
     } else if(LEDState == LEDMode.CubeMode) {
       setZoneColour(LedZones.ZONE0, LedColour.PURPLE); //Set LED colour to purple
     }
+  }
+
+  public void smartDashboardSet() {
+
+    // double[] colour = {Double.valueOf(m_rr), Double.valueOf(m_gg), Double.valueOf(m_bb)};
+
+    // SmartDashboard.putNumberArray("null", colour);
+
+
   }
 
 }
