@@ -29,7 +29,8 @@ public class IntakeSub extends SubsystemBase {
   private final CANSparkMax m_rotateMotor =
       new CANSparkMax((Constants.CanIds.kRotateMotor), CANSparkMaxLowLevel.MotorType.kBrushless);
 
-  private final DigitalInput m_intakeSensor = new DigitalInput(Constants.DioIds.kIntakeSensorPort);
+  private final DigitalInput m_cubeSensor = new DigitalInput(Constants.DioIds.kCubeSensorPort);
+  private final DigitalInput m_coneSensor = new DigitalInput(Constants.DioIds.kConeSensorPort);
 
   private double m_p = 0.1;
   private double m_i = 0.0;
@@ -97,7 +98,7 @@ public class IntakeSub extends SubsystemBase {
   }
 
   public boolean isIntakeLoaded() {
-    return m_intakeSensor.get();
+    return m_coneSensor.get();
   }
 
   /**
@@ -243,6 +244,9 @@ public class IntakeSub extends SubsystemBase {
     SmartDashboard.putNumber("Intake kI", i);
     SmartDashboard.putNumber("Intake kD", d);
     SmartDashboard.putNumber("Arm Voltage", m_intakeMotor.getOutputCurrent());
+
+    SmartDashboard.putBoolean("Cone Sensor", m_coneSensor.get());
+    SmartDashboard.putBoolean("Cube Sensor", m_cubeSensor.get());
 
     m_pid.setP(p);
     m_pid.setI(i);

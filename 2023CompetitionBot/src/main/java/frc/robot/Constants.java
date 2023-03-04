@@ -47,7 +47,8 @@ public final class Constants {
   }
 
   public final static class DioIds {
-    public final static int kIntakeSensorPort = 1;
+    public final static int kCubeSensorPort = 3;
+    public final static int kConeSensorPort = 1;
     public final static int kMastBack = 0; // Need ID
     public final static int kMastFront = 28; // Need ID
   }
