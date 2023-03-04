@@ -25,7 +25,9 @@ public class MastSub extends SubsystemBase {
   private static final double kMaxPowerStop = 0.1; // max amount of power for the state to finish                                        <--- Must be tuned
   private static final double kMastMinSafeZone = 110;
   private static final double kMastMaxSafeZone = 130;
-  //TODO: Tune the two constants above
+  public static final double kVertical = 118;
+  //TODO: Tune the two constants above 
+  
 
 
   // STATE VARIABLES //////////////////////////////////////////////////////////

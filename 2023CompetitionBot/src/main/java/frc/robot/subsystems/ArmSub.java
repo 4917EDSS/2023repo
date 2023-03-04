@@ -21,15 +21,19 @@ import frc.robot.subsystems.DrivetrainSub;
 
 public class ArmSub extends SubsystemBase {
   // CONSTANTS ////////////////////////////////////////////////////////////////
-  private static final double kPositionMin = -95.0; // In encoder ticks
-  private static final double kPositionMax = 80.0; // In encoder ticks (straight up is 30)
+  private static final double kPositionMin = -250000.0; // In encoder ticks
+  private static final double kPositionMax = 250000.0; // In encoder ticks (straight up is 30)
   private static final double kManualModePowerDeadband = 0.05; // If manual power is less than this, assume power is 0
   private static final double kMaxPosDifference = 0.1; // Maximum difference between the target and current pos for the state to finish   <---- Must be tuned
   private static final double kMaxPowerStop = 0.1; // Max amount of power for the state to finish <--- Must be tuned
   private static final double kMaxDangerZone = 133000;
-  private static final double kMinDangerZone = -69000;                                       
+  private static final double kMinDangerZone = -69000;     
+  public static final double kVertical = 25000.0;
+  public static final double kFourtyFive = 133000.0;
+  public static final double kMax = 198000.0;
+  public static final double kNegFourtyFive = -69000.0;                                  
   //TODO: Tune the two constants above
-
+  
   // STATE VARIABLES //////////////////////////////////////////////////////////
   private SubControl m_currentControl = new SubControl(); // Current states of mechanism
   private SubControl m_newControl = new SubControl(); // New state to copy to current state when newStateParameters is true
@@ -119,17 +123,11 @@ public class ArmSub extends SubsystemBase {
   }
 
   public boolean isBlocked(double currentPosition, double targetPosition){
-    if (isDangerZone() == true) {
-      return true;
+    if (!isDangerZone()) {
+      return false;
+    } else if (!m_mastSub.isSafeZone() || !m_intakeSub.isSafeZone()){
+        return true;
     }
-    //is Mast in range
-      if (m_mastSub.isSafeZone() == false){
-        return true;
-      }
-    //is wrist in range
-    if(m_intakeSub.isSafeZone()) {
-        return true;
-    } 
     return false;
   }
 

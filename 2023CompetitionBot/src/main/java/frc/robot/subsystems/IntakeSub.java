@@ -20,6 +20,9 @@ public class IntakeSub extends SubsystemBase {
   private static final double kManualModePowerDeadband = 0.05; // If manual power is less than this, assume power is 0
   private static final double kIntakeMinSafeZone = -5;
   private static final double kIntakeMaxSafeZone = 5;
+  public static final double kWristFlush = 27;
+  public static final double kWristThrough = -0.9;
+
 
   // STATE VARIABLES //////////////////////////////////////////////////////////
   private SubControl m_currentControl = new SubControl(); // Current states of mechanism

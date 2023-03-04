@@ -96,17 +96,15 @@ public class RobotContainer {
     m_driverController.povUp().onTrue(new DriveAlignTapeCmd(m_drivetrainSub, m_visionSub, 15.0));
 
 
-    m_driverController.circle().onTrue(new InstantCommand(() -> m_drivetrainSub.setBrakeCmd(true), m_drivetrainSub));
+    m_driverController.circle().onTrue(new InstantCommand(() -> m_drivetrainSub.setBrakeButtonCmd(true), m_drivetrainSub));
 
-    m_driverController.cross().onTrue(new InstantCommand(() -> m_drivetrainSub.setBrakeCmd(false), m_drivetrainSub));
+    m_driverController.cross().onTrue(new InstantCommand(() -> m_drivetrainSub.setBrakeButtonCmd(false), m_drivetrainSub));
 
     m_driverController.L1().onTrue(new DriveSetGearCmd(false, m_drivetrainSub));
 
     m_driverController.R1().onTrue(new DriveSetGearCmd(true, m_drivetrainSub));
 
     m_driverController.triangle().onTrue(new InstantCommand(() -> m_drivetrainSub.setIsAutoShift(true), /* Call on command start */ m_drivetrainSub));
-
-    m_driverController.circle().onTrue(new DriveStraightCmd(m_drivetrainSub, 2));
 
     // Operator controller bindings
     
@@ -196,11 +194,9 @@ public class RobotContainer {
     if(m_armSub.getPosition() < 0) {
       m_ledSub.setZoneRGB(LedZones.DIAG_ARM_ENC, 200, 200 + (int) (m_armSub.getPosition() / 50000 * 200),
           200 + (int) (m_armSub.getPosition() / 50000 * 200));
-      System.out.println((int) (m_armSub.getPosition() / 50000 * 200)); // TODO: Remove this extra math when no longer needed
     } else {
       m_ledSub.setZoneRGB(LedZones.DIAG_ARM_ENC, 200 - (int) (m_armSub.getPosition() / 50000 * 200), 200,
           200 - (int) (m_armSub.getPosition() / 50000 * 200));
-      System.out.println((int) (m_armSub.getPosition() / 50000 * 200)); // TODO: Remove this extra math when no longer needed
     }
 
     m_ledSub.setZoneRGB(LedZones.DIAG_MAST_ENC, 200 - (int) m_mastSub.getPosition() * 12, 200,
