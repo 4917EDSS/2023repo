@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import frc.robot.subsystems.SubControl.Mode;
 import frc.robot.StateOfRobot;
 import frc.robot.subsystems.IntakeSub;
+import frc.robot.subsystems.SubControl;
 
 public class IntakeRotateWithJoystickCmd extends CommandBase {
   private final CommandPS4Controller m_controller;
@@ -32,7 +33,7 @@ public class IntakeRotateWithJoystickCmd extends CommandBase {
   @Override
   public void execute() {
     if (StateOfRobot.m_operatorJoystickforIntake) {
-      m_intakeSub.intakeRotate(m_controller.getLeftY());
+      m_intakeSub.setPosition(SubControl.Mode.MANUAL, m_controller.getLeftY(), 0);
       //m_intakeSub.setPosition(Mode.MANUAL, -m_controller.getLeftY(), 0);
       m_intakeSub.spinWheelsIntake(-m_controller.getRightY());
     }
