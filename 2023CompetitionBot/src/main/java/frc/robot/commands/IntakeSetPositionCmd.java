@@ -7,7 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.ArmSub;
-import frc.robot.subsystems.IntakePositions;
+import frc.robot.subsystems.ManipulatorsPositions;
 import frc.robot.subsystems.IntakeSub;
 import frc.robot.subsystems.MastSub;
 import frc.robot.subsystems.SubControl.Mode;
@@ -17,7 +17,7 @@ public class IntakeSetPositionCmd extends CommandBase {
   public final static int kSquareButton = 0;
   public final static int kOptionsButton = 1;
 
-  private IntakePositions m_intakePositions;
+  private ManipulatorsPositions m_manipulatorsPositions;
   private final static double kMaxArmPower = 0.5; //TODO <----- Tune this value 
   private final static double kMaxMastPower = 1.0; //TODO <----- Tune this value 
   private final static double kMaxIntakePower = 0.5; //TODO <----- Tune this  value
@@ -28,10 +28,10 @@ public class IntakeSetPositionCmd extends CommandBase {
   private final IntakeSub m_intakeSub;
 
   /** Creates a new MoveManipulatorToHighPickUpCmd. */
-  public IntakeSetPositionCmd(IntakePositions positions, ArmSub armSub, MastSub mastSub, IntakeSub intakeSub) {
+  public IntakeSetPositionCmd(ManipulatorsPositions positions, ArmSub armSub, MastSub mastSub, IntakeSub intakeSub) {
     m_armSub = armSub;
     m_mastSub = mastSub;
-    m_intakePositions = positions;
+    m_manipulatorsPositions = positions;
     m_intakeSub = intakeSub;
 
     // Use addRequirements() here to declare subsystem dependencies.
@@ -41,7 +41,8 @@ public class IntakeSetPositionCmd extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    IntakePositions converted = IntakePositions.convert(m_intakePositions, RobotContainer.isConeMode());
+    ManipulatorsPositions converted = ManipulatorsPositions.convert(m_manipulatorsPositions, RobotContainer.isConeMode());
+
 
     m_armSub.setPosition(Mode.AUTO, kMaxArmPower, converted.armEncoder);
     m_mastSub.setPosition(Mode.AUTO, kMaxMastPower, converted.mastEncoder);

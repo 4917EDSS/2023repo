@@ -25,18 +25,23 @@ public class ArmSub extends SubsystemBase {
   private static final double kPositionMax = 250000.0; // In encoder ticks (straight up is 30)
   private static final double kManualModePowerDeadband = 0.05; // If manual power is less than this, assume power is 0
   private static final double kMaxPosDifference = 1000; // Maximum difference between the target and current pos for the state to finish   <---- Must be tuned
-  private static final double kMaxPowerStop = 0.1; // Max amount of power for the state to finish  
+  private static final double kMaxPosDifference = 0.1; // Maximum difference between the target and current pos for the state to finish   <---- Must be tuned
+  private static final double kMaxPowerStop = 0.1; // Max amount of power for the state to finish <--- Must be tuned
+  private static final double kMaxDangerZone = 80000;
+  private static final double kMinDangerZone = -69000;     
   public static final double kVertical = 25000.0;
-  public static final double kFourtyFive = 133000.0;
-  public static final double kMax = 198000.0;
-  public static final double kNegFourtyFive = -69000.0;
-
+  public static final double kFourtyFive = 133000.0; // Measured - not necessarily useful, can delete
+  public static final double kNegFourtyFive = -69000.0;   // Measured - not necessarily useful, can delete                                
+  //TODO: Tune the two constants above
+  
   // STATE VARIABLES //////////////////////////////////////////////////////////
   private SubControl m_currentControl = new SubControl(); // Current states of mechanism
   private SubControl m_newControl = new SubControl(); // New state to copy to current state when newStateParameters is true
   private boolean m_newControlParameters = false; // Set to true when ready to switch to new state
   private double m_lastPower = 0;
   private double m_blockedPosition;
+  private MastSub m_mastSub; // to determine if arm is blocked
+  private IntakeSub m_intakeSub;
 
   // HARDWARE AND CONTROL OBJECTS /////////////////////////////////////////////
   private final TalonFX m_motor = new TalonFX(Constants.CanIds.kArmMotor);
@@ -51,7 +56,13 @@ public class ArmSub extends SubsystemBase {
   // SUBSYSTEM METHODS ////////////////////////////////////////////////////////
 
   /** Creates a new ArmSub. */
-  public ArmSub() {
+  public ArmSub(MastSub mastSub, IntakeSub intakeSub) {
+  
+    this.m_mastSub = mastSub;
+    this.m_mastSub.setArmSub(this);
+    this.m_intakeSub = intakeSub;
+    this.m_mastSub.setIntakeSub(intakeSub);
+
     SmartDashboard.putNumber("Arm kP", m_p);
     SmartDashboard.putNumber("Arm kI", m_i);
     SmartDashboard.putNumber("Arm kD", m_d);
@@ -104,8 +115,19 @@ public class ArmSub extends SubsystemBase {
     return m_motor.getSelectedSensorVelocity();
   }
 
-  public boolean isBlocked(double currentPosition, double targetPosition) {
-    //TODO implement later
+  private boolean isDangerZone() {
+    if((getPosition() >= kMinDangerZone) && (getPosition() <= kMaxDangerZone)) {
+      return true;
+    }
+    return false;
+  }
+
+  public boolean isBlocked(double currentPosition, double targetPosition){
+    if (!isDangerZone()) {
+      return false;
+    } else if (!m_mastSub.isSafeZone() || !m_intakeSub.isSafeZone()){
+        return true;
+    }
     return false;
   }
 
@@ -257,7 +279,7 @@ public class ArmSub extends SubsystemBase {
 
   /** Calculate the amount of power should use to get to the target position */
   private double calcMovePower(double currentPosition, double newPosition, double targetPower) {
-  return MathUtil.clamp(m_pid.calculate(currentPosition, newPosition), -targetPower, targetPower);
+    return MathUtil.clamp(m_pid.calculate(currentPosition, newPosition), -targetPower, targetPower);
   }
 
   private double calcHoldPower(double currentPosition, double targetPosition) {
