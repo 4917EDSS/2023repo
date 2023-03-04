@@ -18,8 +18,12 @@ public class IntakeSub extends SubsystemBase {
   private static final double kPositionMin = -36.0; // In encoder ticks
   private static final double kPositionMax = 36.0; // In encoder ticks (straight up is 30)
   private static final double kManualModePowerDeadband = 0.05; // If manual power is less than this, assume power is 0
+  private static final double kIntakeMinSafeZone = -8;
+  private static final double kIntakeMaxSafeZone = 2;
   public static final double kWristFlush = 27;
   public static final double kWristThrough = -0.9;
+  public static final double kMaxPosDifference = 0.1;
+
 
   // STATE VARIABLES //////////////////////////////////////////////////////////
   private SubControl m_currentControl = new SubControl(); // Current states of mechanism
@@ -31,7 +35,8 @@ public class IntakeSub extends SubsystemBase {
   private final CANSparkMax m_rotateMotor =
       new CANSparkMax((Constants.CanIds.kRotateMotor), CANSparkMaxLowLevel.MotorType.kBrushless);
 
-  private final DigitalInput m_intakeSensor = new DigitalInput(Constants.DioIds.kIntakeSensorPort);
+  private final DigitalInput m_cubeSensor = new DigitalInput(Constants.DioIds.kCubeSensorPort);
+  private final DigitalInput m_coneSensor = new DigitalInput(Constants.DioIds.kConeSensorPort);
 
   private double m_p = 0.1;
   private double m_i = 0.0;
@@ -54,6 +59,10 @@ public class IntakeSub extends SubsystemBase {
     m_intakeMotor.setIdleMode(IdleMode.kBrake);
     m_rotateMotor.setIdleMode(IdleMode.kBrake);
   }
+  public void initTest() {
+    m_intakeMotor.setIdleMode(IdleMode.kCoast);
+    m_rotateMotor.setIdleMode(IdleMode.kCoast);
+  }
 
   /** This method puts the subsystem in a safe state when all commands are interrupted */
   public void interrupt() {
@@ -69,15 +78,17 @@ public class IntakeSub extends SubsystemBase {
     m_intakeMotor.getEncoder().setPosition(0);
   }
 
-  /** Returns the position of the mechanism in encoder ticks */
-  public double getPositionIntake() {
-    return m_intakeMotor.getEncoder().getPosition();
-  }
-
   /** Returns the velocity of the mechanism in ticks per second */
   public double getVelocityIntake() {
     return m_intakeMotor.getEncoder().getVelocity();
   }
+
+  public boolean isSafeZone() {
+    if((getPositionRotate() < kIntakeMaxSafeZone) && (getPositionRotate() > kIntakeMinSafeZone)) {
+      return true;
+  } 
+  return false;
+}
 
   // This is for the rotate motors
   public void intakeRotate(double power) {
@@ -99,7 +110,7 @@ public class IntakeSub extends SubsystemBase {
   }
 
   public boolean isIntakeLoaded() {
-    return m_intakeSensor.get();
+    return m_coneSensor.get();
   }
 
   /**
@@ -246,10 +257,22 @@ public class IntakeSub extends SubsystemBase {
     SmartDashboard.putNumber("Intake kD", d);
     SmartDashboard.putNumber("Arm Voltage", m_intakeMotor.getOutputCurrent());
 
+    SmartDashboard.putBoolean("Cone Sensor", m_coneSensor.get());
+    SmartDashboard.putBoolean("Cube Sensor", m_cubeSensor.get());
+
     m_pid.setP(p);
     m_pid.setI(i);
     m_pid.setD(d);
   }
 
+  public boolean isFinished() {
+    if(Math.abs(getPositionRotate() - m_currentControl.targetPosition) > kMaxPosDifference) {
+      return false;
+    }
+    if(m_newControlParameters) {
+      return false;
+    }
+    return true;
+  }
 
 }
