@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ArmMoveWithJoystickCmd;
 import frc.robot.commands.AutoDoNothingCmd;
+import frc.robot.commands.AutoDriveFwdThenBack;
 import frc.robot.commands.DriveAlignTapeCmd;
 import frc.robot.commands.DriveSetGearCmd;
 import frc.robot.commands.DriveStraightCmd;
@@ -157,7 +158,8 @@ public class RobotContainer {
 
   void autoChooserSetup() {
     m_Chooser.setDefaultOption("do nothing", new AutoDoNothingCmd());
-    m_Chooser.addOption("drive straight", new DriveStraightCmd(m_drivetrainSub, 3));
+    m_Chooser.addOption("drive straight", new DriveStraightCmd(m_drivetrainSub, -2));
+    m_Chooser.addOption("drive straight then back", new AutoDriveFwdThenBack(m_drivetrainSub, 2, 2));
     SmartDashboard.putData("auto choices", m_Chooser);
   }
 

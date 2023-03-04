@@ -113,11 +113,11 @@ public class DrivetrainSub extends SubsystemBase {
     return (getLeftVelocity() + getRightVelocity()) / 2;
   }
 
-  public double getLeftEncoderDistanceM() {
+  private double getLeftEncoderDistanceM() {
     return getLeftMotorEncoder() * getEncoderRotationsToMeterFactor();
   }
 
-  public double getRightEncoderDistanceM() {
+  private double getRightEncoderDistanceM() {
     return getRightMotorEncoder() * getEncoderRotationsToMeterFactor();
   }
 
