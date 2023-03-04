@@ -16,14 +16,14 @@ import java.util.logging.Level;
  * reduce verbosity.
  */
 public final class Constants {
+  public static final Level kLogLevel = Level.WARNING;
+
   // HARDWARE IDs/PORTs MAPPING ///////////////////////////////////////////////
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
     public static final int kOperatorControllerPort = 1;
   }
 
-  public static final Level kLogLevel = Level.WARNING;
-  
   public final static class CanIds {
     public final static int kMastMotor = 1;
     public final static int kLeftDriveMotor1 = 2;
@@ -32,13 +32,14 @@ public final class Constants {
     public final static int kRightDriveMotor1 = 5;
     public final static int kRightDriveMotor2 = 6;
     public final static int kRightDriveMotor3 = 7;
-    public final static int kArmMotor = 8;
+    public final static int kArmMotor = 12;
     public final static int kRotateMotor = 9;
     public final static int kIntakeMotor = 10;
   }
 
   public final static class SolenoidIds {
     public final static int kShifter = 1;
+    public final static int kArmLock = 3;
   }
 
   public final static class PwmIds {
@@ -47,6 +48,8 @@ public final class Constants {
 
   public final static class DioIds {
     public final static int kIntakeSensorPort = 1;
+    public final static int kMastBack = 0; // Need ID
+    public final static int kMastFront = 28; // Need ID
   }
 
   // OTHER GLOBAL CONSTANTS ///////////////////////////////////////////////////
@@ -54,6 +57,13 @@ public final class Constants {
     public final static int kNoVision = 0;
     public final static int kLimelimelight = 1;
     public final static int kApriltag = 2;
+  }
+
+  public final static class VisionConstants {
+    public final static double kMountAngle = 0.0; // All measurements in meters
+    public final static double kHighTapeHeight = 1.06;
+    public final static double kLowTapeHeight = 0.56;
+    public final static double kLensHeight = 0.0;
   }
 
   public final static class LedConstants {

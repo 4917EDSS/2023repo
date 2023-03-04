@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import com.revrobotics.CANSparkMax.IdleMode;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -14,8 +15,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class IntakeSub extends SubsystemBase {
-  private static final double kPositionMin = 0.0; // In encoder ticks
-  private static final double kPositionMax = 60.0; // In encoder ticks (straight up is 30)
+  private static final double kPositionMin = -36.0; // In encoder ticks
+  private static final double kPositionMax = 36.0; // In encoder ticks (straight up is 30)
   private static final double kManualModePowerDeadband = 0.05; // If manual power is less than this, assume power is 0
 
   // STATE VARIABLES //////////////////////////////////////////////////////////
@@ -48,6 +49,8 @@ public class IntakeSub extends SubsystemBase {
 
   /** Use this method to reset all of the hardware and states to safe starting values */
   public void init() {
+    m_intakeMotor.setIdleMode(IdleMode.kBrake);
+    m_rotateMotor.setIdleMode(IdleMode.kBrake);
   }
 
   /** This method puts the subsystem in a safe state when all commands are interrupted */
@@ -214,7 +217,7 @@ public class IntakeSub extends SubsystemBase {
         break;
     }
 
-    spinWheelsIntake(newPower);
+    intakeRotate(newPower);
   }
 
   /** Calculate the amount of power should use to get to the target position */
@@ -224,6 +227,7 @@ public class IntakeSub extends SubsystemBase {
 
   private double calcHoldPower(double currentPosition) {
     // TODO: Decide what is needed to hold the position
+    // We probalby just want to use calcMovePower
     return 0.0;
   }
 
@@ -238,6 +242,7 @@ public class IntakeSub extends SubsystemBase {
     SmartDashboard.putNumber("Intake kP", p);
     SmartDashboard.putNumber("Intake kI", i);
     SmartDashboard.putNumber("Intake kD", d);
+    SmartDashboard.putNumber("Arm Voltage", m_intakeMotor.getOutputCurrent());
 
     m_pid.setP(p);
     m_pid.setI(i);

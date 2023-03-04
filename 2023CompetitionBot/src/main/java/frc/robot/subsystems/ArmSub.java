@@ -5,13 +5,19 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.fasterxml.jackson.annotation.JsonCreator.Mode;
+import com.revrobotics.CANSparkMax.IdleMode;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.SubControl.State;
+import frc.robot.subsystems.DrivetrainSub;
 
 public class ArmSub extends SubsystemBase {
   // CONSTANTS ////////////////////////////////////////////////////////////////
@@ -30,10 +36,9 @@ public class ArmSub extends SubsystemBase {
   private double m_blockedPosition;
 
   // HARDWARE AND CONTROL OBJECTS /////////////////////////////////////////////
-  //public class TalonFxSub extends SubsystemBase {
-    // The ID is the CAN ID that the motor was programmed with (using the CTRE Phoenix software)
-    private final TalonFX m_motor = new TalonFX(Constants.CanIds.kArmMotor);
-    
+  private final TalonFX m_motor = new TalonFX(Constants.CanIds.kArmMotor);
+
+  private final Solenoid m_lock = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.SolenoidIds.kArmLock);
   
   private double m_p = 0.1;
   private double m_i = 0.0;
@@ -51,6 +56,7 @@ public class ArmSub extends SubsystemBase {
     init();
   }
 
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -63,6 +69,7 @@ public class ArmSub extends SubsystemBase {
    */
   public void init() {
     zeroEncoder();
+    m_motor.setNeutralMode(NeutralMode.Brake);
   }
 
   /**
@@ -97,6 +104,10 @@ public class ArmSub extends SubsystemBase {
   public boolean isBlocked(double currentPosition, double targetPosition) {
     //TODO implement later
     return false;
+  }
+
+  public void lockArm(boolean lock) {
+    m_lock.set(lock);
   }
 
   /**
@@ -179,6 +190,7 @@ public class ArmSub extends SubsystemBase {
 
     // Check if there are new control parameters to set
     if(m_newControlParameters) {
+      //TODO: Unlock motor
       m_currentControl.state = m_newControl.state;
       m_currentControl.mode = m_newControl.mode;
       m_currentControl.targetPower = m_newControl.targetPower;
@@ -199,6 +211,7 @@ public class ArmSub extends SubsystemBase {
           m_blockedPosition = currentPosition;
           m_currentControl.state = State.INTERRUPTED;
         } else if(isFinished()) {
+          //TODO: Lock motor
           m_currentControl.state = State.HOLDING;
         } else {
           newPower = calcMovePower(currentPosition, m_currentControl.targetPosition, m_currentControl.targetPower);
@@ -220,6 +233,7 @@ public class ArmSub extends SubsystemBase {
       case INTERRUPTED:
         // If the mechanism is no longer blocked, transition to MOVING
         if(isBlocked(currentPosition, m_currentControl.targetPosition) == false) {
+          //TODO: Unlock motor
           m_currentControl.state = State.MOVING;
           // Otherwise, hold this position
         } else {
@@ -244,8 +258,7 @@ public class ArmSub extends SubsystemBase {
   }
 
   private double calcHoldPower(double currentPosition, double targetPosition) {
-    double holdPower = (targetPosition - currentPosition) * 0.004;
-    return holdPower;
+    return 0;
   }
 
   public boolean isFinished() {

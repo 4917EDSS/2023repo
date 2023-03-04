@@ -5,20 +5,18 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.RobotContainer;
+import frc.robot.StateOfRobot;
 import frc.robot.subsystems.LedSub;
 import frc.robot.subsystems.LedSub.LedColour;
 import frc.robot.subsystems.LedSub.LedZones;
 
 public class SetGamePieceTypeCmd extends CommandBase {
   private final LedSub m_ledSub;
-  private final RobotContainer m_robotContainer;
   private final boolean m_coneMode;
 
   /** Creates a new SetGamePieceTypeCmd. */
-  public SetGamePieceTypeCmd(boolean coneMode, RobotContainer robotContainer, LedSub ledSub) {
+  public SetGamePieceTypeCmd(boolean coneMode, LedSub ledSub) {
     m_coneMode = coneMode;
-    m_robotContainer = robotContainer;
     m_ledSub = ledSub;
 
     // Use addRequirements() here to declare subsystem dependencies.
@@ -28,9 +26,9 @@ public class SetGamePieceTypeCmd extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_robotContainer.setConeMode(m_coneMode);
+    StateOfRobot.m_coneMode = m_coneMode;
 
-    if (m_coneMode) {
+    if(m_coneMode) {
       m_ledSub.setZoneColour(LedZones.ZONE1, LedColour.BLUE);
     } else {
       m_ledSub.setZoneColour(LedZones.ZONE1, LedColour.GREEN);
@@ -48,6 +46,6 @@ public class SetGamePieceTypeCmd extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

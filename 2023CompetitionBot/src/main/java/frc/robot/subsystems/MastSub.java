@@ -4,10 +4,13 @@
 
 package frc.robot.subsystems;
 
+import com.fasterxml.jackson.annotation.JsonCreator.Mode;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import com.revrobotics.CANSparkMax.IdleMode;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -16,7 +19,7 @@ import frc.robot.subsystems.SubControl.State;
 public class MastSub extends SubsystemBase {
   // CONSTANTS ////////////////////////////////////////////////////////////////
   private static final double kPositionMin = 0.0; // In endcoder ticks
-  private static final double kPositionMax = 60.0; // In encoder ticks (straight up is 30)
+  private static final double kPositionMax = 308.0; // In encoder ticks (straight up is 30)
   private static final double kManualModePowerDeadband = 0.05; // If manual power is less than this, assume power is 0
   private static final double kMaxPosDifference = 0.1; // Maximum difference between the target and current pos for the state to finish  <---- Must be tuned
   private static final double kMaxPowerStop = 0.1; // max amount of power for the state to finish                                        <--- Must be tuned
@@ -33,6 +36,9 @@ public class MastSub extends SubsystemBase {
   private final CANSparkMax m_motor =
       new CANSparkMax((Constants.CanIds.kMastMotor), CANSparkMaxLowLevel.MotorType.kBrushless);
 
+  private final DigitalInput m_backMast = new DigitalInput(Constants.DioIds.kMastBack);
+  private final DigitalInput m_frontMast = new DigitalInput(Constants.DioIds.kMastFront);
+
   private double m_p = 0.1;
   private double m_i = 0.0;
   private double m_d = 0.0;
@@ -41,7 +47,7 @@ public class MastSub extends SubsystemBase {
   // SUBSYSTEM METHODS ////////////////////////////////////////////////////////
   /** Creates a new MastSub. */
   public MastSub() {
-    m_motor.setInverted(true);
+    m_motor.setInverted(false);
 
     SmartDashboard.putNumber("Mast kP", m_p);
     SmartDashboard.putNumber("Mast kI", m_i);
@@ -62,6 +68,7 @@ public class MastSub extends SubsystemBase {
    */
   public void init() {
     zeroEncoder();
+    m_motor.setIdleMode(IdleMode.kBrake);
   }
 
   /**
@@ -95,7 +102,21 @@ public class MastSub extends SubsystemBase {
 
   public boolean isBlocked(double currentPosition, double targetPosition) {
     //TODO implement later
+    if((currentPosition > targetPosition && isMastAtBack())) {
+      return true;
+    } 
+    if((currentPosition < targetPosition && isMastAtFront())) {
+      return true;
+    } 
     return false;
+  }
+
+  public boolean isMastAtBack() {
+    return m_backMast.get();
+  }
+
+  public boolean isMastAtFront() {
+    return !m_frontMast.get();
   }
 
   /**
@@ -174,6 +195,9 @@ public class MastSub extends SubsystemBase {
 
   /** Run the mechanism state machine */
   private void updateStateMachine() {
+    if(isMastAtBack()) {
+      zeroEncoder();
+    }
     double newPower = 0.0;
     double currentPosition = getPosition();
 
@@ -219,7 +243,7 @@ public class MastSub extends SubsystemBase {
 
       case INTERRUPTED:
         // If the mechanism is no longer blocked, transition to MOVING
-        if(isBlocked(currentPosition, m_currentControl.targetPosition) == false) {
+        if(!isBlocked(currentPosition, m_currentControl.targetPosition)) {
           m_currentControl.state = State.MOVING;
           // Otherwise, hold this position
         } else {
@@ -246,8 +270,7 @@ public class MastSub extends SubsystemBase {
 
 
   private double calcHoldPower(double currentPosition, double targetPosition) {
-    double holdPower = (targetPosition - currentPosition) * 0.004;
-    return holdPower;
+    return 0;
   }
 
   /** Display/get subsystem information to/from the Smart Dashboard */
@@ -261,6 +284,8 @@ public class MastSub extends SubsystemBase {
     SmartDashboard.putNumber("Mast kP", p);
     SmartDashboard.putNumber("Mast kI", i);
     SmartDashboard.putNumber("Mast kD", d);
+    SmartDashboard.putBoolean("Mast back", isMastAtBack());
+    SmartDashboard.putBoolean("Mast front", isMastAtFront());
 
     m_pid.setP(p);
     m_pid.setI(i);
@@ -279,4 +304,5 @@ public class MastSub extends SubsystemBase {
     }
     return true;
   }
+
 }

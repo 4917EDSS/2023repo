@@ -33,9 +33,10 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     Logger root = Logger.getLogger("");
     root.setLevel(Constants.kLogLevel);
-    for (Handler handler : root.getHandlers()) {
-        handler.setLevel(Constants.kLogLevel);
+    for(Handler handler : root.getHandlers()) {
+      handler.setLevel(Constants.kLogLevel);
     }
+
     m_robotContainer = new RobotContainer();
   }
 
@@ -63,9 +64,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-        /*if(HALUtil.getFPGAButton() == true){
-      System.out.println("User button pressed");
-    }*/
+    m_robotContainer.disabledPeriodic();
   }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
@@ -88,7 +87,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    if(!m_isInitialized){
+    if(!m_isInitialized) {
       m_robotContainer.initSubsystems();
       m_isInitialized = true;
     }
