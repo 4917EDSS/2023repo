@@ -108,6 +108,7 @@ public class RobotContainer {
 
     // Operator controller bindings
     
+    /* */
     m_operatorController.povUp().onTrue(new IntakeSetPositionCmd(ManipulatorsPositions.DOUBLE_STATION, m_armSub, m_mastSub, m_intakeSub));
 
      m_operatorController.povLeft().onTrue(new IntakeSetPositionCmd(ManipulatorsPositions.SINGLE_STATION, m_armSub, m_mastSub, m_intakeSub));
@@ -181,6 +182,12 @@ public class RobotContainer {
     m_ledSub.init();
     m_mastSub.init();
     m_visionSub.init();
+  }
+
+  public void initTests() {
+    m_armSub.initTest();
+    m_intakeSub.initTest();
+    m_mastSub.initTest();
   }
 
   public void disabledPeriodic() {

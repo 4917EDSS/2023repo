@@ -21,18 +21,18 @@ import frc.robot.subsystems.DrivetrainSub;
 
 public class ArmSub extends SubsystemBase {
   // CONSTANTS ////////////////////////////////////////////////////////////////
-  private static final double kPositionMin = -250000.0; // In encoder ticks
-  private static final double kPositionMax = 250000.0; // In encoder ticks (straight up is 30)
+  private static final double kPositionMin = -200000.0; // In encoder ticks
+  private static final double kPositionMax = 240000.0; // In encoder ticks (straight up is 30)
   private static final double kManualModePowerDeadband = 0.05; // If manual power is less than this, assume power is 0
-  private static final double kMaxPosDifference = 0.1; // Maximum difference between the target and current pos for the state to finish   <---- Must be tuned
-  private static final double kMaxPowerStop = 0.1; // Max amount of power for the state to finish <--- Must be tuned
-  private static final double kMaxDangerZone = 80000;
+  private static final double kMaxPosDifference = 1000; // Maximum difference between the target and current pos for the state to finish   <---- Must be tuned
+  private static final double kMaxSpeedStop = 1000; // Max amount of power for the state to finish <--- Must be tuned
+  private static final double kMaxDangerZone = 60000;
   private static final double kMinDangerZone = -69000;     
   public static final double kVertical = 25000.0;
   public static final double kFourtyFive = 133000.0; // Measured - not necessarily useful, can delete
   public static final double kNegFourtyFive = -69000.0;   // Measured - not necessarily useful, can delete                                
   //TODO: Tune the two constants above
-  
+
   // STATE VARIABLES //////////////////////////////////////////////////////////
   private SubControl m_currentControl = new SubControl(); // Current states of mechanism
   private SubControl m_newControl = new SubControl(); // New state to copy to current state when newStateParameters is true
@@ -47,7 +47,7 @@ public class ArmSub extends SubsystemBase {
 
   private final Solenoid m_lock = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.SolenoidIds.kArmLock);
   
-  private double m_p = 0.1;
+  private double m_p = 0.0001;
   private double m_i = 0.0;
   private double m_d = 0.0;
   private final PIDController m_pid = new PIDController(m_p, m_i, m_d);
@@ -83,6 +83,11 @@ public class ArmSub extends SubsystemBase {
   public void init() {
     zeroEncoder();
     m_motor.setNeutralMode(NeutralMode.Brake);
+  }
+
+  public void initTest() {
+    zeroEncoder();
+    m_motor.setNeutralMode(NeutralMode.Coast);
   }
 
   /**
@@ -278,7 +283,7 @@ public class ArmSub extends SubsystemBase {
 
   /** Calculate the amount of power should use to get to the target position */
   private double calcMovePower(double currentPosition, double newPosition, double targetPower) {
-    return MathUtil.clamp(m_pid.calculate(currentPosition, newPosition), -targetPower, targetPower);
+  return MathUtil.clamp(m_pid.calculate(currentPosition, newPosition), -targetPower, targetPower);
   }
 
   private double calcHoldPower(double currentPosition, double targetPosition) {
@@ -289,7 +294,7 @@ public class ArmSub extends SubsystemBase {
     if(Math.abs(getPosition() - m_currentControl.targetPosition) > kMaxPosDifference) {
       return false;
     }
-    if(Math.abs(getVelocity()) > kMaxPowerStop) {
+    if(Math.abs(getVelocity()) > kMaxSpeedStop) {
       return false;
     }
     if(m_newControlParameters) {
