@@ -26,6 +26,7 @@ import frc.robot.commands.IntakeSetPositionCmd;
 import frc.robot.commands.InterruptAllCommandsCmd;
 import frc.robot.commands.MastMoveWithJoystickCmd;
 import frc.robot.commands.SetGamePieceTypeCmd;
+import frc.robot.commands.ExpelGamePieceCmd;
 import frc.robot.subsystems.ArmSub;
 import frc.robot.subsystems.DrivetrainSub;
 import frc.robot.subsystems.ManipulatorsPositions;
@@ -160,6 +161,9 @@ public class RobotContainer {
     m_Chooser.setDefaultOption("do nothing", new AutoDoNothingCmd());
     m_Chooser.addOption("drive straight", new DriveStraightCmd(m_drivetrainSub, -2));
     m_Chooser.addOption("drive straight then back", new AutoDriveFwdThenBack(m_drivetrainSub, 2, 2));
+    m_Chooser.setDefaultOption("1 do nothing", new AutoDoNothingCmd());
+    m_Chooser.addOption("2 drive straight", new DriveStraightCmd(m_drivetrainSub, 3));
+    m_Chooser.addOption("3 expel game piece", new ExpelGamePieceCmd(m_intakeSub)); 
     SmartDashboard.putData("auto choices", m_Chooser);
   }
 
