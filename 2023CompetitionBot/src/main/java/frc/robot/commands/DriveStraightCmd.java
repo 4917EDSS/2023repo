@@ -12,7 +12,8 @@ public class DriveStraightCmd extends CommandBase {
   private final DrivetrainSub m_drivetrainSub;
   private double m_distanceRemaining = 0;
   private double kRotateAdjustment = 0.045;
-  private double kMinPower = 0.15;
+  private double kMaxPower = 0.9; 
+  private double kMinPower = 0.2;
   private double kTolerance = 0.03;
   private double m_targetDriveDistance;
 
@@ -28,20 +29,23 @@ public class DriveStraightCmd extends CommandBase {
   @Override
   public void initialize() {
     m_drivetrainSub.zeroHeading();
+    m_drivetrainSub.zeroDrivetrainEncoders();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     double rotatePwr = m_drivetrainSub.getHeading() * kRotateAdjustment;
-    double power = 0.40;
+    double power = kMaxPower;
     m_distanceRemaining = m_targetDriveDistance - m_drivetrainSub.getEncoderDistanceM();
+    System.out.println(m_distanceRemaining);
+    System.out.println("Left: " + (m_drivetrainSub.getLeftEncoderDistanceM()) + "Right: " + m_drivetrainSub.getRightEncoderDistanceM());
     double dir = (m_distanceRemaining < 0) ? -1 : 1;
     m_distanceRemaining = Math.abs(m_distanceRemaining);
 
 
-    if(m_distanceRemaining <= 0.4) {
-      power = ((m_distanceRemaining / 0.4) * (power - kMinPower)) + kMinPower;
+    if(m_distanceRemaining <= 0.3) {
+      power = ((m_distanceRemaining / 0.3) * (kMaxPower)) + kMinPower;
     }
     if(m_distanceRemaining <= kTolerance) {
       power = 0;

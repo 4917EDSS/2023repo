@@ -84,8 +84,13 @@ public class DrivetrainSub extends SubsystemBase {
     // Nothing to do on interrupt at this time
   }
 
-  private void zeroDrivetrainEncoders() {
+  public void zeroDrivetrainEncoders() {
     m_leftMotor1.getEncoder().setPosition(0);
+    m_leftMotor2.getEncoder().setPosition(0);
+    m_leftMotor3.getEncoder().setPosition(0);
+    m_rightMotor1.getEncoder().setPosition(0);
+    m_rightMotor2.getEncoder().setPosition(0);
+    m_rightMotor3.getEncoder().setPosition(0);
   }
 
   private double getLeftMotorEncoder() {
@@ -108,16 +113,16 @@ public class DrivetrainSub extends SubsystemBase {
     return (getLeftVelocity() + getRightVelocity()) / 2;
   }
 
-  private double getLeftEncoderDistanceM() {
+  public double getLeftEncoderDistanceM() {
     return getLeftMotorEncoder() * getEncoderRotationsToMeterFactor();
   }
 
-  private double getRightEncoderDistanceM() {
+  public double getRightEncoderDistanceM() {
     return getRightMotorEncoder() * getEncoderRotationsToMeterFactor();
   }
 
   public double getEncoderDistanceM() {
-    return (getLeftEncoderDistanceM() + getRightEncoderDistanceM() / 2);
+    return (Math.abs(getLeftEncoderDistanceM())+ Math.abs(getRightEncoderDistanceM())) / 2;
   }
 
   private double getEncoderRotationsToMeterFactor() {

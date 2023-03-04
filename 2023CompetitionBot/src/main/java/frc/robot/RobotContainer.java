@@ -156,7 +156,7 @@ public class RobotContainer {
 
   void autoChooserSetup() {
     m_Chooser.setDefaultOption("do nothing", new AutoDoNothingCmd());
-    m_Chooser.addOption("drive straight", new DriveStraightCmd(m_drivetrainSub, 3000));
+    m_Chooser.addOption("drive straight", new DriveStraightCmd(m_drivetrainSub, 3));
     SmartDashboard.putData("auto choices", m_Chooser);
   }
 
