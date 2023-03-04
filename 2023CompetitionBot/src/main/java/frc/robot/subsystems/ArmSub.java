@@ -26,12 +26,11 @@ public class ArmSub extends SubsystemBase {
   private static final double kManualModePowerDeadband = 0.05; // If manual power is less than this, assume power is 0
   private static final double kMaxPosDifference = 0.1; // Maximum difference between the target and current pos for the state to finish   <---- Must be tuned
   private static final double kMaxPowerStop = 0.1; // Max amount of power for the state to finish <--- Must be tuned
-  private static final double kMaxDangerZone = 133000;
+  private static final double kMaxDangerZone = 80000;
   private static final double kMinDangerZone = -69000;     
   public static final double kVertical = 25000.0;
-  public static final double kFourtyFive = 133000.0;
-  public static final double kMax = 198000.0;
-  public static final double kNegFourtyFive = -69000.0;                                  
+  public static final double kFourtyFive = 133000.0; // Measured - not necessarily useful, can delete
+  public static final double kNegFourtyFive = -69000.0;   // Measured - not necessarily useful, can delete                                
   //TODO: Tune the two constants above
   
   // STATE VARIABLES //////////////////////////////////////////////////////////
