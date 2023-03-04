@@ -62,6 +62,8 @@ public class IntakeSub extends SubsystemBase {
   public void initTest() {
     m_intakeMotor.setIdleMode(IdleMode.kCoast);
     m_rotateMotor.setIdleMode(IdleMode.kCoast);
+    zeroEncoderIntake();
+    zeroEncoderRotate();
   }
 
   /** This method puts the subsystem in a safe state when all commands are interrupted */

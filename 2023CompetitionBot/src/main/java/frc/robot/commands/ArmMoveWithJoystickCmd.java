@@ -23,6 +23,19 @@ public class ArmMoveWithJoystickCmd extends CommandBase {
     addRequirements(armSub);
   }
 
+  private double adjustSensitivity(double power, int sensitvity) {
+    double dir;
+    if(power < 0) {
+      dir = -1;
+    } else {
+      dir = 1;
+    }
+
+    power = Math.pow(Math.abs(power), sensitvity) * dir;
+
+    return power;
+  }
+
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {}
@@ -31,7 +44,7 @@ public class ArmMoveWithJoystickCmd extends CommandBase {
   @Override
   public void execute() {
     if(!StateOfRobot.m_operatorJoystickforIntake){
-      m_armSub.setPosition(SubControl.Mode.MANUAL, m_controller.getRightY(), 0);
+      m_armSub.setPosition(SubControl.Mode.MANUAL, adjustSensitivity(m_controller.getRightY(),3), 0); // Make sure arm isn't too sensitive
   }
 }
 

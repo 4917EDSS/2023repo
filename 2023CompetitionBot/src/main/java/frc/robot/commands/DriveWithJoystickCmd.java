@@ -30,7 +30,7 @@ public class DriveWithJoystickCmd extends CommandBase {
     addRequirements(drivetrainSub);
   }
 
-  private double adjustSensativity(double power, int sensitvity) {
+  private double adjustSensitivity(double power, int sensitvity) {
     double dir;
     if(power < 0) {
       dir = -1;
@@ -83,8 +83,8 @@ public class DriveWithJoystickCmd extends CommandBase {
     double fwdPower = m_controller.getLeftY();
     double turnPower = m_controller.getRightX();
 
-    fwdPower = adjustSensativity(fwdPower, kForwardSensitivityPower);
-    turnPower = adjustSensativity(turnPower, kTurnSensitivityPower);
+    fwdPower = adjustSensitivity(fwdPower, kForwardSensitivityPower);
+    turnPower = adjustSensitivity(turnPower, kTurnSensitivityPower);
 
     fwdPower = capAcceleration(fwdPower, m_curFwdPower, kForwardMaxAcceleration);
     turnPower = capAcceleration(turnPower, m_curTurnPower, kTurnMaxAcceleration);
