@@ -5,7 +5,7 @@
 package frc.robot.subsystems;
 
 /** Add your docs here. */
-public enum IntakePositions {
+public enum ManipulatorsPositions {
   START(0, 0, 0),
   HOME(118,0,0),
   // We are setting the values to zero, so that people use the cube or cone positions.
@@ -37,13 +37,13 @@ public enum IntakePositions {
   public final double mastEncoder;
   public final double wristEncoder;
 
-  IntakePositions(double mastEncoder, double armEncoder, double wristEncoder) {
+  ManipulatorsPositions(double mastEncoder, double armEncoder, double wristEncoder) {
     this.mastEncoder = mastEncoder;
     this.armEncoder = armEncoder;
     this.wristEncoder = wristEncoder;
   }
 
-  public static IntakePositions convert(IntakePositions unConverted, boolean coneMode) {
+  public static ManipulatorsPositions convert(ManipulatorsPositions unConverted, boolean coneMode) {
     // Converts positions depending on which mode is enabled (Cone, Cube)
     switch(unConverted) {
       case HIGH:

@@ -25,7 +25,9 @@ public class ArmSub extends SubsystemBase {
   private static final double kPositionMax = 80.0; // In encoder ticks (straight up is 30)
   private static final double kManualModePowerDeadband = 0.05; // If manual power is less than this, assume power is 0
   private static final double kMaxPosDifference = 0.1; // Maximum difference between the target and current pos for the state to finish   <---- Must be tuned
-  private static final double kMaxPowerStop = 0.1; // Max amount of power for the state to finish                                         <--- Must be tuned
+  private static final double kMaxPowerStop = 0.1; // Max amount of power for the state to finish <--- Must be tuned
+  private static final double kMaxDangerZone = 133000;
+  private static final double kMinDangerZone = -69000;                                       
   //TODO: Tune the two constants above
 
   // STATE VARIABLES //////////////////////////////////////////////////////////
@@ -34,6 +36,8 @@ public class ArmSub extends SubsystemBase {
   private boolean m_newControlParameters = false; // Set to true when ready to switch to new state
   private double m_lastPower = 0;
   private double m_blockedPosition;
+  private MastSub m_mastSub; // to determine if arm is blocked
+  private IntakeSub m_intakeSub;
 
   // HARDWARE AND CONTROL OBJECTS /////////////////////////////////////////////
   private final TalonFX m_motor = new TalonFX(Constants.CanIds.kArmMotor);
@@ -48,7 +52,13 @@ public class ArmSub extends SubsystemBase {
   // SUBSYSTEM METHODS ////////////////////////////////////////////////////////
 
   /** Creates a new ArmSub. */
-  public ArmSub() {
+  public ArmSub(MastSub mastSub, IntakeSub intakeSub) {
+  
+    this.m_mastSub = mastSub;
+    this.m_mastSub.setArmSub(this);
+    this.m_intakeSub = intakeSub;
+    this.m_mastSub.setIntakeSub(intakeSub);
+
     SmartDashboard.putNumber("Arm kP", m_p);
     SmartDashboard.putNumber("Arm kI", m_i);
     SmartDashboard.putNumber("Arm kD", m_d);
@@ -101,8 +111,25 @@ public class ArmSub extends SubsystemBase {
     return m_motor.getSelectedSensorVelocity();
   }
 
-  public boolean isBlocked(double currentPosition, double targetPosition) {
-    //TODO implement later
+  private boolean isDangerZone() {
+    if((getPosition() >= kMinDangerZone) && (getPosition() <= kMaxDangerZone)) {
+      return true;
+    }
+    return false;
+  }
+
+  public boolean isBlocked(double currentPosition, double targetPosition){
+    if (isDangerZone() == true) {
+      return true;
+    }
+    //is Mast in range
+      if (m_mastSub.isSafeZone() == false){
+        return true;
+      }
+    //is wrist in range
+    if(m_intakeSub.isSafeZone()) {
+        return true;
+    } 
     return false;
   }
 

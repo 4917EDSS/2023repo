@@ -18,6 +18,8 @@ public class IntakeSub extends SubsystemBase {
   private static final double kPositionMin = -36.0; // In encoder ticks
   private static final double kPositionMax = 36.0; // In encoder ticks (straight up is 30)
   private static final double kManualModePowerDeadband = 0.05; // If manual power is less than this, assume power is 0
+  private static final double kIntakeMinSafeZone = -5;
+  private static final double kIntakeMaxSafeZone = 5;
 
   // STATE VARIABLES //////////////////////////////////////////////////////////
   private SubControl m_currentControl = new SubControl(); // Current states of mechanism
@@ -76,6 +78,13 @@ public class IntakeSub extends SubsystemBase {
   public double getVelocityIntake() {
     return m_intakeMotor.getEncoder().getVelocity();
   }
+
+  public boolean isSafeZone() {
+    if((getPositionIntake() < kIntakeMaxSafeZone) && (getPositionIntake() > kIntakeMinSafeZone)) {
+      return true;
+  } 
+  return false;
+}
 
   // This is for the rotate motors
   public void intakeRotate(double power) {

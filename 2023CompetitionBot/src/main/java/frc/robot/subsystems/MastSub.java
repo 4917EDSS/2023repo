@@ -23,7 +23,10 @@ public class MastSub extends SubsystemBase {
   private static final double kManualModePowerDeadband = 0.05; // If manual power is less than this, assume power is 0
   private static final double kMaxPosDifference = 0.1; // Maximum difference between the target and current pos for the state to finish  <---- Must be tuned
   private static final double kMaxPowerStop = 0.1; // max amount of power for the state to finish                                        <--- Must be tuned
+  private static final double kMastMinSafeZone = 110;
+  private static final double kMastMaxSafeZone = 130;
   //TODO: Tune the two constants above
+
 
   // STATE VARIABLES //////////////////////////////////////////////////////////
   private SubControl m_currentControl = new SubControl(); // Current states of mechanism
@@ -31,6 +34,8 @@ public class MastSub extends SubsystemBase {
   private boolean m_newControlParameters = false; // Set to true when ready to switch to new state
   private double m_lastPower = 0;
   private double m_blockedPosition;
+  private ArmSub m_armSub;
+  private IntakeSub m_intakeSub;
 
   // HARDWARE AND CONTROL OBJECTS /////////////////////////////////////////////
   private final CANSparkMax m_motor =
@@ -93,6 +98,21 @@ public class MastSub extends SubsystemBase {
   /** Returns the position of the mechanism in encoder ticks */
   public double getPosition() {
     return m_motor.getEncoder().getPosition();
+  }
+
+  public boolean isSafeZone() {
+    if((getPosition() > kMastMinSafeZone) && (getPosition() < kMastMaxSafeZone)) {
+      return true;
+    }
+    return false;
+  }
+
+  public void setArmSub(ArmSub armSub) {
+    m_armSub = armSub; 
+  }
+
+  public void setIntakeSub(IntakeSub intakeSub) {
+    m_intakeSub = intakeSub;
   }
 
   /** Returns the velocity of the mechanism in ticks per second */
