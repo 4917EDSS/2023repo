@@ -30,7 +30,8 @@ public class ArmSub extends SubsystemBase {
   private static final double kMinDangerZone = -69000;     
   public static final double kVertical = 25000.0;
   public static final double kFourtyFive = 133000.0; // Measured - not necessarily useful, can delete
-  public static final double kNegFourtyFive = -69000.0;   // Measured - not necessarily useful, can delete                                
+  public static final double kNegFourtyFive = -69000.0; // Measured - not necessarily useful, can delete  
+  public static final double kSafeSpaceInDangerZone = 10000;
   //TODO: Tune the two constants above
 
   // STATE VARIABLES //////////////////////////////////////////////////////////
@@ -56,7 +57,7 @@ public class ArmSub extends SubsystemBase {
 
   /** Creates a new ArmSub. */
   public ArmSub(MastSub mastSub, IntakeSub intakeSub) {
-  
+
     this.m_mastSub = mastSub;
     this.m_mastSub.setArmSub(this);
     this.m_intakeSub = intakeSub;
@@ -126,11 +127,26 @@ public class ArmSub extends SubsystemBase {
     return false;
   }
 
-  public boolean isBlocked(double currentPosition, double targetPosition){
-    if (!isDangerZone()) {
+  public boolean isBlocked(double currentPosition, double targetPosition) {
+    boolean moving_up = (targetPosition > currentPosition);
+    boolean moving_down = (targetPosition < currentPosition);
+    boolean near_top_of_danger_zone = ((currentPosition > (kMaxDangerZone - kSafeSpaceInDangerZone)) && (currentPosition < kMaxDangerZone));
+    boolean near_bottom_of_danger_zone = ((currentPosition < (kMinDangerZone + kSafeSpaceInDangerZone)) && (currentPosition > kMinDangerZone));
+   
+    if(!isDangerZone()) {
+      System.out.println("Danger");
       return false;
-    } else if (!m_mastSub.isSafeZone() || !m_intakeSub.isSafeZone()){
+    } else { //Does not work or needs to be tested properly
+      if(moving_up && near_top_of_danger_zone) {
+        System.out.println("TOP");
+        return false; 
+      } else if(moving_down && near_bottom_of_danger_zone) {
+        System.out.println("Bottom");
+        return false; 
+      }
+      if(!m_mastSub.isSafeZone() || !m_intakeSub.isSafeZone()) {
         return true;
+      }
     }
     return false;
   }
