@@ -194,11 +194,9 @@ public class RobotContainer {
     if(m_armSub.getPosition() < 0) {
       m_ledSub.setZoneRGB(LedZones.DIAG_ARM_ENC, 200, 200 + (int) (m_armSub.getPosition() / 50000 * 200),
           200 + (int) (m_armSub.getPosition() / 50000 * 200));
-      System.out.println((int) (m_armSub.getPosition() / 50000 * 200)); // TODO: Remove this extra math when no longer needed
     } else {
       m_ledSub.setZoneRGB(LedZones.DIAG_ARM_ENC, 200 - (int) (m_armSub.getPosition() / 50000 * 200), 200,
           200 - (int) (m_armSub.getPosition() / 50000 * 200));
-      System.out.println((int) (m_armSub.getPosition() / 50000 * 200)); // TODO: Remove this extra math when no longer needed
     }
 
     m_ledSub.setZoneRGB(LedZones.DIAG_MAST_ENC, 200 - (int) m_mastSub.getPosition() * 12, 200,
