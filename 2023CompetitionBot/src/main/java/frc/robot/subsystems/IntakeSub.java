@@ -20,6 +20,7 @@ public class IntakeSub extends SubsystemBase {
   private static final double kManualModePowerDeadband = 0.05; // If manual power is less than this, assume power is 0
   public static final double kWristFlush = 27;
   public static final double kWristThrough = -0.9;
+  public static final double kMaxPosDifference = 0.1;
 
   // STATE VARIABLES //////////////////////////////////////////////////////////
   private SubControl m_currentControl = new SubControl(); // Current states of mechanism
@@ -251,5 +252,14 @@ public class IntakeSub extends SubsystemBase {
     m_pid.setD(d);
   }
 
+  public boolean isFinished() {
+    if(Math.abs(getPositionRotate() - m_currentControl.targetPosition) > kMaxPosDifference) {
+      return false;
+    }
+    if(m_newControlParameters) {
+      return false;
+    }
+    return true;
+  }
 
 }

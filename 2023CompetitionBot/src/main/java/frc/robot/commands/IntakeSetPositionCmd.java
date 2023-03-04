@@ -19,7 +19,8 @@ public class IntakeSetPositionCmd extends CommandBase {
 
   private IntakePositions m_intakePositions;
   private final static double kMaxArmPower = 0.5; //TODO <----- Tune this value 
-  private final static double kMaxMastPower = 0.5; //TODO <----- Tune this value 
+  private final static double kMaxMastPower = 1.0; //TODO <----- Tune this value 
+  private final static double kMaxIntakePower = 0.5; //TODO <----- Tune this  value
 
   //private final ManipulatorSub m_manipulatorSub;
   private final ArmSub m_armSub;
@@ -34,7 +35,7 @@ public class IntakeSetPositionCmd extends CommandBase {
     m_intakeSub = intakeSub;
 
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(armSub, mastSub);
+    addRequirements(armSub, mastSub, intakeSub);
   }
 
   // Called when the command is initially scheduled.
@@ -42,12 +43,9 @@ public class IntakeSetPositionCmd extends CommandBase {
   public void initialize() {
     IntakePositions converted = IntakePositions.convert(m_intakePositions, RobotContainer.isConeMode());
 
-    // TODO:  Remove the println when done or convert to a logger message
-    System.out.println("ISPC: " + m_intakePositions.name() + " " + converted.name());
-
     m_armSub.setPosition(Mode.AUTO, kMaxArmPower, converted.armEncoder);
     m_mastSub.setPosition(Mode.AUTO, kMaxMastPower, converted.mastEncoder);
-    m_intakeSub.setPosition(Mode.AUTO, kMaxMastPower, converted.mastEncoder);
+    m_intakeSub.setPosition(Mode.AUTO, kMaxIntakePower, converted.wristEncoder);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -63,12 +61,13 @@ public class IntakeSetPositionCmd extends CommandBase {
     if(interrupted) {
       m_armSub.setPosition(Mode.MANUAL, 0, 0);
       m_mastSub.setPosition(Mode.MANUAL, 0, 0);
+      m_intakeSub.setPosition(Mode.MANUAL, 0, 0);
     }
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (m_armSub.isFinished() && m_mastSub.isFinished());
+    return (m_armSub.isFinished() && m_mastSub.isFinished() && m_intakeSub.isFinished());
   }
 }
