@@ -107,7 +107,10 @@ public class Robot extends TimedRobot {
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
-    logger.info("Im in teleop Mode");
+    logger.info("Im in test Mode");
+    m_robotContainer.initTests();
+    m_isInitialized = false;
+
   }
 
   /** This function is called periodically during test mode. */

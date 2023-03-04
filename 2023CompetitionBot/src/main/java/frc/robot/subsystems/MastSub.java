@@ -78,6 +78,11 @@ public class MastSub extends SubsystemBase {
     m_motor.setIdleMode(IdleMode.kBrake);
   }
 
+  public void initTest() {
+    zeroEncoder();
+    m_motor.setIdleMode(IdleMode.kCoast);
+  }
+
   /**
    * This method puts the subsystem in a safe state when all commands are interrupted
    */
