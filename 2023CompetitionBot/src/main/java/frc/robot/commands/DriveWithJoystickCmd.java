@@ -4,7 +4,6 @@
 
 package frc.robot.commands;
 
-import com.revrobotics.CANSparkMax.IdleMode;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import frc.robot.subsystems.DrivetrainSub;
@@ -71,8 +70,8 @@ public class DriveWithJoystickCmd extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if(!DrivetrainSub.hasBrakeButtonPressed){
-      m_drivetrainSub.setBrakeCmd(false);
+    if(!DrivetrainSub.hasBrakeButtonPressed) {
+      m_drivetrainSub.setBrake(false);
     }
   }
 
@@ -105,8 +104,8 @@ public class DriveWithJoystickCmd extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     // m_drivetrainSub.tankDrive(0.0, 0.0); // Dont end or it will break the motors
-    if(!DrivetrainSub.hasBrakeButtonPressed){
-      m_drivetrainSub.setBrakeCmd(true);
+    if(!DrivetrainSub.hasBrakeButtonPressed) {
+      m_drivetrainSub.setBrake(true);
     }
   }
 

@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -75,11 +74,7 @@ public class RobotContainer {
     m_drivetrainSub.setDefaultCommand(new DriveWithJoystickCmd(m_driverController, m_drivetrainSub));
     m_armSub.setDefaultCommand(new ArmMoveWithJoystickCmd(m_operatorController, m_armSub));
     m_mastSub.setDefaultCommand(new MastMoveWithJoystickCmd(m_operatorController, m_mastSub));
-   m_intakeSub.setDefaultCommand(new IntakeRotateWithJoystickCmd(m_operatorController, m_intakeSub));
-
     m_intakeSub.setDefaultCommand(new IntakeRotateWithJoystickCmd(m_operatorController, m_intakeSub));
-
-
   }
 
   /**
@@ -93,77 +88,80 @@ public class RobotContainer {
   private void configureBindings() {
     // Driver controller bindings
     m_driverController.L3().or(m_driverController.R3())
-        .onTrue(new InterruptAllCommandsCmd(m_armSub,m_mastSub, m_intakeSub, m_drivetrainSub));
+        .onTrue(new InterruptAllCommandsCmd(m_armSub, m_mastSub, m_intakeSub, m_drivetrainSub));
 
     m_driverController.povUp().onTrue(new DriveAlignTapeCmd(m_drivetrainSub, m_visionSub, 15.0));
 
+    m_driverController.circle().onTrue(new InstantCommand(() -> m_drivetrainSub.setBrakeButton(true), m_drivetrainSub));
 
-    m_driverController.circle().onTrue(new InstantCommand(() -> m_drivetrainSub.setBrakeButtonCmd(true), m_drivetrainSub));
-
-    m_driverController.cross().onTrue(new InstantCommand(() -> m_drivetrainSub.setBrakeButtonCmd(false), m_drivetrainSub));
+    m_driverController.cross().onTrue(new InstantCommand(() -> m_drivetrainSub.setBrakeButton(false), m_drivetrainSub));
 
     m_driverController.L1().onTrue(new DriveSetGearCmd(false, m_drivetrainSub));
 
     m_driverController.R1().onTrue(new DriveSetGearCmd(true, m_drivetrainSub));
 
-    m_driverController.triangle().onTrue(new InstantCommand(() -> m_drivetrainSub.setIsAutoShift(true), /* Call on command start */ m_drivetrainSub));
+    m_driverController.triangle().onTrue(
+        new InstantCommand(() -> m_drivetrainSub.setIsAutoShift(true), /* Call on command start */ m_drivetrainSub));
 
     // Operator controller bindings
-    
+
     /* */
-    m_operatorController.povUp().onTrue(new IntakeSetPositionCmd(ManipulatorsPositions.DOUBLE_STATION, m_armSub, m_mastSub, m_intakeSub));
+    m_operatorController.povUp()
+        .onTrue(new IntakeSetPositionCmd(ManipulatorsPositions.DOUBLE_STATION, m_armSub, m_mastSub, m_intakeSub));
 
-     m_operatorController.povLeft().onTrue(new IntakeSetPositionCmd(ManipulatorsPositions.SINGLE_STATION, m_armSub, m_mastSub, m_intakeSub));
-    
-    m_operatorController.povDown().onTrue(new IntakeSetPositionCmd(ManipulatorsPositions.GROUND, m_armSub, m_mastSub, m_intakeSub));
-    
-    m_operatorController.triangle().onTrue(new IntakeSetPositionCmd(ManipulatorsPositions.HIGH, m_armSub, m_mastSub, m_intakeSub));
+    m_operatorController.povLeft()
+        .onTrue(new IntakeSetPositionCmd(ManipulatorsPositions.SINGLE_STATION, m_armSub, m_mastSub, m_intakeSub));
 
-    m_operatorController.circle().onTrue(new IntakeSetPositionCmd(ManipulatorsPositions.MEDIUM, m_armSub, m_mastSub, m_intakeSub));
+    m_operatorController.povDown()
+        .onTrue(new IntakeSetPositionCmd(ManipulatorsPositions.GROUND, m_armSub, m_mastSub, m_intakeSub));
 
-    m_operatorController.cross().onTrue(new IntakeSetPositionCmd(ManipulatorsPositions.LOW, m_armSub, m_mastSub, m_intakeSub));
-    
-    m_operatorController.square().onTrue(new IntakeSetPositionCmd(ManipulatorsPositions.HOME, m_armSub, m_mastSub, m_intakeSub));
-   
+    m_operatorController.triangle()
+        .onTrue(new IntakeSetPositionCmd(ManipulatorsPositions.HIGH, m_armSub, m_mastSub, m_intakeSub));
+
+    m_operatorController.circle()
+        .onTrue(new IntakeSetPositionCmd(ManipulatorsPositions.MEDIUM, m_armSub, m_mastSub, m_intakeSub));
+
+    m_operatorController.cross()
+        .onTrue(new IntakeSetPositionCmd(ManipulatorsPositions.LOW, m_armSub, m_mastSub, m_intakeSub));
+
+    m_operatorController.square()
+        .onTrue(new IntakeSetPositionCmd(ManipulatorsPositions.HOME, m_armSub, m_mastSub, m_intakeSub));
+
     m_operatorController.L1().onTrue(new SetGamePieceTypeCmd(false, m_ledSub));
-    
+
     m_operatorController.R1().onTrue(new SetGamePieceTypeCmd(true, m_ledSub));
-   
+
     // L2 is maped to Intakes in
     m_operatorController.L2().onTrue(new InstantCommand(() -> m_intakeSub.spinWheelsIntake(0.3), m_intakeSub));
-    
+
     // R2 is maped to the intake out
     m_operatorController.R2().onTrue(new InstantCommand(() -> m_intakeSub.spinWheelsIntake(-0.3), m_intakeSub));
-    
-    // Share is maped to rotate gripper
-    //m_operatorController.share().onTrue(new InstantCommand(() -> m_intakeSub.intakeRotate(0.3), m_intakeSub));
-      
-    //m_operatorController.options().onTrue(new InstantCommand(() -> m_intakeSub.intakeRotate(-0.3), m_intakeSub));
 
-   //Option is maped to Led Subsystem
-    m_operatorController.options().onTrue(new InstantCommand(() ->  m_ledSub.setZoneColour(LedSub.LedZones.ZONE0, LedColour.GREEN)));
+    m_operatorController.share()
+        .onTrue(new InstantCommand(() -> m_ledSub.setZoneColour(LedSub.LedZones.ZONE0, LedColour.PURPLE)));
 
-    
+    m_operatorController.options()
+        .onTrue(new InstantCommand(() -> m_ledSub.setZoneColour(LedSub.LedZones.ZONE0, LedColour.GREEN)));
+
     m_operatorController.PS().onTrue(new InstantCommand(() -> StateOfRobot.m_operatorJoystickforIntake = false));
 
     m_operatorController.touchpad().onTrue(new InstantCommand(() -> StateOfRobot.m_operatorJoystickforIntake = true));
 
-    //Share is maped to Led Subsystem
-    m_operatorController.share().onTrue(new InstantCommand(() -> m_ledSub.setZoneColour(LedSub.LedZones.ZONE0, LedColour.PURPLE)));
-    m_operatorController.L2().onTrue(new InstantCommand(() ->  m_ledSub.setZoneColour(LedSub.LedZones.ALL, LedColour.YELLOW)));
-   
+    m_operatorController.L2()
+        .onTrue(new InstantCommand(() -> m_ledSub.setZoneColour(LedSub.LedZones.ALL, LedColour.YELLOW)));
+
     m_operatorController.L3().or(m_operatorController.R3())
         .onTrue(new InterruptAllCommandsCmd(m_armSub, m_mastSub, m_intakeSub, m_drivetrainSub));
   }
 
 
   void autoChooserSetup() {
-    m_Chooser.setDefaultOption("do nothing", new AutoDoNothingCmd());
-    m_Chooser.addOption("drive straight", new DriveStraightCmd(m_drivetrainSub, -2));
+    // TODO:  Do we need these first two options?  Looks like a bad merge because there was also a second setDefaultOption
+    m_Chooser.addOption("drive back 2m", new DriveStraightCmd(m_drivetrainSub, -2));
     m_Chooser.addOption("drive straight then back", new AutoDriveFwdThenBack(m_drivetrainSub, 2, 2));
     m_Chooser.setDefaultOption("1 do nothing", new AutoDoNothingCmd());
     m_Chooser.addOption("2 drive straight", new DriveStraightCmd(m_drivetrainSub, 3));
-    m_Chooser.addOption("3 expel game piece", new ExpelGamePieceCmd(m_intakeSub)); 
+    m_Chooser.addOption("3 expel game piece", new ExpelGamePieceCmd(m_intakeSub));
     SmartDashboard.putData("auto choices", m_Chooser);
   }
 
@@ -175,7 +173,7 @@ public class RobotContainer {
   public static boolean isConeMode() {
     return s_coneMode;
   }
-  
+
   public static void setConeMode(boolean coneMode) {
     s_coneMode = coneMode;
     System.out.println(coneMode ? "Cone Mode" : "Cube Mode");

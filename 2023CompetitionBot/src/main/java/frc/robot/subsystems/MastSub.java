@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems;
 
-import com.fasterxml.jackson.annotation.JsonCreator.Mode;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -27,8 +26,6 @@ public class MastSub extends SubsystemBase {
   private static final double kMastMaxSafeZone = 130;
   public static final double kVertical = 118;
   //TODO: Tune the two constants above 
-  
-
 
   // STATE VARIABLES //////////////////////////////////////////////////////////
   private SubControl m_currentControl = new SubControl(); // Current states of mechanism
@@ -115,7 +112,7 @@ public class MastSub extends SubsystemBase {
   }
 
   public void setArmSub(ArmSub armSub) {
-    m_armSub = armSub; 
+    m_armSub = armSub;
   }
 
   public void setIntakeSub(IntakeSub intakeSub) {
@@ -131,10 +128,10 @@ public class MastSub extends SubsystemBase {
     //TODO implement later
     if((currentPosition > targetPosition && isMastAtBack())) {
       return true;
-    } 
+    }
     if((currentPosition < targetPosition && isMastAtFront())) {
       return true;
-    } 
+    }
     return false;
   }
 

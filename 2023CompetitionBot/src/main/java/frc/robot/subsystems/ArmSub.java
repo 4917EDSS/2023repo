@@ -7,8 +7,6 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.fasterxml.jackson.annotation.JsonCreator.Mode;
-import com.revrobotics.CANSparkMax.IdleMode;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -17,7 +15,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.SubControl.State;
-import frc.robot.subsystems.DrivetrainSub;
 
 public class ArmSub extends SubsystemBase {
   // CONSTANTS ////////////////////////////////////////////////////////////////
@@ -27,7 +24,7 @@ public class ArmSub extends SubsystemBase {
   private static final double kMaxPosDifference = 1000; // Maximum difference between the target and current pos for the state to finish   <---- Must be tuned
   private static final double kMaxSpeedStop = 1000; // Max amount of power for the state to finish <--- Must be tuned
   private static final double kMaxDangerZone = 60000;
-  private static final double kMinDangerZone = -69000;     
+  private static final double kMinDangerZone = -69000;
   public static final double kVertical = 25000.0;
   public static final double kFourtyFive = 133000.0; // Measured - not necessarily useful, can delete
   public static final double kNegFourtyFive = -69000.0; // Measured - not necessarily useful, can delete  
@@ -47,7 +44,7 @@ public class ArmSub extends SubsystemBase {
   private final TalonFX m_motor = new TalonFX(Constants.CanIds.kArmMotor);
 
   private final Solenoid m_lock = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.SolenoidIds.kArmLock);
-  
+
   private double m_p = 0.0001;
   private double m_i = 0.0;
   private double m_d = 0.0;
@@ -130,19 +127,21 @@ public class ArmSub extends SubsystemBase {
   public boolean isBlocked(double currentPosition, double targetPosition) {
     boolean moving_up = (targetPosition > currentPosition);
     boolean moving_down = (targetPosition < currentPosition);
-    boolean near_top_of_danger_zone = ((currentPosition > (kMaxDangerZone - kSafeSpaceInDangerZone)) && (currentPosition < kMaxDangerZone));
-    boolean near_bottom_of_danger_zone = ((currentPosition < (kMinDangerZone + kSafeSpaceInDangerZone)) && (currentPosition > kMinDangerZone));
-   
+    boolean near_top_of_danger_zone =
+        ((currentPosition > (kMaxDangerZone - kSafeSpaceInDangerZone)) && (currentPosition < kMaxDangerZone));
+    boolean near_bottom_of_danger_zone =
+        ((currentPosition < (kMinDangerZone + kSafeSpaceInDangerZone)) && (currentPosition > kMinDangerZone));
+
     if(!isDangerZone()) {
       System.out.println("Danger");
       return false;
     } else { //Does not work or needs to be tested properly
       if(moving_up && near_top_of_danger_zone) {
         System.out.println("TOP");
-        return false; 
+        return false;
       } else if(moving_down && near_bottom_of_danger_zone) {
         System.out.println("Bottom");
-        return false; 
+        return false;
       }
       if(!m_mastSub.isSafeZone() || !m_intakeSub.isSafeZone()) {
         return true;
@@ -299,7 +298,7 @@ public class ArmSub extends SubsystemBase {
 
   /** Calculate the amount of power should use to get to the target position */
   private double calcMovePower(double currentPosition, double newPosition, double targetPower) {
-  return MathUtil.clamp(m_pid.calculate(currentPosition, newPosition), -targetPower, targetPower);
+    return MathUtil.clamp(m_pid.calculate(currentPosition, newPosition), -targetPower, targetPower);
   }
 
   private double calcHoldPower(double currentPosition, double targetPosition) {

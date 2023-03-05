@@ -76,7 +76,7 @@ public class DrivetrainSub extends SubsystemBase {
     zeroDrivetrainEncoders();
     setIsAutoShift(true);
     m_gyro.reset();
-    setBrakeCmd(true);
+    setBrake(true);
   }
 
   /** This method puts the subsystem in a safe state when all commands are interrupted */
@@ -122,7 +122,7 @@ public class DrivetrainSub extends SubsystemBase {
   }
 
   public double getEncoderDistanceM() {
-    return (Math.abs(getLeftEncoderDistanceM())+ Math.abs(getRightEncoderDistanceM())) / 2;
+    return (Math.abs(getLeftEncoderDistanceM()) + Math.abs(getRightEncoderDistanceM())) / 2;
   }
 
   private double getEncoderRotationsToMeterFactor() {
@@ -169,12 +169,12 @@ public class DrivetrainSub extends SubsystemBase {
     return m_rightMotor3.getIdleMode().equals(IdleMode.kCoast);
   }
 
-  public void setBrakeButtonCmd(boolean isBrakeOn){
+  public void setBrakeButton(boolean isBrakeOn) {
     hasBrakeButtonPressed = isBrakeOn;
-    setBrakeCmd(isBrakeOn);
+    setBrake(isBrakeOn);
   }
 
-  public void setBrakeCmd(boolean isBrakeOn) {
+  public void setBrake(boolean isBrakeOn) {
     IdleMode mode;
     if(isBrakeOn) {
       tankDrive(0, 0);
