@@ -36,6 +36,15 @@ public class ArmMoveWithJoystickCmd extends CommandBase {
     return power;
   }
 
+  private double slowCurve(double val, double curve, double start, double end) { //y=a*c^x+b
+    // Slow value down by a curve between (0-1)
+    // b = end
+    // c = curve
+    // x = val
+    double a = start-end;
+    return a*Math.pow(curve,val)+end;
+  }
+
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {}
