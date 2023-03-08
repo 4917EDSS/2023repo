@@ -125,13 +125,13 @@ public class MastSub extends SubsystemBase {
 
   public boolean isBlocked(double currentPosition, double targetPosition) {
     //TODO implement later
-    if((currentPosition > targetPosition && isMastAtBack())) {
+    if((currentPosition > targetPosition && isMastAtLimit())) {
       return true;
     }
     return false;
   }
 
-  public boolean isMastAtBack() {
+  public boolean isMastAtLimit() {
     return m_backMast.get();
   }
 
@@ -211,7 +211,7 @@ public class MastSub extends SubsystemBase {
 
   /** Run the mechanism state machine */
   private void updateStateMachine() {
-    if(isMastAtBack()) {
+    if(isMastAtLimit()) {
       zeroEncoder();
     }
 
@@ -301,7 +301,7 @@ public class MastSub extends SubsystemBase {
     SmartDashboard.putNumber("Mast kP", p);
     SmartDashboard.putNumber("Mast kI", i);
     SmartDashboard.putNumber("Mast kD", d);
-    SmartDashboard.putBoolean("Mast back", isMastAtBack());
+    SmartDashboard.putBoolean("Mast back", isMastAtLimit());
 
     m_pid.setP(p);
     m_pid.setI(i);

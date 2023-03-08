@@ -32,29 +32,35 @@ public class SetLimitSwitchesCmd extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(!m_mastSub.isMastAtBack()) {
+    if(!m_mastSub.isMastAtLimit()) {
       m_mastSub.move(-0.3);
     } else {
       m_mastSub.move(0);
     }
-    //TODO add arm and intake
+
+    if(!m_intakeSub.isIntakeAtLimit()) {
+      m_intakeSub.intakeRotate(-0.2);
+    } else {
+      m_intakeSub.intakeRotate(0);
+    }
+    //TODO add arm 
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     m_mastSub.zeroEncoder();
-    // m_armSub.zeroEncoder();
-    // m_intakeSub.zeroEncoderRotate();
+    // m_armSub.zeroEncoder(); // TODO add with arm
+    m_intakeSub.zeroEncoderRotate();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(m_mastSub.isMastAtBack()) {
+    if(m_mastSub.isMastAtLimit() && m_intakeSub.isIntakeAtLimit()) {
       return true;
     }
     return false;
   }
-  //TODO add arm and intake
+  //TODO add arm 
 }
