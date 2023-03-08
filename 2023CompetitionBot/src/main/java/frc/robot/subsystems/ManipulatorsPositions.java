@@ -6,30 +6,24 @@ package frc.robot.subsystems;
 
 /** Add your docs here. */
 public enum ManipulatorsPositions {
-  START(0, 0, 0),
-  HOME(MastSub.kVertical,ArmSub.kVertical,IntakeSub.kWristThrough),
+  START(0, 0, 0), HOME(MastSub.kVertical, ArmSub.kVertical, IntakeSub.kWristThrough),
   // We are setting the values to zero, so that people use the cube or cone positions.
-  HIGH(MastSub.kVertical,ArmSub.kVertical,IntakeSub.kWristThrough), 
-  MEDIUM(MastSub.kVertical,ArmSub.kVertical,IntakeSub.kWristThrough), 
-  LOW(MastSub.kVertical,ArmSub.kVertical,IntakeSub.kWristThrough), 
-  GROUND(MastSub.kVertical,ArmSub.kVertical,IntakeSub.kWristThrough), 
-  SINGLE_STATION(MastSub.kVertical,ArmSub.kVertical,IntakeSub.kWristThrough), 
-  DOUBLE_STATION(MastSub.kVertical,ArmSub.kVertical,IntakeSub.kWristThrough),
+  HIGH(MastSub.kVertical, ArmSub.kVertical, IntakeSub.kWristThrough), MEDIUM(MastSub.kVertical, ArmSub.kVertical,
+      IntakeSub.kWristThrough), LOW(MastSub.kVertical, ArmSub.kVertical, IntakeSub.kWristThrough), GROUND(
+          MastSub.kVertical, ArmSub.kVertical, IntakeSub.kWristThrough), SINGLE_STATION(MastSub.kVertical,
+              ArmSub.kVertical,
+              IntakeSub.kWristThrough), DOUBLE_STATION(MastSub.kVertical, ArmSub.kVertical, IntakeSub.kWristThrough),
 
   // Cone Positions
-  HIGH_CONE(197, 248000, 0), 
-  MEDIUM_CONE(78, 203000, 0), // Needs to br found
+  HIGH_CONE(197, 248000, 0), MEDIUM_CONE(78, 203000, 0), // Needs to br found
   LOW_CONE(217, 126000, 0), // Needs to br found
-  GROUND_CONE(256, 100000, 0), 
-  SINGLE_STATION_CONE(250, 0, 0), // Needs to br found
+  GROUND_CONE(256, 100000, 0), SINGLE_STATION_CONE(250, 0, 0), // Needs to br found
   DOUBLE_STATION_CONE(2, -220000, 0),
 
   // Cube Positions
-  HIGH_CUBE(157, 238000, 0), 
-  MEDIUM_CUBE(78, 158000, 0), // Needs to br found
+  HIGH_CUBE(157, 238000, 0), MEDIUM_CUBE(78, 158000, 0), // Needs to br found
   LOW_CUBE(217, 126000, 0), // Needs to br found
-  GROUND_CUBE(271, 100000, 0), 
-  SINGLE_STATION_CUBE(250, 0, 0), // Needs to br found
+  GROUND_CUBE(271, 100000, 0), SINGLE_STATION_CUBE(250, 0, 0), // Needs to br found
   DOUBLE_STATION_CUBE(2, -163000, 0);
 
 
