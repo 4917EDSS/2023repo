@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.StateOfRobot;
 
 public class IntakeSub extends SubsystemBase {
   private static final double kPositionMin = 0; // In encoder ticks
@@ -114,7 +115,13 @@ public class IntakeSub extends SubsystemBase {
   }
 
   public boolean isIntakeLoaded() {
-    return m_coneSensor.get();
+    if((StateOfRobot.isConeMode() == true) && (m_coneSensor.get() == true)) {
+      return true;
+    }
+    if((StateOfRobot.isCubeMode() == true) && (m_cubeSensor.get() == true)) {
+      return true;
+    }
+    return false;
   }
 
   public boolean isIntakeAtLimit() {
@@ -271,6 +278,7 @@ public class IntakeSub extends SubsystemBase {
     SmartDashboard.putBoolean("Cone Sensor", m_coneSensor.get());
     SmartDashboard.putBoolean("Cube Sensor", m_cubeSensor.get());
     SmartDashboard.putBoolean("Intake Limit", isIntakeAtLimit());
+    SmartDashboard.putBoolean("Intake Loaded", isIntakeLoaded());
 
     m_pid.setP(p);
     m_pid.setI(i);
