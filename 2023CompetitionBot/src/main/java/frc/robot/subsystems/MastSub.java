@@ -41,7 +41,6 @@ public class MastSub extends SubsystemBase {
       new CANSparkMax((Constants.CanIds.kMastMotor), CANSparkMaxLowLevel.MotorType.kBrushless);
 
   private final DigitalInput m_backMast = new DigitalInput(Constants.DioIds.kMastBack);
-  private final DigitalInput m_frontMast = new DigitalInput(Constants.DioIds.kMastFront);
 
   private double m_p = 0.1;
   private double m_i = 0.0;
@@ -129,18 +128,11 @@ public class MastSub extends SubsystemBase {
     if((currentPosition > targetPosition && isMastAtBack())) {
       return true;
     }
-    if((currentPosition < targetPosition && isMastAtFront())) {
-      return true;
-    }
     return false;
   }
 
   public boolean isMastAtBack() {
     return m_backMast.get();
-  }
-
-  public boolean isMastAtFront() {
-    return !m_frontMast.get();
   }
 
   /**
@@ -222,6 +214,7 @@ public class MastSub extends SubsystemBase {
     if(isMastAtBack()) {
       zeroEncoder();
     }
+
     double newPower = 0.0;
     double currentPosition = getPosition();
 
@@ -309,7 +302,6 @@ public class MastSub extends SubsystemBase {
     SmartDashboard.putNumber("Mast kI", i);
     SmartDashboard.putNumber("Mast kD", d);
     SmartDashboard.putBoolean("Mast back", isMastAtBack());
-    SmartDashboard.putBoolean("Mast front", isMastAtFront());
 
     m_pid.setP(p);
     m_pid.setI(i);

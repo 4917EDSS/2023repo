@@ -43,8 +43,6 @@ public class ArmSub extends SubsystemBase {
   // HARDWARE AND CONTROL OBJECTS /////////////////////////////////////////////
   private final TalonFX m_motor = new TalonFX(Constants.CanIds.kArmMotor);
 
-  private final Solenoid m_lock = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.SolenoidIds.kArmLock);
-
   private double m_p = 0.0001;
   private double m_i = 0.0;
   private double m_d = 0.0;
@@ -148,10 +146,6 @@ public class ArmSub extends SubsystemBase {
       }
     }
     return false;
-  }
-
-  public void lockArm(boolean lock) {
-    m_lock.set(lock);
   }
 
   /**

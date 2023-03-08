@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ArmMoveWithJoystickCmd;
 import frc.robot.commands.AutoDoNothingCmd;
-import frc.robot.commands.AutoDriveFwdThenBack;
 import frc.robot.commands.DriveAlignTapeCmd;
 import frc.robot.commands.DriveSetGearCmd;
 import frc.robot.commands.DriveStraightCmd;
@@ -25,6 +24,7 @@ import frc.robot.commands.IntakeSetPositionCmd;
 import frc.robot.commands.InterruptAllCommandsCmd;
 import frc.robot.commands.MastMoveWithJoystickCmd;
 import frc.robot.commands.SetGamePieceTypeCmd;
+import frc.robot.commands.SetLimitSwitchesCmd;
 import frc.robot.commands.ExpelGamePieceCmd;
 import frc.robot.subsystems.ArmSub;
 import frc.robot.subsystems.DrivetrainSub;
@@ -137,11 +137,7 @@ public class RobotContainer {
     // R2 is maped to the intake out
     m_operatorController.R2().onTrue(new InstantCommand(() -> m_intakeSub.spinWheelsIntake(-0.3), m_intakeSub));
 
-    m_operatorController.share()
-        .onTrue(new InstantCommand(() -> m_ledSub.setZoneColour(LedSub.LedZones.ZONE0, LedColour.PURPLE)));
-
-    m_operatorController.options()
-        .onTrue(new InstantCommand(() -> m_ledSub.setZoneColour(LedSub.LedZones.ZONE0, LedColour.GREEN)));
+    m_operatorController.options().onTrue(new SetLimitSwitchesCmd(m_mastSub, m_armSub, m_intakeSub));
 
     m_operatorController.PS().onTrue(new InstantCommand(() -> StateOfRobot.m_operatorJoystickforIntake = false));
 
@@ -157,8 +153,7 @@ public class RobotContainer {
 
   void autoChooserSetup() {
     // TODO:  Do we need these first two options?  Looks like a bad merge because there was also a second setDefaultOption
-    m_Chooser.addOption("drive back 2m", new DriveStraightCmd(m_drivetrainSub, -2));
-    m_Chooser.addOption("drive straight then back", new AutoDriveFwdThenBack(m_drivetrainSub, 2, 2));
+
     m_Chooser.setDefaultOption("1 do nothing", new AutoDoNothingCmd());
     m_Chooser.addOption("2 drive straight", new DriveStraightCmd(m_drivetrainSub, 3));
     m_Chooser.addOption("3 expel game piece", new ExpelGamePieceCmd(m_intakeSub));
