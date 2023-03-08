@@ -15,8 +15,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class IntakeSub extends SubsystemBase {
-  private static final double kPositionMin = -36.0; // In encoder ticks
-  private static final double kPositionMax = 36.0; // In encoder ticks (straight up is 30)
+  private static final double kPositionMin = 0; // In encoder ticks
+  private static final double kPositionMax = 47.0; // In encoder ticks (straight up is 30)
   private static final double kManualModePowerDeadband = 0.05; // If manual power is less than this, assume power is 0
   private static final double kIntakeMinSafeZone = -8;
   private static final double kIntakeMaxSafeZone = 2;
@@ -37,6 +37,7 @@ public class IntakeSub extends SubsystemBase {
 
   private final DigitalInput m_cubeSensor = new DigitalInput(Constants.DioIds.kCubeSensorPort);
   private final DigitalInput m_coneSensor = new DigitalInput(Constants.DioIds.kConeSensorPort);
+  private final DigitalInput m_intakeLimitSwitch = new DigitalInput(Constants.DioIds.kIntakeLimitSwitch);
 
   private double m_p = 0.1;
   private double m_i = 0.0;
@@ -59,6 +60,7 @@ public class IntakeSub extends SubsystemBase {
     m_intakeMotor.setIdleMode(IdleMode.kBrake);
     m_rotateMotor.setIdleMode(IdleMode.kBrake);
   }
+
   public void initTest() {
     m_intakeMotor.setIdleMode(IdleMode.kCoast);
     m_rotateMotor.setIdleMode(IdleMode.kCoast);
@@ -88,9 +90,9 @@ public class IntakeSub extends SubsystemBase {
   public boolean isSafeZone() {
     if((getPositionRotate() < kIntakeMaxSafeZone) && (getPositionRotate() > kIntakeMinSafeZone)) {
       return true;
-  } 
-  return false;
-}
+    }
+    return false;
+  }
 
   // This is for the rotate motors
   public void intakeRotate(double power) {
@@ -113,6 +115,10 @@ public class IntakeSub extends SubsystemBase {
 
   public boolean isIntakeLoaded() {
     return m_coneSensor.get();
+  }
+
+  public boolean isIntakeAtLimit() {
+    return !m_intakeLimitSwitch.get();
   }
 
   /**
@@ -192,6 +198,9 @@ public class IntakeSub extends SubsystemBase {
   private void updateStateMachine() {
     double newPower = 0.0;
     double currentPosition = getPositionRotate();
+    if(isIntakeAtLimit()) {
+      zeroEncoderRotate();
+    }
 
     // Check if there are new control parameters to set
     if(m_newControlParameters) {
@@ -261,6 +270,7 @@ public class IntakeSub extends SubsystemBase {
 
     SmartDashboard.putBoolean("Cone Sensor", m_coneSensor.get());
     SmartDashboard.putBoolean("Cube Sensor", m_cubeSensor.get());
+    SmartDashboard.putBoolean("Intake Limit", isIntakeAtLimit());
 
     m_pid.setP(p);
     m_pid.setI(i);
