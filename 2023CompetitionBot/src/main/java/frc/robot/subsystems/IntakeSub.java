@@ -271,6 +271,7 @@ public class IntakeSub extends SubsystemBase {
 
     SmartDashboard.putBoolean("Cone Sensor", m_coneSensor.get());
     SmartDashboard.putBoolean("Cube Sensor", m_cubeSensor.get());
+    SmartDashboard.putBoolean("Intake Loaded", isIntakeLoaded());
 
     m_pid.setP(p);
     m_pid.setI(i);
