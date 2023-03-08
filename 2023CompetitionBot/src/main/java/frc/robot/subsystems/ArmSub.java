@@ -23,8 +23,8 @@ public class ArmSub extends SubsystemBase {
   private static final double kManualModePowerDeadband = 0.05; // If manual power is less than this, assume power is 0
   private static final double kMaxPosDifference = 1000; // Maximum difference between the target and current pos for the state to finish   <---- Must be tuned
   private static final double kMaxSpeedStop = 1000; // Max amount of power for the state to finish <--- Must be tuned
-  private static final double kMaxDangerZone = 60000;
-  private static final double kMinDangerZone = -69000;
+  private static final double kMaxDangerZone = 9000;//60000;
+  private static final double kMinDangerZone = -9000;//-69000;
   public static final double kVertical = 25000.0;
   public static final double kFourtyFive = 133000.0; // Measured - not necessarily useful, can delete
   public static final double kNegFourtyFive = -69000.0; // Measured - not necessarily useful, can delete  
@@ -115,11 +115,39 @@ public class ArmSub extends SubsystemBase {
     return m_motor.getSelectedSensorVelocity();
   }
 
+  private double slowCurve(double val, double curve, double start, double end) { //y=a*c^x+b
+    // Slow value down by a curve between (0-1)
+    // b = end
+    // c = curve
+    // x = val
+    double a = start-end;
+    return a*Math.pow(curve,val)+end;
+  }
+
   private boolean isDangerZone() {
     if((getPosition() >= kMinDangerZone) && (getPosition() <= kMaxDangerZone)) {
       return true;
     }
     return false;
+  }
+
+  public boolean aboveDangerZone(double currentPos) {
+    return (currentPos > kMaxDangerZone);
+  }
+  public boolean belowDangerZone(double currentPos) {
+    return (currentPos < kMinDangerZone);
+  }
+
+  public double distToDanger(double currentPos) {
+    double dist = 0;
+    if(aboveDangerZone(currentPos)) {
+      dist = currentPos-kMaxDangerZone;
+    }
+    else if(belowDangerZone(currentPos)) {
+      dist = kMinDangerZone-currentPos;
+    }
+
+    return dist;
   }
 
   public boolean isBlocked(double currentPosition, double targetPosition) {
