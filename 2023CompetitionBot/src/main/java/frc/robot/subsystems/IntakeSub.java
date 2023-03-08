@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.StateOfRobot;
 
 public class IntakeSub extends SubsystemBase {
   private static final double kPositionMin = -36.0; // In encoder ticks
@@ -59,6 +60,7 @@ public class IntakeSub extends SubsystemBase {
     m_intakeMotor.setIdleMode(IdleMode.kBrake);
     m_rotateMotor.setIdleMode(IdleMode.kBrake);
   }
+
   public void initTest() {
     m_intakeMotor.setIdleMode(IdleMode.kCoast);
     m_rotateMotor.setIdleMode(IdleMode.kCoast);
@@ -88,9 +90,9 @@ public class IntakeSub extends SubsystemBase {
   public boolean isSafeZone() {
     if((getPositionRotate() < kIntakeMaxSafeZone) && (getPositionRotate() > kIntakeMinSafeZone)) {
       return true;
-  } 
-  return false;
-}
+    }
+    return false;
+  }
 
   // This is for the rotate motors
   public void intakeRotate(double power) {
@@ -112,8 +114,16 @@ public class IntakeSub extends SubsystemBase {
   }
 
   public boolean isIntakeLoaded() {
-    return m_coneSensor.get();
+    if((StateOfRobot.isConeMode() == true) && (m_coneSensor.get() == true)) {
+      return true;
+    }
+    if((StateOfRobot.isCubeMode() == true) && (m_cubeSensor.get() == true)) {
+      return true;
+    }
+    return false;
   }
+
+
 
   /**
    * Move the mechanism to the desired position using the state machine - In mode DISABLED, the mechanism is disabled -
