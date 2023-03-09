@@ -235,10 +235,8 @@ public class IntakeSub extends SubsystemBase {
         break;
 
       case HOLDING:
-        // If the mechanism is at it's target location, apply power to hold it there if
-        // necessary
-        // TODO: Check if we can use the calcMovePower function since the PID could take
-        // care of both cases
+        // If the mechanism is at it's target location, apply power to hold it there if necessary
+        // TODO: Check if we can use the calcMovePower function since the PID could take care of both cases
         newPower = calcHoldPower(currentPosition);
         break;
 

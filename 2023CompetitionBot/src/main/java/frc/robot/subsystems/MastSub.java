@@ -124,7 +124,6 @@ public class MastSub extends SubsystemBase {
   }
 
   public boolean isBlocked(double currentPosition, double targetPosition) {
-    //TODO implement later
     if((currentPosition > targetPosition && isMastAtLimit())) {
       return true;
     }
@@ -244,17 +243,11 @@ public class MastSub extends SubsystemBase {
         } else {
           newPower = calcMovePower(currentPosition, m_currentControl.targetPosition, m_currentControl.targetPower);
         }
-
-        // If not, check if it's blocked
-        // If not, the set then calculate the move power
-        // TODO: Add missing logic (see 2019 Elevator state machine)
         break;
 
       case HOLDING:
-        // If the mechanism is at it's target location, apply power to hold it there if
-        // necessary
-        // TODO: Check if we can use the calcMovePower function since the PID could take
-        // care of both cases
+        // If the mechanism is at it's target location, apply power to hold it there if necessary
+        // TODO: Check if we can use the calcMovePower function since the PID could take care of both cases
         newPower = calcHoldPower(currentPosition, m_currentControl.targetPosition);
         break;
 

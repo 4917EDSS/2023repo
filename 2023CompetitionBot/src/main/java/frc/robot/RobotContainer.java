@@ -104,8 +104,6 @@ public class RobotContainer {
         new InstantCommand(() -> m_drivetrainSub.setIsAutoShift(true), /* Call on command start */ m_drivetrainSub));
 
     // Operator controller bindings
-
-    /* */
     m_operatorController.povUp()
         .onTrue(new IntakeSetPositionCmd(ManipulatorsPositions.DOUBLE_STATION, m_armSub, m_mastSub, m_intakeSub));
 
@@ -150,10 +148,7 @@ public class RobotContainer {
         .onTrue(new InterruptAllCommandsCmd(m_armSub, m_mastSub, m_intakeSub, m_drivetrainSub));
   }
 
-
   void autoChooserSetup() {
-    // TODO:  Do we need these first two options?  Looks like a bad merge because there was also a second setDefaultOption
-
     m_Chooser.setDefaultOption("1 do nothing", new AutoDoNothingCmd());
     m_Chooser.addOption("2 drive straight", new DriveStraightCmd(m_drivetrainSub, 3));
     m_Chooser.addOption("3 expel game piece", new ExpelGamePieceCmd(m_intakeSub));

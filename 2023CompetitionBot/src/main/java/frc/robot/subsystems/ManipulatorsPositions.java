@@ -6,29 +6,38 @@ package frc.robot.subsystems;
 
 /** Add your docs here. */
 public enum ManipulatorsPositions {
-  START(0, 0, 0), HOME(MastSub.kVertical, ArmSub.kVertical, IntakeSub.kWristThrough),
-  // We are setting the values to zero, so that people use the cube or cone positions.
-  HIGH(MastSub.kVertical, ArmSub.kVertical, IntakeSub.kWristThrough), MEDIUM(MastSub.kVertical, ArmSub.kVertical,
-      IntakeSub.kWristThrough), LOW(MastSub.kVertical, ArmSub.kVertical, IntakeSub.kWristThrough), GROUND(
-          MastSub.kVertical, ArmSub.kVertical, IntakeSub.kWristThrough), SINGLE_STATION(MastSub.kVertical,
-              ArmSub.kVertical,
-              IntakeSub.kWristThrough), DOUBLE_STATION(MastSub.kVertical, ArmSub.kVertical, IntakeSub.kWristThrough),
+  // Mast, Arm, Intake wrist encoder values for all positions
+  START(0, 0, 0), // Position where robot started or hit the reset-encoder limit switches
+  HOME(MastSub.kVertical, ArmSub.kVertical, IntakeSub.kWristThrough), // Carrying position (inside frame)
 
-  // Cone Positions
-  HIGH_CONE(197, 248000, 0), MEDIUM_CONE(78, 203000, 0), // Needs to br found
-  LOW_CONE(217, 126000, 0), // Needs to br found
-  GROUND_CONE(256, 100000, 0), SINGLE_STATION_CONE(250, 0, 0), // Needs to br found
-  DOUBLE_STATION_CONE(61.834, -180802, 41.166),
+  // These enum entries should only be used to convert to a cube/cone value
+  HIGH(MastSub.kVertical, ArmSub.kVertical, IntakeSub.kWristThrough), // Gets replaced by cube/cone values
+  MEDIUM(MastSub.kVertical, ArmSub.kVertical, IntakeSub.kWristThrough), // Gets replaced by cube/cone values
+  LOW(MastSub.kVertical, ArmSub.kVertical, IntakeSub.kWristThrough), // Gets replaced by cube/cone values
+  GROUND(MastSub.kVertical, ArmSub.kVertical, IntakeSub.kWristThrough), // Gets replaced by cube/cone values
+  SINGLE_STATION(MastSub.kVertical, ArmSub.kVertical, IntakeSub.kWristThrough), // Gets replaced by cube/cone values
+  DOUBLE_STATION(MastSub.kVertical, ArmSub.kVertical, IntakeSub.kWristThrough), // Gets replaced by cube/cone values
 
   // Cube Positions
-  HIGH_CUBE(157, 238000, 0), MEDIUM_CUBE(78, 158000, 0), // Needs to br found
-  LOW_CUBE(217, 126000, 0), // Needs to br found
-  GROUND_CUBE(271, 100000, 0), SINGLE_STATION_CUBE(250, 0, 0), // Needs to br found
-  DOUBLE_STATION_CUBE(1.9286, -18080, 22.143);
+  HIGH_CUBE(157, 238000, 0), // Cube high drop-off position 
+  MEDIUM_CUBE(78, 158000, 0), // Cube mid drop-off position
+  LOW_CUBE(217, 126000, 0), // Cube low drop-off position
+  GROUND_CUBE(271, 100000, 0), // Cube ground pick-up position
+  SINGLE_STATION_CUBE(250, 0, 0), // Cube single (side) station pick-up position
+  DOUBLE_STATION_CUBE(1.9286, -18080, 22.143), // Cube double station pick-up position
+
+  // Cone Positions
+  HIGH_CONE(197, 248000, 0), // Cone high drop-off position 
+  MEDIUM_CONE(78, 203000, 0), // Cone mid drop-off position 
+  LOW_CONE(217, 126000, 0), // Cone low drop-off position 
+  GROUND_CONE(256, 100000, 0), // Cone ground pick-up position
+  SINGLE_STATION_CONE(250, 0, 0), // Cone single (side) station pick-up position
+  DOUBLE_STATION_CONE(61.834, -180802, 41.166); // Cone double station pick-up position
 
 
-  public final double armEncoder;
+  // This is where the encoder values are stored for each enum entry
   public final double mastEncoder;
+  public final double armEncoder;
   public final double wristEncoder;
 
   ManipulatorsPositions(double mastEncoder, double armEncoder, double wristEncoder) {
@@ -37,8 +46,8 @@ public enum ManipulatorsPositions {
     this.wristEncoder = wristEncoder;
   }
 
+  /** Modifies position based on which mode is enabled (Cone or Cube) */
   public static ManipulatorsPositions convert(ManipulatorsPositions unConverted, boolean coneMode) {
-    // Converts positions depending on which mode is enabled (Cone, Cube)
     switch(unConverted) {
       case HIGH:
         if(coneMode) {

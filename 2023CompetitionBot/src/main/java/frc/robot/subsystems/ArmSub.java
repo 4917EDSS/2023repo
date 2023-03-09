@@ -140,6 +140,7 @@ public class ArmSub extends SubsystemBase {
   }
 
   public boolean isBlocked(double currentPosition, double targetPosition) {
+    // TODO: Remove if no longer needed
     boolean moving_up = (targetPosition > currentPosition);
     boolean moving_down = (targetPosition < currentPosition);
     boolean near_top_of_danger_zone =
@@ -150,6 +151,7 @@ public class ArmSub extends SubsystemBase {
     if(!isDangerZone()) {
       return false;
     } else {
+      // TODO: Remove commented code if no longer needed
       // if(moving_up && near_top_of_danger_zone) {
       //   System.out.println("TOP");
       //   return false;
@@ -246,7 +248,6 @@ public class ArmSub extends SubsystemBase {
 
     // Check if there are new control parameters to set
     if(m_newControlParameters) {
-      //TODO: Unlock motor
       m_currentControl.state = m_newControl.state;
       m_currentControl.mode = m_newControl.mode;
       m_currentControl.targetPower = m_newControl.targetPower;
@@ -267,29 +268,21 @@ public class ArmSub extends SubsystemBase {
           m_blockedPosition = currentPosition;
           m_currentControl.state = State.INTERRUPTED;
         } else if(isFinished()) {
-          //TODO: Lock motor
           m_currentControl.state = State.HOLDING;
         } else {
           newPower = calcMovePower(currentPosition, m_currentControl.targetPosition, m_currentControl.targetPower);
         }
-
-        // If not, check if it's blocked
-        // If not, the set then calculate the move power
-        // TODO: Add missing logic (see 2019 Elevator state machine)
         break;
 
       case HOLDING:
-        // If the mechanism is at it's target location, apply power to hold it there if
-        // necessary
-        // TODO: Check if we can use the calcMovePower function since the PID could take
-        // care of both cases
+        // If the mechanism is at it's target location, apply power to hold it there if necessary
+        // TODO: Check if we can use the calcMovePower function since the PID could take care of both cases
         newPower = calcHoldPower(currentPosition, m_currentControl.targetPosition);
         break;
 
       case INTERRUPTED:
         // If the mechanism is no longer blocked, transition to MOVING
         if(isBlocked(currentPosition, m_currentControl.targetPosition) == false) {
-          //TODO: Unlock motor
           m_currentControl.state = State.MOVING;
           // Otherwise, hold this position
         } else {
