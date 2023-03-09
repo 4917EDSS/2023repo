@@ -41,7 +41,8 @@ public class IntakeSetPositionCmd extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    ManipulatorsPositions converted = ManipulatorsPositions.convert(m_manipulatorsPositions, RobotContainer.isConeMode());
+    ManipulatorsPositions converted =
+        ManipulatorsPositions.convert(m_manipulatorsPositions, RobotContainer.isConeMode());
 
 
     m_armSub.setPosition(Mode.AUTO, kMaxArmPower, converted.armEncoder);

@@ -12,7 +12,7 @@ public class DriveStraightCmd extends CommandBase {
   private final DrivetrainSub m_drivetrainSub;
   private double m_distanceRemaining = 0;
   private double kRotateAdjustment = 0.045;
-  private double kMaxPower = 0.9; 
+  private double kMaxPower = 0.9;
   private double kMinPower = 0.2;
   private double kTolerance = 0.03;
   private double m_targetDriveDistance;

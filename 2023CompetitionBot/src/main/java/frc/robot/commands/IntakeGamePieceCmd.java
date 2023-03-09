@@ -39,6 +39,6 @@ public class IntakeGamePieceCmd extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-   return m_intakeSub.isIntakeLoaded();
+    return m_intakeSub.isIntakeLoaded();
   }
 }

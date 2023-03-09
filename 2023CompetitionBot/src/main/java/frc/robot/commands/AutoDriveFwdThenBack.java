@@ -7,24 +7,24 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.DrivetrainSub;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
+// NOTE: Consider using this command inline, rather than writing a subclass. For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AutoDriveFwdThenBack extends SequentialCommandGroup {
   private final DrivetrainSub m_drivetrainSub;
   private double m_targetDriveDistanceFwd;
   private double m_targetDriveDistanceBack;
+
   /** Creates a new AutoDriveFwdThenBack. */
 
-  public AutoDriveFwdThenBack(DrivetrainSub drivetrainSub, double targetDriveDistanceFwd, double targetDriveDistanceBack) {
+  public AutoDriveFwdThenBack(DrivetrainSub drivetrainSub, double targetDriveDistanceFwd,
+      double targetDriveDistanceBack) {
     m_drivetrainSub = drivetrainSub;
     m_targetDriveDistanceFwd = targetDriveDistanceFwd;
     m_targetDriveDistanceBack = -(targetDriveDistanceBack);
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(
-      new DriveStraightCmd(m_drivetrainSub, targetDriveDistanceFwd),
-      new DriveStraightCmd(m_drivetrainSub, targetDriveDistanceBack)
-    );
+    addCommands(new DriveStraightCmd(m_drivetrainSub, targetDriveDistanceFwd),
+        new DriveStraightCmd(m_drivetrainSub, targetDriveDistanceBack));
   }
 }

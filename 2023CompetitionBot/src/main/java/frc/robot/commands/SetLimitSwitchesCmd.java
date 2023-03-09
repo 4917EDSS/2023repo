@@ -5,10 +5,9 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.MastSub;
-import frc.robot.subsystems.SubControl.Mode;
 import frc.robot.subsystems.ArmSub;
 import frc.robot.subsystems.IntakeSub;
+import frc.robot.subsystems.MastSub;
 
 public class SetLimitSwitchesCmd extends CommandBase {
   private final MastSub m_mastSub;

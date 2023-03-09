@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DrivetrainSub;
 import frc.robot.subsystems.VisionSub;
 
-//Literally just a copy of DriveAlignToVision command but with 3d coords
+// Literally just a copy of DriveAlignToVision command but with 3d coords
 
 public class StraightenToApriltagCmd extends CommandBase {
   private final DrivetrainSub m_drivetrainSub;
@@ -34,7 +34,7 @@ public class StraightenToApriltagCmd extends CommandBase {
   @Override
   public void initialize() {
     m_timeStart = RobotController.getFPGATime();
-    
+
 
   }
 
@@ -55,7 +55,7 @@ public class StraightenToApriltagCmd extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    
+
     if(m_visionSub.getTargetArea() == 0.0) {
       return true;
     }

@@ -12,19 +12,18 @@ import frc.robot.subsystems.IntakeSub;
 import frc.robot.subsystems.MastSub;
 import frc.robot.subsystems.ManipulatorsPositions;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
+// NOTE: Consider using this command inline, rather than writing a subclass. For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AutoPickUpCmd extends SequentialCommandGroup {
   /** Creates a new AutoPickUpCmd. */
-  public AutoPickUpCmd(ManipulatorsPositions positions, ArmSub armSub, MastSub mastSub, IntakeSub intakeSub, DrivetrainSub drivetrainSub, double targetDriveDistance, double power) {
+  public AutoPickUpCmd(ManipulatorsPositions positions, ArmSub armSub, MastSub mastSub, IntakeSub intakeSub,
+      DrivetrainSub drivetrainSub, double targetDriveDistance, double power) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    
-    /*\ Sets the intake position, drives in, then grabs \*/
-    addCommands(
-    new IntakeSetPositionCmd(positions, armSub, mastSub, intakeSub), 
-    new DriveStraightCmd(drivetrainSub, targetDriveDistance), 
-    new IntakeGamePieceCmd(power, intakeSub));
+
+    /* \ Sets the intake position, drives in, then grabs \ */
+    addCommands(new IntakeSetPositionCmd(positions, armSub, mastSub, intakeSub),
+        new DriveStraightCmd(drivetrainSub, targetDriveDistance), new IntakeGamePieceCmd(power, intakeSub));
   }
 }

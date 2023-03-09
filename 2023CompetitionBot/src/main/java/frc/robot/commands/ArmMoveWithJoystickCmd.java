@@ -15,7 +15,6 @@ public class ArmMoveWithJoystickCmd extends CommandBase {
   private final CommandPS4Controller m_controller;
   private final ArmSub m_armSub;
 
-  private static double maxDangerDist = 10000;
   double powerSafety = 1.0;
 
   /** Creates a new ArmMoveWithJoystickCmd. */
@@ -40,14 +39,11 @@ public class ArmMoveWithJoystickCmd extends CommandBase {
     return power;
   }
 
-  private double slowCurve(double val, double curve, double start, double end) { //y=a*c^x+b
-    // Slow value down by a curve between (0-1)
-    // b = end
-    // c = curve
-    // x = val
-    double a = start-end;
-    return a*Math.pow(curve,val)+end;
-  }
+  /*
+   * Didn't end up needing this private double slowCurve(double val, double curve, double start, double end) {
+   * //y=a*c^x+b // Slow value down by a curve between (0-1) // b = end // c = curve // x = val double a = start - end;
+   * return a * Math.pow(curve, val) + end; }
+   */
 
   // Called when the command is initially scheduled.
   @Override
@@ -56,21 +52,23 @@ public class ArmMoveWithJoystickCmd extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    double distDanger = m_armSub.distToDanger(m_armSub.getPosition());
     powerSafety = 1.0;
     // Uncomment if needed
-    /* 
-    if(distDanger < maxDangerDist && (m_armSub.aboveDangerZone(distDanger)|| m_armSub.belowDangerZone(distDanger))) {
-      double powerChange = slowCurve(distDanger,0.9999,0.0,maxDangerDist);
-
-      powerSafety = powerChange/maxDangerDist;
-
-    }*/
-    if(!StateOfRobot.m_operatorJoystickforIntake){
-      m_armSub.setPosition(SubControl.Mode.MANUAL, MathUtil.clamp(adjustSensitivity(m_controller.getRightY(),3),-powerSafety,powerSafety),0.0); // Make sure arm isn't too sensitive
+    /*
+     * double distDanger = m_armSub.distToDanger(m_armSub.getPosition());
+     * 
+     * if(distDanger < maxDangerDist && (m_armSub.aboveDangerZone(distDanger)|| m_armSub.belowDangerZone(distDanger))) {
+     * double powerChange = slowCurve(distDanger,0.9999,0.0,maxDangerDist);
+     * 
+     * powerSafety = powerChange/maxDangerDist;
+     * 
+     * }
+     */
+    if(!StateOfRobot.m_operatorJoystickforIntake) {
+      m_armSub.setPosition(SubControl.Mode.MANUAL,
+          MathUtil.clamp(adjustSensitivity(m_controller.getRightY(), 3), -powerSafety, powerSafety), 0.0); // Make sure arm isn't too sensitive
+    }
   }
-}
 
   // Called once the command ends or is interrupted.
   @Override

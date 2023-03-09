@@ -9,8 +9,6 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -113,15 +111,6 @@ public class ArmSub extends SubsystemBase {
   /** Returns the velocity of the mechanism in ticks per second */
   public double getVelocity() {
     return m_motor.getSelectedSensorVelocity();
-  }
-
-  private double slowCurve(double val, double curve, double start, double end) { //y=a*c^x+b
-    // Slow value down by a curve between (0-1)
-    // b = end
-    // c = curve
-    // x = val
-    double a = start - end;
-    return a * Math.pow(curve, val) + end;
   }
 
   private boolean isDangerZone() {
