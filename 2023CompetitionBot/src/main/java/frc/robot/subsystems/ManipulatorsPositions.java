@@ -18,13 +18,13 @@ public enum ManipulatorsPositions {
   HIGH_CONE(197, 248000, 0), MEDIUM_CONE(78, 203000, 0), // Needs to br found
   LOW_CONE(217, 126000, 0), // Needs to br found
   GROUND_CONE(256, 100000, 0), SINGLE_STATION_CONE(250, 0, 0), // Needs to br found
-  DOUBLE_STATION_CONE(2, -220000, 0),
+  DOUBLE_STATION_CONE(61.834, -180802, 41.166),
 
   // Cube Positions
   HIGH_CUBE(157, 238000, 0), MEDIUM_CUBE(78, 158000, 0), // Needs to br found
   LOW_CUBE(217, 126000, 0), // Needs to br found
   GROUND_CUBE(271, 100000, 0), SINGLE_STATION_CUBE(250, 0, 0), // Needs to br found
-  DOUBLE_STATION_CUBE(2, -163000, 0);
+  DOUBLE_STATION_CUBE(1.9286, -18080, 22.143);
 
 
   public final double armEncoder;

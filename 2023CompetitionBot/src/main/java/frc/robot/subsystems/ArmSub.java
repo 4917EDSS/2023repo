@@ -25,7 +25,7 @@ public class ArmSub extends SubsystemBase {
   private static final double kMaxSpeedStop = 1000; // Max amount of power for the state to finish <--- Must be tuned
   private static final double kMaxDangerZone = 9000;//60000;
   private static final double kMinDangerZone = -9000;//-69000;
-  public static final double kVertical = 25000.0;
+  public static final double kVertical = 7760;
   public static final double kFourtyFive = 133000.0; // Measured - not necessarily useful, can delete
   public static final double kNegFourtyFive = -69000.0; // Measured - not necessarily useful, can delete  
   public static final double kSafeSpaceInDangerZone = 10000;
@@ -120,8 +120,8 @@ public class ArmSub extends SubsystemBase {
     // b = end
     // c = curve
     // x = val
-    double a = start-end;
-    return a*Math.pow(curve,val)+end;
+    double a = start - end;
+    return a * Math.pow(curve, val) + end;
   }
 
   private boolean isDangerZone() {
@@ -134,6 +134,7 @@ public class ArmSub extends SubsystemBase {
   public boolean aboveDangerZone(double currentPos) {
     return (currentPos > kMaxDangerZone);
   }
+
   public boolean belowDangerZone(double currentPos) {
     return (currentPos < kMinDangerZone);
   }
@@ -141,10 +142,9 @@ public class ArmSub extends SubsystemBase {
   public double distToDanger(double currentPos) {
     double dist = 0;
     if(aboveDangerZone(currentPos)) {
-      dist = currentPos-kMaxDangerZone;
-    }
-    else if(belowDangerZone(currentPos)) {
-      dist = kMinDangerZone-currentPos;
+      dist = currentPos - kMaxDangerZone;
+    } else if(belowDangerZone(currentPos)) {
+      dist = kMinDangerZone - currentPos;
     }
 
     return dist;
@@ -159,21 +159,22 @@ public class ArmSub extends SubsystemBase {
         ((currentPosition < (kMinDangerZone + kSafeSpaceInDangerZone)) && (currentPosition > kMinDangerZone));
 
     if(!isDangerZone()) {
-      System.out.println("Danger");
       return false;
-    } else { //Does not work or needs to be tested properly
-      if(moving_up && near_top_of_danger_zone) {
-        System.out.println("TOP");
-        return false;
-      } else if(moving_down && near_bottom_of_danger_zone) {
-        System.out.println("Bottom");
-        return false;
-      }
-      if(!m_mastSub.isSafeZone() || !m_intakeSub.isSafeZone()) {
+    } else {
+      // if(moving_up && near_top_of_danger_zone) {
+      //   System.out.println("TOP");
+      //   return false;
+      // } else if(moving_down && near_bottom_of_danger_zone) {
+      //   System.out.println("Bottom");
+      //   return false;
+      //}
+      if(/* !m_mastSub.isSafeZone() || */ !m_intakeSub.isSafeZone()) {
+        System.out.println("Arm blocked");
         return true;
       }
     }
     return false;
+
   }
 
   /**

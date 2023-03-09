@@ -23,8 +23,8 @@ public class MastSub extends SubsystemBase {
   private static final double kMaxPosDifference = 0.1; // Maximum difference between the target and current pos for the state to finish  <---- Must be tuned
   private static final double kMaxPowerStop = 0.1; // max amount of power for the state to finish                                        <--- Must be tuned
   private static final double kMastMinSafeZone = 0;
-  private static final double kMastMaxSafeZone = 20;
-  public static final double kVertical = 118;
+  private static final double kMastMaxSafeZone = 150;
+  public static final double kVertical = 24.071;
   //TODO: Tune the two constants above 
 
   // STATE VARIABLES //////////////////////////////////////////////////////////

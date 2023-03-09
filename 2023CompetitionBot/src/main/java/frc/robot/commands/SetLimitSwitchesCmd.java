@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.MastSub;
+import frc.robot.subsystems.SubControl.Mode;
 import frc.robot.subsystems.ArmSub;
 import frc.robot.subsystems.IntakeSub;
 
@@ -33,13 +34,13 @@ public class SetLimitSwitchesCmd extends CommandBase {
   @Override
   public void execute() {
     if(!m_mastSub.isMastAtLimit()) {
-      m_mastSub.move(-0.3);
+      m_mastSub.move(-0.4);
     } else {
       m_mastSub.move(0);
     }
 
     if(!m_intakeSub.isIntakeAtLimit()) {
-      m_intakeSub.intakeRotate(-0.2);
+      m_intakeSub.intakeRotate(-0.3);
     } else {
       m_intakeSub.intakeRotate(0);
     }

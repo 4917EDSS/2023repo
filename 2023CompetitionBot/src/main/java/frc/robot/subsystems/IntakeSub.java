@@ -14,15 +14,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.StateOfRobot;
+import frc.robot.subsystems.SubControl.State;
 
 public class IntakeSub extends SubsystemBase {
   private static final double kPositionMin = 0; // In encoder ticks
   private static final double kPositionMax = 47.0; // In encoder ticks (straight up is 30)
   private static final double kManualModePowerDeadband = 0.05; // If manual power is less than this, assume power is 0
-  private static final double kIntakeMinSafeZone = -8;
-  private static final double kIntakeMaxSafeZone = 2;
+  private static final double kIntakeMinSafeZone = 0.0;
+  private static final double kIntakeMaxSafeZone = 18.0;
   public static final double kWristFlush = 27;
-  public static final double kWristThrough = -0.9;
+  public static final double kWristThrough = 12.595;
   public static final double kMaxPosDifference = 0.1;
 
 
@@ -30,6 +31,7 @@ public class IntakeSub extends SubsystemBase {
   private SubControl m_currentControl = new SubControl(); // Current states of mechanism
   private SubControl m_newControl = new SubControl(); // New state to copy to current state when newStateParameters is true
   private boolean m_newControlParameters; // Set to true when ready to switch to new state
+  private double m_lastPower = 0;
 
   private final CANSparkMax m_intakeMotor =
       new CANSparkMax((Constants.CanIds.kIntakeMotor), CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -248,7 +250,10 @@ public class IntakeSub extends SubsystemBase {
         break;
     }
 
-    intakeRotate(newPower);
+    if(newPower != m_lastPower) {
+      intakeRotate(newPower);
+      m_lastPower = newPower;
+    }
   }
 
   /** Calculate the amount of power should use to get to the target position */
