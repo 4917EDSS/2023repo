@@ -306,9 +306,6 @@ public class ArmSub extends SubsystemBase {
     return MathUtil.clamp(m_pid.calculate(currentPosition, newPosition), -targetPower, targetPower);
   }
 
-  private double calcHoldPower(double currentPosition, double targetPosition) {
-    return 0;
-  }
 
   public boolean isFinished() {
     if(Math.abs(getPosition() - m_currentControl.targetPosition) > kMaxPosDifference) {
