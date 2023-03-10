@@ -142,9 +142,6 @@ public class RobotContainer {
 
     m_operatorController.touchpad().onTrue(new InstantCommand(() -> StateOfRobot.m_operatorJoystickforIntake = true));
 
-    m_operatorController.L2()
-        .onTrue(new InstantCommand(() -> m_ledSub.setZoneColour(LedSub.LedZones.ALL, LedColour.YELLOW)));
-
     m_operatorController.L3().or(m_operatorController.R3())
         .onTrue(new InterruptAllCommandsCmd(m_armSub, m_mastSub, m_intakeSub, m_drivetrainSub));
   }
@@ -188,9 +185,9 @@ public class RobotContainer {
   public void disabledPeriodic() {
     // Show sensor and encoder status on LEDs when the robot isn't enabled
     if(m_intakeSub.isIntakeLoaded()) {
-      m_ledSub.setZoneColour(LedZones.DIAG_INTAKE_LIMSWITCH, LedColour.GREEN);
+      m_ledSub.setZoneColour(LedZones.DIAG_INTAKE_LIMIT, LedColour.GREEN);
     } else {
-      m_ledSub.setZoneColour(LedZones.DIAG_INTAKE_LIMSWITCH, LedColour.RED);
+      m_ledSub.setZoneColour(LedZones.DIAG_INTAKE_LIMIT, LedColour.RED);
     }
 
     if(m_armSub.getPosition() < 0) {

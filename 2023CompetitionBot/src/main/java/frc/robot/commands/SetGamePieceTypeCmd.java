@@ -29,9 +29,9 @@ public class SetGamePieceTypeCmd extends CommandBase {
     StateOfRobot.m_coneMode = m_coneMode;
 
     if(m_coneMode) {
-      m_ledSub.setZoneColour(LedZones.ZONE1, LedColour.BLUE);
+      m_ledSub.setZoneColour(LedZones.GAME_PIECE, LedColour.YELLOW);
     } else {
-      m_ledSub.setZoneColour(LedZones.ZONE1, LedColour.GREEN);
+      m_ledSub.setZoneColour(LedZones.GAME_PIECE, LedColour.PURPLE);
     }
   }
 

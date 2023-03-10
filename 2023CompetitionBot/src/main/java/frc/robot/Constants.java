@@ -69,12 +69,4 @@ public final class Constants {
     public final static double kLowTapeHeight = 0.56;
     public final static double kLensHeight = 0.0;
   }
-
-  public final static class LedConstants {
-    public final static int kLedStripLength = 48;
-    public final static int kLedStripDefaultRed = 0;
-    public static final int kLedStripDefaultGreen = 0;
-    public final static int kLedStripDefaultBlue = 0;
-  }
-
 }

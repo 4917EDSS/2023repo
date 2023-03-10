@@ -8,29 +8,57 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import frc.robot.Constants.PwmIds;
-import frc.robot.Constants.LedConstants;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /** Add your docs here. */
 
 
 public class LedSub extends SubsystemBase {
+  // Constants
+  private final static int kLedStripLength = 48;
+
   public enum LedZones {
-    DIAG_MAST_ENC(0, 0), DIAG_ARM_ENC(1, 1), DIAG_INTAKE_LIMSWITCH(2, 2), ZONE0(0, 2), ZONE1(3, 5), ZONE2(6, 9), ALL(0,
-        LedConstants.kLedStripLength - 1);
+    // The LED string start at the top left and is split up in a big U shape as follows:
+    // - 9 triplets on the left mast vertical hockey stick, facing the front
+    // - 9 triplets on the left mast angled hockey stick, facing the back
+    // - 6 triplets on the left half of the horizontal hockey stick, facing the back
+    // - The same 6, 9, 9 mirrored on the right side of the robot
+
+    // Normal operation zones
+    ALL(0, kLedStripLength - 1, false), // Set all the LEDs
+    GAME_PIECE(0, 17, true), // Indicates cube (purple) or cone (yellow)
+    ARM_BLOCKED(23, 23, true), // Indicates if the arm is blocked from passing through (red) or not (green)
+    VISION(22, 22, true), // Indicates if the vision sees a traget (green) or not (red)
+
+    // Disabled diagnostic zones
+    DIAG_DRIVE_ENC(18, 18, false), //
+    DIAG_MAST_LIMIT(19, 19, false), //
+    DIAG_MAST_ENC(20, 20, false), //
+    DIAG_ARM_LIMIT(21, 21, false), //
+    DIAG_ARM_ENC(22, 22, false), //
+    DIAG_INTAKE_LIMIT(23, 23, false), //
+    DIAG_INTAKE_ENC(24, 24, false); //
+
 
     public final int start;
     public final int end;
+    public final boolean mirror;
 
-    LedZones(int start, int end) {
+    LedZones(int start, int end, boolean mirror) {
       this.start = start;
       this.end = end;
+      this.mirror = mirror;
     }
   }
 
   public enum LedColour {
-    YELLOW(128, 128, 0), PURPLE(80, 20, 60), RED(128, 0, 0), GREEN(0, 128, 0), START_GREEN(0, 64, 0), BLUE(0, 0,
-        128), WHITE(128, 128, 128);
+    YELLOW(128, 128, 0), //
+    PURPLE(80, 20, 60), //
+    RED(128, 0, 0), //
+    GREEN(0, 128, 0), //
+    START_GREEN(0, 64, 0), // 
+    BLUE(0, 0, 128), //
+    WHITE(128, 128, 128); //
 
     public final int red, blue, green;
 
@@ -61,21 +89,18 @@ public class LedSub extends SubsystemBase {
       this.red = r;
       this.green = g;
       this.blue = b;
-
     }
   }
 
   // Hardware setup.
   // WARNING!!! We can only have one LED strip.  roboRIO does not support two AddressableLED objects.
   AddressableLED m_ledStrip = new AddressableLED(PwmIds.kLedStripPwmPort);
-  AddressableLEDBuffer m_ledBuffer = new AddressableLEDBuffer(LedConstants.kLedStripLength);
+  AddressableLEDBuffer m_ledBuffer = new AddressableLEDBuffer(kLedStripLength);
 
   /** Creates a new LedSub. */
   public LedSub() {
     m_ledStrip.setLength(m_ledBuffer.getLength());
-
     setZoneColour(LedZones.ALL, LedColour.START_GREEN);
-
     m_ledStrip.setData(m_ledBuffer);
     m_ledStrip.start();
 
@@ -94,7 +119,6 @@ public class LedSub extends SubsystemBase {
     setZoneColour(LedZones.ALL, LedColour.START_GREEN);
   }
 
-
   /**
    * This method puts the subsystem in a safe state when all commands are interrupted
    */
@@ -102,10 +126,16 @@ public class LedSub extends SubsystemBase {
 
   }
 
+  /**
+   * Set all the LEDS in the specified zone to the specified colour. Define more colours if needed.
+   */
   public void setZoneColour(LedZones zone, LedColour ledColour) {
     setZoneRGB(zone, ledColour.red, ledColour.green, ledColour.blue);
   }
 
+  /**
+   * Set all the LEDs in the specified zone to the specified RGB value. Recomment that you use setZoneColour instead.
+   */
   public void setZoneRGB(LedZones zone, int r, int g, int b) {
     if(r < 0) {
       r = 0;
@@ -125,33 +155,19 @@ public class LedSub extends SubsystemBase {
     if(b > 255) {
       b = 255;
     }
+
     for(int i = zone.start; i <= zone.end; i++) {
       m_ledBuffer.setRGB(i, r, b, g); //this function takes in RBG
     }
+
+    if(zone.mirror) {
+      // Set the same LEDs on the other half of the string (count from the end instead of the start)
+      int start = kLedStripLength - zone.end - 1;
+      int end = kLedStripLength - zone.start - 1;
+      for(int i = start; i <= end; i++) {
+        m_ledBuffer.setRGB(i, r, b, g); //this function takes in RBG
+      }
+    }
     m_ledStrip.setData(m_ledBuffer);
   }
-
-  // LED state enums
-  public enum LEDMode {
-    ConeMode, CubeMode,
-  }
-
-  //Set Colours according to state
-  public void setLEDState(LEDMode LEDState) {
-    if(LEDState == LEDMode.ConeMode) {
-      setZoneColour(LedZones.ZONE0, LedColour.YELLOW); //Set LED colour to yellow 
-    } else if(LEDState == LEDMode.CubeMode) {
-      setZoneColour(LedZones.ZONE0, LedColour.PURPLE); //Set LED colour to purple
-    }
-  }
-
-  public void smartDashboardSet() {
-
-    // double[] colour = {Double.valueOf(m_rr), Double.valueOf(m_gg), Double.valueOf(m_bb)};
-
-    // SmartDashboard.putNumberArray("null", colour);
-
-
-  }
-
 }
