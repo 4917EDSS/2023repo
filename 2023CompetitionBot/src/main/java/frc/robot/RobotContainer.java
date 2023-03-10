@@ -48,11 +48,11 @@ public class RobotContainer {
   private static Logger logger = Logger.getLogger(RobotContainer.class.getName());
 
   // The robot's subsystems and commands are defined here...
+  private final LedSub m_ledSub = new LedSub();
   public final MastSub m_mastSub = new MastSub();
   public final IntakeSub m_intakeSub = new IntakeSub();
-  public final ArmSub m_armSub = new ArmSub(m_mastSub, m_intakeSub);
+  public final ArmSub m_armSub = new ArmSub(m_mastSub, m_intakeSub, m_ledSub);
   private final DrivetrainSub m_drivetrainSub = new DrivetrainSub();
-  private final LedSub m_ledSub = new LedSub();
   private final VisionSub m_visionSub = new VisionSub();
 
   SendableChooser<Command> m_Chooser = new SendableChooser<>();

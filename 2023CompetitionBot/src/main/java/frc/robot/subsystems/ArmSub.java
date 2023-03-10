@@ -13,6 +13,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.SubControl.State;
+import frc.robot.subsystems.LedSub;
+import frc.robot.subsystems.LedSub.LedColour;
+import frc.robot.subsystems.LedSub.LedZones;
 
 public class ArmSub extends SubsystemBase {
   // CONSTANTS ////////////////////////////////////////////////////////////////
@@ -37,6 +40,7 @@ public class ArmSub extends SubsystemBase {
   private double m_blockedPosition;
   private MastSub m_mastSub; // to determine if arm is blocked
   private IntakeSub m_intakeSub;
+  private LedSub m_ledSub;
 
   // HARDWARE AND CONTROL OBJECTS /////////////////////////////////////////////
   private final TalonFX m_motor = new TalonFX(Constants.CanIds.kArmMotor);
@@ -49,7 +53,9 @@ public class ArmSub extends SubsystemBase {
   // SUBSYSTEM METHODS ////////////////////////////////////////////////////////
 
   /** Creates a new ArmSub. */
-  public ArmSub(MastSub mastSub, IntakeSub intakeSub) {
+  public ArmSub(MastSub mastSub, IntakeSub intakeSub, LedSub ledSub) {
+
+    m_ledSub = ledSub;
 
     this.m_mastSub = mastSub;
     this.m_mastSub.setArmSub(this);
@@ -149,6 +155,7 @@ public class ArmSub extends SubsystemBase {
         ((currentPosition < (kMinDangerZone + kSafeSpaceInDangerZone)) && (currentPosition > kMinDangerZone));
 
     if(!isDangerZone()) {
+      m_ledSub.setZoneColour(LedZones.ARM_BLOCKED, LedColour.GREEN);
       return false;
     } else {
       // TODO: Remove commented code if no longer needed
@@ -161,6 +168,7 @@ public class ArmSub extends SubsystemBase {
       //}
       if(/* !m_mastSub.isSafeZone() || */ !m_intakeSub.isSafeZone()) {
         System.out.println("Arm blocked");
+        m_ledSub.setZoneColour(LedZones.ARM_BLOCKED, LedColour.RED);
         return true;
       }
     }
