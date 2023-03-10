@@ -98,6 +98,14 @@ public class ArmSub extends SubsystemBase {
     m_motor.set(ControlMode.PercentOutput, power);
   }
 
+  public void setBrake(boolean brake) {
+    if(brake) {
+      m_motor.setNeutralMode(NeutralMode.Brake);
+    } else {
+      m_motor.setNeutralMode(NeutralMode.Coast);
+    }
+  }
+
   /** Sets the current position as the starting position - use wisely */
   public void zeroEncoder() {
     m_motor.setSelectedSensorPosition(0);

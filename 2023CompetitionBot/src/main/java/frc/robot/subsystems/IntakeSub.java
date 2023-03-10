@@ -103,6 +103,14 @@ public class IntakeSub extends SubsystemBase {
     m_rotateMotor.set(power);
   }
 
+  public void setBrake(boolean brake) {
+    if(brake) {
+      m_rotateMotor.setIdleMode(IdleMode.kBrake);
+    } else {
+      m_rotateMotor.setIdleMode(IdleMode.kCoast);
+    }
+  }
+
   public void zeroEncoderRotate() {
     m_rotateMotor.getEncoder().setPosition(0);
   }

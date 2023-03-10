@@ -178,7 +178,6 @@ public class DrivetrainSub extends SubsystemBase {
     IdleMode mode;
     if(isBrakeOn) {
       tankDrive(0, 0);
-      arcadeDrive(0, 0);
       mode = IdleMode.kBrake;
     } else {
       mode = IdleMode.kCoast;

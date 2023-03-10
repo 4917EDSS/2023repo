@@ -92,6 +92,14 @@ public class MastSub extends SubsystemBase {
     m_motor.set(power);
   }
 
+  public void setBrake(boolean brake) {
+    if(brake) {
+      m_motor.setIdleMode(IdleMode.kBrake);
+    } else {
+      m_motor.setIdleMode(IdleMode.kCoast);
+    }
+  }
+
   /** Sets the current position as the starting position - use wisely */
   public void zeroEncoder() {
     m_motor.getEncoder().setPosition(0);
