@@ -79,7 +79,7 @@ public class DriveWithJoystickCmd extends CommandBase {
   @Override
   public void execute() {
 
-    double fwdPower = m_controller.getLeftY();
+    double fwdPower = -m_controller.getLeftY();
     double turnPower = m_controller.getRightX();
 
     fwdPower = adjustSensitivity(fwdPower, kForwardSensitivityPower);

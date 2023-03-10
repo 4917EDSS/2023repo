@@ -15,14 +15,9 @@ import frc.robot.Constants.LedConstants;
 
 
 public class LedSub extends SubsystemBase {
-  //previous RGB colour vars
-
-  //  private int m_rr, m_gg, m_bb = 0;
-
-
   public enum LedZones {
     DIAG_MAST_ENC(0, 0), DIAG_ARM_ENC(1, 1), DIAG_INTAKE_LIMSWITCH(2, 2), ZONE0(0, 2), ZONE1(3, 5), ZONE2(6, 9), ALL(0,
-        9);
+        LedConstants.kLedStripLength - 1);
 
     public final int start;
     public final int end;
@@ -71,13 +66,16 @@ public class LedSub extends SubsystemBase {
   }
 
   // Hardware setup.
+  // WARNING!!! We can only have one LED strip.  roboRIO does not support two AddressableLED objects.
   AddressableLED m_ledStrip = new AddressableLED(PwmIds.kLedStripPwmPort);
   AddressableLEDBuffer m_ledBuffer = new AddressableLEDBuffer(LedConstants.kLedStripLength);
 
   /** Creates a new LedSub. */
   public LedSub() {
     m_ledStrip.setLength(m_ledBuffer.getLength());
+
     setZoneColour(LedZones.ALL, LedColour.START_GREEN);
+
     m_ledStrip.setData(m_ledBuffer);
     m_ledStrip.start();
 

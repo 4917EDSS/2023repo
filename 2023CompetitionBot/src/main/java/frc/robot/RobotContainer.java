@@ -26,6 +26,7 @@ import frc.robot.commands.MastMoveWithJoystickCmd;
 import frc.robot.commands.SetGamePieceTypeCmd;
 import frc.robot.commands.SetLimitSwitchesCmd;
 import frc.robot.commands.ExpelGamePieceCmd;
+import frc.robot.commands.IntakeGamePieceCmd;
 import frc.robot.subsystems.ArmSub;
 import frc.robot.subsystems.DrivetrainSub;
 import frc.robot.subsystems.ManipulatorsPositions;
@@ -130,10 +131,10 @@ public class RobotContainer {
     m_operatorController.R1().onTrue(new SetGamePieceTypeCmd(true, m_ledSub));
 
     // L2 is maped to Intakes in
-    m_operatorController.L2().onTrue(new InstantCommand(() -> m_intakeSub.spinWheelsIntake(0.3), m_intakeSub));
+    m_operatorController.L2().onTrue(new IntakeGamePieceCmd(1.0, m_intakeSub));
 
     // R2 is maped to the intake out
-    m_operatorController.R2().onTrue(new InstantCommand(() -> m_intakeSub.spinWheelsIntake(-0.3), m_intakeSub));
+    m_operatorController.R2().onTrue(new ExpelGamePieceCmd(0.5, m_intakeSub));
 
     m_operatorController.options().onTrue(new SetLimitSwitchesCmd(m_mastSub, m_armSub, m_intakeSub));
 
@@ -151,7 +152,7 @@ public class RobotContainer {
   void autoChooserSetup() {
     m_Chooser.setDefaultOption("1 do nothing", new AutoDoNothingCmd());
     m_Chooser.addOption("2 drive straight", new DriveStraightCmd(m_drivetrainSub, 3));
-    m_Chooser.addOption("3 expel game piece", new ExpelGamePieceCmd(m_intakeSub));
+    m_Chooser.addOption("3 expel game piece", new ExpelGamePieceCmd(1.0, m_intakeSub));
     SmartDashboard.putData("auto choices", m_Chooser);
   }
 

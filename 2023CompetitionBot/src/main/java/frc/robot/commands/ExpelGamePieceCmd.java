@@ -6,26 +6,34 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj.RobotController;
+import frc.robot.StateOfRobot;
 import frc.robot.subsystems.IntakeSub;
 
 public class ExpelGamePieceCmd extends CommandBase {
   private final IntakeSub m_intakeSub;
   private long m_timeStart; // The time it was at the time the command was initialized
-  private double timeSpinning = 0.2; // How long the intake wheels spin (in seconds)
-  private double power = 1; // What power the motors spin at
+  private double m_timeSpinning = 0.5; // How long the intake wheels spin (in seconds)
+  private double m_power; // What power the motors spin at
 
   /** Creates a new ExpelGamePieceCmd. */
-  public ExpelGamePieceCmd(IntakeSub intakeSub) {
-    // Use addRequirements() here to declare subsystem dependencies.
+  public ExpelGamePieceCmd(double power, IntakeSub intakeSub) {
+    m_power = power;
     m_intakeSub = intakeSub;
+
+    // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(intakeSub);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    double curPower = m_power;
+    if(StateOfRobot.isCubeMode()) {
+      curPower = -curPower;
+    }
+
     m_timeStart = RobotController.getFPGATime();
-    m_intakeSub.spinWheelsIntake(power);
+    m_intakeSub.spinWheelsIntake(curPower);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -42,7 +50,7 @@ public class ExpelGamePieceCmd extends CommandBase {
   @Override
   public boolean isFinished() {
 
-    if(RobotController.getFPGATime() - m_timeStart > (timeSpinning * Math.pow(10, 6))) { // After (timeSpinning) seconds the command stops automatically
+    if(RobotController.getFPGATime() - m_timeStart > (m_timeSpinning * Math.pow(10, 6))) { // After (timeSpinning) seconds the command stops automatically
       return true;
     }
 

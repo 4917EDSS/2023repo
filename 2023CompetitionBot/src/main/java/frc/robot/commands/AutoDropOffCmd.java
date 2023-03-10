@@ -23,6 +23,6 @@ public class AutoDropOffCmd extends SequentialCommandGroup {
 
     /* Sets the intake position, drives in, then drops off the game piece */
     addCommands(new IntakeSetPositionCmd(positions, armSub, mastSub, intakeSub),
-        new DriveStraightCmd(drivetrainSub, targetDriveDistance), new ExpelGamePieceCmd(intakeSub));
+        new DriveStraightCmd(drivetrainSub, targetDriveDistance), new ExpelGamePieceCmd(1.0, intakeSub));
   }
 }

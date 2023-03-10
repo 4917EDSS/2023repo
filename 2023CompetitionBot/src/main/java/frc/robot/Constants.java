@@ -39,7 +39,6 @@ public final class Constants {
 
   public final static class SolenoidIds {
     public final static int kShifter = 1;
-    public final static int kArmLock = 3;
   }
 
   public final static class PwmIds {
@@ -47,11 +46,15 @@ public final class Constants {
   }
 
   public final static class DioIds {
-    public final static int kCubeSensorPort = 3;
-    public final static int kConeSensorPort = 1;
-    public final static int kMastBack = 0;
-    public final static int kIntakeLimitSwitch = 2;
+    public final static int kMastLimitPort = 0;
+    public final static int kArmLimitPort = 1;
+    public final static int kIntakeLimitPort = 2;
   }
+
+  public final static class AnalogInputIds {
+    public final static int kGamePieceSensorPort = 0;
+  }
+
 
   // OTHER GLOBAL CONSTANTS ///////////////////////////////////////////////////
   public final static class LimelightConstants {
@@ -68,7 +71,7 @@ public final class Constants {
   }
 
   public final static class LedConstants {
-    public final static int kLedStripLength = 10;
+    public final static int kLedStripLength = 48;
     public final static int kLedStripDefaultRed = 0;
     public static final int kLedStripDefaultGreen = 0;
     public final static int kLedStripDefaultBlue = 0;

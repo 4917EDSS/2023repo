@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -17,7 +18,7 @@ import frc.robot.StateOfRobot;
 
 public class IntakeSub extends SubsystemBase {
   private static final double kPositionMin = 0; // In encoder ticks
-  private static final double kPositionMax = 47.0; // In encoder ticks (straight up is 30)
+  private static final double kPositionMax = 60.0; // In encoder ticks (straight up is 30)
   private static final double kManualModePowerDeadband = 0.05; // If manual power is less than this, assume power is 0
   private static final double kIntakeMinSafeZone = 0.0;
   private static final double kIntakeMaxSafeZone = 18.0;
@@ -37,9 +38,10 @@ public class IntakeSub extends SubsystemBase {
   private final CANSparkMax m_rotateMotor =
       new CANSparkMax((Constants.CanIds.kRotateMotor), CANSparkMaxLowLevel.MotorType.kBrushless);
 
-  private final DigitalInput m_cubeSensor = new DigitalInput(Constants.DioIds.kCubeSensorPort);
-  private final DigitalInput m_coneSensor = new DigitalInput(Constants.DioIds.kConeSensorPort);
-  private final DigitalInput m_intakeLimitSwitch = new DigitalInput(Constants.DioIds.kIntakeLimitSwitch);
+  // private final DigitalInput m_cubeSensor = new DigitalInput(Constants.DioIds.kCubeSensorPort);
+  // private final DigitalInput m_coneSensor = new DigitalInput(Constants.DioIds.kConeSensorPort);
+  private final DigitalInput m_intakeLimitSwitch = new DigitalInput(Constants.DioIds.kIntakeLimitPort);
+  private final AnalogInput m_gamePieceSensor = new AnalogInput(Constants.AnalogInputIds.kGamePieceSensorPort);
 
   private double m_p = 0.1;
   private double m_i = 0.0;
@@ -116,10 +118,10 @@ public class IntakeSub extends SubsystemBase {
   }
 
   public boolean isIntakeLoaded() {
-    if((StateOfRobot.isConeMode() == true) && (m_coneSensor.get() == true)) {
+    if((StateOfRobot.isConeMode() == true) && (m_gamePieceSensor.getValue() > 400)) {
       return true;
     }
-    if((StateOfRobot.isCubeMode() == true) && (m_cubeSensor.get() == true)) {
+    if((StateOfRobot.isCubeMode() == true) && (m_gamePieceSensor.getValue() > 400)) {
       return true;
     }
     return false;
@@ -277,8 +279,7 @@ public class IntakeSub extends SubsystemBase {
     SmartDashboard.putNumber("Intake kD", d);
     SmartDashboard.putNumber("Arm Voltage", m_intakeMotor.getOutputCurrent());
 
-    SmartDashboard.putBoolean("Cone Sensor", m_coneSensor.get());
-    SmartDashboard.putBoolean("Cube Sensor", m_cubeSensor.get());
+    SmartDashboard.putNumber("Piece Sensor", m_gamePieceSensor.getValue());
     SmartDashboard.putBoolean("Intake Limit", isIntakeAtLimit());
     SmartDashboard.putBoolean("Intake Loaded", isIntakeLoaded());
 

@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.StateOfRobot;
 import frc.robot.subsystems.IntakeSub;
 
 public class IntakeGamePieceCmd extends CommandBase {
@@ -23,7 +24,11 @@ public class IntakeGamePieceCmd extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_intakeSub.spinWheelsIntake(m_power);
+    double curPower = m_power;
+    if(StateOfRobot.isConeMode()) {
+      curPower = -curPower;
+    }
+    m_intakeSub.spinWheelsIntake(curPower);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

@@ -40,7 +40,7 @@ public class MastSub extends SubsystemBase {
   private final CANSparkMax m_motor =
       new CANSparkMax((Constants.CanIds.kMastMotor), CANSparkMaxLowLevel.MotorType.kBrushless);
 
-  private final DigitalInput m_backMast = new DigitalInput(Constants.DioIds.kMastBack);
+  private final DigitalInput m_backMast = new DigitalInput(Constants.DioIds.kMastLimitPort);
 
   private double m_p = 0.1;
   private double m_i = 0.0;
