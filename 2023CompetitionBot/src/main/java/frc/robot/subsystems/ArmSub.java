@@ -104,6 +104,14 @@ public class ArmSub extends SubsystemBase {
     m_motor.set(ControlMode.PercentOutput, power);
   }
 
+  public void setBrake(boolean brake) {
+    if(brake) {
+      m_motor.setNeutralMode(NeutralMode.Brake);
+    } else {
+      m_motor.setNeutralMode(NeutralMode.Coast);
+    }
+  }
+
   /** Sets the current position as the starting position - use wisely */
   public void zeroEncoder() {
     m_motor.setSelectedSensorPosition(0);
@@ -285,7 +293,7 @@ public class ArmSub extends SubsystemBase {
       case HOLDING:
         // If the mechanism is at it's target location, apply power to hold it there if necessary
         // TODO: Check if we can use the calcMovePower function since the PID could take care of both cases
-        newPower = calcHoldPower(currentPosition, m_currentControl.targetPosition);
+        newPower = calcMovePower(currentPosition, m_currentControl.targetPosition, m_currentControl.targetPower);
         break;
 
       case INTERRUPTED:
@@ -294,7 +302,7 @@ public class ArmSub extends SubsystemBase {
           m_currentControl.state = State.MOVING;
           // Otherwise, hold this position
         } else {
-          newPower = calcHoldPower(currentPosition, m_blockedPosition);
+          newPower = calcMovePower(currentPosition, m_blockedPosition, m_currentControl.targetPower);
         }
         break;
 
@@ -314,9 +322,6 @@ public class ArmSub extends SubsystemBase {
     return MathUtil.clamp(m_pid.calculate(currentPosition, newPosition), -targetPower, targetPower);
   }
 
-  private double calcHoldPower(double currentPosition, double targetPosition) {
-    return 0;
-  }
 
   public boolean isFinished() {
     if(Math.abs(getPosition() - m_currentControl.targetPosition) > kMaxPosDifference) {

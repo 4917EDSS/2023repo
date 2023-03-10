@@ -103,6 +103,14 @@ public class IntakeSub extends SubsystemBase {
     m_rotateMotor.set(power);
   }
 
+  public void setBrake(boolean brake) {
+    if(brake) {
+      m_rotateMotor.setIdleMode(IdleMode.kBrake);
+    } else {
+      m_rotateMotor.setIdleMode(IdleMode.kCoast);
+    }
+  }
+
   public void zeroEncoderRotate() {
     m_rotateMotor.getEncoder().setPosition(0);
   }
@@ -239,7 +247,7 @@ public class IntakeSub extends SubsystemBase {
       case HOLDING:
         // If the mechanism is at it's target location, apply power to hold it there if necessary
         // TODO: Check if we can use the calcMovePower function since the PID could take care of both cases
-        newPower = calcHoldPower(currentPosition);
+        newPower = calcMovePower(currentPosition, m_currentControl.targetPosition, m_currentControl.targetPower);
         break;
 
       case INTERRUPTED:
@@ -260,11 +268,11 @@ public class IntakeSub extends SubsystemBase {
     return MathUtil.clamp(m_pid.calculate(currentPosition, newPosition), -targetPower, targetPower);
   }
 
-  private double calcHoldPower(double currentPosition) {
-    // TODO: Decide what is needed to hold the position
-    // We probalby just want to use calcMovePower
-    return 0.0;
-  }
+  // private double calcHoldPower(double currentPosition) {
+  //   // TODO: Decide what is needed to hold the position
+  //   // We probalby just want to use calcMovePower
+  //   return 0.0;
+  // }
 
   /** Display/get subsystem information to/from the Smart Dashboard */
   private void updateSmartDashboard() {
