@@ -60,6 +60,7 @@ public class ArmSub extends SubsystemBase {
     this.m_mastSub = mastSub;
     this.m_mastSub.setArmSub(this);
     this.m_intakeSub = intakeSub;
+    this.m_intakeSub.setArmSub(this);
     this.m_mastSub.setIntakeSub(intakeSub);
 
     SmartDashboard.putNumber("Arm kP", m_p);

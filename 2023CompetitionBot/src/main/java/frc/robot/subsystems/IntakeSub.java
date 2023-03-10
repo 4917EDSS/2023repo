@@ -22,6 +22,8 @@ public class IntakeSub extends SubsystemBase {
   private static final double kManualModePowerDeadband = 0.05; // If manual power is less than this, assume power is 0
   private static final double kIntakeMinSafeZone = 0.0;
   private static final double kIntakeMaxSafeZone = 18.0;
+  private static final double kArmMinDangerZone = 0.0; // Needs to be found
+  private static final double kArmMaxDangerZone = 0.0; // Needs to be found
   public static final double kWristFlush = 27;
   public static final double kWristThrough = 12.595;
   public static final double kMaxPosDifference = 0.1;
@@ -47,6 +49,7 @@ public class IntakeSub extends SubsystemBase {
   private double m_i = 0.0;
   private double m_d = 0.0;
   private final PIDController m_pid = new PIDController(m_p, m_i, m_d);
+  private ArmSub m_armSub;
 
   /** Creates a new intakeSub. */
   public IntakeSub() {
@@ -70,6 +73,10 @@ public class IntakeSub extends SubsystemBase {
     m_rotateMotor.setIdleMode(IdleMode.kCoast);
     zeroEncoderIntake();
     zeroEncoderRotate();
+  }
+
+  public void setArmSub(ArmSub armSub) {
+    m_armSub = armSub;
   }
 
   /** This method puts the subsystem in a safe state when all commands are interrupted */
@@ -137,6 +144,14 @@ public class IntakeSub extends SubsystemBase {
 
   public boolean isIntakeAtLimit() {
     return !m_intakeLimitSwitch.get();
+  }
+
+  public boolean inDangerZone() {
+    double arm_pos = m_armSub.getPosition();
+    if(arm_pos > kArmMinDangerZone && arm_pos < kArmMaxDangerZone) {
+      return true;
+    }
+    return false;
   }
 
   /**
