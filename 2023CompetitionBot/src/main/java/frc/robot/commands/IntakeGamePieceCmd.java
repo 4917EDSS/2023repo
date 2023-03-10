@@ -28,6 +28,7 @@ public class IntakeGamePieceCmd extends CommandBase {
     if(StateOfRobot.isConeMode()) {
       curPower = -curPower;
     }
+
     m_intakeSub.spinWheelsIntake(curPower);
   }
 
@@ -45,5 +46,7 @@ public class IntakeGamePieceCmd extends CommandBase {
   @Override
   public boolean isFinished() {
     return m_intakeSub.isIntakeLoaded();
+    //if(RobotController.getFPGATime() - m_timeSpinning > (m_timeSpinning * Math.pow(10, 6))) { // After (timeSpinning) seconds the command stops automatically
+    //return true;
   }
 }
