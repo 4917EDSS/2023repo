@@ -5,6 +5,7 @@
 package frc.robot;
 
 import java.util.logging.Logger;
+import edu.wpi.first.hal.HALUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -43,16 +44,17 @@ import frc.robot.subsystems.VisionSub;
  * Instead, the structure of the robot (including subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  private static boolean s_coneMode = false;
+  private static boolean m_brakeMode = true;
+  private static boolean m_buttonReady = true;
 
   private static Logger logger = Logger.getLogger(RobotContainer.class.getName());
 
   // The robot's subsystems and commands are defined here...
+  private final LedSub m_ledSub = new LedSub();
   public final MastSub m_mastSub = new MastSub();
   public final IntakeSub m_intakeSub = new IntakeSub();
-  public final ArmSub m_armSub = new ArmSub(m_mastSub, m_intakeSub);
+  public final ArmSub m_armSub = new ArmSub(m_mastSub, m_intakeSub, m_ledSub);
   private final DrivetrainSub m_drivetrainSub = new DrivetrainSub();
-  private final LedSub m_ledSub = new LedSub();
   private final VisionSub m_visionSub = new VisionSub();
 
   SendableChooser<Command> m_Chooser = new SendableChooser<>();
@@ -158,15 +160,6 @@ public class RobotContainer {
     return m_Chooser.getSelected();
   }
 
-  public static boolean isConeMode() {
-    return s_coneMode;
-  }
-
-  public static void setConeMode(boolean coneMode) {
-    s_coneMode = coneMode;
-    System.out.println(coneMode ? "Cone Mode" : "Cube Mode");
-  }
-
   public void initSubsystems() {
     m_armSub.init();
     m_drivetrainSub.init();
@@ -183,6 +176,19 @@ public class RobotContainer {
   }
 
   public void disabledPeriodic() {
+    if((HALUtil.getFPGAButton() == true) && m_buttonReady) {
+      m_brakeMode = !m_brakeMode;
+      m_drivetrainSub.setBrake(m_brakeMode);
+      m_mastSub.setBrake(m_brakeMode);
+      m_armSub.setBrake(m_brakeMode);
+      m_intakeSub.setBrake(m_brakeMode);
+      System.out.println("Brake " + m_brakeMode);
+      m_buttonReady = false;
+    }
+    if(HALUtil.getFPGAButton() == false) {
+      m_buttonReady = true;
+    }
+
     // Show sensor and encoder status on LEDs when the robot isn't enabled
     if(m_intakeSub.isIntakeLoaded()) {
       m_ledSub.setZoneColour(LedZones.DIAG_INTAKE_LIMIT, LedColour.GREEN);

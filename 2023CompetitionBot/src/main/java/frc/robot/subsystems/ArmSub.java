@@ -13,6 +13,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.SubControl.State;
+import frc.robot.subsystems.LedSub;
+import frc.robot.subsystems.LedSub.LedColour;
+import frc.robot.subsystems.LedSub.LedZones;
 
 public class ArmSub extends SubsystemBase {
   // CONSTANTS ////////////////////////////////////////////////////////////////
@@ -37,6 +40,7 @@ public class ArmSub extends SubsystemBase {
   private double m_blockedPosition;
   private MastSub m_mastSub; // to determine if arm is blocked
   private IntakeSub m_intakeSub;
+  private LedSub m_ledSub;
 
   // HARDWARE AND CONTROL OBJECTS /////////////////////////////////////////////
   private final TalonFX m_motor = new TalonFX(Constants.CanIds.kArmMotor);
@@ -49,11 +53,14 @@ public class ArmSub extends SubsystemBase {
   // SUBSYSTEM METHODS ////////////////////////////////////////////////////////
 
   /** Creates a new ArmSub. */
-  public ArmSub(MastSub mastSub, IntakeSub intakeSub) {
+  public ArmSub(MastSub mastSub, IntakeSub intakeSub, LedSub ledSub) {
+
+    m_ledSub = ledSub;
 
     this.m_mastSub = mastSub;
     this.m_mastSub.setArmSub(this);
     this.m_intakeSub = intakeSub;
+    this.m_intakeSub.setArmSub(this);
     this.m_mastSub.setIntakeSub(intakeSub);
 
     SmartDashboard.putNumber("Arm kP", m_p);
@@ -96,6 +103,14 @@ public class ArmSub extends SubsystemBase {
    */
   public void move(double power) {
     m_motor.set(ControlMode.PercentOutput, power);
+  }
+
+  public void setBrake(boolean brake) {
+    if(brake) {
+      m_motor.setNeutralMode(NeutralMode.Brake);
+    } else {
+      m_motor.setNeutralMode(NeutralMode.Coast);
+    }
   }
 
   /** Sets the current position as the starting position - use wisely */
@@ -149,6 +164,7 @@ public class ArmSub extends SubsystemBase {
         ((currentPosition < (kMinDangerZone + kSafeSpaceInDangerZone)) && (currentPosition > kMinDangerZone));
 
     if(!isDangerZone()) {
+      m_ledSub.setZoneColour(LedZones.ARM_BLOCKED, LedColour.GREEN);
       return false;
     } else {
       // TODO: Remove commented code if no longer needed
@@ -161,6 +177,7 @@ public class ArmSub extends SubsystemBase {
       //}
       if(/* !m_mastSub.isSafeZone() || */ !m_intakeSub.isSafeZone()) {
         System.out.println("Arm blocked");
+        m_ledSub.setZoneColour(LedZones.ARM_BLOCKED, LedColour.RED);
         return true;
       }
     }

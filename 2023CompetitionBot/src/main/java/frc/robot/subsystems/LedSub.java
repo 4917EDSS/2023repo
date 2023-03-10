@@ -16,6 +16,7 @@ import frc.robot.Constants.PwmIds;
 public class LedSub extends SubsystemBase {
   // Constants
   private final static int kLedStripLength = 48;
+  private boolean m_newColoursAvailible = false;
 
   public enum LedZones {
     // The LED string start at the top left and is split up in a big U shape as follows:
@@ -109,6 +110,10 @@ public class LedSub extends SubsystemBase {
 
   @Override
   public void periodic() {
+    if(m_newColoursAvailible) {
+      m_ledStrip.setData(m_ledBuffer);
+      m_newColoursAvailible = false;
+    }
     // This method will be called once per scheduler run
   }
 
@@ -168,6 +173,6 @@ public class LedSub extends SubsystemBase {
         m_ledBuffer.setRGB(i, r, b, g); //this function takes in RBG
       }
     }
-    m_ledStrip.setData(m_ledBuffer);
+    m_newColoursAvailible = true;
   }
 }
