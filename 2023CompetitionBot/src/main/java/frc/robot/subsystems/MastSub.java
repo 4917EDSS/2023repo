@@ -255,7 +255,7 @@ public class MastSub extends SubsystemBase {
       case HOLDING:
         // If the mechanism is at it's target location, apply power to hold it there if necessary
         // TODO: Check if we can use the calcMovePower function since the PID could take care of both cases
-        newPower = calcHoldPower(currentPosition, m_currentControl.targetPosition);
+        newPower = calcMovePower(currentPosition, m_currentControl.targetPosition, m_currentControl.targetPower);
         break;
 
       case INTERRUPTED:
@@ -264,7 +264,7 @@ public class MastSub extends SubsystemBase {
           m_currentControl.state = State.MOVING;
           // Otherwise, hold this position
         } else {
-          newPower = calcHoldPower(currentPosition, m_blockedPosition);
+          newPower = calcMovePower(currentPosition, m_currentControl.targetPosition, m_currentControl.targetPower);
         }
         break;
 
@@ -287,7 +287,9 @@ public class MastSub extends SubsystemBase {
 
 
   private double calcHoldPower(double currentPosition, double targetPosition) {
-    return 0;
+    double holdPower = currentPosition - targetPosition;
+
+    return holdPower;
   }
 
   /** Display/get subsystem information to/from the Smart Dashboard */
