@@ -18,6 +18,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ArmMoveWithJoystickCmd;
 import frc.robot.commands.AutoDoNothingCmd;
 import frc.robot.commands.AutoDriveOverChargeStationCmd;
+import frc.robot.commands.AutoLeaveAndBalanceGrp;
 import frc.robot.commands.AutoBalanceChargeStationCmd;
 import frc.robot.commands.DriveAlignTapeCmd;
 import frc.robot.commands.DriveSetGearCmd;
@@ -156,8 +157,10 @@ public class RobotContainer {
     m_Chooser.setDefaultOption("1 do nothing", new AutoDoNothingCmd());
     m_Chooser.addOption("2 drive straight", new DriveStraightCmd(m_drivetrainSub, 3));
     m_Chooser.addOption("3 expel game piece", new ExpelGamePieceCmd(1.0, m_intakeSub));
-    m_Chooser.addOption("4 balance on Charge Station", new AutoBalanceChargeStationCmd(m_drivetrainSub));
-    m_Chooser.addOption("5 Drive Over Charge Station", new AutoDriveOverChargeStationCmd(m_drivetrainSub));
+    m_Chooser.addOption("4 balance on Charge Station", new AutoBalanceChargeStationCmd(m_drivetrainSub, true));
+    m_Chooser.addOption("5 Drive Over Charge Station", new AutoDriveOverChargeStationCmd(m_drivetrainSub, true));
+    m_Chooser.addOption("6 Leave and Balance", new AutoLeaveAndBalanceGrp(m_drivetrainSub));
+
     SmartDashboard.putData("auto choices", m_Chooser);
   }
 
