@@ -29,12 +29,12 @@ public class BalanceChargeStationCmd extends CommandBase {
     /**********
      * CONFIG *
      **********/
-    //Speed the robot drived while scoring/approaching station, default = 0.4
-    robotSpeedFast = 0.4;
+    //Speed the robot. drived while scoring/approaching station, default = 0.4
+    robotSpeedFast = 0.7;
 
     //Speed the robot drives while balancing itself on the charge station.
     //Should be roughly half the fast speed, to make the robot more accurate, default = 0.2
-    robotSpeedSlow = 0.2;
+    robotSpeedSlow = 0.4;
 
     //Angle where the robot knows it is on the charge station, default = 13.0
     onChargeStationDegree = 13.0;
@@ -103,7 +103,7 @@ public class BalanceChargeStationCmd extends CommandBase {
       //drive forwards to approach station, exit when tilt is detected
       case 0:
         System.out.println("case 0 pitch " + m_drivetrainSub.getPitch());
-        if(m_drivetrainSub.getPitch() > onChargeStationDegree) {
+        if(-m_drivetrainSub.getPitch() > onChargeStationDegree) {
           debounceCount++;
         }
         if(debounceCount > secondsToTicks(debounceTime)) {
@@ -116,8 +116,9 @@ public class BalanceChargeStationCmd extends CommandBase {
       //driving up charge station, drive slower, stopping when level
       case 1:
         System.out.println("case 1 pitch " + m_drivetrainSub.getPitch());
-        if(m_drivetrainSub.getPitch() < 17) {
+        if(-m_drivetrainSub.getPitch() < 5) {
           debounceCount++;
+
         }
         if(debounceCount > secondsToTicks(debounceTime)) {
           state = 2;
