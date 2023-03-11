@@ -255,20 +255,17 @@ public class IntakeSub extends SubsystemBase {
         // If the mechanism is moving, check if it has arrived at it's target.
         // If not, check if it's blocked
         // If not, the set then calculate the move power
-        // TODO: Add missing logic (see 2019 Elevator state machine)
         newPower = calcMovePower(currentPosition, m_currentControl.targetPosition, m_currentControl.targetPower);
         break;
 
       case HOLDING:
         // If the mechanism is at it's target location, apply power to hold it there if necessary
-        // TODO: Check if we can use the calcMovePower function since the PID could take care of both cases
         newPower = calcMovePower(currentPosition, m_currentControl.targetPosition, m_currentControl.targetPower);
         break;
 
       case INTERRUPTED:
         // If the mechanism is no longer blocked, transition to MOVING
         // Otherwise, hold this position
-        // TODO: Add missing logic (see 2019 Elevator state machine)
         break;
     }
 
@@ -283,11 +280,6 @@ public class IntakeSub extends SubsystemBase {
     return MathUtil.clamp(m_pid.calculate(currentPosition, newPosition), -targetPower, targetPower);
   }
 
-  // private double calcHoldPower(double currentPosition) {
-  //   // TODO: Decide what is needed to hold the position
-  //   // We probalby just want to use calcMovePower
-  //   return 0.0;
-  // }
 
   /** Display/get subsystem information to/from the Smart Dashboard */
   private void updateSmartDashboard() {
