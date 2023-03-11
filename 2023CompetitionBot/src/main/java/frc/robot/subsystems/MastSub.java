@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.subsystems.SubControl.Mode;
 import frc.robot.subsystems.SubControl.State;
 
 public class MastSub extends SubsystemBase {
@@ -72,6 +73,7 @@ public class MastSub extends SubsystemBase {
   public void init() {
     zeroEncoder();
     m_motor.setIdleMode(IdleMode.kBrake);
+    setPosition(Mode.DISABLED, 0, 0);
   }
 
   public void initTest() {
@@ -256,7 +258,6 @@ public class MastSub extends SubsystemBase {
 
       case HOLDING:
         // If the mechanism is at it's target location, apply power to hold it there if necessary
-        // TODO: Check if we can use the calcMovePower function since the PID could take care of both cases
         newPower = calcMovePower(currentPosition, m_currentControl.targetPosition, m_currentControl.targetPower);
         break;
 
