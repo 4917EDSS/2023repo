@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import java.util.logging.Level;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
@@ -341,16 +342,18 @@ public class ArmSub extends SubsystemBase {
   private void updateSmartDashboard() {
     SmartDashboard.putNumber("Arm Encoder", getPosition());
 
-    double p = SmartDashboard.getNumber("Arm kP", m_p);
-    double i = SmartDashboard.getNumber("Arm kI", m_i);
-    double d = SmartDashboard.getNumber("Arm kD", m_d);
+    if(Constants.kLogLevel == Level.FINE) {
+      double p = SmartDashboard.getNumber("Arm kP", m_p);
+      double i = SmartDashboard.getNumber("Arm kI", m_i);
+      double d = SmartDashboard.getNumber("Arm kD", m_d);
 
-    SmartDashboard.putNumber("Arm kP", p);
-    SmartDashboard.putNumber("Arm kI", i);
-    SmartDashboard.putNumber("Arm kD", d);
+      SmartDashboard.putNumber("Arm kP", p);
+      SmartDashboard.putNumber("Arm kI", i);
+      SmartDashboard.putNumber("Arm kD", d);
 
-    m_pid.setP(p);
-    m_pid.setI(i);
-    m_pid.setD(d);
+      m_pid.setP(p);
+      m_pid.setI(i);
+      m_pid.setD(d);
+    }
   }
 }

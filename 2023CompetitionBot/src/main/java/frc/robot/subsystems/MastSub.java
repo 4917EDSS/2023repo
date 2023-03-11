@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import java.util.logging.Level;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -99,6 +100,7 @@ public class MastSub extends SubsystemBase {
       m_motor.setIdleMode(IdleMode.kCoast);
     }
   }
+
 
   /** Sets the current position as the starting position - use wisely */
   public void zeroEncoder() {
@@ -295,19 +297,22 @@ public class MastSub extends SubsystemBase {
   /** Display/get subsystem information to/from the Smart Dashboard */
   private void updateSmartDashboard() {
     SmartDashboard.putNumber("Mast Encoder", getPosition());
+    SmartDashboard.putBoolean("Mast limit", isMastAtLimit());
 
-    double p = SmartDashboard.getNumber("Mast kP", m_p);
-    double i = SmartDashboard.getNumber("Mast kI", m_i);
-    double d = SmartDashboard.getNumber("Mast kD", m_d);
+    if(Constants.kLogLevel == Level.FINE) {
+      double p = SmartDashboard.getNumber("Mast kP", m_p);
+      double i = SmartDashboard.getNumber("Mast kI", m_i);
+      double d = SmartDashboard.getNumber("Mast kD", m_d);
 
-    SmartDashboard.putNumber("Mast kP", p);
-    SmartDashboard.putNumber("Mast kI", i);
-    SmartDashboard.putNumber("Mast kD", d);
-    SmartDashboard.putBoolean("Mast back", isMastAtLimit());
+      SmartDashboard.putNumber("Mast kP", p);
+      SmartDashboard.putNumber("Mast kI", i);
+      SmartDashboard.putNumber("Mast kD", d);
 
-    m_pid.setP(p);
-    m_pid.setI(i);
-    m_pid.setD(d);
+
+      m_pid.setP(p);
+      m_pid.setI(i);
+      m_pid.setD(d);
+    }
   }
 
   public boolean isFinished() {
