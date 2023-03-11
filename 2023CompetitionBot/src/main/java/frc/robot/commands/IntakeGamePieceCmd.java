@@ -6,10 +6,12 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.StateOfRobot;
+import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.subsystems.IntakeSub;
 
 public class IntakeGamePieceCmd extends CommandBase {
   private double m_power;
+  private double m_timeSpinning = 0.1;
   private IntakeSub m_intakeSub;
 
   /** Creates a new IntakeGamePieceCmd. */
@@ -34,7 +36,9 @@ public class IntakeGamePieceCmd extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+
+  }
 
   // Called once the command ends or is interrupted.
   @Override
@@ -47,6 +51,8 @@ public class IntakeGamePieceCmd extends CommandBase {
   public boolean isFinished() {
     return m_intakeSub.isIntakeLoaded();
     //if(RobotController.getFPGATime() - m_timeSpinning > (m_timeSpinning * Math.pow(10, 6))) { // After (timeSpinning) seconds the command stops automatically
-    //return true;
+    //return true; 
+    //}
   }
 }
+

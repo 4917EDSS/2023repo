@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ArmMoveWithJoystickCmd;
 import frc.robot.commands.AutoDoNothingCmd;
+import frc.robot.commands.BalanceChargeStationCmd;
 import frc.robot.commands.DriveAlignTapeCmd;
 import frc.robot.commands.DriveSetGearCmd;
 import frc.robot.commands.DriveStraightCmd;
@@ -107,6 +108,7 @@ public class RobotContainer {
     m_driverController.triangle().onTrue(
         new InstantCommand(() -> m_drivetrainSub.setIsAutoShift(true), /* Call on command start */ m_drivetrainSub));
 
+
     // Operator controller bindings
     m_operatorController.povUp()
         .onTrue(new IntakeSetPositionCmd(ManipulatorsPositions.DOUBLE_STATION, m_armSub, m_mastSub, m_intakeSub));
@@ -153,6 +155,7 @@ public class RobotContainer {
     m_Chooser.setDefaultOption("1 do nothing", new AutoDoNothingCmd());
     m_Chooser.addOption("2 drive straight", new DriveStraightCmd(m_drivetrainSub, 3));
     m_Chooser.addOption("3 expel game piece", new ExpelGamePieceCmd(1.0, m_intakeSub));
+    m_Chooser.addOption("4 balance on Charge Station", new BalanceChargeStationCmd(m_drivetrainSub));
     SmartDashboard.putData("auto choices", m_Chooser);
   }
 
