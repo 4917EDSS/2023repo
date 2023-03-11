@@ -9,6 +9,8 @@ public class AutoBalanceChargeStationCmd extends CommandBase {
   private int count;
   private double onChargeStationDegree;
   private double debounceTime;
+  private boolean m_isForward;
+  private boolean m_isFinished = false;
 
   private final DrivetrainSub m_drivetrainSub;
 
@@ -17,8 +19,9 @@ public class AutoBalanceChargeStationCmd extends CommandBase {
   //  Add Arm and Mast to home state
   //  Use gyro to drive state.  Add drivestright command to drivetrainsub.
 
-  public AutoBalanceChargeStationCmd(DrivetrainSub drivetrainSub) {
+  public AutoBalanceChargeStationCmd(DrivetrainSub drivetrainSub, boolean isForward) {
     m_drivetrainSub = drivetrainSub;
+    m_isForward = isForward;
     addRequirements(drivetrainSub);
     // mRioAccel = new BuiltInAccelerometer();
     state = 0;
@@ -52,7 +55,12 @@ public class AutoBalanceChargeStationCmd extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drivetrainSub.arcadeDrive(autoBalanceRoutine(), 0);
+    if(m_isForward) {
+      m_drivetrainSub.arcadeDrive(autoBalanceRoutine(), 0);
+    } else {
+      m_drivetrainSub.arcadeDrive(-autoBalanceRoutine(), 0);
+    }
+
   }
 
   public int secondsToTicks(double time) {
@@ -77,6 +85,7 @@ public class AutoBalanceChargeStationCmd extends CommandBase {
       //driving up charge station, drive slower, stopping when level
       case 1:
         if(-m_drivetrainSub.getPitch() < 5) {
+
           debounceCount++;
         }
         if(debounceCount > secondsToTicks(debounceTime)) {
@@ -100,15 +109,33 @@ public class AutoBalanceChargeStationCmd extends CommandBase {
           debounceCount = 0;
           return 0;
         }
-        if(m_drivetrainSub.getPitch() >= 1) {
+        if(m_drivetrainSub.getPitch() >= 2) {
           return -0.3;
-        } else if(m_drivetrainSub.getPitch() <= -1) {
+        } else if(m_drivetrainSub.getPitch() <= -2) {
           return 0.3;
+        } else {
+          m_drivetrainSub.setBrake(true);
+          return 0;
         }
       case 3:
+        m_isFinished = true;
+
         return 0;
     }
-
     return 0;
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+    m_drivetrainSub.arcadeDrive(0, 0);
+  }
+
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished() {
+    if(m_isFinished) {
+      return true;
+    }
+    return false;
   }
 }
