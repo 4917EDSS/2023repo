@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.StateOfRobot;
+import frc.robot.subsystems.SubControl.Mode;
 
 public class IntakeSub extends SubsystemBase {
   private static final double kPositionMin = 0; // In encoder ticks
@@ -67,6 +68,7 @@ public class IntakeSub extends SubsystemBase {
   public void init() {
     m_intakeMotor.setIdleMode(IdleMode.kCoast);
     m_rotateMotor.setIdleMode(IdleMode.kBrake);
+    setPosition(Mode.DISABLED, 0, 0);
   }
 
   public void initTest() {

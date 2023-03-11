@@ -13,6 +13,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.subsystems.SubControl.Mode;
 import frc.robot.subsystems.SubControl.State;
 import frc.robot.subsystems.LedSub;
 import frc.robot.subsystems.LedSub.LedColour;
@@ -84,6 +85,7 @@ public class ArmSub extends SubsystemBase {
   public void init() {
     zeroEncoder();
     m_motor.setNeutralMode(NeutralMode.Brake);
+    setPosition(Mode.DISABLED, 0, 0);
   }
 
   public void initTest() {
