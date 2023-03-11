@@ -29,6 +29,8 @@ public class IntakeSub extends SubsystemBase {
   public static final double kWristFlush = 27;
   public static final double kWristThrough = 12.595;
   public static final double kMaxPosDifference = 0.1;
+  public static final int kNumberOfGoodSensorTripsRequired = 3;
+  public static final int kMinSensorDetectionValue = 400;
 
 
   // STATE VARIABLES //////////////////////////////////////////////////////////
@@ -36,6 +38,7 @@ public class IntakeSub extends SubsystemBase {
   private SubControl m_newControl = new SubControl(); // New state to copy to current state when newStateParameters is true
   private boolean m_newControlParameters; // Set to true when ready to switch to new state
   private double m_lastPower = 0;
+  private int m_countOfGoodSensorTrips = 0; // Increments by one every time the sensor trips at 400 (stops at three)
 
   private final CANSparkMax m_intakeMotor =
       new CANSparkMax((Constants.CanIds.kIntakeMotor), CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -136,13 +139,11 @@ public class IntakeSub extends SubsystemBase {
   }
 
   public boolean isIntakeLoaded() {
-    if((StateOfRobot.isConeMode() == true) && (m_gamePieceSensor.getValue() > 400)) {
+    if(m_countOfGoodSensorTrips >= kNumberOfGoodSensorTripsRequired) {
       return true;
+    } else {
+      return false;
     }
-    if((StateOfRobot.isCubeMode() == true) && (m_gamePieceSensor.getValue() > 400)) {
-      return true;
-    }
-    return false;
   }
 
   public boolean isIntakeAtLimit() {
@@ -236,6 +237,14 @@ public class IntakeSub extends SubsystemBase {
     double currentPosition = getPositionRotate();
     if(isIntakeAtLimit()) {
       zeroEncoderRotate();
+    }
+
+
+    // Filter game piece sensor
+    if(m_gamePieceSensor.getValue() > kMinSensorDetectionValue) {
+      m_countOfGoodSensorTrips++;
+    } else {
+      m_countOfGoodSensorTrips = 0;
     }
 
     // Check if there are new control parameters to set
