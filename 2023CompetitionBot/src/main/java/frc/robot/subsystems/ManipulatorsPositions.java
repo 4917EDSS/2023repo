@@ -24,7 +24,7 @@ public enum ManipulatorsPositions {
   LOW_CUBE(217, 126000, 0), // Cube low drop-off position
   GROUND_CUBE(271, 100000, 0), // Cube ground pick-up position
   SINGLE_STATION_CUBE(250, 0, 0), // Cube single (side) station pick-up position
-  DOUBLE_STATION_CUBE(26.237, -171728, 32.523), // Cube double station pick-up position
+  DOUBLE_STATION_CUBE(8.8333, -175041, 28.3569), // Cube double station pick-up position
 
   // Cone Positions
   HIGH_CONE(197, 248000, 0), // Cone high drop-off position 
@@ -32,7 +32,7 @@ public enum ManipulatorsPositions {
   LOW_CONE(217, 126000, 0), // Cone low drop-off position 
   GROUND_CONE(256, 100000, 0), // Cone ground pick-up position
   SINGLE_STATION_CONE(250, 0, 0), // Cone single (side) station pick-up position
-  DOUBLE_STATION_CONE(61.834, -180802, 41.166); // Cone double station pick-up position
+  DOUBLE_STATION_CONE(18.618, -199385, 51.309); // Cone double station pick-up position
 
 
   // This is where the encoder values are stored for each enum entry
