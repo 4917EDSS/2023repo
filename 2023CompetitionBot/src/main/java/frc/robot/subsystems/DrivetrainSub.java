@@ -148,6 +148,7 @@ public class DrivetrainSub extends SubsystemBase {
     SmartDashboard.putBoolean("High Gear", isHighGear());
     SmartDashboard.putBoolean("Coasting", isCoasting());
     SmartDashboard.putNumber("Gyro Heading", getHeading());
+    SmartDashboard.putNumber("Pitch", getPitch());
   }
 
   public void tankDrive(double leftPower, double rightPower) {
@@ -206,6 +207,10 @@ public class DrivetrainSub extends SubsystemBase {
         shift(false);
       }
     }
+  }
+
+  public double getPitch() {
+    return m_gyro.getPitch();
   }
 
   public double getHeading() {
