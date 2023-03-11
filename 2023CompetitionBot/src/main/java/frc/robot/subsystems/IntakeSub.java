@@ -65,7 +65,7 @@ public class IntakeSub extends SubsystemBase {
 
   /** Use this method to reset all of the hardware and states to safe starting values */
   public void init() {
-    m_intakeMotor.setIdleMode(IdleMode.kBrake);
+    m_intakeMotor.setIdleMode(IdleMode.kCoast);
     m_rotateMotor.setIdleMode(IdleMode.kBrake);
   }
 
