@@ -149,9 +149,6 @@ public class DrivetrainSub extends SubsystemBase {
     SmartDashboard.putBoolean("Coasting", isCoasting());
     SmartDashboard.putNumber("Gyro Heading", getHeading());
     SmartDashboard.putNumber("Pitch", getPitch());
-    SmartDashboard.putNumber("x", m_gyro.getVelocityX());
-    SmartDashboard.putNumber("y", m_gyro.getVelocityY());
-    SmartDashboard.putNumber("z", m_gyro.getVelocityZ());
   }
 
   public void tankDrive(double leftPower, double rightPower) {
@@ -213,7 +210,6 @@ public class DrivetrainSub extends SubsystemBase {
   }
 
   public double getPitch() {
-    m_gyro.getVelocityZ();
     return m_gyro.getPitch();
   }
 
