@@ -199,18 +199,16 @@ public class RobotContainer {
       m_buttonReady = true;
     }
 
-
-    // Show sensor and encoder status on LEDs when the robot isn't enabled
-    if(m_intakeSub.isIntakeLoaded()) {
-      m_ledSub.setZoneColour(LedZones.DIAG_INTAKE_LIMIT, LedColour.GREEN);
+    // MAST
+    m_ledSub.setZoneRGB(LedZones.DIAG_MAST_ENC, 0, (int) (m_mastSub.getPosition() / 18.0 * 255), 0);
+    if(m_mastSub.isMastAtLimit()) {
+      m_ledSub.setZoneColour(LedZones.DIAG_MAST_LIMIT, LedColour.GREEN);
     } else {
-      m_ledSub.setZoneColour(LedZones.DIAG_INTAKE_LIMIT, LedColour.RED);
+      m_ledSub.setZoneColour(LedZones.DIAG_MAST_LIMIT, LedColour.RED);
     }
 
-    // MAST ENCODER
-    m_ledSub.setZoneRGB(LedZones.DIAG_MAST_ENC, 0, (int) (m_mastSub.getPosition() / 18.0 * 255), 0);
 
-    // ARM ENCODER
+    // ARM
     if(m_armSub.getPosition() > 0) {
       m_ledSub.setZoneRGB(LedZones.DIAG_ARM_ENC, 0, (int) (m_armSub.getPosition() / 24000.0 * 255), 0);
     } else if(m_armSub.getPosition() < 0) {
@@ -219,7 +217,14 @@ public class RobotContainer {
       m_ledSub.setZoneRGB(LedZones.DIAG_ARM_ENC, 0, 0, 0);
     }
 
-    // INTAKE ENCODER
+    // INTAKE
     m_ledSub.setZoneRGB(LedZones.DIAG_INTAKE_ENC, 0, (int) m_mastSub.getPosition() / 6 * 255, 0);
+
+    // Show sensor and encoder status on LEDs when the robot isn't enabled
+    if(m_intakeSub.isIntakeLoaded()) {
+      m_ledSub.setZoneColour(LedZones.DIAG_INTAKE_LIMIT, LedColour.GREEN);
+    } else {
+      m_ledSub.setZoneColour(LedZones.DIAG_INTAKE_LIMIT, LedColour.RED);
+    }
   }
 }
