@@ -85,6 +85,7 @@ public class AutoBalanceChargeStationCmd extends CommandBase {
       //driving up charge station, drive slower, stopping when level
       case 1:
         if(-m_drivetrainSub.getPitch() < 5) {
+
           debounceCount++;
         }
         if(debounceCount > secondsToTicks(debounceTime)) {
@@ -108,14 +109,17 @@ public class AutoBalanceChargeStationCmd extends CommandBase {
           debounceCount = 0;
           return 0;
         }
-        if(m_drivetrainSub.getPitch() >= 1) {
+        if(m_drivetrainSub.getPitch() >= 2) {
           return -0.3;
-        } else if(m_drivetrainSub.getPitch() <= -1) {
+        } else if(m_drivetrainSub.getPitch() <= -2) {
           return 0.3;
+        } else {
+          m_drivetrainSub.setBrake(true);
+          return 0;
         }
       case 3:
         m_isFinished = true;
-        m_drivetrainSub.setBrake(true);
+
         return 0;
     }
     return 0;
