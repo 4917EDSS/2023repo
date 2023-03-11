@@ -5,6 +5,7 @@
 package frc.robot;
 
 import java.util.logging.Logger;
+import javax.lang.model.util.ElementScanner14;
 import edu.wpi.first.hal.HALUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -179,6 +180,7 @@ public class RobotContainer {
   }
 
   public void disabledPeriodic() {
+    // Manually disable motor brakes
     if((HALUtil.getFPGAButton() == true) && m_buttonReady) {
       m_brakeMode = !m_brakeMode;
       m_drivetrainSub.setBrake(m_brakeMode);
@@ -200,15 +202,19 @@ public class RobotContainer {
       m_ledSub.setZoneColour(LedZones.DIAG_INTAKE_LIMIT, LedColour.RED);
     }
 
-    if(m_armSub.getPosition() < 0) {
-      m_ledSub.setZoneRGB(LedZones.DIAG_ARM_ENC, 200, 200 + (int) (m_armSub.getPosition() / 50000 * 200),
-          200 + (int) (m_armSub.getPosition() / 50000 * 200));
+    // MAST ENCODER
+    m_ledSub.setZoneRGB(LedZones.DIAG_MAST_ENC, 0, (int) (m_mastSub.getPosition() / 18.0 * 255), 0);
+
+    // ARM ENCODER
+    if(m_armSub.getPosition() > 0) {
+      m_ledSub.setZoneRGB(LedZones.DIAG_ARM_ENC, 0, (int) (m_armSub.getPosition() / 24000.0 * 255), 0);
+    } else if(m_armSub.getPosition() < 0) {
+      m_ledSub.setZoneRGB(LedZones.DIAG_ARM_ENC, (int) (m_armSub.getPosition() / -20000.0 * 255), 0, 0);
     } else {
-      m_ledSub.setZoneRGB(LedZones.DIAG_ARM_ENC, 200 - (int) (m_armSub.getPosition() / 50000 * 200), 200,
-          200 - (int) (m_armSub.getPosition() / 50000 * 200));
+      m_ledSub.setZoneRGB(LedZones.DIAG_ARM_ENC, 0, 0, 0);
     }
 
-    m_ledSub.setZoneRGB(LedZones.DIAG_MAST_ENC, 200 - (int) m_mastSub.getPosition() * 12, 200,
-        200 - (int) m_mastSub.getPosition() * 12);
+    // INTAKE ENCODER
+    m_ledSub.setZoneRGB(LedZones.DIAG_INTAKE_ENC, 0, (int) m_mastSub.getPosition() / 6 * 255, 0);
   }
 }
