@@ -21,9 +21,9 @@ public class IntakeSetPositionCmd extends CommandBase {
   public final static int kOptionsButton = 1;
 
   private ManipulatorsPositions m_manipulatorsPositions;
-  private final static double kMaxArmPower = 0.5; //TODO <----- Tune this value 
-  private final static double kMaxMastPower = 1.0; //TODO <----- Tune this value 
-  private final static double kMaxIntakePower = 0.5; //TODO <----- Tune this  value
+  private final static double kMaxArmPower = 1.0;
+  private final static double kMaxMastPower = 1.0;
+  private final static double kMaxIntakePower = 0.75;
 
   //private final ManipulatorSub m_manipulatorSub;
   private final ArmSub m_armSub;

@@ -53,7 +53,7 @@ public class LedSub extends SubsystemBase {
   }
 
   public enum LedColour {
-    YELLOW(128, 128, 0), //
+    YELLOW(128, 80, 0), //
     PURPLE(80, 20, 60), //
     RED(128, 0, 0), //
     GREEN(0, 128, 0), //

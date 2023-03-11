@@ -17,6 +17,7 @@ import java.util.logging.Level;
  */
 public final class Constants {
   public static final Level kLogLevel = Level.WARNING;
+  public static final boolean kEnhanceDashBoard = false;
 
   // HARDWARE IDs/PORTs MAPPING ///////////////////////////////////////////////
   public static class OperatorConstants {
