@@ -37,7 +37,7 @@ public class DriveStraightCmd extends CommandBase {
   public void execute() {
     double rotatePwr = m_drivetrainSub.getHeading() * kRotateAdjustment;
     double power = kMaxPower;
-    m_distanceRemaining = m_targetDriveDistance - m_drivetrainSub.getEncoderDistanceM();
+    m_distanceRemaining = Math.abs(m_targetDriveDistance) - Math.abs(m_drivetrainSub.getEncoderDistanceM());
     double dir = (m_distanceRemaining < 0) ? -1 : 1;
     m_distanceRemaining = Math.abs(m_distanceRemaining);
 
@@ -49,7 +49,7 @@ public class DriveStraightCmd extends CommandBase {
       power = 0;
     }
 
-    m_drivetrainSub.arcadeDrive(power * dir, -rotatePwr);
+    m_drivetrainSub.arcadeDrive(power * dir * (m_targetDriveDistance / Math.abs(m_targetDriveDistance)), -rotatePwr);
   }
 
   // Called once the command ends or is interrupted.
