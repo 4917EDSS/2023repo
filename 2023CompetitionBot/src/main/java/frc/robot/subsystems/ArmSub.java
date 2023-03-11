@@ -327,7 +327,7 @@ public class ArmSub extends SubsystemBase {
   private void updateSmartDashboard() {
     SmartDashboard.putNumber("Arm Encoder", getPosition());
 
-    if(Constants.kLogLevel == Level.FINE) {
+   if(Constants.kEnhanceDashBoard == true) {
       double p = SmartDashboard.getNumber("Arm kP", m_p);
       double i = SmartDashboard.getNumber("Arm kI", m_i);
       double d = SmartDashboard.getNumber("Arm kD", m_d);

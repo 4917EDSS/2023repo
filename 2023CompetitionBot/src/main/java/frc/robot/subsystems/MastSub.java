@@ -300,7 +300,7 @@ public class MastSub extends SubsystemBase {
     SmartDashboard.putNumber("Mast Encoder", getPosition());
     SmartDashboard.putBoolean("Mast limit", isMastAtLimit());
 
-    if(Constants.kLogLevel == Level.FINE) {
+    if(Constants.kEnhanceDashBoard == true) {
       double p = SmartDashboard.getNumber("Mast kP", m_p);
       double i = SmartDashboard.getNumber("Mast kI", m_i);
       double d = SmartDashboard.getNumber("Mast kD", m_d);
