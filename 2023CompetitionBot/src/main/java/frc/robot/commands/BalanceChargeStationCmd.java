@@ -116,7 +116,7 @@ public class BalanceChargeStationCmd extends CommandBase {
       //driving up charge station, drive slower, stopping when level
       case 1:
         System.out.println("case 1 pitch " + m_drivetrainSub.getPitch());
-        if(m_drivetrainSub.getPitch() < 10) {
+        if(m_drivetrainSub.getPitch() < 17) {
           debounceCount++;
         }
         if(debounceCount > secondsToTicks(debounceTime)) {
