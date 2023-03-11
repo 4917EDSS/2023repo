@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import java.util.logging.Level;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
@@ -12,6 +13,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.subsystems.SubControl.Mode;
 import frc.robot.subsystems.SubControl.State;
 import frc.robot.subsystems.LedSub;
 import frc.robot.subsystems.LedSub.LedColour;
@@ -30,7 +32,6 @@ public class ArmSub extends SubsystemBase {
   public static final double kFourtyFive = 133000.0; // Measured - not necessarily useful, can delete
   public static final double kNegFourtyFive = -69000.0; // Measured - not necessarily useful, can delete  
   public static final double kSafeSpaceInDangerZone = 10000;
-  //TODO: Tune the two constants above
 
   // STATE VARIABLES //////////////////////////////////////////////////////////
   private SubControl m_currentControl = new SubControl(); // Current states of mechanism
@@ -84,6 +85,7 @@ public class ArmSub extends SubsystemBase {
   public void init() {
     zeroEncoder();
     m_motor.setNeutralMode(NeutralMode.Brake);
+    setPosition(Mode.DISABLED, 0, 0);
   }
 
   public void initTest() {
@@ -155,27 +157,12 @@ public class ArmSub extends SubsystemBase {
   }
 
   public boolean isBlocked(double currentPosition, double targetPosition) {
-    // TODO: Remove if no longer needed
-    boolean moving_up = (targetPosition > currentPosition);
-    boolean moving_down = (targetPosition < currentPosition);
-    boolean near_top_of_danger_zone =
-        ((currentPosition > (kMaxDangerZone - kSafeSpaceInDangerZone)) && (currentPosition < kMaxDangerZone));
-    boolean near_bottom_of_danger_zone =
-        ((currentPosition < (kMinDangerZone + kSafeSpaceInDangerZone)) && (currentPosition > kMinDangerZone));
 
     if(!isDangerZone()) {
       m_ledSub.setZoneColour(LedZones.ARM_BLOCKED, LedColour.GREEN);
       return false;
     } else {
-      // TODO: Remove commented code if no longer needed
-      // if(moving_up && near_top_of_danger_zone) {
-      //   System.out.println("TOP");
-      //   return false;
-      // } else if(moving_down && near_bottom_of_danger_zone) {
-      //   System.out.println("Bottom");
-      //   return false;
-      //}
-      if(/* !m_mastSub.isSafeZone() || */ !m_intakeSub.isSafeZone()) {
+      if(!m_intakeSub.isSafeZone()) {
         System.out.println("Arm blocked");
         m_ledSub.setZoneColour(LedZones.ARM_BLOCKED, LedColour.RED);
         return true;
@@ -293,7 +280,6 @@ public class ArmSub extends SubsystemBase {
 
       case HOLDING:
         // If the mechanism is at it's target location, apply power to hold it there if necessary
-        // TODO: Check if we can use the calcMovePower function since the PID could take care of both cases
         newPower = calcMovePower(currentPosition, m_currentControl.targetPosition, m_currentControl.targetPower);
         break;
 
@@ -341,16 +327,18 @@ public class ArmSub extends SubsystemBase {
   private void updateSmartDashboard() {
     SmartDashboard.putNumber("Arm Encoder", getPosition());
 
-    double p = SmartDashboard.getNumber("Arm kP", m_p);
-    double i = SmartDashboard.getNumber("Arm kI", m_i);
-    double d = SmartDashboard.getNumber("Arm kD", m_d);
+   if(Constants.kEnhanceDashBoard == true) {
+      double p = SmartDashboard.getNumber("Arm kP", m_p);
+      double i = SmartDashboard.getNumber("Arm kI", m_i);
+      double d = SmartDashboard.getNumber("Arm kD", m_d);
 
-    SmartDashboard.putNumber("Arm kP", p);
-    SmartDashboard.putNumber("Arm kI", i);
-    SmartDashboard.putNumber("Arm kD", d);
+      SmartDashboard.putNumber("Arm kP", p);
+      SmartDashboard.putNumber("Arm kI", i);
+      SmartDashboard.putNumber("Arm kD", d);
 
-    m_pid.setP(p);
-    m_pid.setI(i);
-    m_pid.setD(d);
+      m_pid.setP(p);
+      m_pid.setI(i);
+      m_pid.setD(d);
+    }
   }
 }

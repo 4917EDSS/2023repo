@@ -143,11 +143,10 @@ public class DrivetrainSub extends SubsystemBase {
   }
 
   public void updateSmarterDashboard() {
-    SmartDashboard.putNumber("left motor1 encoder", getLeftMotorEncoder());
+    SmartDashboard.putNumber("L1 drive enc", getLeftMotorEncoder());
     SmartDashboard.putBoolean("Auto Shift", (getisAutoShift()));
+    SmartDashboard.putBoolean("High Gear", isHighGear());
     SmartDashboard.putBoolean("Coasting", isCoasting());
-    // TODO Add high and low gear on Smart Dashboard
-    // SmartDashboard.putBoolean("High Gear", ())
     SmartDashboard.putNumber("Gyro Heading", getHeading());
   }
 
@@ -157,6 +156,10 @@ public class DrivetrainSub extends SubsystemBase {
 
   public void arcadeDrive(double fwdPower, double turnPower) {
     m_drive.arcadeDrive(fwdPower, turnPower);
+  }
+
+  public boolean isHighGear() {
+    return m_shifter.get();
   }
 
   public void shift(boolean isHigh) {
