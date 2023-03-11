@@ -142,7 +142,7 @@ public class MastSub extends SubsystemBase {
   }
 
   public boolean isMastAtLimit() {
-    return m_backMast.get();
+    return !m_backMast.get();
   }
 
   /**

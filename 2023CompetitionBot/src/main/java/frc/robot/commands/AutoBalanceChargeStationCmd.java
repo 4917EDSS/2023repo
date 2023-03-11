@@ -1,23 +1,16 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import frc.robot.subsystems.DrivetrainSub;
 
-public class BalanceChargeStationCmd extends CommandBase {
-  private BuiltInAccelerometer mRioAccel;
+public class AutoBalanceChargeStationCmd extends CommandBase {
   private int state;
   private int debounceCount;
   private int count;
-  private double robotSpeedSlow;
-  private double robotSpeedFast;
-  private double robotSpeedExtraSlow;
   private double onChargeStationDegree;
-  private double levelDegree;
   private double debounceTime;
-  private double singleTapTime;
-  private double scoringBackUpTime;
-  private double doubleTapTime;
+  private boolean m_isForward;
+  private boolean m_isFinished = false;
 
   private final DrivetrainSub m_drivetrainSub;
 
@@ -26,8 +19,9 @@ public class BalanceChargeStationCmd extends CommandBase {
   //  Add Arm and Mast to home state
   //  Use gyro to drive state.  Add drivestright command to drivetrainsub.
 
-  public BalanceChargeStationCmd(DrivetrainSub drivetrainSub) {
+  public AutoBalanceChargeStationCmd(DrivetrainSub drivetrainSub, boolean isForward) {
     m_drivetrainSub = drivetrainSub;
+    m_isForward = isForward;
     addRequirements(drivetrainSub);
     // mRioAccel = new BuiltInAccelerometer();
     state = 0;
@@ -37,36 +31,12 @@ public class BalanceChargeStationCmd extends CommandBase {
     /**********
      * CONFIG *
      **********/
-    //Speed the robot. drived while scoring/approaching station, default = 0.4
-    robotSpeedFast = 0.7;
-
-    //Speed the robot drives while balancing itself on the charge station.
-    //Should be roughly half the fast speed, to make the robot more accurate, default = 0.2
-    robotSpeedSlow = 0.4;
-
-    // Speed of robot at very end when leveling on the charging station.
-    robotSpeedExtraSlow = 0.3;
-
     //Angle where the robot knows it is on the charge station, default = 13.0
     onChargeStationDegree = 13.0;
-
-    //Angle where the robot can assume it is level on the charging station
-    //Used for exiting the drive forward sequence as well as for auto balancing, default = 6.0
-    levelDegree = 10.0;
 
     //Amount of time a sensor condition needs to be met before changing states in seconds
     //Reduces the impact of sensor noice, but too high can make the auto run slower, default = 0.2
     debounceTime = 0.05;
-
-    //Amount of time to drive towards to scoring target when trying to bump the game piece off
-    //Time it takes to go from starting position to hit the scoring target
-    singleTapTime = 0.4;
-
-    //Amount of time to drive away from knocked over gamepiece before the second tap
-    scoringBackUpTime = 0.2;
-
-    //Amount of time to drive forward to secure the scoring of the gamepiece
-    doubleTapTime = 0.3;
 
   }
 
@@ -85,7 +55,12 @@ public class BalanceChargeStationCmd extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drivetrainSub.arcadeDrive(autoBalanceRoutine(), 0);
+    if(m_isForward) {
+      m_drivetrainSub.arcadeDrive(autoBalanceRoutine(), 0);
+    } else {
+      m_drivetrainSub.arcadeDrive(-autoBalanceRoutine(), 0);
+    }
+
   }
 
   public int secondsToTicks(double time) {
@@ -98,26 +73,23 @@ public class BalanceChargeStationCmd extends CommandBase {
     switch(state) {
       //drive forwards to approach station, exit when tilt is detected
       case 0:
-        System.out.println("case 0 pitch " + m_drivetrainSub.getPitch());
         if(-m_drivetrainSub.getPitch() > onChargeStationDegree) {
           debounceCount++;
         }
         if(debounceCount > secondsToTicks(debounceTime)) {
           state = 1;
-          System.out.println("1");
           debounceCount = 0;
-          return robotSpeedSlow;
+          return 0.4;
         }
-        return robotSpeedFast;
+        return 0.7;
       //driving up charge station, drive slower, stopping when level
       case 1:
-        System.out.println("case 1 pitch " + m_drivetrainSub.getPitch());
         if(-m_drivetrainSub.getPitch() < 5) {
+
           debounceCount++;
         }
         if(debounceCount > secondsToTicks(debounceTime)) {
           state = 2;
-          System.out.println("2");
           debounceCount = 0;
           return 0;
         }
@@ -129,28 +101,41 @@ public class BalanceChargeStationCmd extends CommandBase {
         }
         //on charge station, stop motors and wait for end of auto
       case 2:
-        System.out.println("case 2 pitch " + m_drivetrainSub.getPitch());
         if(Math.abs(m_drivetrainSub.getPitch()) <= 1) {
           debounceCount++;
-          System.out.println("if");
         }
         if(debounceCount > secondsToTicks(debounceTime)) {
           state = 4;
-          System.out.println("4");
           debounceCount = 0;
           return 0;
         }
-        if(m_drivetrainSub.getPitch() >= 1) {
-          System.out.println("-0.2");
-          return -robotSpeedExtraSlow;
-        } else if(m_drivetrainSub.getPitch() <= -1) {
-          System.out.println("0.2");
-          return robotSpeedExtraSlow;
+        if(m_drivetrainSub.getPitch() >= 2) {
+          return -0.3;
+        } else if(m_drivetrainSub.getPitch() <= -2) {
+          return 0.3;
+        } else {
+          m_drivetrainSub.setBrake(true);
+          return 0;
         }
       case 3:
+        m_isFinished = true;
+
         return 0;
     }
-
     return 0;
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+    m_drivetrainSub.arcadeDrive(0, 0);
+  }
+
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished() {
+    if(m_isFinished) {
+      return true;
+    }
+    return false;
   }
 }
