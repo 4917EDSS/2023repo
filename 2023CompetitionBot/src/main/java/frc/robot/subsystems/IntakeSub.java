@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import java.util.logging.Level;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel;
@@ -64,7 +65,7 @@ public class IntakeSub extends SubsystemBase {
 
   /** Use this method to reset all of the hardware and states to safe starting values */
   public void init() {
-    m_intakeMotor.setIdleMode(IdleMode.kBrake);
+    m_intakeMotor.setIdleMode(IdleMode.kCoast);
     m_rotateMotor.setIdleMode(IdleMode.kBrake);
   }
 
@@ -283,24 +284,25 @@ public class IntakeSub extends SubsystemBase {
 
   /** Display/get subsystem information to/from the Smart Dashboard */
   private void updateSmartDashboard() {
-    SmartDashboard.putNumber("Rotate Intake Encoder", getPositionRotate());
-
-    double p = SmartDashboard.getNumber("Intake kP", m_p);
-    double i = SmartDashboard.getNumber("Intake kI", m_i);
-    double d = SmartDashboard.getNumber("Intake kD", m_d);
-
-    SmartDashboard.putNumber("Intake kP", p);
-    SmartDashboard.putNumber("Intake kI", i);
-    SmartDashboard.putNumber("Intake kD", d);
-    SmartDashboard.putNumber("Arm Voltage", m_intakeMotor.getOutputCurrent());
-
+    SmartDashboard.putNumber("Wrist Enc", getPositionRotate());
+    SmartDashboard.putBoolean("Wrist Limit", isIntakeAtLimit());
     SmartDashboard.putNumber("Piece Sensor", m_gamePieceSensor.getValue());
-    SmartDashboard.putBoolean("Intake Limit", isIntakeAtLimit());
     SmartDashboard.putBoolean("Intake Loaded", isIntakeLoaded());
 
-    m_pid.setP(p);
-    m_pid.setI(i);
-    m_pid.setD(d);
+    if(Constants.kLogLevel == Level.FINE) {
+      double p = SmartDashboard.getNumber("Intake kP", m_p);
+      double i = SmartDashboard.getNumber("Intake kI", m_i);
+      double d = SmartDashboard.getNumber("Intake kD", m_d);
+
+      SmartDashboard.putNumber("Intake kP", p);
+      SmartDashboard.putNumber("Intake kI", i);
+      SmartDashboard.putNumber("Intake kD", d);
+      SmartDashboard.putNumber("Arm Voltage", m_intakeMotor.getOutputCurrent());
+
+      m_pid.setP(p);
+      m_pid.setI(i);
+      m_pid.setD(d);
+    }
   }
 
   public boolean isFinished() {
