@@ -17,12 +17,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.StateOfRobot;
 import frc.robot.subsystems.SubControl.Mode;
+import frc.robot.subsystems.SubControl.State;
 
 public class IntakeSub extends SubsystemBase {
   private static final double kPositionMin = 0; // In encoder ticks
   private static final double kPositionMax = 60.0; // In encoder ticks (straight up is 30)
   private static final double kManualModePowerDeadband = 0.05; // If manual power is less than this, assume power is 0
-  private static final double kIntakeMinSafeZone = 0.0;
+  private static final double kIntakeMinSafeZone = 1.0;
   private static final double kIntakeMaxSafeZone = 18.0;
   private static final double kArmMinDangerZone = -60405; // Needs to be found
   private static final double kArmMaxDangerZone = 66994; // Needs to be found
@@ -39,6 +40,7 @@ public class IntakeSub extends SubsystemBase {
   private boolean m_newControlParameters; // Set to true when ready to switch to new state
   private double m_lastPower = 0;
   private int m_countOfGoodSensorTrips = 0; // Increments by one every time the sensor trips at 400 (stops at three)
+  private double m_blockedPosition;
 
   private final CANSparkMax m_intakeMotor =
       new CANSparkMax((Constants.CanIds.kIntakeMotor), CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -110,6 +112,7 @@ public class IntakeSub extends SubsystemBase {
     }
     return false;
   }
+
 
   // This is for the rotate motors
   public void intakeRotate(double power) {
@@ -231,6 +234,21 @@ public class IntakeSub extends SubsystemBase {
     }
   }
 
+  public boolean isBlocked(double currentPosition, double targetPosition) {
+    if(!m_armSub.isDangerZone()) {
+      return false;
+    }
+
+    if(targetPosition > kIntakeMinSafeZone && targetPosition < kIntakeMaxSafeZone) {
+      return false;
+    }
+
+    if(currentPosition > kIntakeMinSafeZone && currentPosition < kIntakeMaxSafeZone) {
+      return false;
+    }
+    return true;
+  }
+
   /** Run the mechanism state machine */
   private void updateStateMachine() {
     double newPower = 0.0;
@@ -267,7 +285,14 @@ public class IntakeSub extends SubsystemBase {
         // If the mechanism is moving, check if it has arrived at it's target.
         // If not, check if it's blocked
         // If not, the set then calculate the move power
-        newPower = calcMovePower(currentPosition, m_currentControl.targetPosition, m_currentControl.targetPower);
+        if(isBlocked(currentPosition, m_currentControl.targetPosition)) {
+          m_blockedPosition = currentPosition;
+          m_currentControl.state = State.INTERRUPTED;
+        } else if(isFinished()) {
+          m_currentControl.state = State.HOLDING;
+        } else {
+          newPower = calcMovePower(currentPosition, m_currentControl.targetPosition, m_currentControl.targetPower);
+        }
         break;
 
       case HOLDING:
@@ -278,6 +303,12 @@ public class IntakeSub extends SubsystemBase {
       case INTERRUPTED:
         // If the mechanism is no longer blocked, transition to MOVING
         // Otherwise, hold this position
+        if(isBlocked(currentPosition, m_currentControl.targetPosition) == false) {
+          m_currentControl.state = State.MOVING;
+          // Otherwise, hold this position
+        } else {
+          newPower = calcMovePower(currentPosition, m_blockedPosition, m_currentControl.targetPower);
+        }
         break;
     }
 

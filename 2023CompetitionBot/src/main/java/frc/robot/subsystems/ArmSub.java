@@ -130,7 +130,7 @@ public class ArmSub extends SubsystemBase {
     return m_motor.getSelectedSensorVelocity();
   }
 
-  private boolean isDangerZone() {
+  public boolean isDangerZone() {
     if((getPosition() >= kMinDangerZone) && (getPosition() <= kMaxDangerZone)) {
       return true;
     }
@@ -327,7 +327,6 @@ public class ArmSub extends SubsystemBase {
   private void updateSmartDashboard() {
     SmartDashboard.putNumber("Arm Encoder", getPosition());
 
-   if(Constants.kEnhanceDashBoard == true) {
       double p = SmartDashboard.getNumber("Arm kP", m_p);
       double i = SmartDashboard.getNumber("Arm kI", m_i);
       double d = SmartDashboard.getNumber("Arm kD", m_d);
