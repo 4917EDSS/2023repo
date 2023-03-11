@@ -45,7 +45,7 @@ public class BalanceChargeStationCmd extends CommandBase {
 
     //Amount of time a sensor condition needs to be met before changing states in seconds
     //Reduces the impact of sensor noice, but too high can make the auto run slower, default = 0.2
-    debounceTime = 0.1;
+    debounceTime = 0.05;
 
     //Amount of time to drive towards to scoring target when trying to bump the game piece off
     //Time it takes to go from starting position to hit the scoring target
@@ -102,6 +102,7 @@ public class BalanceChargeStationCmd extends CommandBase {
     switch(state) {
       //drive forwards to approach station, exit when tilt is detected
       case 0:
+        System.out.println("case 0 pitch " + m_drivetrainSub.getPitch());
         if(m_drivetrainSub.getPitch() > onChargeStationDegree) {
           debounceCount++;
         }
@@ -114,8 +115,8 @@ public class BalanceChargeStationCmd extends CommandBase {
         return robotSpeedFast;
       //driving up charge station, drive slower, stopping when level
       case 1:
-        System.out.println("case 1");
-        if(m_drivetrainSub.getPitch() < levelDegree) {
+        System.out.println("case 1 pitch " + m_drivetrainSub.getPitch());
+        if(m_drivetrainSub.getPitch() < 10) {
           debounceCount++;
         }
         if(debounceCount > secondsToTicks(debounceTime)) {
@@ -127,7 +128,7 @@ public class BalanceChargeStationCmd extends CommandBase {
         return robotSpeedSlow;
       //on charge station, stop motors and wait for end of auto
       case 2:
-        System.out.println("case 2");
+        System.out.println("case 2 pitch " + m_drivetrainSub.getPitch());
         if(Math.abs(m_drivetrainSub.getPitch()) <= 1) {
           debounceCount++;
           System.out.println("if");
@@ -138,10 +139,12 @@ public class BalanceChargeStationCmd extends CommandBase {
           debounceCount = 0;
           return 0;
         }
-        if(m_drivetrainSub.getPitch() >= levelDegree) {
-          return -0.2;
-        } else if(m_drivetrainSub.getPitch() <= -levelDegree) {
-          return 0.2;
+        if(m_drivetrainSub.getPitch() >= 1) {
+          System.out.println("-0.2");
+          return -0.3;
+        } else if(m_drivetrainSub.getPitch() <= -1) {
+          System.out.println("0.2");
+          return 0.3;
         }
       case 3:
         return 0;
