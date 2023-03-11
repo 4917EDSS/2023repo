@@ -8,8 +8,10 @@ public class BalanceChargeStationCmd extends CommandBase {
   private BuiltInAccelerometer mRioAccel;
   private int state;
   private int debounceCount;
+  private int count;
   private double robotSpeedSlow;
   private double robotSpeedFast;
+  private double robotSpeedExtraSlow;
   private double onChargeStationDegree;
   private double levelDegree;
   private double debounceTime;
@@ -19,12 +21,18 @@ public class BalanceChargeStationCmd extends CommandBase {
 
   private final DrivetrainSub m_drivetrainSub;
 
+
+  // TO DO
+  //  Add Arm and Mast to home state
+  //  Use gyro to drive state.  Add drivestright command to drivetrainsub.
+
   public BalanceChargeStationCmd(DrivetrainSub drivetrainSub) {
     m_drivetrainSub = drivetrainSub;
     addRequirements(drivetrainSub);
     // mRioAccel = new BuiltInAccelerometer();
     state = 0;
     debounceCount = 0;
+    count = 0;
 
     /**********
      * CONFIG *
@@ -35,6 +43,9 @@ public class BalanceChargeStationCmd extends CommandBase {
     //Speed the robot drives while balancing itself on the charge station.
     //Should be roughly half the fast speed, to make the robot more accurate, default = 0.2
     robotSpeedSlow = 0.4;
+
+    // Speed of robot at very end when leveling on the charging station.
+    robotSpeedExtraSlow = 0.3;
 
     //Angle where the robot knows it is on the charge station, default = 13.0
     onChargeStationDegree = 13.0;
@@ -62,6 +73,9 @@ public class BalanceChargeStationCmd extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    state = 0;
+    debounceCount = 0;
+    count = 0;
     m_drivetrainSub.zeroHeading();
     m_drivetrainSub.zeroDrivetrainEncoders();
     m_drivetrainSub.setBrake(true);
@@ -73,24 +87,6 @@ public class BalanceChargeStationCmd extends CommandBase {
   public void execute() {
     m_drivetrainSub.arcadeDrive(autoBalanceRoutine(), 0);
   }
-
-  // public double getPitch(){
-  //     return Math.atan2((- mRioAccel.getX()) , Math.sqrt(mRioAccel.getY() * mRioAccel.getY() + mRioAccel.getZ() * mRioAccel.getZ())) * 57.3;
-  // }
-
-  // public double getRoll(){
-  //     return Math.atan2(mRioAccel.getY() , mRioAccel.getZ()) * 57.3;
-  // }
-
-  // //returns the magnititude of the robot's tilt calculated by the root of
-  // //pitch^2 + roll^2, used to compensate for diagonally mounted rio
-  // public double getTilt(){
-  //     if((getPitch() + getRoll())>= 0){
-  //         return Math.sqrt(getPitch()*getPitch() + getRoll()*getRoll());
-  //     } else {
-  //         return -Math.sqrt(getPitch()*getPitch() + getRoll()*getRoll());
-  //     }
-  // }
 
   public int secondsToTicks(double time) {
     return (int) (time * 50);
@@ -118,7 +114,6 @@ public class BalanceChargeStationCmd extends CommandBase {
         System.out.println("case 1 pitch " + m_drivetrainSub.getPitch());
         if(-m_drivetrainSub.getPitch() < 5) {
           debounceCount++;
-
         }
         if(debounceCount > secondsToTicks(debounceTime)) {
           state = 2;
@@ -126,8 +121,13 @@ public class BalanceChargeStationCmd extends CommandBase {
           debounceCount = 0;
           return 0;
         }
-        return robotSpeedSlow;
-      //on charge station, stop motors and wait for end of auto
+        count++;
+        if(count < secondsToTicks(2)) {
+          return 0.5;
+        } else {
+          return 0.25;
+        }
+        //on charge station, stop motors and wait for end of auto
       case 2:
         System.out.println("case 2 pitch " + m_drivetrainSub.getPitch());
         if(Math.abs(m_drivetrainSub.getPitch()) <= 1) {
@@ -142,10 +142,10 @@ public class BalanceChargeStationCmd extends CommandBase {
         }
         if(m_drivetrainSub.getPitch() >= 1) {
           System.out.println("-0.2");
-          return -0.3;
+          return -robotSpeedExtraSlow;
         } else if(m_drivetrainSub.getPitch() <= -1) {
           System.out.println("0.2");
-          return 0.3;
+          return robotSpeedExtraSlow;
         }
       case 3:
         return 0;
@@ -154,47 +154,3 @@ public class BalanceChargeStationCmd extends CommandBase {
     return 0;
   }
 }
-
-// // Copyright (c) FIRST and other WPILib contributors.
-// // Open Source Software; you can modify and/or share it under the terms of
-// // the WPILib BSD license file in the root directory of this project.
-
-// package frc.robot.commands;
-
-// import edu.wpi.first.wpilibj2.command.CommandBase;
-// import frc.robot.subsystems.DrivetrainSub;
-
-// public class BalanceChargeStationCmd extends CommandBase {
-//   private final DrivetrainSub m_drivetrainSub;
-//   /** Creates a new BalanceChargeStationCmd. */
-//   public BalanceChargeStationCmd(DrivetrainSub drivetrainSub) {
-//     m_drivetrainSub = drivetrainSub;
-//     // Use addRequirements() here to declare subsystem dependencies.
-//     addRequirements(drivetrainSub);
-//   }
-
-//   // Called when the command is initially scheduled.
-//   @Override
-//   public void initialize() {
-//     m_drivetrainSub.zeroHeading();
-//     m_drivetrainSub.zeroDrivetrainEncoders();
-//   }
-
-//   // Called every time the scheduler runs while the command is scheduled.
-//   @Override
-//   public void execute() {
-//     if(m_drivetrainSub.getPitch() < 10){
-
-//     }
-//   }
-
-//   // Called once the command ends or is interrupted.
-//   @Override
-//   public void end(boolean interrupted) {}
-
-//   // Returns true when the command should end.
-//   @Override
-//   public boolean isFinished() {
-//     return false;
-//   }
-// }
