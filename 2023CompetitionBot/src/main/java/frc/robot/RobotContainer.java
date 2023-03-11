@@ -5,6 +5,7 @@
 package frc.robot;
 
 import java.util.logging.Logger;
+import javax.lang.model.util.ElementScanner14;
 import edu.wpi.first.hal.HALUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -16,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ArmMoveWithJoystickCmd;
 import frc.robot.commands.AutoDoNothingCmd;
+import frc.robot.commands.BalanceChargeStationCmd;
 import frc.robot.commands.DriveAlignTapeCmd;
 import frc.robot.commands.DriveSetGearCmd;
 import frc.robot.commands.DriveStraightCmd;
@@ -106,6 +108,7 @@ public class RobotContainer {
     m_driverController.triangle().onTrue(
         new InstantCommand(() -> m_drivetrainSub.setIsAutoShift(true), /* Call on command start */ m_drivetrainSub));
 
+
     // Operator controller bindings
     m_operatorController.povUp()
         .onTrue(new IntakeSetPositionCmd(ManipulatorsPositions.DOUBLE_STATION, m_armSub, m_mastSub, m_intakeSub));
@@ -152,6 +155,7 @@ public class RobotContainer {
     m_Chooser.setDefaultOption("1 do nothing", new AutoDoNothingCmd());
     m_Chooser.addOption("2 drive straight", new DriveStraightCmd(m_drivetrainSub, 3));
     m_Chooser.addOption("3 expel game piece", new ExpelGamePieceCmd(1.0, m_intakeSub));
+    m_Chooser.addOption("4 balance on Charge Station", new BalanceChargeStationCmd(m_drivetrainSub));
     SmartDashboard.putData("auto choices", m_Chooser);
   }
 
@@ -176,6 +180,7 @@ public class RobotContainer {
   }
 
   public void disabledPeriodic() {
+    // Manually disable motor brakes
     if((HALUtil.getFPGAButton() == true) && m_buttonReady) {
       m_brakeMode = !m_brakeMode;
       m_drivetrainSub.setBrake(m_brakeMode);
@@ -189,6 +194,7 @@ public class RobotContainer {
       m_buttonReady = true;
     }
 
+
     // Show sensor and encoder status on LEDs when the robot isn't enabled
     if(m_intakeSub.isIntakeLoaded()) {
       m_ledSub.setZoneColour(LedZones.DIAG_INTAKE_LIMIT, LedColour.GREEN);
@@ -196,15 +202,19 @@ public class RobotContainer {
       m_ledSub.setZoneColour(LedZones.DIAG_INTAKE_LIMIT, LedColour.RED);
     }
 
-    if(m_armSub.getPosition() < 0) {
-      m_ledSub.setZoneRGB(LedZones.DIAG_ARM_ENC, 200, 200 + (int) (m_armSub.getPosition() / 50000 * 200),
-          200 + (int) (m_armSub.getPosition() / 50000 * 200));
+    // MAST ENCODER
+    m_ledSub.setZoneRGB(LedZones.DIAG_MAST_ENC, 0, (int) (m_mastSub.getPosition() / 18.0 * 255), 0);
+
+    // ARM ENCODER
+    if(m_armSub.getPosition() > 0) {
+      m_ledSub.setZoneRGB(LedZones.DIAG_ARM_ENC, 0, (int) (m_armSub.getPosition() / 24000.0 * 255), 0);
+    } else if(m_armSub.getPosition() < 0) {
+      m_ledSub.setZoneRGB(LedZones.DIAG_ARM_ENC, (int) (m_armSub.getPosition() / -20000.0 * 255), 0, 0);
     } else {
-      m_ledSub.setZoneRGB(LedZones.DIAG_ARM_ENC, 200 - (int) (m_armSub.getPosition() / 50000 * 200), 200,
-          200 - (int) (m_armSub.getPosition() / 50000 * 200));
+      m_ledSub.setZoneRGB(LedZones.DIAG_ARM_ENC, 0, 0, 0);
     }
 
-    m_ledSub.setZoneRGB(LedZones.DIAG_MAST_ENC, 200 - (int) m_mastSub.getPosition() * 12, 200,
-        200 - (int) m_mastSub.getPosition() * 12);
+    // INTAKE ENCODER
+    m_ledSub.setZoneRGB(LedZones.DIAG_INTAKE_ENC, 0, (int) m_mastSub.getPosition() / 6 * 255, 0);
   }
 }

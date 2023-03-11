@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import java.util.logging.Level;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -13,12 +14,13 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.subsystems.SubControl.Mode;
 import frc.robot.subsystems.SubControl.State;
 
 public class MastSub extends SubsystemBase {
   // CONSTANTS ////////////////////////////////////////////////////////////////
   private static final double kPositionMin = 0.0; // In endcoder ticks
-  private static final double kPositionMax = 208.0; // In encoder ticks (straight up is 30)
+  private static final double kPositionMax = 184.325; // In encoder ticks (straight up is 30)
   private static final double kManualModePowerDeadband = 0.05; // If manual power is less than this, assume power is 0
   private static final double kMaxPosDifference = 0.1; // Maximum difference between the target and current pos for the state to finish  <---- Must be tuned
   private static final double kMaxStopVelocity = 0.1; // max amount of power for the state to finish                                        <--- Must be tuned
@@ -71,6 +73,7 @@ public class MastSub extends SubsystemBase {
   public void init() {
     zeroEncoder();
     m_motor.setIdleMode(IdleMode.kBrake);
+    setPosition(Mode.DISABLED, 0, 0);
   }
 
   public void initTest() {
@@ -99,6 +102,7 @@ public class MastSub extends SubsystemBase {
       m_motor.setIdleMode(IdleMode.kCoast);
     }
   }
+
 
   /** Sets the current position as the starting position - use wisely */
   public void zeroEncoder() {
@@ -254,7 +258,6 @@ public class MastSub extends SubsystemBase {
 
       case HOLDING:
         // If the mechanism is at it's target location, apply power to hold it there if necessary
-        // TODO: Check if we can use the calcMovePower function since the PID could take care of both cases
         newPower = calcMovePower(currentPosition, m_currentControl.targetPosition, m_currentControl.targetPower);
         break;
 
@@ -295,19 +298,22 @@ public class MastSub extends SubsystemBase {
   /** Display/get subsystem information to/from the Smart Dashboard */
   private void updateSmartDashboard() {
     SmartDashboard.putNumber("Mast Encoder", getPosition());
+    SmartDashboard.putBoolean("Mast limit", isMastAtLimit());
 
-    double p = SmartDashboard.getNumber("Mast kP", m_p);
-    double i = SmartDashboard.getNumber("Mast kI", m_i);
-    double d = SmartDashboard.getNumber("Mast kD", m_d);
+    if(Constants.kEnhanceDashBoard == true) {
+      double p = SmartDashboard.getNumber("Mast kP", m_p);
+      double i = SmartDashboard.getNumber("Mast kI", m_i);
+      double d = SmartDashboard.getNumber("Mast kD", m_d);
 
-    SmartDashboard.putNumber("Mast kP", p);
-    SmartDashboard.putNumber("Mast kI", i);
-    SmartDashboard.putNumber("Mast kD", d);
-    SmartDashboard.putBoolean("Mast back", isMastAtLimit());
+      SmartDashboard.putNumber("Mast kP", p);
+      SmartDashboard.putNumber("Mast kI", i);
+      SmartDashboard.putNumber("Mast kD", d);
 
-    m_pid.setP(p);
-    m_pid.setI(i);
-    m_pid.setD(d);
+
+      m_pid.setP(p);
+      m_pid.setI(i);
+      m_pid.setD(d);
+    }
   }
 
   public boolean isFinished() {
