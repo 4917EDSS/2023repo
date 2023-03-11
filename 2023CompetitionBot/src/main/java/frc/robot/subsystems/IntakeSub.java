@@ -297,7 +297,7 @@ public class IntakeSub extends SubsystemBase {
     SmartDashboard.putNumber("Piece Sensor", m_gamePieceSensor.getValue());
     SmartDashboard.putBoolean("Intake Loaded", isIntakeLoaded());
 
-    if(Constants.kLogLevel == Level.FINE) {
+    if(Constants.kEnhanceDashBoard == true) {
       double p = SmartDashboard.getNumber("Intake kP", m_p);
       double i = SmartDashboard.getNumber("Intake kI", m_i);
       double d = SmartDashboard.getNumber("Intake kD", m_d);
