@@ -187,12 +187,14 @@ public class RobotContainer {
   public void disabledPeriodic() {
     // Manually disable motor brakes
     if((HALUtil.getFPGAButton() == true) && m_buttonReady) {
+
       m_brakeMode = !m_brakeMode;
       m_drivetrainSub.setBrake(m_brakeMode);
       m_mastSub.setBrake(m_brakeMode);
       m_armSub.setBrake(m_brakeMode);
       m_intakeSub.setBrake(m_brakeMode);
-      System.out.println("Brake " + m_brakeMode);
+
+      logger.finest("Brake " + m_brakeMode);
       m_buttonReady = false;
     }
     if(HALUtil.getFPGAButton() == false) {
