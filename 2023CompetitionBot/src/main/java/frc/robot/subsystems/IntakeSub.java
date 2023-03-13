@@ -149,7 +149,6 @@ public class IntakeSub extends SubsystemBase {
   /** Flashes leds green after the 3 or more sensor trips, then returns true **/
   public boolean isIntakeLoaded() {
     if(m_countOfGoodSensorTrips >= kNumberOfGoodSensorTripsRequired) {
-      m_ledSub.Flash(LedColour.GREEN);
       return true;
     } else {
       return false;
