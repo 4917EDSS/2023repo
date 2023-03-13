@@ -21,13 +21,13 @@ import frc.robot.subsystems.LedSub.LedZones;
 
 public class ArmSub extends SubsystemBase {
   // CONSTANTS ////////////////////////////////////////////////////////////////
-  private static final double kPositionMin = -200000.0; // In encoder ticks
+  private static final double kPositionMin = -240000.0; // In encoder ticks
   private static final double kPositionMax = 240000.0; // In encoder ticks (straight up is 30)
   private static final double kManualModePowerDeadband = 0.05; // If manual power is less than this, assume power is 0
   private static final double kMaxPosDifference = 1000; // Maximum difference between the target and current pos for the state to finish   <---- Must be tuned
   private static final double kMaxSpeedStop = 1000; // Max amount of power for the state to finish <--- Must be tuned
-  private static final double kMaxDangerZone = 9000;//60000;
-  private static final double kMinDangerZone = -9000;//-69000;
+  private static final double kMaxDangerZone = 8300;
+  private static final double kMinDangerZone = -70348;
   public static final double kVertical = 7760;
 
   // STATE VARIABLES //////////////////////////////////////////////////////////
