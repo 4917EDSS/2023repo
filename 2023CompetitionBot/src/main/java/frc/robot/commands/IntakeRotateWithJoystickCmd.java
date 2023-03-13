@@ -32,7 +32,7 @@ public class IntakeRotateWithJoystickCmd extends CommandBase {
   @Override
   public void execute() {
     if(StateOfRobot.m_operatorJoystickforIntake) {// && !m_intakeSub.inDangerZone()) {
-      m_intakeSub.setPosition(SubControl.Mode.MANUAL, m_controller.getLeftY(), 0);
+      m_intakeSub.setPosition(SubControl.Mode.MANUAL, m_controller.getLeftY() * 0.2, 0);
       //m_intakeSub.setPosition(Mode.MANUAL, -m_controller.getLeftY(), 0);
       m_intakeSub.spinWheelsIntake(-m_controller.getRightY());
     }

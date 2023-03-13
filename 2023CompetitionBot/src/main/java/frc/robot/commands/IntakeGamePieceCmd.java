@@ -8,17 +8,20 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.StateOfRobot;
 import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.subsystems.IntakeSub;
+import frc.robot.subsystems.LedSub;
+
 
 public class IntakeGamePieceCmd extends CommandBase {
   private double m_power;
   private double m_timeSpinning = 0.1;
   private IntakeSub m_intakeSub;
+  private LedSub m_ledSub;
 
   /** Creates a new IntakeGamePieceCmd. */
-  public IntakeGamePieceCmd(double power, IntakeSub intakeSub) {
+  public IntakeGamePieceCmd(double power, IntakeSub intakeSub, LedSub ledSub) {
     m_power = power;
     m_intakeSub = intakeSub;
-
+    m_ledSub = ledSub;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(intakeSub);
   }
@@ -44,6 +47,9 @@ public class IntakeGamePieceCmd extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     m_intakeSub.spinWheelsIntake(0);
+    if(!interrupted) {
+      m_ledSub.Flash(LedSub.LedColour.GREEN);
+    }
   }
 
   // Returns true when the command should end.

@@ -9,9 +9,11 @@ import frc.robot.subsystems.MastSub;
 import frc.robot.subsystems.IntakeSub;
 import frc.robot.subsystems.ManipulatorsPositions;
 import frc.robot.subsystems.DrivetrainSub;
+import frc.robot.subsystems.LedSub;
 
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 // NOTE: Consider using this command inline, rather than writing a subclass. For more
 // information, see:
@@ -21,22 +23,26 @@ public class AutoCubeGrp extends SequentialCommandGroup {
   private final ArmSub m_armSub;
   private final IntakeSub m_intakeSub;
   private final DrivetrainSub m_drivetrainSub;
-  private double clearanceDistance = 0.5;
+  private final LedSub m_ledSub;
+  private double clearanceDistance = 0.25; //needs testing
 
   /** Creates a new AutoCubeGrp. */
-  public AutoCubeGrp(ArmSub armSub, MastSub mastSub, IntakeSub intakeSub, DrivetrainSub drivetrainSub) {
+  public AutoCubeGrp(ArmSub armSub, MastSub mastSub, IntakeSub intakeSub, DrivetrainSub drivetrainSub, LedSub ledSub) {
     m_armSub = armSub;
     m_mastSub = mastSub;
     m_intakeSub = intakeSub;
     m_drivetrainSub = drivetrainSub;
+    m_ledSub = ledSub;
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-        new DriveStraightCmd(drivetrainSub, (-clearanceDistance)),
+        new SetGamePieceTypeCmd(false, ledSub),
+        new SetLimitSwitchesCmd(mastSub, armSub, intakeSub),
         new IntakeSetPositionCmd(ManipulatorsPositions.HIGH_CUBE, m_armSub, m_mastSub, m_intakeSub),
+        new WaitCommand(1),
         new DriveStraightCmd(drivetrainSub, clearanceDistance),
         new ExpelGamePieceCmd(0.5, m_intakeSub),
-        new DriveStraightCmd(drivetrainSub, (-clearanceDistance)),
+        new DriveStraightCmd(drivetrainSub, (-(clearanceDistance + 0.1))),
         new IntakeSetPositionCmd(ManipulatorsPositions.HOME, m_armSub, m_mastSub, m_intakeSub));
   }
 }

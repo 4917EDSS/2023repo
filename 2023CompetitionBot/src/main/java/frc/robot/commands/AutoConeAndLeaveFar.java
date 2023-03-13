@@ -4,30 +4,28 @@
 
 package frc.robot.commands;
 
-import org.junit.rules.Timeout;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.ArmSub;
 import frc.robot.subsystems.DrivetrainSub;
 import frc.robot.subsystems.MastSub;
 import frc.robot.subsystems.IntakeSub;
 import frc.robot.subsystems.LedSub;
-import frc.robot.subsystems.ManipulatorsPositions;
 
 // NOTE: Consider using this command inline, rather than writing a subclass. For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class AutoConeGrp extends SequentialCommandGroup {
+public class AutoConeAndLeaveFar extends SequentialCommandGroup {
   private final MastSub m_mastSub;
   private final ArmSub m_armSub;
   private final IntakeSub m_intakeSub;
   private final DrivetrainSub m_drivetrainSub;
   private final LedSub m_ledSub;
-  private double clearanceDistance = 0.25;
 
-  /** Creates a new AutoConeGrp. */
-  public AutoConeGrp(ArmSub armSub, MastSub mastSub, IntakeSub intakeSub, DrivetrainSub drivetrainSub, LedSub ledSub) {
+
+  /** Creates a new AutoConeAndLeave. */
+
+  public AutoConeAndLeaveFar(ArmSub armSub, MastSub mastSub, IntakeSub intakeSub, DrivetrainSub drivetrainSub,
+      LedSub ledSub) {
     m_armSub = armSub;
     m_mastSub = mastSub;
     m_intakeSub = intakeSub;
@@ -35,14 +33,9 @@ public class AutoConeGrp extends SequentialCommandGroup {
     m_ledSub = ledSub;
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
+
     addCommands(
-        new SetGamePieceTypeCmd(true, m_ledSub),
-        new SetLimitSwitchesCmd(mastSub, armSub, intakeSub),
-        new IntakeSetPositionCmd(ManipulatorsPositions.HIGH_CONE, m_armSub, m_mastSub, m_intakeSub),
-        new WaitCommand(1),
-        new DriveStraightCmd(drivetrainSub, (-(clearanceDistance + 0.1))),
-        new ExpelGamePieceCmd(0.5, m_intakeSub),
-        new DriveStraightCmd(drivetrainSub, (clearanceDistance)),
-        new IntakeSetPositionCmd(ManipulatorsPositions.HOME, m_armSub, m_mastSub, m_intakeSub));
+        new AutoConeGrp(armSub, mastSub, intakeSub, drivetrainSub, ledSub),
+        new DriveStraightCmd(drivetrainSub, 4.5));
   }
 }
