@@ -18,10 +18,8 @@ public class LedSub extends SubsystemBase {
   // Constants
   private final static int kLedStripLength = 48;
   private boolean m_newColoursAvailible = false;
-  public boolean m_isFlashing;
-  public long m_timeOfFlash = 0;
-  public long m_timeSinceIntakeLoaded;
-  public long m_time;
+  public boolean m_isFlashing; //true if flash is on (game piece gets loaded)
+  public long m_time; //time of when the flash starts
   private int m_ledblinktimes = 0; // Number of times the led should blink when flashing
 
   public enum LedZones {
