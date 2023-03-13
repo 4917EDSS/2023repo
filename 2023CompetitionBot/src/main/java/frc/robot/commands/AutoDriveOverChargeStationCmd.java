@@ -91,10 +91,10 @@ public class AutoDriveOverChargeStationCmd extends CommandBase {
       //on charge station, stop motors and wait for end of auto
       case 2:
         count++;
-        if(count < secondsToTicks(1)) {
+        if(count < secondsToTicks(1.5)) {
           return 0.6;
-        } else if(count < secondsToTicks(1.6)) {
-          return 0.2;
+        } else if(count < secondsToTicks(2.0)) {
+          return 0.3;
         }
         m_isFinished = true;
         return 0;
