@@ -26,12 +26,12 @@ public class IntakeSub extends SubsystemBase {
   private static final double kPositionMin = 0; // In encoder ticks
   private static final double kPositionMax = 60.0; // In encoder ticks (straight up is 30)
   private static final double kManualModePowerDeadband = 0.05; // If manual power is less than this, assume power is 0
-  private static final double kIntakeMinSafeZone = 1.0;
-  private static final double kIntakeMaxSafeZone = 18.0;
+  private static final double kIntakeMinSafeZone = -0.10;
+  private static final double kIntakeMaxSafeZone = 8.0;
   private static final double kArmMinDangerZone = -60405; // Needs to be found
   private static final double kArmMaxDangerZone = 66994; // Needs to be found
   public static final double kWristFlush = 27;
-  public static final double kWristThrough = 8.3095;
+  public static final double kWristThrough = 2.6666;
   public static final double kMaxPosDifference = 0.1;
   public static final int kNumberOfGoodSensorTripsRequired = 3;
   public static final int kMinSensorDetectionValue = 400;
@@ -111,7 +111,8 @@ public class IntakeSub extends SubsystemBase {
   }
 
   public boolean isSafeZone() {
-    if((getPositionRotate() < kIntakeMaxSafeZone) && (getPositionRotate() > kIntakeMinSafeZone)) {
+    // The +1/-1 is to allow the arm to move when the wrist is locked to make it move.
+    if((getPositionRotate() < kIntakeMaxSafeZone + 1) && (getPositionRotate() > kIntakeMinSafeZone - 1)) {
       return true;
     }
     return false;
@@ -249,9 +250,12 @@ public class IntakeSub extends SubsystemBase {
       return false;
     }
 
+    // Is intentionall different than isSafeZone.
     if(currentPosition > kIntakeMinSafeZone && currentPosition < kIntakeMaxSafeZone) {
       return false;
     }
+
+    System.out.println("Intake blocked");
     return true;
   }
 
