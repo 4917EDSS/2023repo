@@ -5,14 +5,11 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
-import frc.robot.RobotContainer;
 import frc.robot.StateOfRobot;
 import frc.robot.subsystems.ArmSub;
-import frc.robot.subsystems.ManipulatorsPositions;
 import frc.robot.subsystems.IntakeSub;
+import frc.robot.subsystems.ManipulatorsPositions;
 import frc.robot.subsystems.MastSub;
 import frc.robot.subsystems.SubControl.Mode;
 
@@ -24,7 +21,7 @@ public class IntakeSetPositionCmd extends CommandBase {
   private ManipulatorsPositions m_manipulatorsPositions;
   private final static double kMaxArmPower = 1.0;
   private final static double kMaxMastPower = 1.0;
-  private final static double kMaxIntakePower = 0.6;
+  private final static double kMaxIntakePower = 0.4;
   private long m_timeStart; // Time constraint incase it never aligns
 
   //private final ManipulatorSub m_manipulatorSub;
@@ -51,18 +48,28 @@ public class IntakeSetPositionCmd extends CommandBase {
     m_armSub.setPosition(Mode.AUTO, kMaxArmPower, converted.armEncoder);
     m_mastSub.setPosition(Mode.AUTO, kMaxMastPower, converted.mastEncoder);
     m_intakeSub.setPosition(Mode.AUTO, kMaxIntakePower, converted.wristEncoder);
+    if(StateOfRobot.isConeMode()) {
+      m_intakeSub.spinWheelsIntake(-0.2);
+    }
     m_timeStart = RobotController.getFPGATime();
+    {
+
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if(RobotController.getFPGATime() - m_timeStart > 250000) {
+      m_intakeSub.spinWheelsIntake(0);
+    }
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_intakeSub.spinWheelsIntake(0);
     // if inturrupted, stop otherwise already stopped
     if(interrupted) {
       m_armSub.setPosition(Mode.MANUAL, 0, 0);
