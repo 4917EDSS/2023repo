@@ -21,7 +21,7 @@ public class IntakeSetPositionCmd extends CommandBase {
   private ManipulatorsPositions m_manipulatorsPositions;
   private final static double kMaxArmPower = 1.0;
   private final static double kMaxMastPower = 1.0;
-  private final static double kMaxIntakePower = 0.4;
+  private final static double kMaxIntakePower = 0.75;
   private long m_timeStart; // Time constraint incase it never aligns
 
   //private final ManipulatorSub m_manipulatorSub;
@@ -49,7 +49,7 @@ public class IntakeSetPositionCmd extends CommandBase {
     m_mastSub.setPosition(Mode.AUTO, kMaxMastPower, converted.mastEncoder);
     m_intakeSub.setPosition(Mode.AUTO, kMaxIntakePower, converted.wristEncoder);
     if(StateOfRobot.isConeMode()) {
-      m_intakeSub.spinWheelsIntake(-0.2);
+      m_intakeSub.spinWheelsIntake(-0.22);
     }
     m_timeStart = RobotController.getFPGATime();
     {
