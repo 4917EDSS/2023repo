@@ -23,6 +23,19 @@ public class DriveStraightCmd extends CommandBase {
     m_drivetrainSub = drivetrainSub;
     m_targetDriveDistance = targetDriveDistance;
     addRequirements(drivetrainSub);
+    double minimumMax = 0.4;
+    double minimumDistance = 0.5;
+    double fullSpeed = 0.9;
+    double fullDistance = 3;
+
+    if(targetDriveDistance < minimumDistance) {
+      kMaxPower = minimumMax;
+    } else if(targetDriveDistance > fullDistance) {
+      kMaxPower = fullSpeed;
+    } else {
+      kMaxPower =
+          0.4 + ((fullSpeed - minimumMax) / (fullDistance - minimumDistance)) * (targetDriveDistance - minimumDistance);
+    }
   }
 
   // Called when the command is initially scheduled.

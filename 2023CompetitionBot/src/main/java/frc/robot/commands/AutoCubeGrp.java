@@ -13,6 +13,7 @@ import frc.robot.subsystems.LedSub;
 
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 // NOTE: Consider using this command inline, rather than writing a subclass. For more
 // information, see:
@@ -23,7 +24,7 @@ public class AutoCubeGrp extends SequentialCommandGroup {
   private final IntakeSub m_intakeSub;
   private final DrivetrainSub m_drivetrainSub;
   private final LedSub m_ledSub;
-  private double clearanceDistance = 0.2;
+  private double clearanceDistance = 0.25; //needs testing
 
   /** Creates a new AutoCubeGrp. */
   public AutoCubeGrp(ArmSub armSub, MastSub mastSub, IntakeSub intakeSub, DrivetrainSub drivetrainSub, LedSub ledSub) {
@@ -38,6 +39,7 @@ public class AutoCubeGrp extends SequentialCommandGroup {
         new SetGamePieceTypeCmd(false, ledSub),
         new SetLimitSwitchesCmd(mastSub, armSub, intakeSub),
         new IntakeSetPositionCmd(ManipulatorsPositions.HIGH_CUBE, m_armSub, m_mastSub, m_intakeSub),
+        new WaitCommand(1),
         new DriveStraightCmd(drivetrainSub, clearanceDistance),
         new ExpelGamePieceCmd(0.5, m_intakeSub),
         new DriveStraightCmd(drivetrainSub, (-clearanceDistance)),
