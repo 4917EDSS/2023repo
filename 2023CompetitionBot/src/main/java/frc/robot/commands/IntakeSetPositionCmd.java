@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
@@ -24,6 +25,7 @@ public class IntakeSetPositionCmd extends CommandBase {
   private final static double kMaxArmPower = 1.0;
   private final static double kMaxMastPower = 1.0;
   private final static double kMaxIntakePower = 0.6;
+  private long m_timeStart; // Time constraint incase it never aligns
 
   //private final ManipulatorSub m_manipulatorSub;
   private final ArmSub m_armSub;
@@ -49,6 +51,7 @@ public class IntakeSetPositionCmd extends CommandBase {
     m_armSub.setPosition(Mode.AUTO, kMaxArmPower, converted.armEncoder);
     m_mastSub.setPosition(Mode.AUTO, kMaxMastPower, converted.mastEncoder);
     m_intakeSub.setPosition(Mode.AUTO, kMaxIntakePower, converted.wristEncoder);
+    m_timeStart = RobotController.getFPGATime();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -71,6 +74,9 @@ public class IntakeSetPositionCmd extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if(RobotController.getFPGATime() - m_timeStart > 1500000) { // After 1.5 seconds the command stops automatically
+      return true;
+    }
     return (m_armSub.isFinished() && m_mastSub.isFinished() && m_intakeSub.isFinished());
   }
 }

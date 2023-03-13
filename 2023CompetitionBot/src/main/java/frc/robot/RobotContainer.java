@@ -20,6 +20,9 @@ import frc.robot.commands.AutoDoNothingCmd;
 import frc.robot.commands.AutoDriveOverChargeStationCmd;
 import frc.robot.commands.AutoLeaveAndBalanceGrp;
 import frc.robot.commands.AutoBalanceChargeStationCmd;
+import frc.robot.commands.AutoConeAndChargeStation;
+import frc.robot.commands.AutoConeAndLeaveClose;
+import frc.robot.commands.AutoConeAndLeaveFar;
 import frc.robot.commands.DriveAlignTapeCmd;
 import frc.robot.commands.DriveSetGearCmd;
 import frc.robot.commands.DriveStraightCmd;
@@ -160,6 +163,12 @@ public class RobotContainer {
     m_Chooser.addOption("4 balance on Charge Station", new AutoBalanceChargeStationCmd(m_drivetrainSub, true));
     m_Chooser.addOption("5 Drive Over Charge Station", new AutoDriveOverChargeStationCmd(m_drivetrainSub, true));
     m_Chooser.addOption("6 Leave and Balance", new AutoLeaveAndBalanceGrp(m_drivetrainSub));
+    m_Chooser.addOption("7 Score Cone, Leave and Balance",
+        new AutoConeAndChargeStation(m_armSub, m_mastSub, m_intakeSub, m_drivetrainSub, m_ledSub));
+    m_Chooser.addOption("8 Score Cone and Leave Far",
+        new AutoConeAndLeaveFar(m_armSub, m_mastSub, m_intakeSub, m_drivetrainSub, m_ledSub));
+    m_Chooser.addOption("9 Score Cone and Leave Close",
+        new AutoConeAndLeaveClose(m_armSub, m_mastSub, m_intakeSub, m_drivetrainSub, m_ledSub));
 
     SmartDashboard.putData("auto choices", m_Chooser);
   }
