@@ -61,9 +61,6 @@ public class IntakeSub extends SubsystemBase {
   private final PIDController m_pid = new PIDController(m_p, m_i, m_d);
   private ArmSub m_armSub;
 
-  // Defines the Led subsystem
-  private final LedSub m_ledSub = new LedSub();
-
   /** Creates a new intakeSub. */
   public IntakeSub() {}
 
