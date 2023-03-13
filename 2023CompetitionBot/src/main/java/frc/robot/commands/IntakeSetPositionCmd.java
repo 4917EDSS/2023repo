@@ -24,7 +24,7 @@ public class IntakeSetPositionCmd extends CommandBase {
   private ManipulatorsPositions m_manipulatorsPositions;
   private final static double kMaxArmPower = 1.0;
   private final static double kMaxMastPower = 1.0;
-  private final static double kMaxIntakePower = 0.6;
+  private final static double kMaxIntakePower = 0.4;
   private long m_timeStart; // Time constraint incase it never aligns
 
   //private final ManipulatorSub m_manipulatorSub;
