@@ -11,6 +11,7 @@ import frc.robot.subsystems.DrivetrainSub;
 import frc.robot.subsystems.IntakeSub;
 import frc.robot.subsystems.MastSub;
 import frc.robot.subsystems.ManipulatorsPositions;
+import frc.robot.subsystems.LedSub;
 
 // NOTE: Consider using this command inline, rather than writing a subclass. For more
 // information, see:
@@ -18,12 +19,12 @@ import frc.robot.subsystems.ManipulatorsPositions;
 public class AutoPickUpCmd extends SequentialCommandGroup {
   /** Creates a new AutoPickUpCmd. */
   public AutoPickUpCmd(ManipulatorsPositions positions, ArmSub armSub, MastSub mastSub, IntakeSub intakeSub,
-      DrivetrainSub drivetrainSub, double targetDriveDistance, double power) {
+      DrivetrainSub drivetrainSub, LedSub ledSub, double targetDriveDistance, double power) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
 
     /* \ Sets the intake position, drives in, then grabs \ */
     addCommands(new IntakeSetPositionCmd(positions, armSub, mastSub, intakeSub),
-        new DriveStraightCmd(drivetrainSub, targetDriveDistance), new IntakeGamePieceCmd(power, intakeSub));
+        new DriveStraightCmd(drivetrainSub, targetDriveDistance), new IntakeGamePieceCmd(power, intakeSub, ledSub));
   }
 }

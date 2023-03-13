@@ -61,7 +61,7 @@ public class LedSub extends SubsystemBase {
     PURPLE(80, 20, 60), //
     RED(128, 0, 0), //
     GREEN(0, 128, 0), //
-    START_GREEN(0, 64, 0), // 
+    START_GREEN(45, 128, 0), // 
     BLUE(0, 0, 128), //
     WHITE(128, 128, 128); //
 
@@ -125,10 +125,10 @@ public class LedSub extends SubsystemBase {
       long timeSinceIntakeLoaded = RobotController.getFPGATime() - m_time;
 
       if(timeSinceIntakeLoaded < 250000) { // Led ON time
-        setZoneColour(LedZones.ALL, LedColour.START_GREEN);
+        setZoneColour(LedZones.ALL, LedColour.GREEN);
       }
       if(250000 <= timeSinceIntakeLoaded && timeSinceIntakeLoaded <= 500000) {
-        setZoneRGB(LedZones.ALL, 0, 0, 0);
+        setZoneColour(LedZones.ALL, LedColour.WHITE);
         m_time = RobotController.getFPGATime();
         m_ledblinktimes++;
       }
