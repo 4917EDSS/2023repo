@@ -8,7 +8,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import frc.robot.Constants.PwmIds;
-// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.RobotController;
+import frc.robot.StateOfRobot;
 
 /** Add your docs here. */
 
@@ -17,6 +18,9 @@ public class LedSub extends SubsystemBase {
   // Constants
   private final static int kLedStripLength = 48;
   private boolean m_newColoursAvailible = false;
+  public boolean m_isFlashing; //true if flash is on (game piece gets loaded)
+  public long m_time; //time of when the flash starts
+  private int m_ledblinktimes = 0; // Number of times the led should blink when flashing
 
   public enum LedZones {
     // The LED string start at the top left and is split up in a big U shape as follows:
@@ -57,7 +61,7 @@ public class LedSub extends SubsystemBase {
     PURPLE(80, 20, 60), //
     RED(128, 0, 0), //
     GREEN(0, 128, 0), //
-    START_GREEN(0, 64, 0), // 
+    START_GREEN(45, 128, 0), // 
     BLUE(0, 0, 128), //
     WHITE(128, 128, 128); //
 
@@ -106,6 +110,7 @@ public class LedSub extends SubsystemBase {
     m_ledStrip.start();
 
     init();
+
   }
 
   @Override
@@ -114,8 +119,43 @@ public class LedSub extends SubsystemBase {
       m_ledStrip.setData(m_ledBuffer);
       m_newColoursAvailible = false;
     }
-    // This method will be called once per scheduler run
+
+
+    if(m_isFlashing) {
+      long timeSinceIntakeLoaded = RobotController.getFPGATime() - m_time;
+
+      if(timeSinceIntakeLoaded < 1000000) { // Led ON time
+        setZoneColour(LedZones.ALL, LedColour.GREEN);
+      }
+      if(1000000 <= timeSinceIntakeLoaded && timeSinceIntakeLoaded <= 2000000) {
+        setZoneColour(LedZones.ALL, LedColour.WHITE);
+      }
+      if(timeSinceIntakeLoaded > 2000000) {
+        m_time = RobotController.getFPGATime();
+        m_ledblinktimes++;
+      }
+      if(m_ledblinktimes >= 3) {//when it is done flashing
+        m_isFlashing = false;
+        m_ledblinktimes = 0;
+        if(StateOfRobot.m_coneMode) {
+          setZoneColour(LedZones.GAME_PIECE, LedColour.YELLOW);
+        } else {
+          setZoneColour(LedZones.GAME_PIECE, LedColour.PURPLE);
+        }
+      }
+    }
+
+
   }
+
+
+  // This method will be called once per scheduler run
+  public void Flash(LedColour colour) {
+    m_isFlashing = true;
+
+    m_time = RobotController.getFPGATime(); // The time when the flashing will begin
+  }
+
 
   /**
    * Use this method to reset all of the hardware and states to safe starting values
@@ -175,4 +215,6 @@ public class LedSub extends SubsystemBase {
     }
     m_newColoursAvailible = true;
   }
+
+
 }

@@ -18,13 +18,16 @@ import frc.robot.Constants;
 import frc.robot.StateOfRobot;
 import frc.robot.subsystems.SubControl.Mode;
 import frc.robot.subsystems.SubControl.State;
+import frc.robot.subsystems.LedSub;
+import frc.robot.subsystems.LedSub.LedColour;
+import frc.robot.subsystems.LedSub.LedZones;
 
 public class IntakeSub extends SubsystemBase {
   private static final double kPositionMin = 0; // In encoder ticks
   private static final double kPositionMax = 60.0; // In encoder ticks (straight up is 30)
   private static final double kManualModePowerDeadband = 0.05; // If manual power is less than this, assume power is 0
-  private static final double kIntakeMinSafeZone = -0.10;
-  private static final double kIntakeMaxSafeZone = 8.0;
+  private static final double kIntakeMinSafeZone = -0.1;
+  private static final double kIntakeMaxSafeZone = 7.0;
   private static final double kArmMinDangerZone = -60405; // Needs to be found
   private static final double kArmMaxDangerZone = 66994; // Needs to be found
   public static final double kWristFlush = 27;
@@ -59,9 +62,7 @@ public class IntakeSub extends SubsystemBase {
   private ArmSub m_armSub;
 
   /** Creates a new intakeSub. */
-  public IntakeSub() {
-
-  }
+  public IntakeSub() {}
 
   @Override
   public void periodic() {
@@ -108,7 +109,7 @@ public class IntakeSub extends SubsystemBase {
 
   public boolean isSafeZone() {
     // The +1/-1 is to allow the arm to move when the wrist is locked to make it move.
-    if((getPositionRotate() < kIntakeMaxSafeZone + 1) && (getPositionRotate() > kIntakeMinSafeZone - 1)) {
+    if((getPositionRotate() < kIntakeMaxSafeZone + 2) && (getPositionRotate() > kIntakeMinSafeZone - 2)) {
       return true;
     }
     return false;
@@ -142,6 +143,7 @@ public class IntakeSub extends SubsystemBase {
     return m_rotateMotor.getEncoder().getVelocity();
   }
 
+  /** Flashes leds green after the 3 or more sensor trips, then returns true **/
   public boolean isIntakeLoaded() {
     if(m_countOfGoodSensorTrips >= kNumberOfGoodSensorTripsRequired) {
       return true;

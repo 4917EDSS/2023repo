@@ -141,7 +141,7 @@ public class RobotContainer {
     m_operatorController.R1().onTrue(new SetGamePieceTypeCmd(true, m_ledSub));
 
     // L2 is maped to Intakes in
-    m_operatorController.L2().onTrue(new IntakeGamePieceCmd(1.0, m_intakeSub));
+    m_operatorController.L2().onTrue(new IntakeGamePieceCmd(1.0, m_intakeSub, m_ledSub));
 
     // R2 is maped to the intake out
     m_operatorController.R2().onTrue(new ExpelGamePieceCmd(0.5, m_intakeSub));
