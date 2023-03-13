@@ -124,13 +124,13 @@ public class LedSub extends SubsystemBase {
     if(m_isFlashing) {
       long timeSinceIntakeLoaded = RobotController.getFPGATime() - m_time;
 
-      if(timeSinceIntakeLoaded < 1000000) { // Led ON time
+      if(timeSinceIntakeLoaded < 250000) { // Led ON time
         setZoneColour(LedZones.ALL, LedColour.GREEN);
       }
-      if(1000000 <= timeSinceIntakeLoaded && timeSinceIntakeLoaded <= 2000000) {
+      if(250000 <= timeSinceIntakeLoaded && timeSinceIntakeLoaded <= 500000) {
         setZoneColour(LedZones.ALL, LedColour.WHITE);
       }
-      if(timeSinceIntakeLoaded > 2000000) {
+      if(timeSinceIntakeLoaded > 500000) {
         m_time = RobotController.getFPGATime();
         m_ledblinktimes++;
       }
