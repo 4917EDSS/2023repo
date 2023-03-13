@@ -26,7 +26,7 @@ public class MastSub extends SubsystemBase {
   private static final double kMaxStopVelocity = 0.1; // max amount of power for the state to finish                                        <--- Must be tuned
   private static final double kMastMinSafeZone = 0;
   private static final double kMastMaxSafeZone = 150;
-  public static final double kVertical = 24.071;
+  public static final double kVertical = 1;
 
   // STATE VARIABLES //////////////////////////////////////////////////////////
   private SubControl m_currentControl = new SubControl(); // Current states of mechanism

@@ -32,7 +32,7 @@ public enum ManipulatorsPositions {
   LOW_CONE(105.16, 126224, 15.380), // Cone low drop-off position 
   GROUND_CONE(256, 100000, 0), // Cone ground pick-up position
   SINGLE_STATION_CONE(250, 0, 0), // Cone single (side) station pick-up position
-  DOUBLE_STATION_CONE(30.714, -198943, 46.380); // Cone double station pick-up position
+  DOUBLE_STATION_CONE(0, -198943, 46.380); // Cone double station pick-up position
 
 
   // This is where the encoder values are stored for each enum entry
