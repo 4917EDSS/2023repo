@@ -28,7 +28,7 @@ public class IntakeSub extends SubsystemBase {
   private static final double kArmMinDangerZone = -60405; // Needs to be found
   private static final double kArmMaxDangerZone = 66994; // Needs to be found
   public static final double kWristFlush = 27;
-  public static final double kWristThrough = 6;
+  public static final double kWristThrough = 2.6666;
   public static final double kMaxPosDifference = 0.1;
   public static final int kNumberOfGoodSensorTripsRequired = 3;
   public static final int kMinSensorDetectionValue = 400;

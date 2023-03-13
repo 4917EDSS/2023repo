@@ -19,17 +19,17 @@ public enum ManipulatorsPositions {
   DOUBLE_STATION(MastSub.kVertical, ArmSub.kVertical, IntakeSub.kWristThrough), // Gets replaced by cube/cone values
 
   // Cube Positions
-  HIGH_CUBE(157, 238000, 0), // Cube high drop-off position 
-  MEDIUM_CUBE(78, 158000, 0), // Cube mid drop-off position
-  LOW_CUBE(217, 126000, 0), // Cube low drop-off position
+  HIGH_CUBE(24.285, 218812, 0.119), // Cube high drop-off position 
+  MEDIUM_CUBE(0.857, 136899, 4.19047), // Cube mid drop-off position
+  LOW_CUBE(0.857, 56313, 9.214), // Cube low drop-off position
   GROUND_CUBE(271, 100000, 0), // Cube ground pick-up position
   SINGLE_STATION_CUBE(250, 0, 0), // Cube single (side) station pick-up position
   DOUBLE_STATION_CUBE(8.8333, -175041, 28.3569), // Cube double station pick-up position
 
   // Cone Positions
-  HIGH_CONE(55.57191, 239449, 18.78565), // Cone high drop-off position 
-  MEDIUM_CONE(0.14285, 175764, 3.666), // Cone mid drop-off position 
-  LOW_CONE(105.16, 126224, 15.380), // Cone low drop-off position 
+  HIGH_CONE(13.19, 239423, 9.738), // Cone high drop-off position 
+  MEDIUM_CONE(0.333, 185120, 9.595), // Cone mid drop-off position 
+  LOW_CONE(1.07, 101048, 12.857), // Cone low drop-off position 
   GROUND_CONE(256, 100000, 0), // Cone ground pick-up position
   SINGLE_STATION_CONE(250, 0, 0), // Cone single (side) station pick-up position
   DOUBLE_STATION_CONE(0, -198943, 46.380); // Cone double station pick-up position
