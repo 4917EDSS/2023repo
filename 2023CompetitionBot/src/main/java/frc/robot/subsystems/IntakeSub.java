@@ -18,6 +18,9 @@ import frc.robot.Constants;
 import frc.robot.StateOfRobot;
 import frc.robot.subsystems.SubControl.Mode;
 import frc.robot.subsystems.SubControl.State;
+import frc.robot.subsystems.LedSub;
+import frc.robot.subsystems.LedSub.LedColour;
+import frc.robot.subsystems.LedSub.LedZones;
 
 public class IntakeSub extends SubsystemBase {
   private static final double kPositionMin = 0; // In encoder ticks
@@ -58,10 +61,11 @@ public class IntakeSub extends SubsystemBase {
   private final PIDController m_pid = new PIDController(m_p, m_i, m_d);
   private ArmSub m_armSub;
 
-  /** Creates a new intakeSub. */
-  public IntakeSub() {
+  // Defines the Led subsystem
+  private final LedSub m_ledSub = new LedSub();
 
-  }
+  /** Creates a new intakeSub. */
+  public IntakeSub() {}
 
   @Override
   public void periodic() {
@@ -142,8 +146,10 @@ public class IntakeSub extends SubsystemBase {
     return m_rotateMotor.getEncoder().getVelocity();
   }
 
+  /** Flashes leds green after the 3 or more sensor trips, then returns true **/
   public boolean isIntakeLoaded() {
     if(m_countOfGoodSensorTrips >= kNumberOfGoodSensorTripsRequired) {
+      m_ledSub.Flash(LedColour.GREEN);
       return true;
     } else {
       return false;
