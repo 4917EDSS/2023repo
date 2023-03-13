@@ -29,9 +29,6 @@ public class ArmSub extends SubsystemBase {
   private static final double kMaxDangerZone = 9000;//60000;
   private static final double kMinDangerZone = -9000;//-69000;
   public static final double kVertical = 7760;
-  public static final double kFourtyFive = 133000.0; // Measured - not necessarily useful, can delete
-  public static final double kNegFourtyFive = -69000.0; // Measured - not necessarily useful, can delete  
-  public static final double kSafeSpaceInDangerZone = 10000;
 
   // STATE VARIABLES //////////////////////////////////////////////////////////
   private SubControl m_currentControl = new SubControl(); // Current states of mechanism
