@@ -56,9 +56,11 @@ public class AutoBalanceChargeStationCmd extends CommandBase {
   @Override
   public void execute() {
     if(m_isForward) {
-      m_drivetrainSub.arcadeDrive(autoBalanceRoutine(), 0);
+      System.out.println("Balance Forward");
+      m_drivetrainSub.arcadeDrive(autoBalanceRoutine(-1), 0);
     } else {
-      m_drivetrainSub.arcadeDrive(-autoBalanceRoutine(), 0);
+      System.out.println("Balance Backward");
+      m_drivetrainSub.arcadeDrive(-autoBalanceRoutine(1), 0);
     }
 
   }
@@ -69,11 +71,12 @@ public class AutoBalanceChargeStationCmd extends CommandBase {
 
   //routine for automatically driving onto and engaging the charge station.
   //returns a value from -1.0 to 1.0, which left and right motors should be set to.
-  public double autoBalanceRoutine() {
+  public double autoBalanceRoutine(double direction) {
     switch(state) {
       //drive forwards to approach station, exit when tilt is detected
       case 0:
-        if(-m_drivetrainSub.getPitch() > onChargeStationDegree) {
+        System.out.println("Balance Case 0: Dir: " + direction + " Pitch: " + m_drivetrainSub.getPitch());
+        if((direction * m_drivetrainSub.getPitch()) > onChargeStationDegree) {
           debounceCount++;
         }
         if(debounceCount > secondsToTicks(debounceTime)) {
@@ -84,7 +87,8 @@ public class AutoBalanceChargeStationCmd extends CommandBase {
         return 0.7;
       //driving up charge station, drive slower, stopping when level
       case 1:
-        if(-m_drivetrainSub.getPitch() < 5) {
+        System.out.println("Balance Case 1: Dir: " + direction + " Pitch: " + m_drivetrainSub.getPitch());
+        if((direction * m_drivetrainSub.getPitch()) < 5) {
 
           debounceCount++;
         }
@@ -101,17 +105,18 @@ public class AutoBalanceChargeStationCmd extends CommandBase {
         }
         //on charge station, stop motors and wait for end of auto
       case 2:
+        System.out.println("Case 2: Dir: " + direction + " Pitch: " + m_drivetrainSub.getPitch());
         if(Math.abs(m_drivetrainSub.getPitch()) <= 1) {
           debounceCount++;
         }
         if(debounceCount > secondsToTicks(debounceTime)) {
-          state = 4;
+          state = 3;
           debounceCount = 0;
           return 0;
         }
-        if(m_drivetrainSub.getPitch() >= 2) {
+        if((direction * m_drivetrainSub.getPitch()) <= -2) {
           return -0.3;
-        } else if(m_drivetrainSub.getPitch() <= -2) {
+        } else if((direction * m_drivetrainSub.getPitch()) >= 2) {
           return 0.3;
         } else {
           m_drivetrainSub.setBrake(true);

@@ -56,9 +56,11 @@ public class AutoDriveOverChargeStationCmd extends CommandBase {
   @Override
   public void execute() {
     if(m_isForward) {
-      m_drivetrainSub.arcadeDrive(autoBalanceRoutine(), 0);
+      System.out.println("Forward");
+      m_drivetrainSub.arcadeDrive(autoDriveOverStation(-1), 0);
     } else {
-      m_drivetrainSub.arcadeDrive(-autoBalanceRoutine(), 0);
+      System.out.println("Reverse");
+      m_drivetrainSub.arcadeDrive(-autoDriveOverStation(1), 0);
     }
 
   }
@@ -69,11 +71,12 @@ public class AutoDriveOverChargeStationCmd extends CommandBase {
 
   //routine for automatically driving onto and engaging the charge station.
   //returns a value from -1.0 to 1.0, which left and right motors should be set to.
-  public double autoBalanceRoutine() {
+  public double autoDriveOverStation(double direction) {
     switch(state) {
       //drive forwards to approach station, exit when tilt is detected
       case 0:
-        if(-m_drivetrainSub.getPitch() > onChargeStationDegree) {
+        System.out.println("Case 0: Dir: " + direction + " Pitch: " + m_drivetrainSub.getPitch());
+        if(direction * m_drivetrainSub.getPitch() > onChargeStationDegree) {
           debounceCount++;
         }
         if(debounceCount > secondsToTicks(debounceTime)) {
@@ -84,12 +87,14 @@ public class AutoDriveOverChargeStationCmd extends CommandBase {
         return 0.7;
       //driving up charge station, drive slower, stopping when level
       case 1:
-        if(m_drivetrainSub.getPitch() > 0) {
+        System.out.println("Case 1: Dir: " + direction + " Pitch: " + m_drivetrainSub.getPitch());
+        if(-direction * m_drivetrainSub.getPitch() > 0) {
           state = 2;
         }
         return 0.5;
       //on charge station, stop motors and wait for end of auto
       case 2:
+        System.out.println("Case 2: Dir: " + direction + " Pitch: " + m_drivetrainSub.getPitch());
         count++;
         if(count < secondsToTicks(1.5)) {
           return 0.6;
