@@ -5,7 +5,6 @@
 package frc.robot;
 
 import java.util.logging.Logger;
-import javax.lang.model.util.ElementScanner14;
 import edu.wpi.first.hal.HALUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -16,32 +15,32 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ArmMoveWithJoystickCmd;
-import frc.robot.commands.AutoDoNothingCmd;
-import frc.robot.commands.AutoDriveOverChargeStationCmd;
-import frc.robot.commands.AutoLeaveAndBalanceGrp;
 import frc.robot.commands.AutoBalanceChargeStationCmd;
 import frc.robot.commands.AutoConeAndChargeStation;
 import frc.robot.commands.AutoConeAndLeaveClose;
 import frc.robot.commands.AutoConeAndLeaveFar;
+import frc.robot.commands.AutoDoNothingCmd;
+import frc.robot.commands.AutoDriveOverChargeStationCmd;
+import frc.robot.commands.AutoLeaveAndBalanceGrp;
 import frc.robot.commands.DriveAlignTapeCmd;
 import frc.robot.commands.DriveSetGearCmd;
 import frc.robot.commands.DriveStraightCmd;
 import frc.robot.commands.DriveWithJoystickCmd;
+import frc.robot.commands.ExpelGamePieceCmd;
+import frc.robot.commands.IntakeGamePieceCmd;
 import frc.robot.commands.IntakeRotateWithJoystickCmd;
 import frc.robot.commands.IntakeSetPositionCmd;
 import frc.robot.commands.InterruptAllCommandsCmd;
 import frc.robot.commands.MastMoveWithJoystickCmd;
 import frc.robot.commands.SetGamePieceTypeCmd;
 import frc.robot.commands.SetLimitSwitchesCmd;
-import frc.robot.commands.ExpelGamePieceCmd;
-import frc.robot.commands.IntakeGamePieceCmd;
 import frc.robot.subsystems.ArmSub;
 import frc.robot.subsystems.DrivetrainSub;
-import frc.robot.subsystems.ManipulatorsPositions;
 import frc.robot.subsystems.IntakeSub;
 import frc.robot.subsystems.LedSub;
 import frc.robot.subsystems.LedSub.LedColour;
 import frc.robot.subsystems.LedSub.LedZones;
+import frc.robot.subsystems.ManipulatorsPositions;
 import frc.robot.subsystems.MastSub;
 import frc.robot.subsystems.VisionSub;
 
@@ -123,6 +122,9 @@ public class RobotContainer {
 
     m_operatorController.povDown()
         .onTrue(new IntakeSetPositionCmd(ManipulatorsPositions.GROUND, m_armSub, m_mastSub, m_intakeSub));
+
+    m_operatorController.povRight()
+        .onTrue(new IntakeSetPositionCmd(ManipulatorsPositions.TILTED_GROUND, m_armSub, m_mastSub, m_intakeSub));
 
     m_operatorController.triangle()
         .onTrue(new IntakeSetPositionCmd(ManipulatorsPositions.HIGH, m_armSub, m_mastSub, m_intakeSub));
