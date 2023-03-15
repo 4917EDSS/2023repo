@@ -31,6 +31,8 @@ public class AutoConeAndChargeStation extends SequentialCommandGroup {
     m_ledSub = ledSub;
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
+
+    /* Score cone, drive to charge station, then balance on charge station */
     addCommands(
         new AutoConeGrp(armSub, mastSub, intakeSub, drivetrainSub, ledSub),
         new AutoDriveOverChargeStationCmd(drivetrainSub, true),
