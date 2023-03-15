@@ -303,7 +303,18 @@ public class ArmSub extends SubsystemBase {
 
   /** Calculate the amount of power should use to get to the target position */
   private double calcMovePower(double currentPosition, double newPosition, double targetPower) {
+    if(Math.abs(currentPosition - newPosition) < 20000) {
+      if(targetPower > 0.1) {
+        targetPower = 0.1;
+      }
+    } else if(Math.abs(currentPosition - newPosition) < 40000) {
+      if(targetPower > 0.2) {
+        targetPower = 0.2;
+      }
+    }
     return MathUtil.clamp(m_pid.calculate(currentPosition, newPosition), -targetPower, targetPower);
+
+
   }
 
 
