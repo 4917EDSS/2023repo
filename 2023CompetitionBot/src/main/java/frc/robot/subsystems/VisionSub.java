@@ -77,7 +77,7 @@ public class VisionSub extends SubsystemBase {
    * Use this method to reset all of the hardware and states to safe starting values
    */
   public void init() {
-    setPipeline(Constants.LimelightConstants.kApriltag);
+    setPipeline(Constants.LimelightConstants.kNoVision);
   }
 
   /**

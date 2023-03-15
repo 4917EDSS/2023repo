@@ -75,7 +75,7 @@ public class AutoBalanceChargeStationCmd extends CommandBase {
     switch(state) {
       //drive forwards to approach station, exit when tilt is detected
       case 0:
-        System.out.println("Balance Case 0: Dir: " + direction + " Pitch: " + m_drivetrainSub.getPitch());
+        //System.out.println("Balance Case 0: Dir: " + direction + " Pitch: " + m_drivetrainSub.getPitch());
         if((direction * m_drivetrainSub.getPitch()) > onChargeStationDegree) {
           debounceCount++;
         }
@@ -87,7 +87,7 @@ public class AutoBalanceChargeStationCmd extends CommandBase {
         return 0.7;
       //driving up charge station, drive slower, stopping when level
       case 1:
-        System.out.println("Balance Case 1: Dir: " + direction + " Pitch: " + m_drivetrainSub.getPitch());
+        //System.out.println("Balance Case 1: Dir: " + direction + " Pitch: " + m_drivetrainSub.getPitch());
         if((direction * m_drivetrainSub.getPitch()) < 5) {
 
           debounceCount++;
@@ -124,7 +124,7 @@ public class AutoBalanceChargeStationCmd extends CommandBase {
         }
       case 3:
         m_isFinished = true;
-
+        m_drivetrainSub.setBrake(true);
         return 0;
     }
     return 0;
@@ -133,6 +133,8 @@ public class AutoBalanceChargeStationCmd extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     m_drivetrainSub.arcadeDrive(0, 0);
+    m_drivetrainSub.setBrake(true);
+
   }
 
   // Returns true when the command should end.
