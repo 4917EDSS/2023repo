@@ -36,6 +36,7 @@ public class AutoConeAndLeaveFar extends SequentialCommandGroup {
 
     addCommands(
         new AutoConeGrp(armSub, mastSub, intakeSub, drivetrainSub, ledSub),
-        new DriveStraightCmd(drivetrainSub, 4.5));
+        new DriveStraightCmd(drivetrainSub, 4.5),
+        new RotateRobotCmd(drivetrainSub, 150));
   }
 }

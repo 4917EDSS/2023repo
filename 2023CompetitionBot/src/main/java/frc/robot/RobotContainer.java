@@ -32,6 +32,7 @@ import frc.robot.commands.IntakeRotateWithJoystickCmd;
 import frc.robot.commands.IntakeSetPositionCmd;
 import frc.robot.commands.InterruptAllCommandsCmd;
 import frc.robot.commands.MastMoveWithJoystickCmd;
+import frc.robot.commands.RotateRobotCmd;
 import frc.robot.commands.SetGamePieceTypeCmd;
 import frc.robot.commands.SetLimitSwitchesCmd;
 import frc.robot.subsystems.ArmSub;
@@ -171,6 +172,7 @@ public class RobotContainer {
         new AutoConeAndLeaveFar(m_armSub, m_mastSub, m_intakeSub, m_drivetrainSub, m_ledSub));
     m_Chooser.addOption("9 Score Cone and Leave Close",
         new AutoConeAndLeaveClose(m_armSub, m_mastSub, m_intakeSub, m_drivetrainSub, m_ledSub));
+    m_Chooser.addOption("10 Rotate Robot", new RotateRobotCmd(m_drivetrainSub, 0));
 
     SmartDashboard.putData("auto choices", m_Chooser);
   }

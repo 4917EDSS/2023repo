@@ -213,6 +213,10 @@ public class DrivetrainSub extends SubsystemBase {
     return m_gyro.getPitch();
   }
 
+  public double getTurnRate() {
+    return m_gyro.getRate() * (kGyroReversed ? -1. : 1.);
+  }
+
   public double getHeading() {
     return m_gyro.getAngle() * (kGyroReversed ? -1. : 1.);
   }
