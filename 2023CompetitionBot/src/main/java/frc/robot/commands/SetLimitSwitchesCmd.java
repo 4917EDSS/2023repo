@@ -53,7 +53,7 @@ public class SetLimitSwitchesCmd extends CommandBase {
     }
 
     if(!m_intakeSub.isIntakeAtLimit()) {
-      m_intakeSub.intakeRotate(-0.3);
+      m_intakeSub.intakeRotate(-0.2);
     } else {
       m_intakeSub.intakeRotate(0);
     }
