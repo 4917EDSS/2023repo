@@ -10,6 +10,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -42,6 +43,8 @@ public class ArmSub extends SubsystemBase {
 
   // HARDWARE AND CONTROL OBJECTS /////////////////////////////////////////////
   private final TalonFX m_motor = new TalonFX(Constants.CanIds.kArmMotor);
+  private final DigitalInput m_armSwitch = new DigitalInput(Constants.DioIds.kArmLimitPort);
+
 
   private double m_p = 0.0001;
   private double m_i = 0.0;
@@ -117,6 +120,10 @@ public class ArmSub extends SubsystemBase {
     m_motor.setSelectedSensorPosition(0);
   }
 
+  public void setEncoderPosition(double pos) {
+    m_motor.setSelectedSensorPosition(pos);
+  }
+
   /** Returns the position of the mechanism in encoder ticks */
   public double getPosition() {
     return m_motor.getSelectedSensorPosition();
@@ -132,6 +139,10 @@ public class ArmSub extends SubsystemBase {
       return true;
     }
     return false;
+  }
+
+  public boolean isArmAtSwitch() {
+    return m_armSwitch.get();
   }
 
   public boolean aboveDangerZone(double currentPos) {
@@ -334,6 +345,7 @@ public class ArmSub extends SubsystemBase {
   /** Display/get subsystem information to/from the Smart Dashboard */
   private void updateSmartDashboard() {
     SmartDashboard.putNumber("Arm Encoder", getPosition());
+    SmartDashboard.putBoolean("Arm Limit Sensor", isArmAtSwitch());
 
     if(Constants.kEnhanceDashBoard == true) {
       double p = SmartDashboard.getNumber("Arm kP", m_p);

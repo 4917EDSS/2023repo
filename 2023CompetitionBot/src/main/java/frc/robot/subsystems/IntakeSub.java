@@ -34,7 +34,7 @@ public class IntakeSub extends SubsystemBase {
   public static final double kWristThrough = 2.6666;
   public static final double kMaxPosDifference = 0.1;
   public static final int kNumberOfGoodSensorTripsRequired = 3;
-  public static final int kMinSensorDetectionValue = 400;
+  public static final int kMinSensorDetectionValue = 300;
 
 
   // STATE VARIABLES //////////////////////////////////////////////////////////
