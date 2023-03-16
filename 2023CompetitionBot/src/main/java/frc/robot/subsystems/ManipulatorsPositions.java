@@ -23,19 +23,19 @@ public enum ManipulatorsPositions {
   HIGH_CUBE(24.285, 218812, 0.119), // Cube high drop-off position 
   MEDIUM_CUBE(0.857, 136899, 4.19047), // Cube mid drop-off position
   LOW_CUBE(0.857, 56313, 9.214), // Cube low drop-off position
-  GROUND_CUBE(42.475, 74607, 13.07), // Cube ground pick-up position
-  SINGLE_STATION_CUBE(250, 0, 0), // Cube single (side) station pick-up position
-  DOUBLE_STATION_CUBE(0, -167851, 9.833), // Cube double station pick-up position
-  TILTED_GROUND_CUBE(0, 0, 0),
+  GROUND_CUBE(42.904, 114117, 4.166), // Cube ground pick-up position
+  SINGLE_STATION_CUBE(13.047, 137816, 14.976), // Cube single (side) station pick-up position
+  DOUBLE_STATION_CUBE(0, -173985, 9.833), // Cube double station pick-up position
+  TILTED_GROUND_CUBE(42.904, 114117, 4.166),
 
   // Cone Positions
   HIGH_CONE(13.19, 239423, 9.738), // Cone high drop-off position 
   MEDIUM_CONE(0.333, 185120, 9.595), // Cone mid drop-off position 
   LOW_CONE(1.07, 101048, 12.857), // Cone low drop-off position 
-  GROUND_CONE(23.618, 109151, 16.1904), // Cone ground pick-up position
-  SINGLE_STATION_CONE(0, 0, 0), // Cone single (side) station pick-up position
+  GROUND_CONE(23.7855, 104890, 14.476), // Cone ground pick-up position
+  SINGLE_STATION_CONE(1.119, 120796, 25.2855), // Cone single (side) station pick-up position
   DOUBLE_STATION_CONE(0, -203081, 26.99), // Cone double station pick-up position
-  TILTED_GROUND_CONE(41, 88268, 25.57);
+  TILTED_GROUND_CONE(43.309, 120200, 22.261);
 
   // This is where the encoder values are stored for each enum entry
   public final double mastEncoder;
