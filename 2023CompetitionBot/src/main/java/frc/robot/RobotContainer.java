@@ -119,10 +119,10 @@ public class RobotContainer {
         .onTrue(new IntakeSetPositionCmd(ManipulatorsPositions.DOUBLE_STATION, m_armSub, m_mastSub, m_intakeSub));
 
     m_operatorController.povLeft()
-        .onTrue(new IntakeSetPositionCmd(ManipulatorsPositions.SINGLE_STATION, m_armSub, m_mastSub, m_intakeSub));
+        .onTrue(new IntakeSetPositionCmd(ManipulatorsPositions.GROUND, m_armSub, m_mastSub, m_intakeSub));
 
     m_operatorController.povDown()
-        .onTrue(new IntakeSetPositionCmd(ManipulatorsPositions.GROUND, m_armSub, m_mastSub, m_intakeSub));
+        .onTrue(new IntakeSetPositionCmd(ManipulatorsPositions.SINGLE_STATION, m_armSub, m_mastSub, m_intakeSub));
 
     m_operatorController.povRight()
         .onTrue(new IntakeSetPositionCmd(ManipulatorsPositions.TILTED_GROUND, m_armSub, m_mastSub, m_intakeSub));
