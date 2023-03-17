@@ -74,6 +74,7 @@ public class MastSub extends SubsystemBase {
     zeroEncoder();
     m_motor.setIdleMode(IdleMode.kBrake);
     setPosition(Mode.DISABLED, 0, 0);
+    move(0.0);
   }
 
   public void initTest() {

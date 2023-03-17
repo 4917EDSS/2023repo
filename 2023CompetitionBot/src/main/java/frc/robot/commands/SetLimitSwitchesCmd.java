@@ -16,6 +16,7 @@ public class SetLimitSwitchesCmd extends CommandBase {
   private final MastSub m_mastSub;
   private final ArmSub m_armSub;
   private final IntakeSub m_intakeSub;
+  private boolean m_moveMastForward = false;
 
   private int m_armPhase = 0;
 
@@ -35,10 +36,21 @@ public class SetLimitSwitchesCmd extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_intakeSub.setPosition(Mode.DISABLED, 0, 0);
     m_mastSub.setPosition(Mode.DISABLED, 0, 0);
-    //TODO add arm
     m_armSub.setPosition(Mode.DISABLED, 0, 0);
+    m_intakeSub.setPosition(Mode.DISABLED, 0, 0);
+
+    // Mast start well into the limit switch so if we're on it, move forward until we clear it, them back into.
+    if(m_mastSub.isMastAtLimit()) {
+      m_moveMastForward = true;
+      m_mastSub.move(0.4);
+      System.out.println("-----------Mast In ==============================================");
+    } else {
+      m_moveMastForward = false;
+      m_mastSub.move(0.0);
+      System.out.println("-----------Mast Out ==============================================");
+    }
+
 
     m_armPhase = 0;
   }
@@ -46,16 +58,22 @@ public class SetLimitSwitchesCmd extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(!m_mastSub.isMastAtLimit()) {
+    if(m_moveMastForward) {
+      if(!m_mastSub.isMastAtLimit()) {
+        m_moveMastForward = false;
+      }
+    } else if(!m_mastSub.isMastAtLimit()) {
       m_mastSub.move(-0.4);
     } else {
-      m_mastSub.move(0);
+      m_mastSub.zeroEncoder();
+      m_mastSub.setPosition(Mode.MANUAL, 0.0, 0.0);
     }
 
     if(!m_intakeSub.isIntakeAtLimit()) {
       m_intakeSub.intakeRotate(-0.2);
     } else {
-      m_intakeSub.intakeRotate(0);
+      m_intakeSub.zeroEncoderRotate();
+      m_intakeSub.setPosition(Mode.MANUAL, 0.0, 0.0);
     }
 
     // Arm logic
@@ -79,21 +97,18 @@ public class SetLimitSwitchesCmd extends CommandBase {
         if(!m_armSub.isArmAtSwitch()) {
           m_armSub.move(0.2);
         } else {
-          m_armSub.move(0.0);
           m_armPhase = 3;
+          m_armSub.setEncoderPosition(kArmLimitPos);
+          m_armSub.setPosition(Mode.MANUAL, 0.0, 0.0);
         }
         break;
     }
-
-    //TODO add arm 
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_mastSub.zeroEncoder();
-    m_armSub.setEncoderPosition(kArmLimitPos);
-    m_intakeSub.zeroEncoderRotate();
+
   }
 
   // Returns true when the command should end.
@@ -104,5 +119,4 @@ public class SetLimitSwitchesCmd extends CommandBase {
     }
     return false;
   }
-  //TODO add arm 
 }
