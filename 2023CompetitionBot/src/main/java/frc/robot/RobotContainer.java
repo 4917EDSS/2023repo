@@ -41,6 +41,7 @@ import frc.robot.subsystems.IntakeSub;
 import frc.robot.subsystems.LedSub;
 import frc.robot.subsystems.LedSub.LedColour;
 import frc.robot.subsystems.LedSub.LedZones;
+import frc.robot.subsystems.SubControl.Mode;
 import frc.robot.subsystems.ManipulatorsPositions;
 import frc.robot.subsystems.MastSub;
 import frc.robot.subsystems.VisionSub;
@@ -149,7 +150,8 @@ public class RobotContainer {
     // R2 is maped to the intake out
     m_operatorController.R2().onTrue(new ExpelGamePieceCmd(0.5, m_intakeSub));
 
-    m_operatorController.options().onTrue(new SetLimitSwitchesCmd(m_mastSub, m_armSub, m_intakeSub));
+    m_operatorController.options().onTrue(new SetLimitSwitchesCmd(m_mastSub, m_armSub, m_intakeSub)
+        .andThen(new IntakeSetPositionCmd(ManipulatorsPositions.HOME, m_armSub, m_mastSub, m_intakeSub)));
 
     m_operatorController.PS().onTrue(new InstantCommand(() -> StateOfRobot.m_operatorJoystickforIntake = false));
 
@@ -202,6 +204,9 @@ public class RobotContainer {
       m_mastSub.setBrake(m_brakeMode);
       m_armSub.setBrake(m_brakeMode);
       m_intakeSub.setBrake(m_brakeMode);
+      m_mastSub.setPosition(Mode.DISABLED, 0, 0);
+      m_intakeSub.setPosition(Mode.DISABLED, 0, 0);
+      m_armSub.setPosition(Mode.DISABLED, 0, 0);
 
       logger.finest("Brake " + m_brakeMode);
       m_buttonReady = false;

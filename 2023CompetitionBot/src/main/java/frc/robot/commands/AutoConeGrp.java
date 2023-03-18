@@ -42,7 +42,8 @@ public class AutoConeGrp extends SequentialCommandGroup {
         new WaitCommand(0.25),
         new DriveStraightCmd(drivetrainSub, (-clearanceDistance)),
         new ExpelGamePieceCmd(0.5, m_intakeSub),
-        new DriveStraightCmd(drivetrainSub, (clearanceDistance + 0.1)),
+        new DriveStraightCmd(drivetrainSub, (clearanceDistance + 0.1))
+            .alongWith(new ExpelGamePieceCmd(0.5, m_intakeSub)),
         new IntakeSetPositionCmd(ManipulatorsPositions.HOME, m_armSub, m_mastSub, m_intakeSub));
   }
 }

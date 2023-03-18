@@ -223,9 +223,6 @@ public class MastSub extends SubsystemBase {
 
   /** Run the mechanism state machine */
   private void updateStateMachine() {
-    if(isMastAtLimit()) {
-      zeroEncoder();
-    }
 
     double newPower = 0.0;
     double currentPosition = getPosition();
