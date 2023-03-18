@@ -20,7 +20,7 @@ import frc.robot.subsystems.SubControl.State;
 public class MastSub extends SubsystemBase {
   // CONSTANTS ////////////////////////////////////////////////////////////////
   private static final double kPositionMin = 0.0; // In endcoder ticks
-  private static final double kPositionMax = 42; // In encoder ticks (straight up is 30)
+  private static final double kPositionMax = 43.75; // In encoder ticks (straight up is 30)
   private static final double kManualModePowerDeadband = 0.05; // If manual power is less than this, assume power is 0
   private static final double kMaxPosDifference = 0.5; // Maximum difference between the target and current pos for the state to finish  <---- Must be tuned
   private static final double kMaxStopVelocity = 0.1; // max amount of power for the state to finish                                        <--- Must be tuned

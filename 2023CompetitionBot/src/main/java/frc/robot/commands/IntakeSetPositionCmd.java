@@ -52,9 +52,7 @@ public class IntakeSetPositionCmd extends CommandBase {
       m_intakeSub.spinWheelsIntake(-0.22);
     }
     m_timeStart = RobotController.getFPGATime();
-    {
 
-    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
