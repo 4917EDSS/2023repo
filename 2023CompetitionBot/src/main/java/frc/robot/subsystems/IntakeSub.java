@@ -34,7 +34,7 @@ public class IntakeSub extends SubsystemBase {
   public static final double kWristThrough = 2.6666;
   public static final double kMaxPosDifference = 0.1;
   public static final int kNumberOfGoodSensorTripsRequired = 3;
-  public static final int kMinSensorDetectionValue = 525;
+  public static final int kMinSensorDetectionValue = 600;
 
 
   // STATE VARIABLES //////////////////////////////////////////////////////////
@@ -340,6 +340,8 @@ public class IntakeSub extends SubsystemBase {
     SmartDashboard.putNumber("Piece Sensor Left", m_gamePieceSensorLeft.getValue());
     SmartDashboard.putNumber("Piece Sensor Right", m_gamePieceSensorRight.getValue());
     SmartDashboard.putBoolean("Intake Loaded", isIntakeLoaded());
+    SmartDashboard.putNumber("Intake Current (A)", m_intakeMotor.getOutputCurrent());
+
 
     if(Constants.kEnhanceDashBoard == true) {
       double p = SmartDashboard.getNumber("Intake kP", m_p);
@@ -349,7 +351,7 @@ public class IntakeSub extends SubsystemBase {
       SmartDashboard.putNumber("Intake kP", p);
       SmartDashboard.putNumber("Intake kI", i);
       SmartDashboard.putNumber("Intake kD", d);
-      SmartDashboard.putNumber("Arm Voltage", m_intakeMotor.getOutputCurrent());
+
 
       m_pid.setP(p);
       m_pid.setI(i);

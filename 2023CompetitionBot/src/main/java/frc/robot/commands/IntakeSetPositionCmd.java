@@ -79,7 +79,8 @@ public class IntakeSetPositionCmd extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(RobotController.getFPGATime() - m_timeStart > 1500000) { // After 1.5 seconds the command stops automatically
+    if(RobotController.getFPGATime() - m_timeStart > 2500000) { // After 1.5 seconds the command stops automatically
+      System.out.println("**** timed out** intake set position");
       return true;
     }
     return (m_armSub.isFinished() && m_mastSub.isFinished() && m_intakeSub.isFinished());

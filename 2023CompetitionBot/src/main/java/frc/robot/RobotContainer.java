@@ -111,6 +111,8 @@ public class RobotContainer {
 
     m_driverController.R1().onTrue(new DriveSetGearCmd(true, m_drivetrainSub));
 
+    m_driverController.R2().onTrue(new ExpelGamePieceCmd(0.5, m_intakeSub));
+
     m_driverController.triangle().onTrue(
         new InstantCommand(() -> m_drivetrainSub.setIsAutoShift(true), /* Call on command start */ m_drivetrainSub));
 
