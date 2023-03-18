@@ -6,13 +6,16 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DrivetrainSub;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 
 public class RotateRobotCmd extends CommandBase {
   private final DrivetrainSub m_drivetrainSub;
-  private final double m_angle;
+  private double m_angle;
   private long m_startTime;
+  private boolean m_flipBasedOnAlliance;
 
   private static double kMinPower = 0.2;
   private static double kMaxPower = 0.8;
@@ -21,9 +24,10 @@ public class RotateRobotCmd extends CommandBase {
 
 
   /** Creates a new RotateRobotCmd. */
-  public RotateRobotCmd(DrivetrainSub drivetrainSub, double angle) {
+  public RotateRobotCmd(DrivetrainSub drivetrainSub, double angle, boolean flipBasedOnAlliance) {
     m_drivetrainSub = drivetrainSub;
     m_angle = angle;
+    m_flipBasedOnAlliance = flipBasedOnAlliance;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_drivetrainSub);
   }
@@ -32,8 +36,12 @@ public class RotateRobotCmd extends CommandBase {
   @Override
   public void initialize() {
     m_drivetrainSub.shift(false);
+    m_drivetrainSub.setBrake(true);
     m_drivetrainSub.zeroHeading();
     m_startTime = RobotController.getFPGATime();
+    if(m_flipBasedOnAlliance && DriverStation.getAlliance() == Alliance.Blue) {
+      m_angle = -m_angle;
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -41,12 +49,12 @@ public class RotateRobotCmd extends CommandBase {
   public void execute() {
 
     double power = 0.8;
-    double rotationRemaining = 0;
-    rotationRemaining = m_angle - m_drivetrainSub.getHeading();
+    m_rotationRemaining = m_angle - m_drivetrainSub.getHeading();
 
 
-    double dir = (rotationRemaining < 0) ? -1 : 1;
-    rotationRemaining = Math.abs(rotationRemaining);
+    double dir = (m_rotationRemaining < 0) ? -1 : 1;
+
+    double rotationRemaining = Math.abs(m_rotationRemaining);
     if(rotationRemaining <= 40) {
       power = ((rotationRemaining / 40) * (kMaxPower - kMinPower)) + kMinPower;
     }
@@ -66,10 +74,10 @@ public class RotateRobotCmd extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if((m_rotationRemaining <= kTolerance) && (Math.abs(m_drivetrainSub.getTurnRate()) <= 0.1)) {
+    if((Math.abs(m_rotationRemaining) <= kTolerance) && (Math.abs(m_drivetrainSub.getTurnRate()) <= 0.1)) {
       return true;
     }
-    if((RobotController.getFPGATime() - m_startTime) > 3000000) {
+    if((RobotController.getFPGATime() - m_startTime) > 8000000) {
       return true;
     }
     return false;

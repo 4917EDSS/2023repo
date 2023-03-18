@@ -32,7 +32,7 @@ public class MastSub extends SubsystemBase {
   private SubControl m_currentControl = new SubControl(); // Current states of mechanism
   private SubControl m_newControl = new SubControl(); // New state to copy to current state when newStateParameters is true
   private boolean m_newControlParameters = false; // Set to true when ready to switch to new state
-  private double m_lastPower = 0;
+  private double m_lastPower = -999;
   private double m_blockedPosition;
   private ArmSub m_armSub;
   private IntakeSub m_intakeSub;
@@ -71,6 +71,8 @@ public class MastSub extends SubsystemBase {
    * Use this method to reset all of the hardware and states to safe starting values
    */
   public void init() {
+    m_newControlParameters = false;
+
     zeroEncoder();
     m_motor.setIdleMode(IdleMode.kBrake);
     setPosition(Mode.DISABLED, 0, 0);
@@ -197,7 +199,7 @@ public class MastSub extends SubsystemBase {
             // We're not currently holding so set that up
             m_newControl.state = SubControl.State.HOLDING;
             m_newControl.mode = mode;
-            m_newControl.targetPower = 0.0;
+            m_newControl.targetPower = 0.20;
             m_newControl.targetPosition = getPosition();
             m_newControlParameters = true;
           }
@@ -267,7 +269,7 @@ public class MastSub extends SubsystemBase {
           m_currentControl.state = State.MOVING;
           // Otherwise, hold this position
         } else {
-          newPower = calcMovePower(currentPosition, m_currentControl.targetPosition, m_currentControl.targetPower);
+          newPower = calcMovePower(currentPosition, m_blockedPosition, m_currentControl.targetPower);
         }
         break;
 

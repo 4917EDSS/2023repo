@@ -70,7 +70,7 @@ public class SetLimitSwitchesCmd extends CommandBase {
 
       case 1: // Go past zero a bit
         m_armSub.move(-0.3);
-        if(m_armSub.getPosition() < kArmLimitPos - 4000.0) {
+        if(m_armSub.getPosition() < kArmLimitPos - 8000.0) {
           m_armPhase = 2;
         }
         break;

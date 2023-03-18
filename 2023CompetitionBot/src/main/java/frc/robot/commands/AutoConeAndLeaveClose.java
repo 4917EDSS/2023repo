@@ -34,6 +34,6 @@ public class AutoConeAndLeaveClose extends SequentialCommandGroup {
     addCommands(
         new AutoConeGrp(armSub, mastSub, intakeSub, drivetrainSub, ledSub),
         new DriveStraightCmd(drivetrainSub, 2),
-        new RotateRobotCmd(drivetrainSub, 150));
+        new RotateRobotCmd(drivetrainSub, 150, true));
   }
 }

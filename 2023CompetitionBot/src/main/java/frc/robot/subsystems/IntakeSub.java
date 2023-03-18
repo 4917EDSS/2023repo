@@ -41,7 +41,7 @@ public class IntakeSub extends SubsystemBase {
   private SubControl m_currentControl = new SubControl(); // Current states of mechanism
   private SubControl m_newControl = new SubControl(); // New state to copy to current state when newStateParameters is true
   private boolean m_newControlParameters; // Set to true when ready to switch to new state
-  private double m_lastPower = 0;
+  private double m_lastPower = -999;
   private int m_countOfGoodSensorTrips = 0; // Increments by one every time the sensor trips at 400 (stops at three)
   private double m_blockedPosition;
 
@@ -53,7 +53,9 @@ public class IntakeSub extends SubsystemBase {
   // private final DigitalInput m_cubeSensor = new DigitalInput(Constants.DioIds.kCubeSensorPort);
   // private final DigitalInput m_coneSensor = new DigitalInput(Constants.DioIds.kConeSensorPort);
   private final DigitalInput m_intakeLimitSwitch = new DigitalInput(Constants.DioIds.kIntakeLimitPort);
-  private final AnalogInput m_gamePieceSensor = new AnalogInput(Constants.AnalogInputIds.kGamePieceSensorPort);
+  private final AnalogInput m_gamePieceSensorLeft = new AnalogInput(Constants.AnalogInputIds.kGamePieceSensorPort);
+  private final AnalogInput m_gamePieceSensorRight =
+      new AnalogInput(Constants.AnalogInputIds.kGamePieceSensorPortRight);
 
   private double m_p = 0.1;
   private double m_i = 0.0;
@@ -215,7 +217,7 @@ public class IntakeSub extends SubsystemBase {
             // We're not currently holding so set that up
             m_newControl.state = SubControl.State.HOLDING;
             m_newControl.mode = mode;
-            m_newControl.targetPower = 0.0;
+            m_newControl.targetPower = 0.40;
             m_newControl.targetPosition = getPositionRotate();
             m_newControlParameters = true;
           }
@@ -251,7 +253,6 @@ public class IntakeSub extends SubsystemBase {
       return false;
     }
 
-    System.out.println("Intake blocked");
     return true;
   }
 
@@ -265,11 +266,13 @@ public class IntakeSub extends SubsystemBase {
 
 
     // Filter game piece sensor
-    if(m_gamePieceSensor.getValue() > kMinSensorDetectionValue) {
+    if((m_gamePieceSensorLeft.getValue() > kMinSensorDetectionValue)
+        || (m_gamePieceSensorRight.getValue() > kMinSensorDetectionValue)) {
       m_countOfGoodSensorTrips++;
     } else {
       m_countOfGoodSensorTrips = 0;
     }
+
 
     // Check if there are new control parameters to set
     if(m_newControlParameters) {
@@ -334,7 +337,8 @@ public class IntakeSub extends SubsystemBase {
   private void updateSmartDashboard() {
     SmartDashboard.putNumber("Wrist Enc", getPositionRotate());
     SmartDashboard.putBoolean("Wrist Limit", isIntakeAtLimit());
-    SmartDashboard.putNumber("Piece Sensor", m_gamePieceSensor.getValue());
+    SmartDashboard.putNumber("Piece Sensor Left", m_gamePieceSensorLeft.getValue());
+    SmartDashboard.putNumber("Piece Sensor Right", m_gamePieceSensorRight.getValue());
     SmartDashboard.putBoolean("Intake Loaded", isIntakeLoaded());
 
     if(Constants.kEnhanceDashBoard == true) {

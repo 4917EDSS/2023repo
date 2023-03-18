@@ -54,6 +54,7 @@ public final class Constants {
 
   public final static class AnalogInputIds {
     public final static int kGamePieceSensorPort = 0;
+    public final static int kGamePieceSensorPortRight = 1;
   }
 
 

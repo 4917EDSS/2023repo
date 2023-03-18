@@ -33,7 +33,7 @@ public enum ManipulatorsPositions {
   MEDIUM_CONE(0.333, 185120, 9.595), // Cone mid drop-off position 
   LOW_CONE(1.07, 101048, 12.857), // Cone low drop-off position 
   GROUND_CONE(20.26, 100383, 14.59), // Cone ground pick-up position
-  TILTED_GROUND_CONE(41.332, 99442, 25.047), // Cone single (side) station pick-up position
+  TILTED_GROUND_CONE(41.332, 85442, 26), // Cone single (side) station pick-up position
   DOUBLE_STATION_CONE(0, -203081, 26.99), // Cone double station pick-up position
   SINGLE_STATION_CONE(1.119, 120796, 25.2855);
 
