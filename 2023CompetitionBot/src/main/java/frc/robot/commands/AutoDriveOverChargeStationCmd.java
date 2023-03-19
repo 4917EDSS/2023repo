@@ -96,10 +96,10 @@ public class AutoDriveOverChargeStationCmd extends CommandBase {
       case 2:
         System.out.println("Case 2: Dir: " + direction + " Pitch: " + m_drivetrainSub.getPitch());
         count++;
-        if(count < secondsToTicks(1.0)) {
-          return 0.7;
-        } else if(count < secondsToTicks(1.5)) {
-          return 0.4;
+        if(count < secondsToTicks(0.5)) {
+          return 0.8;
+        } else if(count < secondsToTicks(0.8)) {
+          return 0.6;
         }
         m_isFinished = true;
         return 0;

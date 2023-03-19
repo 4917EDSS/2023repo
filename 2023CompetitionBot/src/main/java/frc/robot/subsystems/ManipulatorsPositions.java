@@ -25,7 +25,7 @@ public enum ManipulatorsPositions {
   LOW_CUBE(0.857, 56313, 9.214), // Cube low drop-off position
   GROUND_CUBE(42.5, 105000, 10.785), // Cube ground pick-up position
   SINGLE_STATION_CUBE(13.047, 137816, 14.976), // Cube single (side) station pick-up position
-  DOUBLE_STATION_CUBE(0, -162279, 14), // Cube double station pick-up position
+  DOUBLE_STATION_CUBE(0, -162279, 12), // Cube double station pick-up position
   TILTED_GROUND_CUBE(42.5, 105000, 10.785),
 
   // Cone Positions
