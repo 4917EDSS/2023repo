@@ -33,6 +33,7 @@ public class IntakeSub extends SubsystemBase {
   public static final double kWristFlush = 27;
   public static final double kWristThrough = 2.6666;
   public static final double kMaxPosDifference = 0.1;
+  public static final int kMagnitudeOfGoodSensorTripsRequired = 500;
   public static final int kNumberOfGoodSensorTripsRequired = 3;
   public static final int kMinSensorDetectionValue = 600;
 
@@ -42,6 +43,7 @@ public class IntakeSub extends SubsystemBase {
   private SubControl m_newControl = new SubControl(); // New state to copy to current state when newStateParameters is true
   private boolean m_newControlParameters; // Set to true when ready to switch to new state
   private double m_lastPower = -999;
+  private int m_magnitudeOfGoodSensorTrips = 0;
   private int m_countOfGoodSensorTrips = 0; // Increments by one every time the sensor trips at 400 (stops at three)
   private double m_blockedPosition;
 
@@ -147,7 +149,8 @@ public class IntakeSub extends SubsystemBase {
 
   /** Flashes leds green after the 3 or more sensor trips, then returns true **/
   public boolean isIntakeLoaded() {
-    if(m_countOfGoodSensorTrips >= kNumberOfGoodSensorTripsRequired) {
+    if((m_magnitudeOfGoodSensorTrips >= kMagnitudeOfGoodSensorTripsRequired)
+        && (m_countOfGoodSensorTrips >= kNumberOfGoodSensorTripsRequired)) {
       return true;
     } else {
       return false;
@@ -266,10 +269,13 @@ public class IntakeSub extends SubsystemBase {
 
 
     // Filter game piece sensor
-    if((m_gamePieceSensorLeft.getValue() > kMinSensorDetectionValue)
-        || (m_gamePieceSensorRight.getValue() > kMinSensorDetectionValue)) {
+    double biggestsSensorValue = Math.max(m_gamePieceSensorLeft.getValue(), m_gamePieceSensorRight.getValue());
+
+    if((biggestsSensorValue > kMinSensorDetectionValue)) {
+      m_magnitudeOfGoodSensorTrips += biggestsSensorValue - kMinSensorDetectionValue;
       m_countOfGoodSensorTrips++;
     } else {
+      m_magnitudeOfGoodSensorTrips = 0;
       m_countOfGoodSensorTrips = 0;
     }
 

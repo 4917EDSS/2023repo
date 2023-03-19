@@ -82,16 +82,16 @@ public class AutoDriveOverChargeStationCmd extends CommandBase {
         if(debounceCount > secondsToTicks(debounceTime)) {
           state = 1;
           debounceCount = 0;
-          return 0.6;
+          return 0.75;
         }
         return 0.8;
-      //driving up charge station, drive slower, stopping when level
+
       case 1:
         System.out.println("Case 1: Dir: " + direction + " Pitch: " + m_drivetrainSub.getPitch());
         if(-direction * m_drivetrainSub.getPitch() > 0) {
           state = 2;
         }
-        return 0.6;
+        return 0.75;
       //on charge station, stop motors and wait for end of auto
       case 2:
         System.out.println("Case 2: Dir: " + direction + " Pitch: " + m_drivetrainSub.getPitch());
