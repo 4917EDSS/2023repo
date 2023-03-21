@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import org.junit.rules.Timeout;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -18,36 +19,23 @@ import frc.robot.subsystems.ManipulatorsPositions;
 // NOTE: Consider using this command inline, rather than writing a subclass. For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class AutoConeGrp extends SequentialCommandGroup {
+public class AutoHomeAndDriveParallelCmd extends ParallelCommandGroup {
   private final MastSub m_mastSub;
   private final ArmSub m_armSub;
   private final IntakeSub m_intakeSub;
   private final DrivetrainSub m_drivetrainSub;
-  private final LedSub m_ledSub;
-  private double clearanceDistance = 0.3;
 
-  /** Creates a new AutoConeGrp. */
-  public AutoConeGrp(ArmSub armSub, MastSub mastSub, IntakeSub intakeSub, DrivetrainSub drivetrainSub, LedSub ledSub) {
+  /** Creates a new AutoHomeAndDriveParallelCmd. */
+  public AutoHomeAndDriveParallelCmd(ArmSub armSub, MastSub mastSub, IntakeSub intakeSub, DrivetrainSub drivetrainSub) {
+    // Add your commands in the addCommands() call, e.g.
+    // addCommands(new FooCommand(), new BarCommand());
     m_armSub = armSub;
     m_mastSub = mastSub;
     m_intakeSub = intakeSub;
     m_drivetrainSub = drivetrainSub;
-    m_ledSub = ledSub;
-    // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
+
     addCommands(
-        new SetGamePieceTypeCmd(true, m_ledSub),
-        new SetLimitSwitchesCmd(mastSub, armSub, intakeSub),
-        new IntakeSetPositionCmd(ManipulatorsPositions.HIGH_CONE, m_armSub, m_mastSub, m_intakeSub),
-        new WaitCommand(0.25),
-        new DriveStraightCmd(drivetrainSub, (-clearanceDistance)),
-        new ExpelGamePieceCmd(0.5, m_intakeSub),
-        new AutoHomeAndDriveParallelCmd(armSub, mastSub, intakeSub, drivetrainSub));
-    /*
-     * new DriveStraightCmd(drivetrainSub, (clearanceDistance + 0.1))
-     * .alongWith(new ExpelGamePieceCmd(0.5, m_intakeSub))
-     * .alongWith(new WaitCommand(0.5))
-     * .andThen(new IntakeSetPositionCmd(ManipulatorsPositions.HOME, m_armSub, m_mastSub, m_intakeSub)))
-     */
+        (new IntakeSetPositionCmd(ManipulatorsPositions.HOME, m_armSub, m_mastSub, m_intakeSub)),
+        new DriveStraightCmd(drivetrainSub, 0.5));
   }
 }
