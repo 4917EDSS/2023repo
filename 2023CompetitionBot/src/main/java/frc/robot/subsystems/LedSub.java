@@ -42,7 +42,8 @@ public class LedSub extends SubsystemBase {
     DIAG_ARM_LIMIT(21, 21, false), //
     DIAG_ARM_ENC(22, 22, false), //
     DIAG_INTAKE_LIMIT(23, 23, false), //
-    DIAG_INTAKE_ENC(24, 24, false); //
+    DIAG_INTAKE_ENC(24, 24, false), //
+    DIAG_INTAKE_SENSOR(25, 25, false);
 
 
     public final int start;

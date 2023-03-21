@@ -62,7 +62,7 @@ public class SetLimitSwitchesCmd extends CommandBase {
     switch(m_armPhase) {
       case 0: // Find relative zero
         m_armSub.move(-0.3);
-        if(m_armSub.isArmAtSwitch()) {
+        if(m_armSub.isArmAtLimit()) {
           m_armSub.setEncoderPosition(kArmLimitPos);
           m_armPhase = 1;
         }
@@ -76,7 +76,7 @@ public class SetLimitSwitchesCmd extends CommandBase {
         break;
 
       case 2: // Carefully go to zero position
-        if(!m_armSub.isArmAtSwitch()) {
+        if(!m_armSub.isArmAtLimit()) {
           m_armSub.move(0.2);
         } else {
           m_armSub.move(0.0);
@@ -99,7 +99,7 @@ public class SetLimitSwitchesCmd extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(m_mastSub.isMastAtLimit() && m_intakeSub.isIntakeAtLimit() && (m_armSub.isArmAtSwitch() && m_armPhase == 3)) {
+    if(m_mastSub.isMastAtLimit() && m_intakeSub.isIntakeAtLimit() && (m_armSub.isArmAtLimit() && m_armPhase == 3)) {
       return true;
     }
     return false;

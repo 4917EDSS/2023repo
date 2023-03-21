@@ -44,7 +44,7 @@ public class ArmSub extends SubsystemBase {
 
   // HARDWARE AND CONTROL OBJECTS /////////////////////////////////////////////
   private final TalonFX m_motor = new TalonFX(Constants.CanIds.kArmMotor);
-  private final DigitalInput m_armSwitch = new DigitalInput(Constants.DioIds.kArmLimitPort);
+  private final DigitalInput m_armLimit = new DigitalInput(Constants.DioIds.kArmLimitPort);
 
 
   private double m_p = 0.0001;
@@ -142,8 +142,8 @@ public class ArmSub extends SubsystemBase {
     return false;
   }
 
-  public boolean isArmAtSwitch() {
-    return m_armSwitch.get();
+  public boolean isArmAtLimit() {
+    return m_armLimit.get();
   }
 
   public boolean aboveDangerZone(double currentPos) {
@@ -345,7 +345,7 @@ public class ArmSub extends SubsystemBase {
   /** Display/get subsystem information to/from the Smart Dashboard */
   private void updateSmartDashboard() {
     SmartDashboard.putNumber("Arm Encoder", getPosition());
-    SmartDashboard.putBoolean("Arm Limit Sensor", isArmAtSwitch());
+    SmartDashboard.putBoolean("Arm Limit Sensor", isArmAtLimit());
 
     if(Constants.kEnhanceDashBoard == true) {
       double p = SmartDashboard.getNumber("Arm kP", m_p);
