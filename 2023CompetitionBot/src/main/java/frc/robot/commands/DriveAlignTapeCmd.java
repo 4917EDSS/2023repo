@@ -36,7 +36,7 @@ public class DriveAlignTapeCmd extends CommandBase {
   @Override
   public void initialize() {
     turn_dir = 1.0;
-    m_visionSub.setPipeline(Constants.LimelightConstants.kNoVision);
+    m_visionSub.setPipeline(Constants.LimelightConstants.kLimelimelight);
     if(m_visionSub.getHorizontalAngle() > 0) {
       turn_dir = -1.0;
     }
@@ -66,6 +66,7 @@ public class DriveAlignTapeCmd extends CommandBase {
   @Override
   public boolean isFinished() {
     if(!m_visionSub.hasTarget()) {
+      m_visionSub.setPipeline(Constants.LimelightConstants.kNoVision);
       return true;
     }
     return false;
