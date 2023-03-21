@@ -219,8 +219,9 @@ public class RobotContainer {
       m_buttonReady = true;
     }
 
-    // MAST
-    m_ledSub.setZoneRGB(LedZones.DIAG_MAST_ENC, 0, (int) (m_mastSub.getPosition() / 18.0 * 255), 0);
+    // MAST ENCODER
+    m_ledSub.setZoneRGB(LedZones.DIAG_MAST_ENC, 0, (int) (m_mastSub.getPosition() / 18.0 * 255.0), 0);
+    // MAST LIMIT
     if(m_mastSub.isMastAtLimit()) {
       m_ledSub.setZoneColour(LedZones.DIAG_MAST_LIMIT, LedColour.GREEN);
     } else {
@@ -228,23 +229,36 @@ public class RobotContainer {
     }
 
 
-    // ARM
+    // ARM ENCODERS
     if(m_armSub.getPosition() > 0) {
-      m_ledSub.setZoneRGB(LedZones.DIAG_ARM_ENC, 0, (int) (m_armSub.getPosition() / 24000.0 * 255), 0);
+      m_ledSub.setZoneRGB(LedZones.DIAG_ARM_ENC, 0, (int) (m_armSub.getPosition() / 24000.0 * 255.0), 0);
     } else if(m_armSub.getPosition() < 0) {
-      m_ledSub.setZoneRGB(LedZones.DIAG_ARM_ENC, (int) (m_armSub.getPosition() / -20000.0 * 255), 0, 0);
+      m_ledSub.setZoneRGB(LedZones.DIAG_ARM_ENC, (int) (m_armSub.getPosition() / -20000.0 * 255.0), 0, 0);
     } else {
       m_ledSub.setZoneRGB(LedZones.DIAG_ARM_ENC, 0, 0, 0);
     }
+    // ARM AT LIMIT
+    if(m_armSub.isArmAtLimit()) {
+      m_ledSub.setZoneColour(LedZones.DIAG_ARM_LIMIT, LedColour.GREEN);
+    } else {
+      m_ledSub.setZoneColour(LedZones.DIAG_ARM_LIMIT, LedColour.RED);
+    }
 
-    // INTAKE
-    m_ledSub.setZoneRGB(LedZones.DIAG_INTAKE_ENC, 0, (int) m_mastSub.getPosition() / 6 * 255, 0);
+    // INTAKE ENCODER
+    m_ledSub.setZoneRGB(LedZones.DIAG_INTAKE_ENC, 0, (int) (m_mastSub.getPosition() / 6.0 * 255.0), 0);
 
-    // Show sensor and encoder status on LEDs when the robot isn't enabled
-    if(m_intakeSub.isIntakeLoaded()) {
+    // INTAKE AT LIMIT
+    if(m_intakeSub.isIntakeAtLimit()) {
       m_ledSub.setZoneColour(LedZones.DIAG_INTAKE_LIMIT, LedColour.GREEN);
     } else {
       m_ledSub.setZoneColour(LedZones.DIAG_INTAKE_LIMIT, LedColour.RED);
+    }
+
+    // Show sensor and encoder status on LEDs when the robot isn't enabled
+    if(m_intakeSub.isIntakeLoaded()) {
+      m_ledSub.setZoneColour(LedZones.DIAG_INTAKE_SENSOR, LedColour.GREEN);
+    } else {
+      m_ledSub.setZoneColour(LedZones.DIAG_INTAKE_SENSOR, LedColour.RED);
     }
   }
 }
