@@ -6,6 +6,9 @@ package frc.robot;
 
 import java.util.logging.Logger;
 import edu.wpi.first.hal.HALUtil;
+import edu.wpi.first.wpilibj.PS4Controller;
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -254,9 +257,36 @@ public class RobotContainer {
 
     // Show sensor and encoder status on LEDs when the robot isn't enabled
     if(m_intakeSub.isIntakeLoaded()) {
+
+      // for(int i = 0; i < (3 * 1000000); i++) {
+      //   // operator rumble
+      //   m_operatorController.getHID().setRumble(RumbleType.kLeftRumble, 1);
+      //   m_operatorController.getHID().setRumble(RumbleType.kRightRumble, 1);
+
+
+      //   // driver rumble
+      //   m_driverController.getHID().setRumble(RumbleType.kLeftRumble, 1);
+      //   m_driverController.getHID().setRumble(RumbleType.kRightRumble, 1);
+      //   try {
+      //     Thread.sleep(2000);
+      //   } catch (Exception ex) {
+
+      //   }
+      // }
+      m_driverhid.setRumble(RumbleType.kLeftRumble, 1);
+      m_driverhid.setRumble(RumbleType.kRightRumble, 1);
+      m_operatorhid.setRumble(RumbleType.kLeftRumble, 1);
+      m_operatorhid.setRumble(RumbleType.kRightRumble, 1);
+
+
       m_ledSub.setZoneColour(LedZones.DIAG_INTAKE_SENSOR, LedColour.GREEN);
     } else {
       m_ledSub.setZoneColour(LedZones.DIAG_INTAKE_SENSOR, LedColour.RED);
     }
   }
+
+  private final PS4Controller m_driverhid = new PS4Controller(OperatorConstants.kDriverControllerPort);
+  private final PS4Controller m_operatorhid = new PS4Controller(OperatorConstants.kOperatorControllerPort);
+
+
 }
