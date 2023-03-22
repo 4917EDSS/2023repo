@@ -35,7 +35,8 @@ public class AutoHomeAndDriveParallelCmd extends ParallelCommandGroup {
     m_drivetrainSub = drivetrainSub;
 
     addCommands(
-        (new IntakeSetPositionCmd(ManipulatorsPositions.HOME, m_armSub, m_mastSub, m_intakeSub)),
-        new DriveStraightCmd(drivetrainSub, 0.5));
+        new DriveStraightCmd(m_drivetrainSub, 0.4),
+        new ExpelGamePieceCmd(0.5, m_intakeSub)
+            .andThen(new IntakeSetPositionCmd(ManipulatorsPositions.HOME, m_armSub, m_mastSub, m_intakeSub)));
   }
 }
