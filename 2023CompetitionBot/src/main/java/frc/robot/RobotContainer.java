@@ -24,6 +24,7 @@ import frc.robot.commands.AutoDoNothingCmd;
 import frc.robot.commands.AutoDriveOverChargeStationCmd;
 import frc.robot.commands.AutoHomeAndDriveParallelCmd;
 import frc.robot.commands.AutoLeaveAndBalanceGrp;
+import frc.robot.commands.DriveAlignCmd;
 import frc.robot.commands.DriveAlignTapeCmd;
 import frc.robot.commands.DriveSetGearCmd;
 import frc.robot.commands.DriveStraightCmd;
@@ -103,7 +104,7 @@ public class RobotContainer {
     m_driverController.L3().or(m_driverController.R3())
         .onTrue(new InterruptAllCommandsCmd(m_armSub, m_mastSub, m_intakeSub, m_drivetrainSub));
 
-    m_driverController.povUp().onTrue(new DriveAlignTapeCmd(m_drivetrainSub, m_visionSub, 15.0));
+    m_driverController.povUp().onTrue(new DriveAlignCmd(m_drivetrainSub, m_visionSub, 15.0));
 
     m_driverController.circle().onTrue(new InstantCommand(() -> m_drivetrainSub.setBrakeButton(true), m_drivetrainSub));
 
