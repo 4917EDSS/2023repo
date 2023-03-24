@@ -23,6 +23,7 @@ import frc.robot.commands.AutoConeAndReverseGrp;
 import frc.robot.commands.AutoDoNothingCmd;
 import frc.robot.commands.AutoDriveOverChargeStationCmd;
 import frc.robot.commands.AutoHomeAndDriveParallelCmd;
+import frc.robot.commands.AutoHomeOnlyGrp;
 import frc.robot.commands.AutoLeaveAndBalanceGrp;
 import frc.robot.commands.DriveAlignCmd;
 import frc.robot.commands.DriveAlignTapeCmd;
@@ -167,8 +168,8 @@ public class RobotContainer {
   }
 
   void autoChooserSetup() {
-    m_Chooser.setDefaultOption("1 do nothing", new AutoDoNothingCmd());
-    m_Chooser.addOption("2 drive straight", new DriveStraightCmd(m_drivetrainSub, -3));
+    m_Chooser.setDefaultOption("1 Home Only", new AutoHomeOnlyGrp(m_mastSub, m_armSub, m_intakeSub));
+    m_Chooser.addOption("2 Drive Straight", new DriveStraightCmd(m_drivetrainSub, -3));
     m_Chooser.addOption("7 Score Cone, Leave and Balance",
         new AutoConeAndChargeStation(m_armSub, m_mastSub, m_intakeSub, m_drivetrainSub, m_ledSub));
     m_Chooser.addOption("8 Score Cone and Leave Far",
