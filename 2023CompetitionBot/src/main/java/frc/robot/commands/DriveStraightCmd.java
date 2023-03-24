@@ -30,13 +30,14 @@ public class DriveStraightCmd extends CommandBase {
     double fullSpeed = 0.9;
     double fullDistance = 3;
 
-    if(targetDriveDistance < minimumDistance) {
+    if(Math.abs(targetDriveDistance) < minimumDistance) {
       kMaxPower = minimumMax;
-    } else if(targetDriveDistance > fullDistance) {
+    } else if(Math.abs(targetDriveDistance) > fullDistance) {
       kMaxPower = fullSpeed;
     } else {
       kMaxPower =
-          0.4 + ((fullSpeed - minimumMax) / (fullDistance - minimumDistance)) * (targetDriveDistance - minimumDistance);
+          0.4 + ((fullSpeed - minimumMax) / (fullDistance - minimumDistance))
+              * (Math.abs(targetDriveDistance) - minimumDistance);
     }
   }
 
@@ -80,7 +81,7 @@ public class DriveStraightCmd extends CommandBase {
     if((m_distanceRemaining <= kTolerance) && (Math.abs(m_drivetrainSub.getVelocity()) <= 0.1)) {
       return true;
     }
-    if(RobotController.getFPGATime() - m_timeStart > (2500000 * m_targetDriveDistance)) { // After 2.5 seconds the command stops automatically
+    if(RobotController.getFPGATime() - m_timeStart > (1000000.0 + (1000000.0 * Math.abs(m_targetDriveDistance)))) { // After 2.5 seconds the command stops automatically
       System.out.println("**** timed out** intake set position");
       return true;
     }
