@@ -35,7 +35,7 @@ public class AutoConeAndChargeStation extends SequentialCommandGroup {
 
     /* Score cone, drive to charge station, then balance on charge station */
     addCommands(
-        new AutoConeChargingStationGrp(armSub, mastSub, intakeSub, drivetrainSub, ledSub),
+        new AutoConeSubGrp(armSub, mastSub, intakeSub, drivetrainSub, ledSub),
         new AutoDriveOverChargeStationCmd(drivetrainSub, true)
             .alongWith(new IntakeSetPositionDelayCmd(m_armSub, m_mastSub, m_intakeSub)),
         new AutoBalanceChargeStationCmd(drivetrainSub, false));

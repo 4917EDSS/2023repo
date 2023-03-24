@@ -4,27 +4,30 @@
 
 package frc.robot.commands;
 
+import org.junit.rules.Timeout;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.ArmSub;
 import frc.robot.subsystems.DrivetrainSub;
 import frc.robot.subsystems.MastSub;
 import frc.robot.subsystems.IntakeSub;
 import frc.robot.subsystems.LedSub;
+import frc.robot.subsystems.ManipulatorsPositions;
 
 // NOTE: Consider using this command inline, rather than writing a subclass. For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class AutoConeAndLeaveFar extends SequentialCommandGroup {
+public class AutoConeAndReverseGrp extends SequentialCommandGroup {
   private final MastSub m_mastSub;
   private final ArmSub m_armSub;
   private final IntakeSub m_intakeSub;
   private final DrivetrainSub m_drivetrainSub;
   private final LedSub m_ledSub;
+  private double clearanceDistance = 0.3;
 
-
-  /** Creates a new AutoConeAndLeave. */
-
-  public AutoConeAndLeaveFar(ArmSub armSub, MastSub mastSub, IntakeSub intakeSub, DrivetrainSub drivetrainSub,
+  /** Creates a new AutoConeGrp. */
+  public AutoConeAndReverseGrp(ArmSub armSub, MastSub mastSub, IntakeSub intakeSub, DrivetrainSub drivetrainSub,
       LedSub ledSub) {
     m_armSub = armSub;
     m_mastSub = mastSub;
@@ -33,10 +36,8 @@ public class AutoConeAndLeaveFar extends SequentialCommandGroup {
     m_ledSub = ledSub;
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-
     addCommands(
-        new AutoConeGrp(armSub, mastSub, intakeSub, drivetrainSub, ledSub),
-        new DriveStraightCmd(drivetrainSub, 4.5),
-        new RotateRobotCmd(drivetrainSub, -150, true));
+        new AutoConeSubGrp(armSub, mastSub, intakeSub, drivetrainSub, ledSub),
+        new AutoHomeAndDriveParallelCmd(armSub, mastSub, intakeSub, drivetrainSub));
   }
 }

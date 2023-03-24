@@ -18,7 +18,7 @@ import frc.robot.subsystems.ManipulatorsPositions;
 // NOTE: Consider using this command inline, rather than writing a subclass. For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class AutoConeGrp extends SequentialCommandGroup {
+public class AutoConeSubGrp extends SequentialCommandGroup {
   private final MastSub m_mastSub;
   private final ArmSub m_armSub;
   private final IntakeSub m_intakeSub;
@@ -27,7 +27,8 @@ public class AutoConeGrp extends SequentialCommandGroup {
   private double clearanceDistance = 0.3;
 
   /** Creates a new AutoConeGrp. */
-  public AutoConeGrp(ArmSub armSub, MastSub mastSub, IntakeSub intakeSub, DrivetrainSub drivetrainSub, LedSub ledSub) {
+  public AutoConeSubGrp(ArmSub armSub, MastSub mastSub, IntakeSub intakeSub, DrivetrainSub drivetrainSub,
+      LedSub ledSub) {
     m_armSub = armSub;
     m_mastSub = mastSub;
     m_intakeSub = intakeSub;
@@ -41,7 +42,6 @@ public class AutoConeGrp extends SequentialCommandGroup {
         new IntakeSetPositionCmd(ManipulatorsPositions.HIGH_CONE, m_armSub, m_mastSub, m_intakeSub),
         new WaitCommand(0.25),
         new DriveStraightCmd(drivetrainSub, (-clearanceDistance)),
-        new ExpelGamePieceCmd(0.5, m_intakeSub),
-        new AutoHomeAndDriveParallelCmd(armSub, mastSub, intakeSub, drivetrainSub));
+        new ExpelGamePieceCmd(0.5, m_intakeSub));
   }
 }
