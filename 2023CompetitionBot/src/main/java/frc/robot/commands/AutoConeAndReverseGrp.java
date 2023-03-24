@@ -24,7 +24,7 @@ public class AutoConeAndReverseGrp extends SequentialCommandGroup {
   private final IntakeSub m_intakeSub;
   private final DrivetrainSub m_drivetrainSub;
   private final LedSub m_ledSub;
-  private double clearanceDistance = 0.3;
+  private double clearanceDistance = 0.42;
 
   /** Creates a new AutoConeGrp. */
   public AutoConeAndReverseGrp(ArmSub armSub, MastSub mastSub, IntakeSub intakeSub, DrivetrainSub drivetrainSub,

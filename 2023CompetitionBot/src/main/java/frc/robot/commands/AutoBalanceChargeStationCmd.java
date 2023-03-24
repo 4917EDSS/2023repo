@@ -36,7 +36,7 @@ public class AutoBalanceChargeStationCmd extends CommandBase {
 
     //Amount of time a sensor condition needs to be met before changing states in seconds
     //Reduces the impact of sensor noice, but too high can make the auto run slower, default = 0.2
-    debounceTime = 0.05;
+    debounceTime = 0.2;
 
   }
 
@@ -99,9 +99,9 @@ public class AutoBalanceChargeStationCmd extends CommandBase {
         }
         count++;
         if(count < secondsToTicks(2)) {
-          return 0.5;
+          return 0.45;
         } else {
-          return 0.25;
+          return 0.3;
         }
         //on charge station, stop motors and wait for end of auto
       case 2:
@@ -115,9 +115,9 @@ public class AutoBalanceChargeStationCmd extends CommandBase {
           return 0;
         }
         if((direction * m_drivetrainSub.getPitch()) <= -2) {
-          return -0.3;
+          return -0.2;
         } else if((direction * m_drivetrainSub.getPitch()) >= 2) {
-          return 0.3;
+          return 0.2;
         } else {
           m_drivetrainSub.setBrake(true);
           return 0;
@@ -140,9 +140,11 @@ public class AutoBalanceChargeStationCmd extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(m_isFinished) {
-      return true;
-    }
+    /*
+     * if(m_isFinished) {
+     * return true;
+     * }
+     */
     return false;
   }
 }

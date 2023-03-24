@@ -58,13 +58,15 @@ public class LedSub extends SubsystemBase {
   }
 
   public enum LedColour {
-    YELLOW(128, 80, 0), //
+    YELLOW(128, 100, 0), //
     PURPLE(80, 20, 60), //
     RED(128, 0, 0), //
     GREEN(0, 128, 0), //
     START_GREEN(45, 128, 0), // 
-    BLUE(0, 0, 128), //
-    WHITE(128, 128, 128); //
+    BLUE(10, 0, 128), //
+    WHITE(128, 128, 128),
+    //
+    ORANGE(128, 20, 0);
 
     public final int red, blue, green;
 
@@ -129,7 +131,7 @@ public class LedSub extends SubsystemBase {
         setZoneColour(LedZones.ALL, LedColour.GREEN);
       }
       if(250000 <= timeSinceIntakeLoaded && timeSinceIntakeLoaded <= 500000) {
-        setZoneColour(LedZones.ALL, LedColour.WHITE);
+        setZoneColour(LedZones.ALL, LedColour.RED);
       }
       if(timeSinceIntakeLoaded > 500000) {
         m_time = RobotController.getFPGATime();
@@ -138,15 +140,19 @@ public class LedSub extends SubsystemBase {
       if(m_ledblinktimes >= 3) {//when it is done flashing
         m_isFlashing = false;
         m_ledblinktimes = 0;
-        if(StateOfRobot.m_coneMode) {
-          setZoneColour(LedZones.GAME_PIECE, LedColour.YELLOW);
-        } else {
-          setZoneColour(LedZones.GAME_PIECE, LedColour.PURPLE);
-        }
+        changeColourHome();
       }
     }
 
 
+  }
+
+  public void changeColourHome() {
+    if(StateOfRobot.m_coneMode) {
+      setZoneColour(LedZones.GAME_PIECE, LedColour.YELLOW);
+    } else {
+      setZoneColour(LedZones.GAME_PIECE, LedColour.PURPLE);
+    }
   }
 
 

@@ -30,8 +30,13 @@ public class IntakeGamePieceCmd extends CommandBase {
   @Override
   public void initialize() {
     double curPower = m_power;
+
+
     if(StateOfRobot.isConeMode()) {
       curPower = -curPower;
+      m_ledSub.setZoneColour(LedSub.LedZones.ALL, LedSub.LedColour.ORANGE);
+    } else {
+      m_ledSub.setZoneColour(LedSub.LedZones.ALL, LedSub.LedColour.BLUE);
     }
 
     m_intakeSub.spinWheelsIntake(curPower);
@@ -49,6 +54,8 @@ public class IntakeGamePieceCmd extends CommandBase {
     m_intakeSub.spinWheelsIntake(0);
     if(!interrupted) {
       m_ledSub.Flash(LedSub.LedColour.GREEN);
+    } else {
+      m_ledSub.changeColourHome();
     }
   }
 
