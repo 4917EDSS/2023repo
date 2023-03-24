@@ -36,7 +36,7 @@ public class AutoBalanceChargeStationCmd extends CommandBase {
 
     //Amount of time a sensor condition needs to be met before changing states in seconds
     //Reduces the impact of sensor noice, but too high can make the auto run slower, default = 0.2
-    debounceTime = 0.2;
+    debounceTime = 0.1;
 
   }
 
@@ -115,9 +115,9 @@ public class AutoBalanceChargeStationCmd extends CommandBase {
           return 0;
         }
         if((direction * m_drivetrainSub.getPitch()) <= -2) {
-          return -0.2;
+          return -0.25;
         } else if((direction * m_drivetrainSub.getPitch()) >= 2) {
-          return 0.2;
+          return 0.25;
         } else {
           m_drivetrainSub.setBrake(true);
           return 0;

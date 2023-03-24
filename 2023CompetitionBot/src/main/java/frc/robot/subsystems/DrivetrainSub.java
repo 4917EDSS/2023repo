@@ -20,8 +20,8 @@ import frc.robot.Constants;
 
 public class DrivetrainSub extends SubsystemBase {
 
-  private final double kShiftUpSpeed = 1.8; // meters per second
-  private final double kShiftDownSpeed = 1.4; // meters per second
+  private final double kShiftUpSpeed = 1.4; // meters per second
+  private final double kShiftDownSpeed = 1.0; // meters per second
 
   private final double kEncoderRotationsToMeterLowGear = 5.0 / 204.5;
   private final double kEncoderRotationsToMeterHighGear = 5.0 / 129.8;

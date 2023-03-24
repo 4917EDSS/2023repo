@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DrivetrainSub;
 
@@ -16,6 +17,7 @@ public class DriveStraightCmd extends CommandBase {
   private double kMinPower = 0.2;
   private double kTolerance = 0.03;
   private double m_targetDriveDistance;
+  private long m_timeStart;
 
   /** Creates a new DriveStraightCmd. */
   public DriveStraightCmd(DrivetrainSub drivetrainSub, double targetDriveDistance) {
@@ -43,6 +45,7 @@ public class DriveStraightCmd extends CommandBase {
   public void initialize() {
     m_drivetrainSub.zeroHeading();
     m_drivetrainSub.zeroDrivetrainEncoders();
+    m_timeStart = RobotController.getFPGATime();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -75,6 +78,10 @@ public class DriveStraightCmd extends CommandBase {
   @Override
   public boolean isFinished() {
     if((m_distanceRemaining <= kTolerance) && (Math.abs(m_drivetrainSub.getVelocity()) <= 0.1)) {
+      return true;
+    }
+    if(RobotController.getFPGATime() - m_timeStart > (2500000 * m_targetDriveDistance)) { // After 2.5 seconds the command stops automatically
+      System.out.println("**** timed out** intake set position");
       return true;
     }
     return false;
