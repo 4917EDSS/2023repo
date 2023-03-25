@@ -10,6 +10,7 @@ import frc.robot.subsystems.DrivetrainSub;
 import frc.robot.subsystems.MastSub;
 import frc.robot.subsystems.IntakeSub;
 import frc.robot.subsystems.LedSub;
+import frc.robot.subsystems.ManipulatorsPositions;
 
 // NOTE: Consider using this command inline, rather than writing a subclass. For more
 // information, see:
@@ -36,7 +37,9 @@ public class AutoConeAndLeaveFarGrp extends SequentialCommandGroup {
 
     addCommands(
         new AutoConeAndReverseGrp(armSub, mastSub, intakeSub, drivetrainSub, ledSub),
-        new DriveStraightCmd(drivetrainSub, 4.5),
-        new RotateRobotCmd(drivetrainSub, -150, true));
+        new DriveStraightCmd(drivetrainSub, 4.0),
+        new RotateRobotCmd(drivetrainSub, -160, true),
+        new SetGamePieceTypeCmd(false, ledSub),
+        new IntakeSetPositionCmd(ManipulatorsPositions.TILTED_GROUND_CUBE, armSub, mastSub, intakeSub));
   }
 }
