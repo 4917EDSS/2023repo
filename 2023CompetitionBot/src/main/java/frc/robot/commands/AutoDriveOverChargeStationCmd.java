@@ -98,7 +98,7 @@ public class AutoDriveOverChargeStationCmd extends CommandBase {
         count++;
         if(count < secondsToTicks(0.5)) {
           return 0.8;
-        } else if(count < secondsToTicks(0.7)) {
+        } else if(count < secondsToTicks(0.8)) {
           return 0.6;
         }
         m_isFinished = true;
