@@ -23,8 +23,8 @@ public class DrivetrainSub extends SubsystemBase {
   private final double kShiftUpSpeed = 1.4; // meters per second
   private final double kShiftDownSpeed = 1.0; // meters per second
 
-  private final double kEncoderRotationsToMeterLowGear = 5.0 / 204.5;
-  private final double kEncoderRotationsToMeterHighGear = 5.0 / 129.8;
+  private final double kEncoderRotationsToMeterLowGear = 5.0 / 115.36;//204.5;
+  private final double kEncoderRotationsToMeterHighGear = 5.0 / 70.192;//129.8;
   private final boolean kGyroReversed = false;
 
   public static boolean hasBrakeButtonPressed = false;

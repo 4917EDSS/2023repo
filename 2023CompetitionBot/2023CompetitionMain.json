@@ -418,6 +418,39 @@
               "Colors/Color when true": "#7CFC00FF",
               "Colors/Color when false": "#8B0000FF"
             }
+          },
+          "1,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Piece Sensor Left",
+              "_title": "Piece Sensor Left"
+            }
+          },
+          "2,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Piece Sensor Right",
+              "_title": "Piece Sensor Right"
+            }
+          },
+          "3,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Intake Current (A)",
+              "_title": "Intake Current (A)"
+            }
           }
         }
       }
@@ -491,7 +524,8 @@
               "_title": "Ungrouped/navX-Sensor[4]",
               "Visuals/Major tick spacing": 45.0,
               "Visuals/Starting angle": 180.0,
-              "Visuals/Show tick mark ring": true
+              "Visuals/Show tick mark ring": true,
+              "Visuals/Counter clockwise": false
             }
           },
           "6,0": {
@@ -607,7 +641,8 @@
                   "_title": "navX-Sensor[4]",
                   "Visuals/Major tick spacing": 45.0,
                   "Visuals/Starting angle": 180.0,
-                  "Visuals/Show tick mark ring": true
+                  "Visuals/Show tick mark ring": true,
+                  "Visuals/Counter clockwise": false
                 },
                 {
                   "_type": "PID Controller",
