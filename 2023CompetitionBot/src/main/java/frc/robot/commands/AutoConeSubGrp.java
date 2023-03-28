@@ -17,7 +17,7 @@ import frc.robot.subsystems.MastSub;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AutoConeSubGrp extends SequentialCommandGroup {
-  private double m_clearanceDistance = 0.42;
+  private double m_clearanceDistance = 0.38;
 
   /** Creates a new AutoConeGrp. */
   public AutoConeSubGrp(ArmSub armSub, MastSub mastSub, IntakeSub intakeSub, DrivetrainSub drivetrainSub,
