@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems;
 
-import java.util.logging.Level;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
@@ -14,11 +13,10 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.subsystems.SubControl.Mode;
-import frc.robot.subsystems.SubControl.State;
-import frc.robot.subsystems.LedSub;
 import frc.robot.subsystems.LedSub.LedColour;
 import frc.robot.subsystems.LedSub.LedZones;
+import frc.robot.subsystems.SubControl.Mode;
+import frc.robot.subsystems.SubControl.State;
 
 public class ArmSub extends SubsystemBase {
   // CONSTANTS ////////////////////////////////////////////////////////////////
@@ -38,7 +36,6 @@ public class ArmSub extends SubsystemBase {
   private boolean m_newControlParameters = false; // Set to true when ready to switch to new state
   private double m_lastPower = -999;
   private double m_blockedPosition;
-  private MastSub m_mastSub; // to determine if arm is blocked
   private IntakeSub m_intakeSub;
   private LedSub m_ledSub;
 
@@ -58,16 +55,14 @@ public class ArmSub extends SubsystemBase {
   public ArmSub(MastSub mastSub, IntakeSub intakeSub, LedSub ledSub) {
 
     m_ledSub = ledSub;
+    m_intakeSub = intakeSub;
+    m_intakeSub.setArmSub(this);
 
-    this.m_mastSub = mastSub;
-    this.m_mastSub.setArmSub(this);
-    this.m_intakeSub = intakeSub;
-    this.m_intakeSub.setArmSub(this);
-    this.m_mastSub.setIntakeSub(intakeSub);
-
-    SmartDashboard.putNumber("Arm kP", m_p);
-    SmartDashboard.putNumber("Arm kI", m_i);
-    SmartDashboard.putNumber("Arm kD", m_d);
+    if(Constants.kEnhanceDashBoard == true) {
+      SmartDashboard.putNumber("Arm kP", m_p);
+      SmartDashboard.putNumber("Arm kI", m_i);
+      SmartDashboard.putNumber("Arm kD", m_d);
+    }
 
     init();
   }

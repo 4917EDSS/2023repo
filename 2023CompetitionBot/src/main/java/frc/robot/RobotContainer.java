@@ -15,18 +15,11 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ArmMoveWithJoystickCmd;
-import frc.robot.commands.AutoBalanceChargeStationCmd;
-import frc.robot.commands.AutoConeAndChargeStation;
+import frc.robot.commands.AutoConeAndChargeStationGrp;
 import frc.robot.commands.AutoConeAndLeaveCloseGrp;
 import frc.robot.commands.AutoConeAndLeaveFarGrp;
-import frc.robot.commands.AutoConeAndReverseGrp;
-import frc.robot.commands.AutoDoNothingCmd;
-import frc.robot.commands.AutoDriveOverChargeStationCmd;
-import frc.robot.commands.AutoHomeAndDriveParallelCmd;
 import frc.robot.commands.AutoHomeOnlyGrp;
-import frc.robot.commands.AutoLeaveAndBalanceGrp;
 import frc.robot.commands.DriveAlignCmd;
-import frc.robot.commands.DriveAlignTapeCmd;
 import frc.robot.commands.DriveSetGearCmd;
 import frc.robot.commands.DriveStraightCmd;
 import frc.robot.commands.DriveWithJoystickCmd;
@@ -45,9 +38,9 @@ import frc.robot.subsystems.IntakeSub;
 import frc.robot.subsystems.LedSub;
 import frc.robot.subsystems.LedSub.LedColour;
 import frc.robot.subsystems.LedSub.LedZones;
-import frc.robot.subsystems.SubControl.Mode;
 import frc.robot.subsystems.ManipulatorsPositions;
 import frc.robot.subsystems.MastSub;
+import frc.robot.subsystems.SubControl.Mode;
 import frc.robot.subsystems.VisionSub;
 
 /**
@@ -171,7 +164,7 @@ public class RobotContainer {
     m_Chooser.setDefaultOption("1 Home Only", new AutoHomeOnlyGrp(m_mastSub, m_armSub, m_intakeSub));
     m_Chooser.addOption("2 Drive Straight", new DriveStraightCmd(m_drivetrainSub, -0.5));
     m_Chooser.addOption("7 Score Cone, Leave and Balance",
-        new AutoConeAndChargeStation(m_armSub, m_mastSub, m_intakeSub, m_drivetrainSub, m_ledSub));
+        new AutoConeAndChargeStationGrp(m_armSub, m_mastSub, m_intakeSub, m_drivetrainSub, m_ledSub));
     m_Chooser.addOption("8 Score Cone and Leave Far",
         new AutoConeAndLeaveFarGrp(m_armSub, m_mastSub, m_intakeSub, m_drivetrainSub, m_ledSub));
     m_Chooser.addOption("9 Score Cone and Leave Close",

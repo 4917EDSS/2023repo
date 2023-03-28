@@ -4,12 +4,10 @@
 
 package frc.robot.commands;
 
-import javax.swing.plaf.basic.BasicBorders.MarginBorder;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmSub;
 import frc.robot.subsystems.IntakeSub;
 import frc.robot.subsystems.MastSub;
-import frc.robot.subsystems.SubControl;
 import frc.robot.subsystems.SubControl.Mode;
 
 public class SetLimitSwitchesCmd extends CommandBase {
@@ -37,7 +35,6 @@ public class SetLimitSwitchesCmd extends CommandBase {
   public void initialize() {
     m_intakeSub.setPosition(Mode.DISABLED, 0, 0);
     m_mastSub.setPosition(Mode.DISABLED, 0, 0);
-    //TODO add arm
     m_armSub.setPosition(Mode.DISABLED, 0, 0);
 
     m_armPhase = 0;
@@ -84,8 +81,6 @@ public class SetLimitSwitchesCmd extends CommandBase {
         }
         break;
     }
-
-    //TODO add arm 
   }
 
   // Called once the command ends or is interrupted.
@@ -104,5 +99,4 @@ public class SetLimitSwitchesCmd extends CommandBase {
     }
     return false;
   }
-  //TODO add arm 
 }

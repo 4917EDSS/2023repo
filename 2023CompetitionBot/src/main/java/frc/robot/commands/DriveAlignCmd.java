@@ -18,8 +18,7 @@ public class DriveAlignCmd extends CommandBase {
   private final PIDController m_angleController = new PIDController(0.1, 0.0, 0.01); // Using a PID controller instead of a function
   private final double kMaxPower = 0.45; // Maximum possible motor power
   private double kPower = 0.0;
-  private double kOffsetAngle = 0.0;
-  private double turn_dir = 1.0;
+
   private long m_timeStart; // Time constraint incase it never aligns
 
   public DriveAlignCmd(DrivetrainSub drivetrain, VisionSub vision, double offset) { // Drive towards and align to target
@@ -27,7 +26,7 @@ public class DriveAlignCmd extends CommandBase {
 
     m_drivetrainSub = drivetrain;
     m_visionSub = vision;
-    kOffsetAngle = offset;
+    //kOffsetAngle = offset;
 
     addRequirements(drivetrain, vision);
   }
@@ -37,10 +36,10 @@ public class DriveAlignCmd extends CommandBase {
   public void initialize() {
     m_timeStart = RobotController.getFPGATime();
     m_visionSub.setPipeline(1);
-    turn_dir = 1.0;
-    if(m_visionSub.getHorizontalAngle() > 0) {
-      turn_dir = -1.0;
-    }
+    // turn_dir = 1.0;
+    // if(m_visionSub.getHorizontalAngle() > 0) {
+    //   turn_dir = -1.0;
+    // }
   }
 
   // Called every time the scheduler runs while the command is scheduled.

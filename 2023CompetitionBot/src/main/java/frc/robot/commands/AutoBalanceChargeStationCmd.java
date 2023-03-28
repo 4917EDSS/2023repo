@@ -10,7 +10,7 @@ public class AutoBalanceChargeStationCmd extends CommandBase {
   private double onChargeStationDegree;
   private double debounceTime;
   private boolean m_isForward;
-  private boolean m_isFinished = false;
+  //private boolean m_isFinished = false;
 
   private final DrivetrainSub m_drivetrainSub;
 
@@ -123,7 +123,7 @@ public class AutoBalanceChargeStationCmd extends CommandBase {
           return 0;
         }
       case 3:
-        m_isFinished = true;
+        //m_isFinished = true;
         m_drivetrainSub.setBrake(true);
         return 0;
     }

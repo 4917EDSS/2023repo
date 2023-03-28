@@ -4,10 +4,9 @@
 
 package frc.robot.subsystems;
 
-import java.util.logging.Level;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -34,8 +33,6 @@ public class MastSub extends SubsystemBase {
   private boolean m_newControlParameters = false; // Set to true when ready to switch to new state
   private double m_lastPower = -999;
   private double m_blockedPosition;
-  private ArmSub m_armSub;
-  private IntakeSub m_intakeSub;
 
   // HARDWARE AND CONTROL OBJECTS /////////////////////////////////////////////
   private final CANSparkMax m_motor =
@@ -121,14 +118,6 @@ public class MastSub extends SubsystemBase {
       return true;
     }
     return false;
-  }
-
-  public void setArmSub(ArmSub armSub) {
-    m_armSub = armSub;
-  }
-
-  public void setIntakeSub(IntakeSub intakeSub) {
-    m_intakeSub = intakeSub;
   }
 
   /** Returns the velocity of the mechanism in ticks per second */
@@ -281,17 +270,9 @@ public class MastSub extends SubsystemBase {
     }
   }
 
-
   /** Calculate the amount of power should use to get to the target position */
   private double calcMovePower(double currentPosition, double newPosition, double targetPower) {
     return MathUtil.clamp(m_pid.calculate(currentPosition, newPosition), -targetPower, targetPower);
-  }
-
-
-  private double calcHoldPower(double currentPosition, double targetPosition) {
-    double holdPower = currentPosition - targetPosition;
-
-    return holdPower;
   }
 
   /** Display/get subsystem information to/from the Smart Dashboard */

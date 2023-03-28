@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems;
 
-import java.util.logging.Level;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel;
@@ -15,12 +14,8 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.StateOfRobot;
 import frc.robot.subsystems.SubControl.Mode;
 import frc.robot.subsystems.SubControl.State;
-import frc.robot.subsystems.LedSub;
-import frc.robot.subsystems.LedSub.LedColour;
-import frc.robot.subsystems.LedSub.LedZones;
 
 public class IntakeSub extends SubsystemBase {
   private static final double kPositionMin = 0; // In encoder ticks

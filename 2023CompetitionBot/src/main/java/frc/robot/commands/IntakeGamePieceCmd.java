@@ -6,14 +6,12 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.StateOfRobot;
-import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.subsystems.IntakeSub;
 import frc.robot.subsystems.LedSub;
 
 
 public class IntakeGamePieceCmd extends CommandBase {
   private double m_power;
-  private double m_timeSpinning = 0.1;
   private IntakeSub m_intakeSub;
   private LedSub m_ledSub;
 
@@ -63,9 +61,6 @@ public class IntakeGamePieceCmd extends CommandBase {
   @Override
   public boolean isFinished() {
     return m_intakeSub.isIntakeLoaded();
-    //if(RobotController.getFPGATime() - m_timeSpinning > (m_timeSpinning * Math.pow(10, 6))) { // After (timeSpinning) seconds the command stops automatically
-    //return true; 
-    //}
   }
 }
 
