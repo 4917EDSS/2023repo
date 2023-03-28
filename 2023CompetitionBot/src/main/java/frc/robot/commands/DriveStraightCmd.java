@@ -13,7 +13,7 @@ public class DriveStraightCmd extends CommandBase {
   private final DrivetrainSub m_drivetrainSub;
   private double m_distanceRemaining = 0;
   private double kRotateAdjustment = 0.045;
-  private double kMaxPower = 0.9;
+  private double kMaxPower = 0.8;
   private double kMinPower = 0.2;
   private double kTolerance = 0.03;
   private double m_targetDriveDistance;
@@ -27,7 +27,7 @@ public class DriveStraightCmd extends CommandBase {
     addRequirements(drivetrainSub);
     double minimumMax = 0.4;
     double minimumDistance = 0.5;
-    double fullSpeed = 0.9;
+    double fullSpeed = 0.8;
     double fullDistance = 3;
 
     if(Math.abs(targetDriveDistance) < minimumDistance) {

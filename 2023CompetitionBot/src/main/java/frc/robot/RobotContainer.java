@@ -27,6 +27,7 @@ import frc.robot.commands.ExpelGamePieceCmd;
 import frc.robot.commands.IntakeGamePieceCmd;
 import frc.robot.commands.IntakeRotateWithJoystickCmd;
 import frc.robot.commands.IntakeSetPositionCmd;
+import frc.robot.commands.AutoConeDrivePickupCubeGrp;
 import frc.robot.commands.InterruptAllCommandsCmd;
 import frc.robot.commands.MastMoveWithJoystickCmd;
 import frc.robot.commands.RotateRobotCmd;
@@ -169,7 +170,8 @@ public class RobotContainer {
         new AutoConeAndLeaveFarGrp(m_armSub, m_mastSub, m_intakeSub, m_drivetrainSub, m_ledSub));
     m_Chooser.addOption("9 Score Cone and Leave Close",
         new AutoConeAndLeaveCloseGrp(m_armSub, m_mastSub, m_intakeSub, m_drivetrainSub, m_ledSub));
-    m_Chooser.addOption("10 Rotate Robot", new RotateRobotCmd(m_drivetrainSub, 90, true));
+    m_Chooser.addOption("10 AutoPlaceConeDrivePickupCube",
+        new AutoConeDrivePickupCubeGrp(m_armSub, m_mastSub, m_intakeSub, m_drivetrainSub, m_ledSub));
 
     SmartDashboard.putData("auto choices", m_Chooser);
   }
