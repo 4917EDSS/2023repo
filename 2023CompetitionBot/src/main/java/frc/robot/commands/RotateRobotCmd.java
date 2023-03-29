@@ -17,7 +17,7 @@ public class RotateRobotCmd extends CommandBase {
   private long m_startTime;
   private boolean m_flipBasedOnAlliance;
 
-  private static double kMinPower = 0.2;
+  private static double kMinPower = 0.3;
   private static double kMaxPower = 0.8;
   private static double kTolerance = 1;
   private double m_rotationRemaining = 0;
