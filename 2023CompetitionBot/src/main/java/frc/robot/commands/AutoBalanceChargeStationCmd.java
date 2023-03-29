@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DrivetrainSub;
 
@@ -10,6 +11,7 @@ public class AutoBalanceChargeStationCmd extends CommandBase {
   private double onChargeStationDegree;
   private double debounceTime;
   private boolean m_isForward;
+  private long m_timeStart;
   //private boolean m_isFinished = false;
 
   private final DrivetrainSub m_drivetrainSub;
@@ -50,6 +52,8 @@ public class AutoBalanceChargeStationCmd extends CommandBase {
     m_drivetrainSub.zeroDrivetrainEncoders();
     m_drivetrainSub.setBrake(true);
     m_drivetrainSub.shift(false);
+
+    m_timeStart = RobotController.getFPGATime();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -82,9 +86,14 @@ public class AutoBalanceChargeStationCmd extends CommandBase {
         if(debounceCount > secondsToTicks(debounceTime)) {
           state = 1;
           debounceCount = 0;
-          return 0.4;
+          return 0.35;
         }
-        return 0.7;
+        if(RobotController.getFPGATime() - m_timeStart > 3200000) {
+          return 0.5;
+        } else if(RobotController.getFPGATime() - m_timeStart > 2000000) {
+          return -0.2;
+        }
+        return 0.6;
       //driving up charge station, drive slower, stopping when level
       case 1:
         //System.out.println("Balance Case 1: Dir: " + direction + " Pitch: " + m_drivetrainSub.getPitch());
@@ -99,9 +108,9 @@ public class AutoBalanceChargeStationCmd extends CommandBase {
         }
         count++;
         if(count < secondsToTicks(2)) {
-          return 0.45;
+          return 0.35;
         } else {
-          return 0.3;
+          return 0.25;
         }
         //on charge station, stop motors and wait for end of auto
       case 2:
@@ -115,9 +124,9 @@ public class AutoBalanceChargeStationCmd extends CommandBase {
           return 0;
         }
         if((direction * m_drivetrainSub.getPitch()) <= -2) {
-          return -0.25;
+          return -0.15;
         } else if((direction * m_drivetrainSub.getPitch()) >= 2) {
-          return 0.25;
+          return 0.15;
         } else {
           m_drivetrainSub.setBrake(true);
           return 0;
