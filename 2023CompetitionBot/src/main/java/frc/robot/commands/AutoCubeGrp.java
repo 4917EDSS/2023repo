@@ -29,9 +29,9 @@ public class AutoCubeGrp extends SequentialCommandGroup {
         new SetLimitSwitchesCmd(mastSub, armSub, intakeSub),
         new IntakeSetPositionCmd(ManipulatorsPositions.HIGH_CUBE, armSub, mastSub, intakeSub),
         new WaitCommand(1),
-        new DriveStraightCmd(drivetrainSub, clearanceDistance),
+        new DriveStraightCmd(drivetrainSub, clearanceDistance, 0.8),
         new ExpelGamePieceCmd(0.5, intakeSub),
-        new DriveStraightCmd(drivetrainSub, (-(clearanceDistance + 0.1))),
+        new DriveStraightCmd(drivetrainSub, (-(clearanceDistance + 0.1)), 0.8),
         new IntakeSetPositionCmd(ManipulatorsPositions.HOME, armSub, mastSub, intakeSub));
   }
 }

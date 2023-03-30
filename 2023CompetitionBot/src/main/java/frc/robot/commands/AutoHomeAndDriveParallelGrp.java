@@ -20,7 +20,7 @@ public class AutoHomeAndDriveParallelGrp extends ParallelCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-        new DriveStraightCmd(drivetrainSub, 0.5),
+        new DriveStraightCmd(drivetrainSub, 0.5, 0.8),
         new ExpelGamePieceCmd(0.5, intakeSub)
             .andThen(new IntakeSetPositionCmd(ManipulatorsPositions.HOME, armSub, mastSub, intakeSub)));
   }

@@ -19,7 +19,7 @@ public class AutoDriveFwdThenBackGrp extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-        new DriveStraightCmd(drivetrainSub, targetDriveDistanceFwd),
-        new DriveStraightCmd(drivetrainSub, -targetDriveDistanceBack));
+        new DriveStraightCmd(drivetrainSub, targetDriveDistanceFwd, 0.8),
+        new DriveStraightCmd(drivetrainSub, -targetDriveDistanceBack, 0.8));
   }
 }

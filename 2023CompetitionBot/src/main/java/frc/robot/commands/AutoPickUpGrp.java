@@ -25,6 +25,7 @@ public class AutoPickUpGrp extends SequentialCommandGroup {
 
     /* \ Sets the intake position, drives in, then grabs \ */
     addCommands(new IntakeSetPositionCmd(positions, armSub, mastSub, intakeSub),
-        new DriveStraightCmd(drivetrainSub, targetDriveDistance), new IntakeGamePieceCmd(power, intakeSub, ledSub));
+        new DriveStraightCmd(drivetrainSub, targetDriveDistance, 0.8),
+        new IntakeGamePieceCmd(power, intakeSub, ledSub));
   }
 }

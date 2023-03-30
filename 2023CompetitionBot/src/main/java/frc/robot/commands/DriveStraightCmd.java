@@ -13,15 +13,16 @@ public class DriveStraightCmd extends CommandBase {
   private final DrivetrainSub m_drivetrainSub;
   private double m_distanceRemaining = 0;
   private double kRotateAdjustment = 0.045;
-  private double kMaxPower = 0.8;
+  private double m_maxPower = 0.8;
   private double kMinPower = 0.2;
   private double kTolerance = 0.03;
   private double m_targetDriveDistance;
   private long m_timeStart;
 
   /** Creates a new DriveStraightCmd. */
-  public DriveStraightCmd(DrivetrainSub drivetrainSub, double targetDriveDistance) {
+  public DriveStraightCmd(DrivetrainSub drivetrainSub, double targetDriveDistance, double maxPower) {
     // Use addRequirements() here to declare subsystem dependencies.
+    m_maxPower = maxPower;
     m_drivetrainSub = drivetrainSub;
     m_targetDriveDistance = targetDriveDistance;
     addRequirements(drivetrainSub);
@@ -31,11 +32,11 @@ public class DriveStraightCmd extends CommandBase {
     double fullDistance = 3;
 
     if(Math.abs(targetDriveDistance) < minimumDistance) {
-      kMaxPower = minimumMax;
+      m_maxPower = minimumMax;
     } else if(Math.abs(targetDriveDistance) > fullDistance) {
-      kMaxPower = fullSpeed;
+      m_maxPower = fullSpeed;
     } else {
-      kMaxPower =
+      m_maxPower =
           0.4 + ((fullSpeed - minimumMax) / (fullDistance - minimumDistance))
               * (Math.abs(targetDriveDistance) - minimumDistance);
     }
@@ -53,14 +54,14 @@ public class DriveStraightCmd extends CommandBase {
   @Override
   public void execute() {
     double rotatePwr = m_drivetrainSub.getHeading() * kRotateAdjustment;
-    double power = kMaxPower;
+    double power = m_maxPower;
     m_distanceRemaining = Math.abs(m_targetDriveDistance) - Math.abs(m_drivetrainSub.getEncoderDistanceM());
     double dir = (m_distanceRemaining < 0) ? -1 : 1;
     m_distanceRemaining = Math.abs(m_distanceRemaining);
 
 
     if(m_distanceRemaining <= 0.3) {
-      power = ((m_distanceRemaining / 0.3) * (kMaxPower)) + kMinPower;
+      power = ((m_distanceRemaining / 0.3) * (m_maxPower)) + kMinPower;
     }
     if(m_distanceRemaining <= kTolerance) {
       power = 0;

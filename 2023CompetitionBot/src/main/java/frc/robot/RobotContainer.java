@@ -163,7 +163,7 @@ public class RobotContainer {
 
   void autoChooserSetup() {
     m_Chooser.setDefaultOption("1 Home Only", new AutoHomeOnlyGrp(m_mastSub, m_armSub, m_intakeSub));
-    m_Chooser.addOption("2 Drive Straight", new DriveStraightCmd(m_drivetrainSub, -0.5));
+    m_Chooser.addOption("2 Drive Straight", new DriveStraightCmd(m_drivetrainSub, -0.5, 0.8));
     m_Chooser.addOption("7 Score Cone, Leave and Balance",
         new AutoConeAndChargeStationGrp(m_armSub, m_mastSub, m_intakeSub, m_drivetrainSub, m_ledSub));
     m_Chooser.addOption("8 Score Cone and Leave Far",
