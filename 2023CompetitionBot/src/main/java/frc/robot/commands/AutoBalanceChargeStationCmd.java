@@ -107,10 +107,10 @@ public class AutoBalanceChargeStationCmd extends CommandBase {
           return 0;
         }
         count++;
-        if(count < secondsToTicks(2)) {
-          return 0.35;
+        if(count < secondsToTicks(1.8)) {
+          return 0.4;
         } else {
-          return 0.25;
+          return 0.3;
         }
         //on charge station, stop motors and wait for end of auto
       case 2:
@@ -124,9 +124,9 @@ public class AutoBalanceChargeStationCmd extends CommandBase {
           return 0;
         }
         if((direction * m_drivetrainSub.getPitch()) <= -2) {
-          return -0.15;
+          return -0.225;
         } else if((direction * m_drivetrainSub.getPitch()) >= 2) {
-          return 0.15;
+          return 0.225;
         } else {
           m_drivetrainSub.setBrake(true);
           return 0;
