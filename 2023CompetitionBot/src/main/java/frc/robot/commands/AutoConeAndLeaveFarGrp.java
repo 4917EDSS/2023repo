@@ -17,20 +17,18 @@ import frc.robot.subsystems.ManipulatorsPositions;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AutoConeAndLeaveFarGrp extends SequentialCommandGroup {
 
+  /** Creates a new AutoConeAndLeave. */
+  public AutoConeAndLeaveFarGrp(ArmSub armSub, MastSub mastSub, IntakeSub intakeSub, DrivetrainSub drivetrainSub,
+      LedSub ledSub) {
 
-        /** Creates a new AutoConeAndLeave. */
-
-        public AutoConeAndLeaveFarGrp(ArmSub armSub, MastSub mastSub, IntakeSub intakeSub, DrivetrainSub drivetrainSub,
-                        LedSub ledSub) {
-
-                // Add your commands in the addCommands() call, e.g.
-                // addCommands(new FooCommand(), new BarCommand());
-                addCommands(
-                                new AutoConeAndReverseGrp(armSub, mastSub, intakeSub, drivetrainSub, ledSub),
-                                new DriveStraightCmd(drivetrainSub, 4.0, 0.8),
-                                new RotateRobotCmd(drivetrainSub, -160, true, false),
-                                new SetGamePieceTypeCmd(false, ledSub),
-                                new IntakeSetPositionCmd(ManipulatorsPositions.TILTED_GROUND_CUBE, armSub, mastSub,
-                                                intakeSub));
-        }
+    // Add your commands in the addCommands() call, e.g.
+    // addCommands(new FooCommand(), new BarCommand());
+    addCommands(
+        new AutoConeAndReverseGrp(armSub, mastSub, intakeSub, drivetrainSub, ledSub),
+        new DriveStraightCmd(drivetrainSub, 4.0, 0.8),
+        new RotateRobotCmd(drivetrainSub, -160, true, false),
+        new SetGamePieceTypeCmd(false, ledSub),
+        new IntakeSetPositionCmd(ManipulatorsPositions.TILTED_GROUND_CUBE, armSub, mastSub,
+            intakeSub));
+  }
 }

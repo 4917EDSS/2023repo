@@ -47,8 +47,6 @@ public class RotateRobotCmd extends CommandBase {
     if(m_invertRotate) {
       m_angle = -m_angle;
     }
-
-
   }
 
   // Called every time the scheduler runs while the command is scheduled.

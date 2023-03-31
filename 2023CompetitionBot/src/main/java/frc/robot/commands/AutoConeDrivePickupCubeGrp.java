@@ -21,8 +21,7 @@ public class AutoConeDrivePickupCubeGrp extends SequentialCommandGroup {
   /** Creates a new AutoConeAndLeave. */
 
   public AutoConeDrivePickupCubeGrp(ArmSub armSub, MastSub mastSub, IntakeSub intakeSub,
-      DrivetrainSub drivetrainSub,
-      LedSub ledSub, boolean isClose) {
+      DrivetrainSub drivetrainSub, LedSub ledSub, boolean isClose) {
 
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
