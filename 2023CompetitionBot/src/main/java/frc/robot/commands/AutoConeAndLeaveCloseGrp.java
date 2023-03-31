@@ -15,16 +15,17 @@ import frc.robot.subsystems.LedSub;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AutoConeAndLeaveCloseGrp extends SequentialCommandGroup {
-  /** Creates a new AutoConeAndLeaveClose. */
-  public AutoConeAndLeaveCloseGrp(ArmSub armSub, MastSub mastSub, IntakeSub intakeSub, DrivetrainSub drivetrainSub,
-      LedSub ledSub) {
+        /** Creates a new AutoConeAndLeaveClose. */
+        public AutoConeAndLeaveCloseGrp(ArmSub armSub, MastSub mastSub, IntakeSub intakeSub,
+                        DrivetrainSub drivetrainSub,
+                        LedSub ledSub) {
 
-    // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
-    addCommands(
-        new AutoConeAndReverseGrp(armSub, mastSub, intakeSub, drivetrainSub, ledSub),
-        new DriveStraightCmd(drivetrainSub, 2, 0.8),
-        new RotateRobotCmd(drivetrainSub, 15, true),
-        new DriveStraightCmd(drivetrainSub, 2, 0.8));
-  }
+                // Add your commands in the addCommands() call, e.g.
+                // addCommands(new FooCommand(), new BarCommand());
+                addCommands(
+                                new AutoConeAndReverseGrp(armSub, mastSub, intakeSub, drivetrainSub, ledSub),
+                                new DriveStraightCmd(drivetrainSub, 2, 0.8),
+                                new RotateRobotCmd(drivetrainSub, 15, true, false),
+                                new DriveStraightCmd(drivetrainSub, 2, 0.8));
+        }
 }

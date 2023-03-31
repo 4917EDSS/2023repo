@@ -18,18 +18,19 @@ import frc.robot.subsystems.ManipulatorsPositions;
 public class AutoConeAndLeaveFarGrp extends SequentialCommandGroup {
 
 
-  /** Creates a new AutoConeAndLeave. */
+        /** Creates a new AutoConeAndLeave. */
 
-  public AutoConeAndLeaveFarGrp(ArmSub armSub, MastSub mastSub, IntakeSub intakeSub, DrivetrainSub drivetrainSub,
-      LedSub ledSub) {
+        public AutoConeAndLeaveFarGrp(ArmSub armSub, MastSub mastSub, IntakeSub intakeSub, DrivetrainSub drivetrainSub,
+                        LedSub ledSub) {
 
-    // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
-    addCommands(
-        new AutoConeAndReverseGrp(armSub, mastSub, intakeSub, drivetrainSub, ledSub),
-        new DriveStraightCmd(drivetrainSub, 4.0, 0.8),
-        new RotateRobotCmd(drivetrainSub, -160, true),
-        new SetGamePieceTypeCmd(false, ledSub),
-        new IntakeSetPositionCmd(ManipulatorsPositions.TILTED_GROUND_CUBE, armSub, mastSub, intakeSub));
-  }
+                // Add your commands in the addCommands() call, e.g.
+                // addCommands(new FooCommand(), new BarCommand());
+                addCommands(
+                                new AutoConeAndReverseGrp(armSub, mastSub, intakeSub, drivetrainSub, ledSub),
+                                new DriveStraightCmd(drivetrainSub, 4.0, 0.8),
+                                new RotateRobotCmd(drivetrainSub, -160, true, false),
+                                new SetGamePieceTypeCmd(false, ledSub),
+                                new IntakeSetPositionCmd(ManipulatorsPositions.TILTED_GROUND_CUBE, armSub, mastSub,
+                                                intakeSub));
+        }
 }
