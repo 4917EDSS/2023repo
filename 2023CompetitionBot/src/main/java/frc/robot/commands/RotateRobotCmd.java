@@ -15,6 +15,7 @@ public class RotateRobotCmd extends CommandBase {
   private final DrivetrainSub m_drivetrainSub;
   private double m_angle;
   private long m_startTime;
+  private boolean m_invertRotate;
   private boolean m_flipBasedOnAlliance;
 
   private static double kMinPower = 0.3;
@@ -24,9 +25,10 @@ public class RotateRobotCmd extends CommandBase {
 
 
   /** Creates a new RotateRobotCmd. */
-  public RotateRobotCmd(DrivetrainSub drivetrainSub, double angle, boolean flipBasedOnAlliance) {
+  public RotateRobotCmd(DrivetrainSub drivetrainSub, double angle, boolean flipBasedOnAlliance, boolean invertRotate) {
     m_drivetrainSub = drivetrainSub;
     m_angle = angle;
+    m_invertRotate = invertRotate;
     m_flipBasedOnAlliance = flipBasedOnAlliance;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_drivetrainSub);
@@ -42,6 +44,11 @@ public class RotateRobotCmd extends CommandBase {
     if(m_flipBasedOnAlliance && DriverStation.getAlliance() == Alliance.Blue) {
       m_angle = -m_angle;
     }
+    if(m_invertRotate) {
+      m_angle = -m_angle;
+    }
+
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.

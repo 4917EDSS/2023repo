@@ -28,7 +28,7 @@ public class AutoConeAndLeaveFarGrp extends SequentialCommandGroup {
     addCommands(
         new AutoConeAndReverseGrp(armSub, mastSub, intakeSub, drivetrainSub, ledSub),
         new DriveStraightCmd(drivetrainSub, 4.0),
-        new RotateRobotCmd(drivetrainSub, -160, true),
+        new RotateRobotCmd(drivetrainSub, -160, true, false),
         new SetGamePieceTypeCmd(false, ledSub),
         new IntakeSetPositionCmd(ManipulatorsPositions.TILTED_GROUND_CUBE, armSub, mastSub, intakeSub));
   }

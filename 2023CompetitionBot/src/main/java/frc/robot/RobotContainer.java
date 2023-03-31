@@ -163,15 +163,19 @@ public class RobotContainer {
 
   void autoChooserSetup() {
     m_Chooser.setDefaultOption("1 Home Only", new AutoHomeOnlyGrp(m_mastSub, m_armSub, m_intakeSub));
-    m_Chooser.addOption("2 Drive Straight", new DriveStraightCmd(m_drivetrainSub, -0.5));
-    m_Chooser.addOption("7 Score Cone, Leave and Balance",
+
+    m_Chooser.addOption("2 Cone, Leave and Balance",
         new AutoConeAndChargeStationGrp(m_armSub, m_mastSub, m_intakeSub, m_drivetrainSub, m_ledSub));
-    m_Chooser.addOption("8 Score Cone and Leave Far",
+    m_Chooser.addOption("3 Cone and Leave Far",
         new AutoConeAndLeaveFarGrp(m_armSub, m_mastSub, m_intakeSub, m_drivetrainSub, m_ledSub));
-    m_Chooser.addOption("9 Score Cone and Leave Close",
+    m_Chooser.addOption("4 Cone and Leave Close",
         new AutoConeAndLeaveCloseGrp(m_armSub, m_mastSub, m_intakeSub, m_drivetrainSub, m_ledSub));
-    m_Chooser.addOption("10 AutoPlaceConeDrivePickupCube",
-        new AutoConeDrivePickupCubeGrp(m_armSub, m_mastSub, m_intakeSub, m_drivetrainSub, m_ledSub));
+    m_Chooser.addOption("5 Cone Drive Far Get Cube",
+        new AutoConeDrivePickupCubeGrp(m_armSub, m_mastSub, m_intakeSub, m_drivetrainSub, m_ledSub, false));
+    m_Chooser.addOption("5 Cone Drive Close Get Cube",
+        new AutoConeDrivePickupCubeGrp(m_armSub, m_mastSub, m_intakeSub, m_drivetrainSub, m_ledSub, true));
+
+    m_Chooser.addOption("7 Leave Community", new DriveStraightCmd(m_drivetrainSub, 1.5));
 
     SmartDashboard.putData("auto choices", m_Chooser);
   }
