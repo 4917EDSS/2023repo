@@ -15,9 +15,7 @@ public class SetLimitSwitchesCmd extends CommandBase {
   private final ArmSub m_armSub;
   private final IntakeSub m_intakeSub;
 
-  private int m_armPhase = 0;
-
-  private double kArmLimitPos = -19000.0;
+  private double kArmLimitPos = 31000.0;
 
   /** Creates a new SetLimitSwitchesCmd. */
   public SetLimitSwitchesCmd(MastSub mastSub, ArmSub armSub, IntakeSub intakeSub) {
@@ -37,7 +35,6 @@ public class SetLimitSwitchesCmd extends CommandBase {
     m_mastSub.setPosition(Mode.DISABLED, 0, 0);
     m_armSub.setPosition(Mode.DISABLED, 0, 0);
 
-    m_armPhase = 0;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -55,31 +52,10 @@ public class SetLimitSwitchesCmd extends CommandBase {
       m_intakeSub.intakeRotate(0);
     }
 
-    // Arm logic
-    switch(m_armPhase) {
-      case 0: // Find relative zero
-        m_armSub.move(-0.3);
-        if(m_armSub.isArmAtLimit()) {
-          m_armSub.setEncoderPosition(kArmLimitPos);
-          m_armPhase = 1;
-        }
-        break;
-
-      case 1: // Go past zero a bit
-        m_armSub.move(-0.3);
-        if(m_armSub.getPosition() < kArmLimitPos - 8000.0) {
-          m_armPhase = 2;
-        }
-        break;
-
-      case 2: // Carefully go to zero position
-        if(!m_armSub.isArmAtLimit()) {
-          m_armSub.move(0.2);
-        } else {
-          m_armSub.move(0.0);
-          m_armPhase = 3;
-        }
-        break;
+    if(!m_armSub.isArmAtLimit()) {
+      m_armSub.move(0.2);
+    } else {
+      m_armSub.move(0);
     }
   }
 
@@ -94,7 +70,7 @@ public class SetLimitSwitchesCmd extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(m_mastSub.isMastAtLimit() && m_intakeSub.isIntakeAtLimit() && (m_armSub.isArmAtLimit() && m_armPhase == 3)) {
+    if(m_mastSub.isMastAtLimit() && m_intakeSub.isIntakeAtLimit() && (m_armSub.isArmAtLimit())) {
       return true;
     }
     return false;

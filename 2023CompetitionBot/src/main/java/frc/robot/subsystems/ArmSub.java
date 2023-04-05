@@ -40,9 +40,10 @@ public class ArmSub extends SubsystemBase {
   private LedSub m_ledSub;
 
   // HARDWARE AND CONTROL OBJECTS /////////////////////////////////////////////
-  private final TalonFX m_motor = new TalonFX(Constants.CanIds.kArmMotor);
-  private final DigitalInput m_armLimit = new DigitalInput(Constants.DioIds.kArmLimitPort);
+  private final TalonFX m_motorR = new TalonFX(Constants.CanIds.kArmMotorR);
+  private final TalonFX m_motorL = new TalonFX(Constants.CanIds.kArmMotorL);
 
+  private final DigitalInput m_armLimit = new DigitalInput(Constants.DioIds.kArmLimitPort);
 
   private double m_p = 0.0001;
   private double m_i = 0.0;
@@ -53,6 +54,7 @@ public class ArmSub extends SubsystemBase {
 
   /** Creates a new ArmSub. */
   public ArmSub(MastSub mastSub, IntakeSub intakeSub, LedSub ledSub) {
+    m_motorL.setInverted(true);
 
     m_ledSub = ledSub;
     m_intakeSub = intakeSub;
@@ -80,13 +82,17 @@ public class ArmSub extends SubsystemBase {
    */
   public void init() {
     zeroEncoder();
-    m_motor.setNeutralMode(NeutralMode.Brake);
+    m_motorR.setNeutralMode(NeutralMode.Brake);
+    m_motorL.setNeutralMode(NeutralMode.Brake);
+
     setPosition(Mode.DISABLED, 0, 0);
   }
 
   public void initTest() {
     zeroEncoder();
-    m_motor.setNeutralMode(NeutralMode.Coast);
+    m_motorR.setNeutralMode(NeutralMode.Coast);
+    m_motorL.setNeutralMode(NeutralMode.Coast);
+
   }
 
   /**
@@ -100,34 +106,44 @@ public class ArmSub extends SubsystemBase {
    * Blindly sets the mechanism power (-1.0 to 1.0). Use setPosition for smart operation
    */
   public void move(double power) {
-    m_motor.set(ControlMode.PercentOutput, power);
+    m_motorR.set(ControlMode.PercentOutput, power);
+    m_motorL.set(ControlMode.PercentOutput, power);
+
   }
 
   public void setBrake(boolean brake) {
     if(brake) {
-      m_motor.setNeutralMode(NeutralMode.Brake);
+      m_motorR.setNeutralMode(NeutralMode.Brake);
+      m_motorL.setNeutralMode(NeutralMode.Brake);
+
     } else {
-      m_motor.setNeutralMode(NeutralMode.Coast);
+      m_motorR.setNeutralMode(NeutralMode.Coast);
+      m_motorL.setNeutralMode(NeutralMode.Coast);
+
     }
   }
 
   /** Sets the current position as the starting position - use wisely */
   public void zeroEncoder() {
-    m_motor.setSelectedSensorPosition(0);
+    m_motorR.setSelectedSensorPosition(0);
+    m_motorL.setSelectedSensorPosition(0);
+
   }
 
   public void setEncoderPosition(double pos) {
-    m_motor.setSelectedSensorPosition(pos);
+    m_motorR.setSelectedSensorPosition(pos);
+    m_motorL.setSelectedSensorPosition(pos);
+
   }
 
   /** Returns the position of the mechanism in encoder ticks */
   public double getPosition() {
-    return m_motor.getSelectedSensorPosition();
+    return m_motorR.getSelectedSensorPosition();
   }
 
   /** Returns the velocity of the mechanism in ticks per second */
   public double getVelocity() {
-    return m_motor.getSelectedSensorVelocity();
+    return m_motorR.getSelectedSensorVelocity();
   }
 
   public boolean isDangerZone() {
@@ -138,7 +154,7 @@ public class ArmSub extends SubsystemBase {
   }
 
   public boolean isArmAtLimit() {
-    return m_armLimit.get();
+    return !m_armLimit.get();
   }
 
   public boolean aboveDangerZone(double currentPos) {

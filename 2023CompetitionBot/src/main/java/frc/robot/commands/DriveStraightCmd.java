@@ -14,7 +14,7 @@ public class DriveStraightCmd extends CommandBase {
   private double m_distanceRemaining = 0;
   private double kRotateAdjustment = 0.045;
   private double m_maxPower = 0.8;
-  private double kMinPower = 0.2;
+  private double kMinPower = 0.15;
   private double kTolerance = 0.03;
   private double m_targetDriveDistance;
   private long m_timeStart;
@@ -83,7 +83,7 @@ public class DriveStraightCmd extends CommandBase {
       return true;
     }
     if(RobotController.getFPGATime() - m_timeStart > (1000000.0 + (1000000.0 * Math.abs(m_targetDriveDistance)))) { // After 2.5 seconds the command stops automatically
-      System.out.println("**** timed out** intake set position");
+      System.out.println("**** timed out** drive straight ");
       return true;
     }
     return false;

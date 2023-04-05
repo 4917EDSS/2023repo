@@ -33,9 +33,10 @@ public final class Constants {
     public final static int kRightDriveMotor1 = 5;
     public final static int kRightDriveMotor2 = 6;
     public final static int kRightDriveMotor3 = 7;
-    public final static int kArmMotor = 12;
     public final static int kRotateMotor = 9;
     public final static int kIntakeMotor = 10;
+    public final static int kArmMotorR = 12;
+    public final static int kArmMotorL = 13;
   }
 
   public final static class SolenoidIds {
