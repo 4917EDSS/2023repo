@@ -108,9 +108,9 @@ public class AutoBalanceChargeStationCmd extends CommandBase {
         }
         count++;
         if(count < secondsToTicks(1.8)) {
-          return 0.35;
+          return 0.38;
         } else {
-          return 0.25;
+          return 0.3;
         }
         //on charge station, stop motors and wait for end of auto
       case 2:
