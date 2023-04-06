@@ -47,6 +47,7 @@ public class AutoDriveOverChargeStationCmd extends CommandBase {
     state = 0;
     debounceCount = 0;
     count = 0;
+    m_isFinished = false;
     m_drivetrainSub.zeroHeading();
     m_drivetrainSub.zeroDrivetrainEncoders();
     m_drivetrainSub.setBrake(true);

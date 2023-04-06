@@ -16,7 +16,7 @@ import frc.robot.StateOfRobot;
 
 public class LedSub extends SubsystemBase {
   // Constants
-  private final static int kLedStripLength = 48;
+  private final static int kLedStripLength = 45;
   private boolean m_newColoursAvailible = false;
   public boolean m_isFlashing; //true if flash is on (game piece gets loaded)
   public long m_time; //time of when the flash starts
@@ -31,19 +31,19 @@ public class LedSub extends SubsystemBase {
 
     // Normal operation zones
     ALL(0, kLedStripLength - 1, false), // Set all the LEDs
-    GAME_PIECE(0, 17, true), // Indicates cube (purple) or cone (yellow)
-    ARM_BLOCKED(23, 23, true), // Indicates if the arm is blocked from passing through (red) or not (green)
-    VISION(22, 22, true), // Indicates if the vision sees a traget (green) or not (red)
+    GAME_PIECE(0, 16, true), // Indicates cube (purple) or cone (yellow)
+    ARM_BLOCKED(21, 21, true), // Indicates if the arm is blocked from passing through (red) or not (green)
+    VISION(20, 20, true), // Indicates if the vision sees a traget (green) or not (red)
 
     // Disabled diagnostic zones
-    DIAG_DRIVE_ENC(18, 18, false), //
-    DIAG_MAST_LIMIT(19, 19, false), //
-    DIAG_MAST_ENC(20, 20, false), //
-    DIAG_ARM_LIMIT(21, 21, false), //
-    DIAG_ARM_ENC(22, 22, false), //
-    DIAG_INTAKE_LIMIT(23, 23, false), //
-    DIAG_INTAKE_ENC(24, 24, false), //
-    DIAG_INTAKE_SENSOR(25, 25, false);
+    DIAG_DRIVE_ENC(16, 16, false), //
+    DIAG_MAST_LIMIT(17, 17, false), //
+    DIAG_MAST_ENC(18, 18, false), //
+    DIAG_ARM_LIMIT(19, 19, false), //
+    DIAG_ARM_ENC(20, 20, false), //
+    DIAG_INTAKE_LIMIT(21, 21, false), //
+    DIAG_INTAKE_ENC(22, 22, false), //
+    DIAG_INTAKE_SENSOR(23, 23, false);
 
 
     public final int start;
