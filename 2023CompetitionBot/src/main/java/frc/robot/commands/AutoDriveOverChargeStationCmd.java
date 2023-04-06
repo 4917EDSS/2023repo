@@ -11,6 +11,7 @@ public class AutoDriveOverChargeStationCmd extends CommandBase {
   private double debounceTime;
   private boolean m_isForward;
   private boolean m_isFinished = false;
+  private double kRotateAdjustment = 0.045;
 
   private final DrivetrainSub m_drivetrainSub;
 
@@ -55,12 +56,13 @@ public class AutoDriveOverChargeStationCmd extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    double rotatePwr = m_drivetrainSub.getHeading() * kRotateAdjustment;
     if(m_isForward) {
       System.out.println("Forward");
-      m_drivetrainSub.arcadeDrive(autoDriveOverStation(-1), 0);
+      m_drivetrainSub.arcadeDrive(autoDriveOverStation(-1), -rotatePwr);
     } else {
       System.out.println("Reverse");
-      m_drivetrainSub.arcadeDrive(-autoDriveOverStation(1), 0);
+      m_drivetrainSub.arcadeDrive(-autoDriveOverStation(1), -rotatePwr);
     }
 
   }

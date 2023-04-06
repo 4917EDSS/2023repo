@@ -21,7 +21,7 @@ import frc.robot.subsystems.SubControl.State;
 public class ArmSub extends SubsystemBase {
   // CONSTANTS ////////////////////////////////////////////////////////////////
   private static final double kPositionMin = -240000.0; // In encoder ticks
-  private static final double kPositionMax = 250000.0; // In encoder ticks (straight up is 30)
+  private static final double kPositionMax = 255000.0; // In encoder ticks (straight up is 30)
   private static final double kManualModePowerDeadband = 0.05; // If manual power is less than this, assume power is 0
   private static final double kMaxPosDifference = 1000; // Maximum difference between the target and current pos for the state to finish   <---- Must be tuned
   private static final double kMaxSpeedStop = 1000; // Max amount of power for the state to finish <--- Must be tuned
