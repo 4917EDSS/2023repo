@@ -17,7 +17,7 @@ import frc.robot.subsystems.MastSub;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AutoConeSubGrp extends SequentialCommandGroup {
-  private double m_clearanceDistance = 0.38;
+  private double m_clearanceDistance = 0.33;
 
   /** Creates a new AutoConeGrp. */
   public AutoConeSubGrp(ArmSub armSub, MastSub mastSub, IntakeSub intakeSub, DrivetrainSub drivetrainSub,
@@ -29,8 +29,9 @@ public class AutoConeSubGrp extends SequentialCommandGroup {
         new SetGamePieceTypeCmd(true, ledSub),
         new SetLimitSwitchesCmd(mastSub, armSub, intakeSub),
         new IntakeSetPositionCmd(ManipulatorsPositions.HIGH_CONE, armSub, mastSub, intakeSub),
-        new WaitCommand(0.25),
+        //new WaitCommand(0.25),
         new DriveStraightCmd(drivetrainSub, (-m_clearanceDistance), 0.6),
+        new WaitCommand(0.5),
         new ExpelGamePieceCmd(0.5, intakeSub));
   }
 }

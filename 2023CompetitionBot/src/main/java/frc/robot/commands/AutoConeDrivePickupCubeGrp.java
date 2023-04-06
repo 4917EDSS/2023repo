@@ -36,6 +36,7 @@ public class AutoConeDrivePickupCubeGrp extends SequentialCommandGroup {
         new IntakeGamePieceCmd(1.0, intakeSub, ledSub)
             .alongWith(new DriveStraightCmd(drivetrainSub, -0.5, 0.8)),
         new IntakeSetPositionCmd(ManipulatorsPositions.HOME, armSub, mastSub, intakeSub),
-        new RotateRobotCmd(drivetrainSub, -220, true, isClose));
+        new RotateRobotCmd(drivetrainSub, 168, true, isClose),
+        new DriveStraightCmd(drivetrainSub, -0.5, 0.8));
   }
 }

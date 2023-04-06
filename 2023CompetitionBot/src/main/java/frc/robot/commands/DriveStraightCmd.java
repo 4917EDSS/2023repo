@@ -14,7 +14,7 @@ public class DriveStraightCmd extends CommandBase {
   private double m_distanceRemaining = 0;
   private double kRotateAdjustment = 0.045;
   private double m_maxPower = 0.8;
-  private double kMinPower = 0.15;
+  private double kMinPower = 0.1;
   private double kTolerance = 0.03;
   private double m_targetDriveDistance;
   private long m_timeStart;
