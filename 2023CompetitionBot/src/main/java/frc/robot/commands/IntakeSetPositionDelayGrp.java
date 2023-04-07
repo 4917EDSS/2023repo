@@ -22,7 +22,8 @@ public class IntakeSetPositionDelayGrp extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-        new WaitCommand(0.5),
+        new WaitCommand(0.5)
+            .alongWith(new ExpelGamePieceCmd(0.5, intakeSub)),
         new IntakeSetPositionCmd(ManipulatorsPositions.HOME, armSub, mastSub, intakeSub));
   }
 }
