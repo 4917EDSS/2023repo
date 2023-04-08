@@ -30,7 +30,6 @@ import frc.robot.commands.IntakeSetPositionCmd;
 import frc.robot.commands.AutoConeDrivePickupCubeGrp;
 import frc.robot.commands.InterruptAllCommandsCmd;
 import frc.robot.commands.MastMoveWithJoystickCmd;
-import frc.robot.commands.RotateRobotCmd;
 import frc.robot.commands.SetGamePieceTypeCmd;
 import frc.robot.commands.SetLimitSwitchesCmd;
 import frc.robot.subsystems.ArmSub;
@@ -162,15 +161,14 @@ public class RobotContainer {
   }
 
   void autoChooserSetup() {
-    m_Chooser.setDefaultOption("1 Home Only", new AutoHomeOnlyGrp(m_mastSub, m_armSub, m_intakeSub));
-
+    m_Chooser.addOption("1 Home Only", new AutoHomeOnlyGrp(m_mastSub, m_armSub, m_intakeSub));
     m_Chooser.addOption("2 Cone, Leave and Balance",
         new AutoConeAndChargeStationGrp(m_armSub, m_mastSub, m_intakeSub, m_drivetrainSub, m_ledSub));
     m_Chooser.addOption("3 Cone and Leave Far",
         new AutoConeAndLeaveFarGrp(m_armSub, m_mastSub, m_intakeSub, m_drivetrainSub, m_ledSub));
     m_Chooser.addOption("4 Cone and Leave Close",
         new AutoConeAndLeaveCloseGrp(m_armSub, m_mastSub, m_intakeSub, m_drivetrainSub, m_ledSub));
-    m_Chooser.addOption("5 Cone Drive Far Get Cube",
+    m_Chooser.setDefaultOption("5 Cone Drive Far Get Cube",
         new AutoConeDrivePickupCubeGrp(m_armSub, m_mastSub, m_intakeSub, m_drivetrainSub, m_ledSub, false));
     m_Chooser.addOption("6 Cone Drive Close Get Cube",
         new AutoConeDrivePickupCubeGrp(m_armSub, m_mastSub, m_intakeSub, m_drivetrainSub, m_ledSub, true));

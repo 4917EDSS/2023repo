@@ -28,7 +28,7 @@ public class DriveStraightCmd extends CommandBase {
     addRequirements(drivetrainSub);
     double minimumMax = 0.4;
     double minimumDistance = 0.5;
-    double fullSpeed = 0.8;
+    double fullSpeed = 0.65;
     double fullDistance = 3;
 
     if(Math.abs(targetDriveDistance) < minimumDistance) {
