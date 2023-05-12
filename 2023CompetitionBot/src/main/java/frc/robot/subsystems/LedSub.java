@@ -16,7 +16,7 @@ import frc.robot.StateOfRobot;
 
 public class LedSub extends SubsystemBase {
   // Constants
-  private final static int kLedStripLength = 44;
+  private final static int kLedStripLength = 43;
   private boolean m_newColoursAvailible = false;
   public boolean m_isFlashing; //true if flash is on (game piece gets loaded)
   public long m_time; //time of when the flash starts
@@ -36,14 +36,14 @@ public class LedSub extends SubsystemBase {
     VISION(20, 20, true), // Indicates if the vision sees a traget (green) or not (red)
 
     // Disabled diagnostic zones
-    DIAG_DRIVE_ENC(15, 15, false), //
-    DIAG_MAST_LIMIT(16, 16, false), //
-    DIAG_MAST_ENC(17, 17, false), //
-    DIAG_ARM_LIMIT(18, 18, false), //
-    DIAG_ARM_ENC(19, 19, false), //
-    DIAG_INTAKE_LIMIT(20, 20, false), //
-    DIAG_INTAKE_ENC(21, 21, false), //
-    DIAG_INTAKE_SENSOR(22, 22, false);
+    DIAG_DRIVE_ENC(14, 14, false), //
+    DIAG_MAST_LIMIT(15, 15, false), //
+    DIAG_MAST_ENC(16, 16, false), //
+    DIAG_ARM_LIMIT(17, 17, false), //
+    DIAG_ARM_ENC(18, 18, false), //
+    DIAG_INTAKE_LIMIT(19, 19, false), //
+    DIAG_INTAKE_ENC(20, 20, false), //
+    DIAG_INTAKE_SENSOR(21, 21, false);
 
 
     public final int start;
