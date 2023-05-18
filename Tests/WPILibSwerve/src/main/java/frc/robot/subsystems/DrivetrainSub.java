@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -17,13 +18,14 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CanIds;
+import frc.robot.Constants.SwerveModuleConstants;
 
 public class DrivetrainSub extends SubsystemBase {
   private static final boolean kGyroReversed = false;
   private static final double kMaxSpeedMetersPerSecond = 3;
-  private static final double kTrackWidth = 0.678;    // meters
+  private static final double kTrackWidth = 0.678; // meters
   // Distance between centers of right and left wheels on robot
-  private static final double kWheelBase = 0.633;     // meters
+  private static final double kWheelBase = 0.633; // meters
   // Distance between front and back wheels on robot
   private static final SwerveDriveKinematics kDriveKinematics =
       new SwerveDriveKinematics(
@@ -37,35 +39,39 @@ public class DrivetrainSub extends SubsystemBase {
       CanIds.kDriveMotorFL,
       CanIds.kTurningMotorFL,
       CanIds.kEncoderFL,
-      false);
+      false,
+      SwerveModuleConstants.kAbsoluteEncoderOffsetFL);
   private final SwerveModule m_frontRight = new SwerveModule(
       CanIds.kDriveMotorFR,
       CanIds.kTurningMotorFR,
       CanIds.kEncoderFR,
-      false);
+      false,
+      SwerveModuleConstants.kAbsoluteEncoderOffsetFR);
   private final SwerveModule m_backLeft = new SwerveModule(
       CanIds.kDriveMotorBL,
       CanIds.kTurningMotorBL,
       CanIds.kEncoderBL,
-      false);
+      false,
+      SwerveModuleConstants.kAbsoluteEncoderOffsetBL);
   private final SwerveModule m_backRight = new SwerveModule(
       CanIds.kDriveMotorBR,
       CanIds.kTurningMotorBR,
       CanIds.kEncoderBR,
-      false);
+      false,
+      SwerveModuleConstants.kAbsoluteEncoderOffsetBR);
 
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 
-  SwerveDriveOdometry m_odometry = 
-  new SwerveDriveOdometry(
-      kDriveKinematics,
-      m_gyro.getRotation2d(),
-      new SwerveModulePosition[] {
-        m_frontLeft.getPosition(),
-        m_frontRight.getPosition(),
-        m_backLeft.getPosition(),
-        m_backRight.getPosition()
-      });
+  SwerveDriveOdometry m_odometry =
+      new SwerveDriveOdometry(
+          kDriveKinematics,
+          m_gyro.getRotation2d(),
+          new SwerveModulePosition[] {
+              m_frontLeft.getPosition(),
+              m_frontRight.getPosition(),
+              m_backLeft.getPosition(),
+              m_backRight.getPosition()
+          });
 
 
   /** Creates a new DrivetrainSub. */
@@ -79,26 +85,35 @@ public class DrivetrainSub extends SubsystemBase {
   }
 
   private int delayCount = 10;
+
   @Override
   public void periodic() {
     // Update the odometry in the periodic block
     m_odometry.update(
-      m_gyro.getRotation2d(),
-      new SwerveModulePosition[] {
-        m_frontLeft.getPosition(),
-        m_frontRight.getPosition(),
-        m_backLeft.getPosition(),
-        m_backRight.getPosition()
-      });
+        m_gyro.getRotation2d(),
+        new SwerveModulePosition[] {
+            m_frontLeft.getPosition(),
+            m_frontRight.getPosition(),
+            m_backLeft.getPosition(),
+            m_backRight.getPosition()
+        });
 
     // This method will be called once per scheduler run
     // SwerveModulePosition smp = m_frontLeft.getPosition();
     // SwerveModuleState sms = m_frontLeft.getState();
 
-    // SmartDashboard.putNumber("FL Dist", (double)(smp.distanceMeters));
-    // SmartDashboard.putNumber("FL Angle Deg", smp.angle.getDegrees());
-    // SmartDashboard.putNumber("FL Speed mps", sms.speedMetersPerSecond);
-    // SmartDashboard.putNumber("FL Angle Rad", sms.angle.getRadians());
+    // SmartDashboard.putNumber("FL Dist m", m_frontLeft.getDrivePositionM());
+    // SmartDashboard.putNumber("FL Vel mps", m_frontLeft.getDriveVelocityMPerS());
+    // SmartDashboard.putNumber("FL Turn pos", m_frontLeft.getTurningPosition());
+    // SmartDashboard.putNumber("FL Turn vel", m_frontLeft.getTurningVelocity());
+    SmartDashboard.putNumber("Gyro deg", m_gyro.getAngle());
+    SmartDashboard.putNumber("Heading deg", getHeading());
+
+    SmartDashboard.putNumber("FL Abs", m_frontLeft.getTurningPositionAbsoluteRad());
+    SmartDashboard.putNumber("FR Abs", m_frontRight.getTurningPositionAbsoluteRad());
+    SmartDashboard.putNumber("BL Abs", m_backLeft.getTurningPositionAbsoluteRad());
+    SmartDashboard.putNumber("BR Abs", m_backRight.getTurningPositionAbsoluteRad());
+
     if(--delayCount == 0) {
       delayCount = 10;
       double dp = SmartDashboard.getNumber("dP", 0.1);
@@ -132,10 +147,10 @@ public class DrivetrainSub extends SubsystemBase {
     m_odometry.resetPosition(
         m_gyro.getRotation2d(),
         new SwerveModulePosition[] {
-          m_frontLeft.getPosition(),
-          m_frontRight.getPosition(),
-          m_backLeft.getPosition(),
-          m_backRight.getPosition()
+            m_frontLeft.getPosition(),
+            m_frontRight.getPosition(),
+            m_backLeft.getPosition(),
+            m_backRight.getPosition()
         },
         pose);
   }
@@ -154,8 +169,7 @@ public class DrivetrainSub extends SubsystemBase {
             fieldRelative
                 ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_gyro.getRotation2d())
                 : new ChassisSpeeds(xSpeed, ySpeed, rot));
-    SwerveDriveKinematics.desaturateWheelSpeeds(
-        swerveModuleStates, kMaxSpeedMetersPerSecond);
+    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeedMetersPerSecond);
     m_frontLeft.setDesiredState(swerveModuleStates[0]);
     m_frontRight.setDesiredState(swerveModuleStates[1]);
     m_backLeft.setDesiredState(swerveModuleStates[2]);
@@ -167,9 +181,8 @@ public class DrivetrainSub extends SubsystemBase {
    *
    * @param desiredStates The desired SwerveModule states.
    */
-  public void setModuleStates(SwerveModuleState[] desiredStates) {
-    SwerveDriveKinematics.desaturateWheelSpeeds(
-        desiredStates, kMaxSpeedMetersPerSecond);
+  public void setModuleStates(SwerveModuleState[] desiredStates) { // TODO:  Duplicates drive code above
+    SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, kMaxSpeedMetersPerSecond);
     m_frontLeft.setDesiredState(desiredStates[0]);
     m_frontRight.setDesiredState(desiredStates[1]);
     m_backLeft.setDesiredState(desiredStates[2]);
@@ -195,7 +208,11 @@ public class DrivetrainSub extends SubsystemBase {
    * @return the robot's heading in degrees, from -180 to 180
    */
   public double getHeading() {
-    return m_gyro.getRotation2d().getDegrees();
+    return Math.IEEEremainder(m_gyro.getRotation2d().getDegrees(), 360);
+  }
+
+  public Rotation2d getRotation2d() {
+    return Rotation2d.fromDegrees(getHeading());
   }
 
   /**
@@ -206,4 +223,13 @@ public class DrivetrainSub extends SubsystemBase {
   public double getTurnRate() {
     return m_gyro.getRate() * (kGyroReversed ? -1.0 : 1.0);
   }
+
+  public void stopModules() {
+    m_frontLeft.stop();
+    m_frontRight.stop();
+    m_backLeft.stop();
+    m_backRight.stop();
+  }
+
+
 }
