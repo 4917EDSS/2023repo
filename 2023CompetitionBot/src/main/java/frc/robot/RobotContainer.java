@@ -113,6 +113,9 @@ public class RobotContainer {
     m_driverController.triangle().onTrue(
         new InstantCommand(() -> m_drivetrainSub.setIsAutoShift(true), /* Call on command start */ m_drivetrainSub));
 
+    m_driverController.touchpad().onTrue(new InstantCommand(() -> m_drivetrainSub.setDemoMode(true)));
+    m_driverController.PS().onTrue(new InstantCommand(() -> m_drivetrainSub.setDemoMode(false)));
+
 
     // Operator controller bindings
     m_operatorController.povUp()

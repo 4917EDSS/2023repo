@@ -19,7 +19,6 @@ public class DriveWithJoystickCmd extends CommandBase {
   private final DrivetrainSub m_drivetrainSub;
   private double m_curFwdPower;
   private double m_curTurnPower;
-  private double demoModePowerScale = 0.5; // Multiply power by this much (<1), to slow down robot
 
   /** Creates a new DriveWithJoystickCmd. */
   public DriveWithJoystickCmd(CommandPS4Controller controller, DrivetrainSub drivetrainSub) {
@@ -92,7 +91,7 @@ public class DriveWithJoystickCmd extends CommandBase {
     fwdPower = applyDeadband(fwdPower);
     turnPower = applyDeadband(turnPower);
 
-    m_drivetrainSub.arcadeDrive(fwdPower * demoModePowerScale, turnPower * demoModePowerScale);
+    m_drivetrainSub.arcadeDrive(fwdPower, turnPower);
     m_curFwdPower = fwdPower;
     m_curTurnPower = turnPower;
 

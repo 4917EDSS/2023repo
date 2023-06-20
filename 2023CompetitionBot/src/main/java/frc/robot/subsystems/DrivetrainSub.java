@@ -51,6 +51,8 @@ public class DrivetrainSub extends SubsystemBase {
   private final Solenoid m_shifter = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.SolenoidIds.kShifter);
 
   boolean m_isAutoShift = true;
+  private boolean m_demoMode = false;
+  private double m_demoModePowerScale = 0.5; // Set to <1 to scale the drive power for robot demos (i.e. kids driving)
 
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 
@@ -168,7 +170,15 @@ public class DrivetrainSub extends SubsystemBase {
   }
 
   public void arcadeDrive(double fwdPower, double turnPower) {
-    m_drive.arcadeDrive(fwdPower, turnPower);
+    if(m_demoMode) {
+      m_drive.arcadeDrive(fwdPower * m_demoModePowerScale, turnPower * m_demoModePowerScale);
+    } else {
+      m_drive.arcadeDrive(fwdPower, turnPower);
+    }
+  }
+
+  public void setDemoMode(boolean demoMode) {
+    m_demoMode = demoMode;
   }
 
   public boolean isHighGear() {
