@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.SensorTimeBase;
 import com.revrobotics.CANSparkMax;
@@ -13,6 +14,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants;
 
 public class SwerveModule {
   /**
@@ -20,8 +23,8 @@ public class SwerveModule {
    */
   public static final class ModuleConstants {
     public static final double kMaxDriveMPerS = 1.0; // TODO: To be measured
-    public static final double kMaxModuleAngularSpeedRadiansPerSecond = 1 * Math.PI;
-    public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 1 * Math.PI;
+    public static final double kMaxModuleAngularSpeedRadiansPerSecond = 10 * Math.PI;
+    public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 10 * Math.PI;
 
     //public static final int kDriveEncoderCPR = 2048; // For CTRE TalonFX built-in encoder
     //public static final double kWheelDiameterMeters = 0.1016; // 4"
@@ -32,7 +35,7 @@ public class SwerveModule {
     // Assumes the encoders are on a 1:1 reduction with the module shaft.
     public static final double kTurningEncoderDistancePerPulse = (2 * Math.PI) / (double) kTurningEncoderCPR; // Radians per pulse
 
-    public static final double kPModuleTurningController = 100;
+    public static final double kPModuleTurningController = 0.5;
     public static final double kPModuleDriveController = 1;
   }
 
@@ -74,6 +77,7 @@ public class SwerveModule {
     m_driveMotor.configSelectedFeedbackCoefficient(ModuleConstants.kDriveEncoderDistancePerPulseMmPerTick);
     m_driveMotor.setInverted(true);
 
+    m_turningEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
     m_turningEncoder.configSensorDirection(reverseTurningEncoderDirection); // False means positive rotation occurs when magnet is spun counter-clockwise when observer is facing the LED side of CANCoder.
     m_turningEncoder.configFeedbackCoefficient(ModuleConstants.kTurningEncoderDistancePerPulse, "radians",
         SensorTimeBase.PerSecond);
@@ -97,7 +101,7 @@ public class SwerveModule {
   }
 
   public void setDesiredState(SwerveModuleState desiredState) {
-    if(Math.abs(desiredState.speedMetersPerSecond) < 0.001) {
+    if(Math.abs(desiredState.speedMetersPerSecond) < 0.1) {
       stop();
       return;
     }
@@ -112,9 +116,17 @@ public class SwerveModule {
         state.speedMetersPerSecond / ModuleConstants.kMaxDriveMPerS;
 
     // Calculate the turning motor output from the turning PID controller.
+    double tpar = getTurningPositionAbsoluteRad();
+    double sar = state.angle.getRadians();
     final double turnOutput =
-        m_turningPIDController.calculate(getTurningPositionAbsoluteRad(), state.angle.getRadians());
+        m_turningPIDController.calculate(tpar, sar);
+    if(m_turningEncoderOffset == Constants.SwerveModuleConstants.kAbsoluteEncoderOffsetBL) {
+      SmartDashboard.putNumber("TurnOutput", turnOutput);
+      SmartDashboard.putNumber("CurTPos", tpar);
+      SmartDashboard.putNumber("TargetTPos", sar);
+      SmartDashboard.putNumber("Delta", sar - tpar);
 
+    }
 
     // Calculate the turning motor output from the turning PID controller.
     m_driveMotor.set(ControlMode.PercentOutput, driveOutput);
@@ -168,11 +180,21 @@ public class SwerveModule {
   }
 
   public double getTurningPositionAbsoluteRad() {
-    return m_turningEncoder.getPosition() - m_turningEncoderOffset;
+    double position = m_turningEncoder.getAbsolutePosition() - m_turningEncoderOffset;
+
+    // Compensate for the offset's effect on the absolute encorder roll-over
+    // Want values from -PI to +PI (radians)
+    if(position < -Math.PI) {
+      position += (2 * Math.PI);
+    } else if(position > Math.PI) {
+      position -= (2 * Math.PI);
+    }
+
+    return position;
   }
 
   public void resetEncoders() {
     m_driveMotor.setSelectedSensorPosition(0.0);
-    m_turningMotor.getEncoder().setPosition(getTurningPositionAbsoluteRad());
+    // m_turningMotor.getEncoder().setPosition(0.0); // Can't reset this absolute encoder
   }
 }

@@ -13,7 +13,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -76,10 +75,10 @@ public class DrivetrainSub extends SubsystemBase {
 
   /** Creates a new DrivetrainSub. */
   public DrivetrainSub() {
-    SmartDashboard.putNumber("dP", 0.1);
-    SmartDashboard.putNumber("dI", 0);
-    SmartDashboard.putNumber("dD", 0);
-    SmartDashboard.putNumber("tP", 0.1);
+    // SmartDashboard.putNumber("dP", 0.1);
+    // SmartDashboard.putNumber("dI", 0);
+    // SmartDashboard.putNumber("dD", 0);
+    SmartDashboard.putNumber("tP", 0.5);
     SmartDashboard.putNumber("tI", 0);
     SmartDashboard.putNumber("tD", 0);
   }
@@ -106,7 +105,6 @@ public class DrivetrainSub extends SubsystemBase {
     // SmartDashboard.putNumber("FL Vel mps", m_frontLeft.getDriveVelocityMPerS());
     // SmartDashboard.putNumber("FL Turn pos", m_frontLeft.getTurningPosition());
     // SmartDashboard.putNumber("FL Turn vel", m_frontLeft.getTurningVelocity());
-    SmartDashboard.putNumber("Gyro deg", m_gyro.getAngle());
     SmartDashboard.putNumber("Heading deg", getHeading());
 
     SmartDashboard.putNumber("FL Abs", m_frontLeft.getTurningPositionAbsoluteRad());
@@ -116,20 +114,20 @@ public class DrivetrainSub extends SubsystemBase {
 
     if(--delayCount == 0) {
       delayCount = 10;
-      double dp = SmartDashboard.getNumber("dP", 0.1);
-      double di = SmartDashboard.getNumber("dI", 0);
-      double dd = SmartDashboard.getNumber("dD", 0);
-      double tp = SmartDashboard.getNumber("tP", 0.1);
+      // double dp = SmartDashboard.getNumber("dP", 0.1);
+      // double di = SmartDashboard.getNumber("dI", 0);
+      // double dd = SmartDashboard.getNumber("dD", 0);
+      double tp = SmartDashboard.getNumber("tP", 0.5);
       double ti = SmartDashboard.getNumber("tI", 0);
       double td = SmartDashboard.getNumber("tD", 0);
 
-      m_frontLeft.setPID(true, dp, di, dd);
+      // m_frontLeft.setPID(true, dp, di, dd);
       m_frontLeft.setPID(false, tp, ti, td);
-      m_frontRight.setPID(true, dp, di, dd);
+      // m_frontRight.setPID(true, dp, di, dd);
       m_frontRight.setPID(false, tp, ti, td);
-      m_backLeft.setPID(true, dp, di, dd);
+      // m_backLeft.setPID(true, dp, di, dd);
       m_backLeft.setPID(false, tp, ti, td);
-      m_backRight.setPID(true, dp, di, dd);
+      // m_backRight.setPID(true, dp, di, dd);
       m_backRight.setPID(false, tp, ti, td);
     }
   }
@@ -174,19 +172,6 @@ public class DrivetrainSub extends SubsystemBase {
     m_frontRight.setDesiredState(swerveModuleStates[1]);
     m_backLeft.setDesiredState(swerveModuleStates[2]);
     m_backRight.setDesiredState(swerveModuleStates[3]);
-  }
-
-  /**
-   * Sets the swerve ModuleStates.
-   *
-   * @param desiredStates The desired SwerveModule states.
-   */
-  public void setModuleStates(SwerveModuleState[] desiredStates) { // TODO:  Duplicates drive code above
-    SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, kMaxSpeedMetersPerSecond);
-    m_frontLeft.setDesiredState(desiredStates[0]);
-    m_frontRight.setDesiredState(desiredStates[1]);
-    m_backLeft.setDesiredState(desiredStates[2]);
-    m_backRight.setDesiredState(desiredStates[3]);
   }
 
   /** Resets the drive encoders to currently read a position of 0. */
