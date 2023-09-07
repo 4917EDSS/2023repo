@@ -28,7 +28,11 @@ public class SwerveModule {
 
     //public static final int kDriveEncoderCPR = 2048; // For CTRE TalonFX built-in encoder
     //public static final double kWheelDiameterMeters = 0.1016; // 4"
+
     public static final double kDriveEncoderDistancePerPulseMmPerTick = (1000.0 / 51782); // Millimeters per tick
+    /**
+     * mm/100ms to m/s
+     */
     public static final double kDriveVelocityFactor = (10.0 / 1000.0); // mm/100ms to m/s 
 
     public static final int kTurningEncoderCPR = 4096; // For CTRE CANCoder magnetic encoder

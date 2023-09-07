@@ -4,11 +4,26 @@
 
 package frc.robot;
 
+import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.DrivetrainSub;
+import java.util.List;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -62,7 +77,44 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
+    double kMaxSpeedMetersPerSecond = 3;
+    double kMaxAccelerationMetersPerSecondSquared = 3;
+
+
+    TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
+        kMaxSpeedMetersPerSecond,
+        kMaxAccelerationMetersPerSecondSquared)
+            .setKinematics(DriveConstants.kDriveKinematics);
+
+    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
+        new Pose2d(0, 0, new Rotation2d(0)),
+        List.of(
+            new Translation2d(0.5, 0),
+            new Translation2d(1.0, 0)),
+        new Pose2d(1.5, 0, Rotation2d.fromDegrees(0)),
+        trajectoryConfig);
+
+    ProfiledPIDController thetaController =
+        new ProfiledPIDController(AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
+    thetaController.enableContinuousInput(-Math.PI, Math.PI);
+
+    SwerveControllerCommand swerveControllerCommand =
+        new SwerveControllerCommand(
+            trajectory,
+            m_drivetrainSub::getPose, // Functional interface to feed supplier
+            DriveConstants.kDriveKinematics,
+
+            // Position controllers
+            new PIDController(1.0, 0, 0),
+            new PIDController(1.0, 0, 0),
+            thetaController,
+            m_drivetrainSub::setModuleStates,
+            m_drivetrainSub);
+
     // An example command will be run in autonomous
-    return new PrintCommand("Running AUTO!");
+    return new SequentialCommandGroup(
+        new InstantCommand(() -> m_drivetrainSub.resetOdometry(trajectory.getInitialPose()), m_drivetrainSub),
+        swerveControllerCommand,
+        new InstantCommand(() -> m_drivetrainSub.stopModules(), m_drivetrainSub));
   }
 }

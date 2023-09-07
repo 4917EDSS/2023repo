@@ -4,6 +4,10 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -43,5 +47,26 @@ public final class Constants {
     public static final double kAbsoluteEncoderOffsetFR = 0.150;
     public static final double kAbsoluteEncoderOffsetBL = 3.221353;
     public static final double kAbsoluteEncoderOffsetBR = 2.911489;
+  }
+
+  public static class DriveConstants {
+    public static final double kTrackWidth = 0.678; // meters
+    public static final double kWheelBase = 0.633; // meters
+    public static final SwerveDriveKinematics kDriveKinematics =
+        new SwerveDriveKinematics(
+            new Translation2d(kWheelBase / 2, kTrackWidth / 2),
+            new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
+            new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
+            new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
+  }
+
+  public static class AutoConstants {
+    public static double kMaxAngularSpeedRadiansPerSecond = 0.1;
+    public static double kMaxAngularAccelerationRadiansPerSecondSquared = 0.1;
+    public static double kPThetaController = 1.0;
+    public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
+        new TrapezoidProfile.Constraints(
+            kMaxAngularSpeedRadiansPerSecond,
+            kMaxAngularAccelerationRadiansPerSecondSquared);
   }
 }

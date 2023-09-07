@@ -13,6 +13,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -21,7 +22,7 @@ import frc.robot.Constants.SwerveModuleConstants;
 
 public class DrivetrainSub extends SubsystemBase {
   private static final boolean kGyroReversed = false;
-  private static final double kMaxSpeedMetersPerSecond = 3;
+  private static final double kMaxSpeedMetersPerSecond = 3; // TO-do: Tune if needed
   private static final double kTrackWidth = 0.678; // meters
   // Distance between centers of right and left wheels on robot
   private static final double kWheelBase = 0.633; // meters
@@ -167,11 +168,20 @@ public class DrivetrainSub extends SubsystemBase {
             fieldRelative
                 ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_gyro.getRotation2d())
                 : new ChassisSpeeds(xSpeed, ySpeed, rot));
-    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeedMetersPerSecond);
+    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeedMetersPerSecond); // Used to be called normalizeWheelSpeeds
     m_frontLeft.setDesiredState(swerveModuleStates[0]);
     m_frontRight.setDesiredState(swerveModuleStates[1]);
     m_backLeft.setDesiredState(swerveModuleStates[2]);
     m_backRight.setDesiredState(swerveModuleStates[3]);
+  }
+
+  public void setModuleStates(SwerveModuleState[] desiredStates) {
+    SwerveDriveKinematics.desaturateWheelSpeeds(
+        desiredStates, kMaxSpeedMetersPerSecond);
+    m_frontLeft.setDesiredState(desiredStates[0]);
+    m_frontRight.setDesiredState(desiredStates[1]);
+    m_backLeft.setDesiredState(desiredStates[2]);
+    m_backRight.setDesiredState(desiredStates[3]);
   }
 
   /** Resets the drive encoders to currently read a position of 0. */
