@@ -34,87 +34,89 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
-  DrivetrainSub m_drivetrainSub = new DrivetrainSub();
+    // The robot's subsystems and commands are defined here...
+    DrivetrainSub m_drivetrainSub = new DrivetrainSub();
 
-  // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandPS4Controller m_driverController =
-      new CommandPS4Controller(OperatorConstants.kDriverControllerPort);
+    // Replace with CommandPS4Controller or CommandJoystick if needed
+    private final CommandPS4Controller m_driverController =
+            new CommandPS4Controller(OperatorConstants.kDriverControllerPort);
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
-  public RobotContainer() {
-    // Configure the trigger bindings
-    configureBindings();
+    /** The container for the robot. Contains subsystems, OI devices, and commands. */
+    public RobotContainer() {
+        // Configure the trigger bindings
+        configureBindings();
 
-    m_drivetrainSub.setDefaultCommand(
-        // The left stick controls translation of the robot.
-        // Turning is controlled by the X axis of the right stick.
-        new RunCommand(
-            () -> m_drivetrainSub.drive(
-                m_driverController.getLeftY(),
-                m_driverController.getLeftX(),
-                m_driverController.getRightX(),
-                true),
-            m_drivetrainSub));
-  }
+        m_drivetrainSub.setDefaultCommand(
+                // The left stick controls translation of the robot.
+                // Turning is controlled by the X axis of the right stick.
+                new RunCommand(
+                        () -> m_drivetrainSub.drive(
+                                m_driverController.getLeftY(),
+                                m_driverController.getLeftX(),
+                                m_driverController.getRightX(),
+                                true),
+                        m_drivetrainSub));
+    }
 
-  /**
-   * Use this method to define your trigger->command mappings. Triggers can be created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
-   * predicate, or via the named factories in {@link
-   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
-   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
-   * joysticks}.
-   */
-  private void configureBindings() {
-    m_driverController.cross().onTrue(new PrintCommand("Cross pressed!"));
-  }
+    /**
+     * Use this method to define your trigger->command mappings. Triggers can be created via the
+     * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
+     * predicate, or via the named factories in {@link
+     * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
+     * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
+     * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
+     * joysticks}.
+     */
+    private void configureBindings() {
+        m_driverController.cross().onTrue(new PrintCommand("Cross pressed!"));
+    }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    double kMaxSpeedMetersPerSecond = 3;
-    double kMaxAccelerationMetersPerSecondSquared = 3;
+    /**
+     * Use this to pass the autonomous command to the main {@link Robot} class.
+     *
+     * @return the command to run in autonomous
+     */
+    public Command getAutonomousCommand() {
 
+        // Create trajectory settings
+        TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
+                AutoConstants.kMaxSpeedMetersPerSecond,
+                AutoConstants.kMaxAccelerationMetersPerSecondSquared)
+                        .setKinematics(DriveConstants.kDriveKinematics);
 
-    TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
-        kMaxSpeedMetersPerSecond,
-        kMaxAccelerationMetersPerSecondSquared)
-            .setKinematics(DriveConstants.kDriveKinematics);
+        //  Generate trajectory             
+        Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
+                new Pose2d(0, 0, new Rotation2d(0)),
+                List.of(
+                        new Translation2d(0.1, 0),
+                        new Translation2d(0.2, 0.2)),
+                new Pose2d(0.5, 0.2, Rotation2d.fromDegrees(0)),
+                trajectoryConfig);
 
-    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-        new Pose2d(0, 0, new Rotation2d(0)),
-        List.of(
-            new Translation2d(0.5, 0),
-            new Translation2d(1.0, 0)),
-        new Pose2d(1.5, 0, Rotation2d.fromDegrees(0)),
-        trajectoryConfig);
+        // Define PID Controller for tracking trajectory
+        ProfiledPIDController thetaController =
+                new ProfiledPIDController(AutoConstants.kPThetaController, 0, 0,
+                        AutoConstants.kThetaControllerConstraints);
+        thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-    ProfiledPIDController thetaController =
-        new ProfiledPIDController(AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
-    thetaController.enableContinuousInput(-Math.PI, Math.PI);
+        // Construct command to follow trajectory
+        SwerveControllerCommand swerveControllerCommand =
+                new SwerveControllerCommand(
+                        trajectory,
+                        m_drivetrainSub::getPose, // Functional interface to feed supplier
+                        DriveConstants.kDriveKinematics,
 
-    SwerveControllerCommand swerveControllerCommand =
-        new SwerveControllerCommand(
-            trajectory,
-            m_drivetrainSub::getPose, // Functional interface to feed supplier
-            DriveConstants.kDriveKinematics,
+                        // Position controllers
+                        new PIDController(AutoConstants.kPXController, 0, 0),
+                        new PIDController(AutoConstants.kPYController, 0, 0),
+                        thetaController,
+                        m_drivetrainSub::setModuleStates,
+                        m_drivetrainSub);
 
-            // Position controllers
-            new PIDController(1.0, 0, 0),
-            new PIDController(1.0, 0, 0),
-            thetaController,
-            m_drivetrainSub::setModuleStates,
-            m_drivetrainSub);
-
-    // An example command will be run in autonomous
-    return new SequentialCommandGroup(
-        new InstantCommand(() -> m_drivetrainSub.resetOdometry(trajectory.getInitialPose()), m_drivetrainSub),
-        swerveControllerCommand,
-        new InstantCommand(() -> m_drivetrainSub.stopModules(), m_drivetrainSub));
-  }
+        // An example command will be run in autonomous
+        return new SequentialCommandGroup(
+                new InstantCommand(() -> m_drivetrainSub.resetOdometry(trajectory.getInitialPose()), m_drivetrainSub),
+                swerveControllerCommand,
+                new InstantCommand(() -> m_drivetrainSub.stopModules(), m_drivetrainSub));
+    }
 }
