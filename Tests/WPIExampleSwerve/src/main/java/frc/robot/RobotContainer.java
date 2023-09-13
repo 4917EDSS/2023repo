@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
@@ -31,10 +32,10 @@ import java.util.List;
  */
 public class RobotContainer {
     // The robot's subsystems
-    private final DrivetrainSub m_robotDrive = new DrivetrainSub();
+    private final DrivetrainSub m_drivetrainSub = new DrivetrainSub();
 
     // The driver's controller
-    XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+    PS4Controller m_driverController = new PS4Controller(OIConstants.kDriverControllerPort);
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -42,16 +43,16 @@ public class RobotContainer {
         configureButtonBindings();
 
         // Configure default commands
-        m_robotDrive.setDefaultCommand(
+        m_drivetrainSub.setDefaultCommand(
                 // The left stick controls translation of the robot.
                 // Turning is controlled by the X axis of the right stick.
                 new RunCommand(
-                        () -> m_robotDrive.drive(
+                        () -> m_drivetrainSub.drive(
                                 m_driverController.getLeftY(),
                                 m_driverController.getLeftX(),
                                 m_driverController.getRightX(),
-                                false),
-                        m_robotDrive));
+                                true),
+                        m_drivetrainSub));
     }
 
     /**
@@ -95,20 +96,20 @@ public class RobotContainer {
         SwerveControllerCommand swerveControllerCommand =
                 new SwerveControllerCommand(
                         exampleTrajectory,
-                        m_robotDrive::getPose, // Functional interface to feed supplier
+                        m_drivetrainSub::getPose, // Functional interface to feed supplier
                         DriveConstants.kDriveKinematics,
 
                         // Position controllers
                         new PIDController(AutoConstants.kPXController, 0, 0),
                         new PIDController(AutoConstants.kPYController, 0, 0),
                         thetaController,
-                        m_robotDrive::setModuleStates,
-                        m_robotDrive);
+                        m_drivetrainSub::setModuleStates,
+                        m_drivetrainSub);
 
         // Reset odometry to the starting pose of the trajectory.
-        m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
+        m_drivetrainSub.resetOdometry(exampleTrajectory.getInitialPose());
 
         // Run path following command, then stop at the end.
-        return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false));
+        return swerveControllerCommand.andThen(() -> m_drivetrainSub.drive(0, 0, 0, false));
     }
 }
