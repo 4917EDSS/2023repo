@@ -11,47 +11,48 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import frc.robot.Constants.CanIds;
 import frc.robot.Constants.DriveConstants;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class DriveSubsystem extends SubsystemBase {
+public class DrivetrainSub extends SubsystemBase {
   // Robot swerve modules
   private final SwerveModule m_frontLeft =
       new SwerveModule(
-          DriveConstants.kFrontLeftDriveMotorPort,
-          DriveConstants.kFrontLeftTurningMotorPort,
-          DriveConstants.kFrontLeftDriveEncoderPorts,
-          DriveConstants.kFrontLeftTurningEncoderPorts,
-          DriveConstants.kFrontLeftDriveEncoderReversed,
-          DriveConstants.kFrontLeftTurningEncoderReversed);
+          CanIds.kDriveMotorFL,
+          CanIds.kTurningMotorFL,
+          CanIds.kEncoderFL,
+          DriveConstants.kDriveEncoderReversedFL,
+          DriveConstants.kTurnEncoderReversedFL,
+          DriveConstants.kAbsoluteEncoderOffsetFL);
 
   private final SwerveModule m_rearLeft =
       new SwerveModule(
-          DriveConstants.kRearLeftDriveMotorPort,
-          DriveConstants.kRearLeftTurningMotorPort,
-          DriveConstants.kRearLeftDriveEncoderPorts,
-          DriveConstants.kRearLeftTurningEncoderPorts,
-          DriveConstants.kRearLeftDriveEncoderReversed,
-          DriveConstants.kRearLeftTurningEncoderReversed);
+          CanIds.kDriveMotorFR,
+          CanIds.kTurningMotorFR,
+          CanIds.kEncoderFR,
+          DriveConstants.kDriveEncoderReversedFR,
+          DriveConstants.kTurnEncoderReversedFR,
+          DriveConstants.kAbsoluteEncoderOffsetFR);
 
   private final SwerveModule m_frontRight =
       new SwerveModule(
-          DriveConstants.kFrontRightDriveMotorPort,
-          DriveConstants.kFrontRightTurningMotorPort,
-          DriveConstants.kFrontRightDriveEncoderPorts,
-          DriveConstants.kFrontRightTurningEncoderPorts,
-          DriveConstants.kFrontRightDriveEncoderReversed,
-          DriveConstants.kFrontRightTurningEncoderReversed);
+          CanIds.kDriveMotorRL,
+          CanIds.kTurningMotorRL,
+          CanIds.kEncoderRL,
+          DriveConstants.kDriveEncoderReversedRL,
+          DriveConstants.kTurnEncoderReversedRL,
+          DriveConstants.kAbsoluteEncoderOffsetRL);
 
   private final SwerveModule m_rearRight =
       new SwerveModule(
-          DriveConstants.kRearRightDriveMotorPort,
-          DriveConstants.kRearRightTurningMotorPort,
-          DriveConstants.kRearRightDriveEncoderPorts,
-          DriveConstants.kRearRightTurningEncoderPorts,
-          DriveConstants.kRearRightDriveEncoderReversed,
-          DriveConstants.kRearRightTurningEncoderReversed);
+          CanIds.kDriveMotorRR,
+          CanIds.kTurningMotorRR,
+          CanIds.kEncoderRR,
+          DriveConstants.kDriveEncoderReversedRR,
+          DriveConstants.kTurnEncoderReversedRR,
+          DriveConstants.kAbsoluteEncoderOffsetRR);
 
   // The gyro sensor
   private final Gyro m_gyro = new ADXRS450_Gyro();
@@ -62,14 +63,14 @@ public class DriveSubsystem extends SubsystemBase {
           DriveConstants.kDriveKinematics,
           m_gyro.getRotation2d(),
           new SwerveModulePosition[] {
-            m_frontLeft.getPosition(),
-            m_frontRight.getPosition(),
-            m_rearLeft.getPosition(),
-            m_rearRight.getPosition()
+              m_frontLeft.getPosition(),
+              m_frontRight.getPosition(),
+              m_rearLeft.getPosition(),
+              m_rearRight.getPosition()
           });
 
   /** Creates a new DriveSubsystem. */
-  public DriveSubsystem() {}
+  public DrivetrainSub() {}
 
   @Override
   public void periodic() {
@@ -77,10 +78,10 @@ public class DriveSubsystem extends SubsystemBase {
     m_odometry.update(
         m_gyro.getRotation2d(),
         new SwerveModulePosition[] {
-          m_frontLeft.getPosition(),
-          m_frontRight.getPosition(),
-          m_rearLeft.getPosition(),
-          m_rearRight.getPosition()
+            m_frontLeft.getPosition(),
+            m_frontRight.getPosition(),
+            m_rearLeft.getPosition(),
+            m_rearRight.getPosition()
         });
   }
 
@@ -102,10 +103,10 @@ public class DriveSubsystem extends SubsystemBase {
     m_odometry.resetPosition(
         m_gyro.getRotation2d(),
         new SwerveModulePosition[] {
-          m_frontLeft.getPosition(),
-          m_frontRight.getPosition(),
-          m_rearLeft.getPosition(),
-          m_rearRight.getPosition()
+            m_frontLeft.getPosition(),
+            m_frontRight.getPosition(),
+            m_rearLeft.getPosition(),
+            m_rearRight.getPosition()
         },
         pose);
   }

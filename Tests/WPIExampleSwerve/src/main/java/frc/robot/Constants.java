@@ -13,44 +13,46 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
  * constants. This class should not be used for any other purpose. All constants should be declared
  * globally (i.e. public static). Do not put anything functional in this class.
  *
- * <p>It is advised to statically import this class (or one of its inner classes) wherever the
+ * <p>
+ * It is advised to statically import this class (or one of its inner classes) wherever the
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+  public static class CanIds {
+    public final static int kDriveMotorFL = 1; // Front left motor
+    public final static int kTurningMotorFL = 2;
+    public final static int kDriveMotorFR = 3; // Front right motor
+    public final static int kTurningMotorFR = 4;
+    public final static int kDriveMotorRL = 5; // Back left motor
+    public final static int kTurningMotorRL = 6;
+    public final static int kDriveMotorRR = 7; // Back right motor
+    public final static int kTurningMotorRR = 8;
+    // 9
+    // 10
+    public final static int kEncoderFL = 11; // All turning encoders
+    // 12
+    public final static int kEncoderRL = 13;
+    // 14
+    public final static int kEncoderFR = 15;
+    // 16
+    public final static int kEncoderRR = 17;
+  }
+
+
   public static final class DriveConstants {
-    public static final int kFrontLeftDriveMotorPort = 0;
-    public static final int kRearLeftDriveMotorPort = 2;
-    public static final int kFrontRightDriveMotorPort = 4;
-    public static final int kRearRightDriveMotorPort = 6;
+    public static final boolean kDriveEncoderReversedFL = true;
+    public static final boolean kDriveEncoderReversedFR = true;
+    public static final boolean kDriveEncoderReversedRL = true;
+    public static final boolean kDriveEncoderReversedRR = true;
 
-    public static final int kFrontLeftTurningMotorPort = 1;
-    public static final int kRearLeftTurningMotorPort = 3;
-    public static final int kFrontRightTurningMotorPort = 5;
-    public static final int kRearRightTurningMotorPort = 7;
+    public static final boolean kTurnEncoderReversedFL = false;
+    public static final boolean kTurnEncoderReversedFR = false;
+    public static final boolean kTurnEncoderReversedRL = false;
+    public static final boolean kTurnEncoderReversedRR = false;
 
-    public static final int[] kFrontLeftTurningEncoderPorts = new int[] {0, 1};
-    public static final int[] kRearLeftTurningEncoderPorts = new int[] {2, 3};
-    public static final int[] kFrontRightTurningEncoderPorts = new int[] {4, 5};
-    public static final int[] kRearRightTurningEncoderPorts = new int[] {6, 7};
-
-    public static final boolean kFrontLeftTurningEncoderReversed = false;
-    public static final boolean kRearLeftTurningEncoderReversed = true;
-    public static final boolean kFrontRightTurningEncoderReversed = false;
-    public static final boolean kRearRightTurningEncoderReversed = true;
-
-    public static final int[] kFrontLeftDriveEncoderPorts = new int[] {8, 9};
-    public static final int[] kRearLeftDriveEncoderPorts = new int[] {10, 11};
-    public static final int[] kFrontRightDriveEncoderPorts = new int[] {12, 13};
-    public static final int[] kRearRightDriveEncoderPorts = new int[] {14, 15};
-
-    public static final boolean kFrontLeftDriveEncoderReversed = false;
-    public static final boolean kRearLeftDriveEncoderReversed = true;
-    public static final boolean kFrontRightDriveEncoderReversed = false;
-    public static final boolean kRearRightDriveEncoderReversed = true;
-
-    public static final double kTrackWidth = 0.5;
+    public static final double kTrackWidth = 0.678;
     // Distance between centers of right and left wheels on robot
-    public static final double kWheelBase = 0.7;
+    public static final double kWheelBase = 0.633;
     // Distance between front and back wheels on robot
     public static final SwerveDriveKinematics kDriveKinematics =
         new SwerveDriveKinematics(
@@ -59,9 +61,14 @@ public final class Constants {
             new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
             new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
 
+    public static final double kAbsoluteEncoderOffsetFL = 4.229176;
+    public static final double kAbsoluteEncoderOffsetFR = 0.150;
+    public static final double kAbsoluteEncoderOffsetRL = 3.221353;
+    public static final double kAbsoluteEncoderOffsetRR = 2.911489;
+
     public static final boolean kGyroReversed = false;
 
-    // These are example values only - DO NOT USE THESE FOR YOUR OWN ROBOT!
+    // To-Do: These are example values only - DO NOT USE THESE FOR YOUR OWN ROBOT!
     // These characterization values MUST be determined either experimentally or theoretically
     // for *your* robot's drive.
     // The SysId tool provides a convenient method for obtaining these values for your robot.
@@ -70,30 +77,36 @@ public final class Constants {
     public static final double kaVoltSecondsSquaredPerMeter = 0.15;
 
     public static final double kMaxSpeedMetersPerSecond = 3;
+
+    /** Minimum requested speed value (m/s) that manual control will react to */
+    public static final double kSpeedDeadband = 0.1;
   }
+
 
   public static final class ModuleConstants {
     public static final double kMaxModuleAngularSpeedRadiansPerSecond = 2 * Math.PI;
     public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 2 * Math.PI;
 
-    public static final int kEncoderCPR = 1024;
-    public static final double kWheelDiameterMeters = 0.15;
-    public static final double kDriveEncoderDistancePerPulse =
-        // Assumes the encoders are directly mounted on the wheel shafts
-        (kWheelDiameterMeters * Math.PI) / (double) kEncoderCPR;
+    public static final int kTurnEncoderCPR = 4096;
 
-    public static final double kTurningEncoderDistancePerPulse =
-        // Assumes the encoders are on a 1:1 reduction with the module shaft.
-        (2 * Math.PI) / (double) kEncoderCPR;
+    /** Millimeters per tick (measured) */
+    public static final double kDriveEncoderDistancePerPulse = (1000.0 / 51782);
+
+    /** Conversion factor for mm/100ms to m/s */
+    public static final double kDriveVelocityFactor = (10.0 / 1000.0);
+
+    /** Radions per pulse (calculated) */
+    public static final double kTurningEncoderDistancePerPulse = (2 * Math.PI) / (double) kTurnEncoderCPR;
 
     public static final double kPModuleTurningController = 1;
-
     public static final double kPModuleDriveController = 1;
   }
+
 
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
   }
+
 
   public static final class AutoConstants {
     public static final double kMaxSpeedMetersPerSecond = 3;
