@@ -44,7 +44,7 @@ public final class Constants {
 
   public static class SwerveModuleConstants {
     public static final double kAbsoluteEncoderOffsetFL = 4.229176;
-    public static final double kAbsoluteEncoderOffsetFR = 0.150;
+    public static final double kAbsoluteEncoderOffsetFR = 1.50;
     public static final double kAbsoluteEncoderOffsetBL = 3.221353;
     public static final double kAbsoluteEncoderOffsetBR = 2.911489;
   }

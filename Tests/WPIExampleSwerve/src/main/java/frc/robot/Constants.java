@@ -62,7 +62,7 @@ public final class Constants {
             new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
 
     public static final double kAbsoluteEncoderOffsetFL = 4.229176;
-    public static final double kAbsoluteEncoderOffsetFR = 1.5;
+    public static final double kAbsoluteEncoderOffsetFR = 0.15;
     public static final double kAbsoluteEncoderOffsetRL = 3.221353;
     public static final double kAbsoluteEncoderOffsetRR = 2.911489;
 
@@ -76,6 +76,7 @@ public final class Constants {
     // public static final double kvVoltSecondsPerMeter = 0.8;
     // public static final double kaVoltSecondsSquaredPerMeter = 0.15;
 
+    // TODO: Should this be module constants or drive constants
     public static final double kMaxSpeedMetersPerSecond = 18 * 12 / 39.3701; /* 18ft/s in m/s for TalonFX */
 
     /** Minimum requested speed value (m/s) that manual control will react to */
@@ -84,8 +85,8 @@ public final class Constants {
 
 
   public static final class ModuleConstants {
-    public static final double kMaxModuleAngularSpeedRadiansPerSecond = 2 * Math.PI;
-    public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 2 * Math.PI;
+    public static final double kMaxModuleAngularSpeedRadiansPerSecond = 10 * Math.PI; // TODO: Check these
+    public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 10 * Math.PI; // TODO: Check these
 
     public static final int kTurnEncoderCPR = 4096;
 
@@ -98,8 +99,8 @@ public final class Constants {
     /** Radions per pulse (calculated) */
     public static final double kTurningEncoderDistancePerPulse = (2 * Math.PI) / (double) kTurnEncoderCPR;
 
+    public static final double kPModuleDriveController = 0.5;
     public static final double kPModuleTurningController = 0.5;
-    public static final double kPModuleDriveController = 0.75;
   }
 
 

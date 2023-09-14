@@ -88,6 +88,8 @@ public class SwerveModule {
     // Limit the PID Controller's input range between -pi and pi and set the input
     // to be continuous.
     m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
+
+    resetEncoders(); // TODO:  Do we want this here?
   }
 
   /**
@@ -124,8 +126,8 @@ public class SwerveModule {
     SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(getTurnPosition()));
 
     // Calculate the drive output from the drive PID controller.
-    //final double driveOutput = m_drivePIDController.calculate(getDriveVelocity(), state.speedMetersPerSecond);
-    final double driveOutput = state.speedMetersPerSecond / 1.0;//DriveConstants.kMaxSpeedMetersPerSecond;
+    final double driveOutput = m_drivePIDController.calculate(getDriveVelocity(), state.speedMetersPerSecond);
+    //final double driveOutput = state.speedMetersPerSecond / 1.0;//DriveConstants.kMaxSpeedMetersPerSecond;
 
     // Calculate the turning motor output from the turning PID controller.
     final double turnOutput = m_turningPIDController.calculate(getTurnPosition(), state.angle.getRadians());
@@ -180,6 +182,10 @@ public class SwerveModule {
     }
 
     return position;
+  }
+
+  public double getAbsTurnEncoder() {
+    return m_turnEncoder.getAbsolutePosition();
   }
 
   /** Zeroes all the SwerveModule encoders. */
