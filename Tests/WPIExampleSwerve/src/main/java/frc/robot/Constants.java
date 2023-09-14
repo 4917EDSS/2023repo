@@ -61,10 +61,10 @@ public final class Constants {
             new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
             new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
 
-    public static final double kAbsoluteEncoderOffsetFL = 4.229176;
-    public static final double kAbsoluteEncoderOffsetFR = 0.15;
-    public static final double kAbsoluteEncoderOffsetRL = 3.221353;
-    public static final double kAbsoluteEncoderOffsetRR = 2.911489;
+    public static final double kAbsoluteEncoderOffsetFL = -2.285675;
+    public static final double kAbsoluteEncoderOffsetFR = 2.534131;
+    public static final double kAbsoluteEncoderOffsetRL = 2.931431;
+    public static final double kAbsoluteEncoderOffsetRR = 2.842461;
 
     public static final boolean kGyroReversed = false;
 

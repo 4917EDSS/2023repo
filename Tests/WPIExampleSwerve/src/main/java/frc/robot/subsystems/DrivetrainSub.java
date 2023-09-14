@@ -71,7 +71,9 @@ public class DrivetrainSub extends SubsystemBase {
           });
 
   /** Creates a new DriveSubsystem. */
-  public DrivetrainSub() {}
+  public DrivetrainSub() {
+    zeroHeading();
+  }
 
   @Override
   public void periodic() {
@@ -89,6 +91,8 @@ public class DrivetrainSub extends SubsystemBase {
     SmartDashboard.putNumber("FR Enc", m_frontRight.getAbsTurnEncoder());
     SmartDashboard.putNumber("RL Enc", m_rearLeft.getAbsTurnEncoder());
     SmartDashboard.putNumber("RR Enc", m_rearRight.getAbsTurnEncoder());
+
+    SmartDashboard.putNumber("Drive Dist", m_rearLeft.getDrivePosition());
   }
 
   /**
