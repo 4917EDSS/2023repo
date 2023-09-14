@@ -61,8 +61,8 @@ public final class Constants {
   }
 
   public static class AutoConstants {
-    public static double kMaxSpeedMetersPerSecond = 1; // Increase to 3 for faster speed in auto
-    public static double kMaxAccelerationMetersPerSecondSquared = 1; // increase to 3 for faster accelleration in auto
+    public static double kMaxSpeedMetersPerSecond = 0.5; // Increase to 3 for faster speed in auto
+    public static double kMaxAccelerationMetersPerSecondSquared = 0.5; // increase to 3 for faster accelleration in auto
     public static double kMaxAngularSpeedRadiansPerSecond = 0.1;
     public static double kMaxAngularAccelerationRadiansPerSecondSquared = 0.1;
     public static double kPThetaController = 1.0;

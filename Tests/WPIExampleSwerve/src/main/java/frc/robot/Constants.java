@@ -62,7 +62,7 @@ public final class Constants {
             new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
 
     public static final double kAbsoluteEncoderOffsetFL = 4.229176;
-    public static final double kAbsoluteEncoderOffsetFR = 0.150;
+    public static final double kAbsoluteEncoderOffsetFR = 1.5;
     public static final double kAbsoluteEncoderOffsetRL = 3.221353;
     public static final double kAbsoluteEncoderOffsetRR = 2.911489;
 
@@ -72,11 +72,11 @@ public final class Constants {
     // These characterization values MUST be determined either experimentally or theoretically
     // for *your* robot's drive.
     // The SysId tool provides a convenient method for obtaining these values for your robot.
-    public static final double ksVolts = 1;
-    public static final double kvVoltSecondsPerMeter = 0.8;
-    public static final double kaVoltSecondsSquaredPerMeter = 0.15;
+    // public static final double ksVolts = 1;
+    // public static final double kvVoltSecondsPerMeter = 0.8;
+    // public static final double kaVoltSecondsSquaredPerMeter = 0.15;
 
-    public static final double kMaxSpeedMetersPerSecond = 3;
+    public static final double kMaxSpeedMetersPerSecond = 18 * 12 / 39.3701; /* 18ft/s in m/s for TalonFX */
 
     /** Minimum requested speed value (m/s) that manual control will react to */
     public static final double kSpeedDeadband = 0.1;
@@ -98,8 +98,8 @@ public final class Constants {
     /** Radions per pulse (calculated) */
     public static final double kTurningEncoderDistancePerPulse = (2 * Math.PI) / (double) kTurnEncoderCPR;
 
-    public static final double kPModuleTurningController = 1;
-    public static final double kPModuleDriveController = 1;
+    public static final double kPModuleTurningController = 0.5;
+    public static final double kPModuleDriveController = 0.75;
   }
 
 

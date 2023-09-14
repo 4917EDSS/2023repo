@@ -5,12 +5,14 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.SensorTimeBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import com.revrobotics.CANSparkMax.IdleMode;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -68,8 +70,12 @@ public class SwerveModule {
     // resolution.
     m_driveMotor.configSelectedFeedbackCoefficient(ModuleConstants.kDriveEncoderDistancePerPulse);
 
-    // Set whether drive encoder (and drive power) should be reversed or not
+    // Configure drive motor
     m_driveMotor.setInverted(driveEncoderReversed);
+    m_driveMotor.setNeutralMode(NeutralMode.Brake);
+
+    // Configure turn motor
+    m_turnMotor.setIdleMode(IdleMode.kBrake);
 
     // Set up the encorder
     m_turnEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
@@ -118,7 +124,8 @@ public class SwerveModule {
     SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(getTurnPosition()));
 
     // Calculate the drive output from the drive PID controller.
-    final double driveOutput = m_drivePIDController.calculate(getDriveVelocity(), state.speedMetersPerSecond);
+    //final double driveOutput = m_drivePIDController.calculate(getDriveVelocity(), state.speedMetersPerSecond);
+    final double driveOutput = state.speedMetersPerSecond / 1.0;//DriveConstants.kMaxSpeedMetersPerSecond;
 
     // Calculate the turning motor output from the turning PID controller.
     final double turnOutput = m_turningPIDController.calculate(getTurnPosition(), state.angle.getRadians());
@@ -144,7 +151,7 @@ public class SwerveModule {
    * @return The drive distance in meters
    */
   public double getDrivePosition() {
-    return m_driveMotor.getSelectedSensorPosition();
+    return m_driveMotor.getSelectedSensorPosition() / 1000.0; /* Sensor position reported in mm */
   }
 
   /**

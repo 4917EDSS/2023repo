@@ -4,17 +4,17 @@
 
 package frc.robot.subsystems;
 
+import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CanIds;
 import frc.robot.Constants.DriveConstants;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DrivetrainSub extends SubsystemBase {
   // Robot swerve modules
@@ -27,7 +27,7 @@ public class DrivetrainSub extends SubsystemBase {
           DriveConstants.kTurnEncoderReversedFL,
           DriveConstants.kAbsoluteEncoderOffsetFL);
 
-  private final SwerveModule m_rearLeft =
+  private final SwerveModule m_frontRight =
       new SwerveModule(
           CanIds.kDriveMotorFR,
           CanIds.kTurningMotorFR,
@@ -36,7 +36,7 @@ public class DrivetrainSub extends SubsystemBase {
           DriveConstants.kTurnEncoderReversedFR,
           DriveConstants.kAbsoluteEncoderOffsetFR);
 
-  private final SwerveModule m_frontRight =
+  private final SwerveModule m_rearLeft =
       new SwerveModule(
           CanIds.kDriveMotorRL,
           CanIds.kTurningMotorRL,
@@ -55,7 +55,7 @@ public class DrivetrainSub extends SubsystemBase {
           DriveConstants.kAbsoluteEncoderOffsetRR);
 
   // The gyro sensor
-  private final Gyro m_gyro = new ADXRS450_Gyro();
+  private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry =
