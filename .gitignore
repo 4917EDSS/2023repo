@@ -1,0 +1,10 @@
+
+*.lock
+*.bin
+*.properties
+*.class
+*.probe
+*.dll
+*.pdb
+*.jar
+*.MF
