@@ -21,6 +21,8 @@ import com.ctre.phoenix.sensors.CANCoderConfiguration;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import com.revrobotics.CANSparkMax.IdleMode;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -37,9 +39,9 @@ public class SwerveDrivetrain extends SubsystemBase {
   private static final Orchestra orcs = new Orchestra();
   // Steering Encoders
 
-  private double kP = 1.0;
-  private double kI = 1.0;
-  private double kD = 1.0;
+  private double kP = 0.01;
+  private double kI = 0.0;
+  private double kD = 0.0;
   private double m_steeringPower = 0.5;
 
   private double fl_dir = 1.0;
@@ -52,7 +54,7 @@ public class SwerveDrivetrain extends SubsystemBase {
   private double bl_encoderOffset = 5.27;//16.35;
   private double br_encoderOffset = 164.35;//146.78;
 
-  //private final CANCoderConfiguration m_CANConfig; // Configuration settings for encoders
+  //private final CANCoderConfiguration m_CANConfig = new CANCoderConfiguration(); // Configuration settings for encoders
 
   private final CANCoder m_encoderFrontLeft = new CANCoder(Constants.CanIds.kEncoderFL);
 
@@ -92,16 +94,20 @@ public class SwerveDrivetrain extends SubsystemBase {
     SmartDashboard.putNumber("FR Offset Set", fr_encoderOffset);
     SmartDashboard.putNumber("BL Offset Set", bl_encoderOffset);
     SmartDashboard.putNumber("BR Offset Set", br_encoderOffset);
+    m_frontleftSteerMotor.setIdleMode(IdleMode.kBrake);
+    m_frontrightSteerMotor.setIdleMode(IdleMode.kBrake);
+    m_backleftSteerMotor.setIdleMode(IdleMode.kBrake);
+    m_backrightSteerMotor.setIdleMode(IdleMode.kBrake);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     // Display Encoder angles and velocities
-    SmartDashboard.putNumber("Front Left Angle (ABS): ", m_encoderFrontLeft.getAbsolutePosition() - fl_encoderOffset);
-    SmartDashboard.putNumber("Front Right Angle (ABS): ", m_encoderFrontRight.getAbsolutePosition() - fr_encoderOffset);
-    SmartDashboard.putNumber("Back Left Angle (ABS): ", m_encoderBackLeft.getAbsolutePosition() - bl_encoderOffset);
-    SmartDashboard.putNumber("Back Right Angle (ABS): ", m_encoderBackRight.getAbsolutePosition() - br_encoderOffset);
+    SmartDashboard.putNumber("Front Left Angle (ABS): ", m_encoderFrontLeft.getAbsolutePosition());
+    SmartDashboard.putNumber("Front Right Angle (ABS): ", m_encoderFrontRight.getAbsolutePosition());
+    SmartDashboard.putNumber("Back Left Angle (ABS): ", m_encoderBackLeft.getAbsolutePosition());
+    SmartDashboard.putNumber("Back Right Angle (ABS): ", m_encoderBackRight.getAbsolutePosition());
 
     SmartDashboard.putNumber("Front Left ID: ", m_encoderFrontLeft.getDeviceID());
     SmartDashboard.putNumber("Front Right ID: ", m_encoderFrontRight.getDeviceID());
@@ -135,6 +141,10 @@ public class SwerveDrivetrain extends SubsystemBase {
     bl_dir = (SmartDashboard.getBoolean("Invert BL", (bl_dir == -1.0))) ? -1.0 : 1.0;
     br_dir = (SmartDashboard.getBoolean("Invert BR", (br_dir == -1.0))) ? -1.0 : 1.0;
 
+    SmartDashboard.putBoolean("Invert FL", (fl_dir == -1.0));
+    SmartDashboard.putBoolean("Invert FR", (fr_dir == -1.0));
+    SmartDashboard.putBoolean("Invert BL", (bl_dir == -1.0));
+    SmartDashboard.putBoolean("Invert BR", (br_dir == -1.0));
     /*
      * SmartDashboard.putBoolean("FL In front", inFront(0));
      * SmartDashboard.putBoolean("FR In front", inFront(1));

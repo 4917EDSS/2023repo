@@ -32,8 +32,8 @@ public class StrafeMoveWithJoystickCmd extends CommandBase {
   @Override
   public void execute() {
     double turnPower = m_controller.getLeftX();
-    double rightX = m_controller.getRawAxis(4);
-    double rightY = m_controller.getRawAxis(5);
+    double rightX = -m_controller.getRawAxis(2);
+    double rightY = m_controller.getRawAxis(3);
     double fwdPower = Math.sqrt(rightX * rightX + rightY * rightY);
 
     Vector stuff = new Vector(rightX, rightY);
