@@ -20,21 +20,21 @@ public enum ManipulatorsPositions {
   TILTED_GROUND(MastSub.kVertical, ArmSub.kVertical, IntakeSub.kWristThrough),
 
   // Cube Positions
-  HIGH_CUBE(16.786, 211130, 0.238), // Cube high drop-off position 
+  HIGH_CUBE(16.857, 223073, 0.310), // Cube high drop-off position 
   MEDIUM_CUBE(0.857, 136899, 4.19047), // Cube mid drop-off position
   LOW_CUBE(0.857, 56313, 9.214), // Cube low drop-off position
   GROUND_CUBE(42.5, 105000, 8.0), // Cube ground pick-up position
   SINGLE_STATION_CUBE(13.047, 137816, 14.976), // Cube single (side) station pick-up position
-  DOUBLE_STATION_CUBE(3.166, -165025, 11.857), // Cube double station pick-up position
+  DOUBLE_STATION_CUBE(3.024, -142578, 11.905), // Cube double station pick-up position
   TILTED_GROUND_CUBE(42.5, 105000, 8.0),
 
   // Cone Positions
-  HIGH_CONE(18.666, 244001, 7.404), // Cone high drop-off position 
-  MEDIUM_CONE(0.333, 185120, 9.595), // Cone mid drop-off position 
+  HIGH_CONE(11.666, 242061, 7.357), // Cone high drop-off position 
+  MEDIUM_CONE(18.66, 244001, 7.404), // Cone mid drop-off position 
   LOW_CONE(1.07, 101048, 12.857), // Cone low drop-off position 
   GROUND_CONE(17.785, 85881, 9.404), // Cone ground pick-up position
   TILTED_GROUND_CONE(42.5, 85442, 26), // Cone single (side) station pick-up position
-  DOUBLE_STATION_CONE(8.047, -196466, 27.071), // Cone double station pick-up position
+  DOUBLE_STATION_CONE(7.857, -168224, 24.500), // Cone double station pick-up position
   SINGLE_STATION_CONE(1.119, 120796, 25.2855);
 
   // This is where the encoder values are stored for each enum entry

@@ -9,6 +9,7 @@
         "showGrid": true,
         "hgap": 16.0,
         "vgap": 16.0,
+        "titleType": 0,
         "tiles": {
           "0,1": {
             "size": [
@@ -18,7 +19,9 @@
             "content": {
               "_type": "ComboBox Chooser",
               "_source0": "network_table:///SmartDashboard/auto choices",
-              "_title": "auto choices"
+              "_title": "auto choices",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "0,0": {
@@ -29,7 +32,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Mast Encoder",
-              "_title": "Mast Encoder"
+              "_title": "Mast Encoder",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "3,0": {
@@ -41,6 +46,8 @@
               "_type": "Boolean Box",
               "_source0": "network_table:///SmartDashboard/Mast limit",
               "_title": "Mast limit",
+              "_glyph": 148,
+              "_showGlyph": false,
               "Colors/Color when true": "#7CFC00FF",
               "Colors/Color when false": "#8B0000FF"
             }
@@ -53,7 +60,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Wrist Enc",
-              "_title": "Wrist Enc"
+              "_title": "Wrist Enc",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "4,0": {
@@ -65,6 +74,8 @@
               "_type": "Boolean Box",
               "_source0": "network_table:///SmartDashboard/Wrist Limit",
               "_title": "Wrist Limit",
+              "_glyph": 148,
+              "_showGlyph": false,
               "Colors/Color when true": "#7CFC00FF",
               "Colors/Color when false": "#8B0000FF"
             }
@@ -77,7 +88,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Piece Sensor",
-              "_title": "Piece Sensor"
+              "_title": "Piece Sensor",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "5,0": {
@@ -89,6 +102,8 @@
               "_type": "Boolean Box",
               "_source0": "network_table:///SmartDashboard/Intake Loaded",
               "_title": "Intake Loaded",
+              "_glyph": 148,
+              "_showGlyph": false,
               "Colors/Color when true": "#7CFC00FF",
               "Colors/Color when false": "#8B0000FF"
             }
@@ -101,7 +116,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Arm Encoder",
-              "_title": "Arm Encoder"
+              "_title": "Arm Encoder",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "5,1": {
@@ -113,6 +130,8 @@
               "_type": "Boolean Box",
               "_source0": "network_table:///SmartDashboard/Auto Shift",
               "_title": "Auto Shift",
+              "_glyph": 148,
+              "_showGlyph": false,
               "Colors/Color when true": "#7CFC00FF",
               "Colors/Color when false": "#8B0000FF"
             }
@@ -126,6 +145,8 @@
               "_type": "Boolean Box",
               "_source0": "network_table:///SmartDashboard/High Gear",
               "_title": "High Gear",
+              "_glyph": 148,
+              "_showGlyph": false,
               "Colors/Color when true": "#7CFC00FF",
               "Colors/Color when false": "#8B0000FF"
             }
@@ -139,6 +160,8 @@
               "_type": "Boolean Box",
               "_source0": "network_table:///SmartDashboard/Coasting",
               "_title": "Coasting",
+              "_glyph": 148,
+              "_showGlyph": false,
               "Colors/Color when true": "#7CFC00FF",
               "Colors/Color when false": "#8B0000FF"
             }
@@ -151,7 +174,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Horizontal Angle",
-              "_title": "Horizontal Angle"
+              "_title": "Horizontal Angle",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "0,5": {
@@ -162,7 +187,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Vertical Angle",
-              "_title": "Vertical Angle"
+              "_title": "Vertical Angle",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "1,5": {
@@ -173,7 +200,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Target Area",
-              "_title": "Target Area"
+              "_title": "Target Area",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "6,0": {
@@ -185,6 +214,8 @@
               "_type": "Boolean Box",
               "_source0": "network_table:///SmartDashboard/Target Available",
               "_title": "Target Available",
+              "_glyph": 148,
+              "_showGlyph": false,
               "Colors/Color when true": "#7CFC00FF",
               "Colors/Color when false": "#8B0000FF"
             }
@@ -197,7 +228,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Apriltag ID",
-              "_title": "Apriltag ID"
+              "_title": "Apriltag ID",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "3,4": {
@@ -208,7 +241,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Pipeline",
-              "_title": "Pipeline"
+              "_title": "Pipeline",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "2,4": {
@@ -219,7 +254,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Distance X",
-              "_title": "Distance X"
+              "_title": "Distance X",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "4,4": {
@@ -230,7 +267,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Y angle",
-              "_title": "Y angle"
+              "_title": "Y angle",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "4,5": {
@@ -241,7 +280,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Mast kP",
-              "_title": "Mast kP"
+              "_title": "Mast kP",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "3,5": {
@@ -252,7 +293,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Arm kP",
-              "_title": "Arm kP"
+              "_title": "Arm kP",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "2,5": {
@@ -263,7 +306,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/L1 drive enc",
-              "_title": "L1 drive enc"
+              "_title": "L1 drive enc",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "1,4": {
@@ -274,7 +319,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/limelight_PipelineName",
-              "_title": "limelight_PipelineName"
+              "_title": "limelight_PipelineName",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "5,4": {
@@ -285,7 +332,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Distance (m)",
-              "_title": "Distance (m)"
+              "_title": "Distance (m)",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "7,0": {
@@ -297,6 +346,8 @@
               "_type": "Camera Stream",
               "_source0": "camera_server://limelight",
               "_title": "limelight",
+              "_glyph": 148,
+              "_showGlyph": false,
               "Crosshair/Show crosshair": true,
               "Crosshair/Crosshair color": "#FFFFFFFF",
               "Controls/Show controls": true,
@@ -315,7 +366,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/limelight_Interface",
-              "_title": "limelight_Interface"
+              "_title": "limelight_Interface",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "11,5": {
@@ -326,7 +379,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/limelight_Stream",
-              "_title": "limelight_Stream"
+              "_title": "limelight_Stream",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "10,5": {
@@ -337,7 +392,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Mast kI",
-              "_title": "Mast kI"
+              "_title": "Mast kI",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "7,5": {
@@ -348,7 +405,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Mast kD",
-              "_title": "Mast kD"
+              "_title": "Mast kD",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "8,5": {
@@ -359,7 +418,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Arm kI",
-              "_title": "Arm kI"
+              "_title": "Arm kI",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "9,5": {
@@ -370,7 +431,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Arm kD",
-              "_title": "Arm kD"
+              "_title": "Arm kD",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "6,5": {
@@ -381,7 +444,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Gyro Heading",
-              "_title": "Gyro Heading"
+              "_title": "Gyro Heading",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "0,4": {
@@ -392,7 +457,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Pitch",
-              "_title": "Pitch"
+              "_title": "Pitch",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "6,4": {
@@ -403,7 +470,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Side of apriltag",
-              "_title": "Side of apriltag"
+              "_title": "Side of apriltag",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "3,1": {
@@ -415,6 +484,8 @@
               "_type": "Boolean Box",
               "_source0": "network_table:///SmartDashboard/Arm Limit Sensor",
               "_title": "Arm Limit Sensor",
+              "_glyph": 148,
+              "_showGlyph": false,
               "Colors/Color when true": "#7CFC00FF",
               "Colors/Color when false": "#8B0000FF"
             }
@@ -427,7 +498,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Piece Sensor Left",
-              "_title": "Piece Sensor Left"
+              "_title": "Piece Sensor Left",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "2,2": {
@@ -438,7 +511,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Piece Sensor Right",
-              "_title": "Piece Sensor Right"
+              "_title": "Piece Sensor Right",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "3,2": {
@@ -449,7 +524,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Intake Current (A)",
-              "_title": "Intake Current (A)"
+              "_title": "Intake Current (A)",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           }
         }
@@ -464,6 +541,7 @@
         "showGrid": true,
         "hgap": 16.0,
         "vgap": 16.0,
+        "titleType": 0,
         "tiles": {
           "0,0": {
             "size": [
@@ -473,7 +551,9 @@
             "content": {
               "_type": "PID Controller",
               "_source0": "network_table:///LiveWindow/Ungrouped/PIDController[4]",
-              "_title": "Ungrouped/PIDController[4]"
+              "_title": "Ungrouped/PIDController[4]",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "1,0": {
@@ -485,6 +565,8 @@
               "_type": "Boolean Box",
               "_source0": "network_table:///LiveWindow/Ungrouped/DigitalInput[0]/Value",
               "_title": "Ungrouped/DigitalInput[0]/Value",
+              "_glyph": 148,
+              "_showGlyph": false,
               "Colors/Color when true": "#7CFC00FF",
               "Colors/Color when false": "#8B0000FF"
             }
@@ -498,6 +580,8 @@
               "_type": "Boolean Box",
               "_source0": "network_table:///LiveWindow/Ungrouped/DigitalInput[2]/Value",
               "_title": "Ungrouped/DigitalInput[2]/Value",
+              "_glyph": 148,
+              "_showGlyph": false,
               "Colors/Color when true": "#7CFC00FF",
               "Colors/Color when false": "#8B0000FF"
             }
@@ -510,7 +594,9 @@
             "content": {
               "_type": "PID Controller",
               "_source0": "network_table:///LiveWindow/Ungrouped/PIDController[1]",
-              "_title": "Ungrouped/PIDController[1]"
+              "_title": "Ungrouped/PIDController[1]",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "4,0": {
@@ -522,6 +608,8 @@
               "_type": "Gyro",
               "_source0": "network_table:///LiveWindow/Ungrouped/navX-Sensor[4]",
               "_title": "Ungrouped/navX-Sensor[4]",
+              "_glyph": 148,
+              "_showGlyph": false,
               "Visuals/Major tick spacing": 45.0,
               "Visuals/Starting angle": 180.0,
               "Visuals/Show tick mark ring": true,
@@ -536,7 +624,9 @@
             "content": {
               "_type": "PID Controller",
               "_source0": "network_table:///LiveWindow/Ungrouped/PIDController[2]",
-              "_title": "Ungrouped/PIDController[2]"
+              "_title": "Ungrouped/PIDController[2]",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "7,0": {
@@ -548,6 +638,8 @@
               "_type": "Differential Drivebase",
               "_source0": "network_table:///LiveWindow/Ungrouped/DifferentialDrive[1]",
               "_title": "Ungrouped/DifferentialDrive[1]",
+              "_glyph": 148,
+              "_showGlyph": false,
               "Wheels/Number of wheels": 4,
               "Wheels/Wheel diameter": 80.0,
               "Visuals/Show velocity vectors": true
@@ -561,7 +653,9 @@
             "content": {
               "_type": "PID Controller",
               "_source0": "network_table:///LiveWindow/Ungrouped/PIDController[3]",
-              "_title": "Ungrouped/PIDController[3]"
+              "_title": "Ungrouped/PIDController[3]",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "1,1": {
@@ -573,6 +667,8 @@
               "_type": "Voltage View",
               "_source0": "network_table:///LiveWindow/Ungrouped/AnalogInput[0]",
               "_title": "Ungrouped/AnalogInput[0]",
+              "_glyph": 148,
+              "_showGlyph": false,
               "Range/Min": 0.0,
               "Range/Max": 5.0,
               "Range/Center": 0.0,
@@ -589,6 +685,8 @@
               "_type": "Boolean Box",
               "_source0": "network_table:///LiveWindow/Ungrouped/Solenoid[0,1]/Value",
               "_title": "Ungrouped/Solenoid[0,1]/Value",
+              "_glyph": 148,
+              "_showGlyph": false,
               "Colors/Color when true": "#7CFC00FF",
               "Colors/Color when false": "#8B0000FF"
             }
@@ -602,17 +700,23 @@
               "_type": "Subsystem Layout",
               "_source0": "network_table:///LiveWindow/Ungrouped",
               "_title": "Ungrouped",
+              "_glyph": 149,
+              "_showGlyph": false,
               "Layout/Label position": "BOTTOM",
               "_children": [
                 {
                   "_type": "PID Controller",
                   "_source0": "network_table:///LiveWindow/Ungrouped/PIDController[4]",
-                  "_title": "PIDController[4]"
+                  "_title": "PIDController[4]",
+                  "_glyph": 148,
+                  "_showGlyph": false
                 },
                 {
                   "_type": "Boolean Box",
                   "_source0": "network_table:///LiveWindow/Ungrouped/DigitalInput[0]/Value",
                   "_title": "DigitalInput[0]/Value",
+                  "_glyph": 148,
+                  "_showGlyph": false,
                   "Colors/Color when true": "#7CFC00FF",
                   "Colors/Color when false": "#8B0000FF"
                 },
@@ -620,6 +724,8 @@
                   "_type": "Boolean Box",
                   "_source0": "network_table:///LiveWindow/Ungrouped/DigitalInput[2]/Value",
                   "_title": "DigitalInput[2]/Value",
+                  "_glyph": 148,
+                  "_showGlyph": false,
                   "Colors/Color when true": "#7CFC00FF",
                   "Colors/Color when false": "#8B0000FF"
                 },
@@ -627,18 +733,24 @@
                   "_type": "Subsystem Layout",
                   "_source0": "network_table:///LiveWindow/Ungrouped/Scheduler/Ids",
                   "_title": "Scheduler/Ids",
+                  "_glyph": 149,
+                  "_showGlyph": false,
                   "Layout/Label position": "BOTTOM",
                   "_children": []
                 },
                 {
                   "_type": "PID Controller",
                   "_source0": "network_table:///LiveWindow/Ungrouped/PIDController[1]",
-                  "_title": "PIDController[1]"
+                  "_title": "PIDController[1]",
+                  "_glyph": 148,
+                  "_showGlyph": false
                 },
                 {
                   "_type": "Gyro",
                   "_source0": "network_table:///LiveWindow/Ungrouped/navX-Sensor[4]",
                   "_title": "navX-Sensor[4]",
+                  "_glyph": 148,
+                  "_showGlyph": false,
                   "Visuals/Major tick spacing": 45.0,
                   "Visuals/Starting angle": 180.0,
                   "Visuals/Show tick mark ring": true,
@@ -647,12 +759,16 @@
                 {
                   "_type": "PID Controller",
                   "_source0": "network_table:///LiveWindow/Ungrouped/PIDController[2]",
-                  "_title": "PIDController[2]"
+                  "_title": "PIDController[2]",
+                  "_glyph": 148,
+                  "_showGlyph": false
                 },
                 {
                   "_type": "Differential Drivebase",
                   "_source0": "network_table:///LiveWindow/Ungrouped/DifferentialDrive[1]",
                   "_title": "DifferentialDrive[1]",
+                  "_glyph": 148,
+                  "_showGlyph": false,
                   "Wheels/Number of wheels": 4,
                   "Wheels/Wheel diameter": 80.0,
                   "Visuals/Show velocity vectors": true
@@ -660,12 +776,16 @@
                 {
                   "_type": "PID Controller",
                   "_source0": "network_table:///LiveWindow/Ungrouped/PIDController[3]",
-                  "_title": "PIDController[3]"
+                  "_title": "PIDController[3]",
+                  "_glyph": 148,
+                  "_showGlyph": false
                 },
                 {
                   "_type": "Voltage View",
                   "_source0": "network_table:///LiveWindow/Ungrouped/AnalogInput[0]",
                   "_title": "AnalogInput[0]",
+                  "_glyph": 148,
+                  "_showGlyph": false,
                   "Range/Min": 0.0,
                   "Range/Max": 5.0,
                   "Range/Center": 0.0,
@@ -676,6 +796,8 @@
                   "_type": "Boolean Box",
                   "_source0": "network_table:///LiveWindow/Ungrouped/Solenoid[0,1]/Value",
                   "_title": "Solenoid[0,1]/Value",
+                  "_glyph": 148,
+                  "_showGlyph": false,
                   "Colors/Color when true": "#7CFC00FF",
                   "Colors/Color when false": "#8B0000FF"
                 },
@@ -683,6 +805,8 @@
                   "_type": "Boolean Box",
                   "_source0": "network_table:///LiveWindow/Ungrouped/DigitalInput[1]/Value",
                   "_title": "DigitalInput[1]/Value",
+                  "_glyph": 148,
+                  "_showGlyph": false,
                   "Colors/Color when true": "#7CFC00FF",
                   "Colors/Color when false": "#8B0000FF"
                 }
@@ -698,6 +822,8 @@
               "_type": "Subsystem Layout",
               "_source0": "network_table:///LiveWindow/MastSub",
               "_title": "MastSub",
+              "_glyph": 149,
+              "_showGlyph": false,
               "Layout/Label position": "BOTTOM",
               "_children": []
             }
@@ -711,6 +837,8 @@
               "_type": "Subsystem Layout",
               "_source0": "network_table:///LiveWindow/ArmSub",
               "_title": "ArmSub",
+              "_glyph": 149,
+              "_showGlyph": false,
               "Layout/Label position": "BOTTOM",
               "_children": []
             }
@@ -724,6 +852,8 @@
               "_type": "Subsystem Layout",
               "_source0": "network_table:///LiveWindow/DrivetrainSub",
               "_title": "DrivetrainSub",
+              "_glyph": 149,
+              "_showGlyph": false,
               "Layout/Label position": "BOTTOM",
               "_children": []
             }
@@ -737,6 +867,8 @@
               "_type": "Subsystem Layout",
               "_source0": "network_table:///LiveWindow/LedSub",
               "_title": "LedSub",
+              "_glyph": 149,
+              "_showGlyph": false,
               "Layout/Label position": "BOTTOM",
               "_children": []
             }
@@ -750,6 +882,8 @@
               "_type": "Subsystem Layout",
               "_source0": "network_table:///LiveWindow/IntakeSub",
               "_title": "IntakeSub",
+              "_glyph": 149,
+              "_showGlyph": false,
               "Layout/Label position": "BOTTOM",
               "_children": []
             }
@@ -766,6 +900,7 @@
         "showGrid": true,
         "hgap": 16.0,
         "vgap": 16.0,
+        "titleType": 0,
         "tiles": {}
       }
     }

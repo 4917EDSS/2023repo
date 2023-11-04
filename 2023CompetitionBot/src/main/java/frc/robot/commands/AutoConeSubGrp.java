@@ -30,7 +30,7 @@ public class AutoConeSubGrp extends SequentialCommandGroup {
         new SetLimitSwitchesCmd(mastSub, armSub, intakeSub),
         new IntakeSetPositionCmd(ManipulatorsPositions.HIGH_CONE, armSub, mastSub, intakeSub),
         //new WaitCommand(0.25),
-        new DriveStraightCmd(drivetrainSub, (-m_clearanceDistance), 0.6),
+        new DriveStraightCmd(drivetrainSub, (-m_clearanceDistance), 0.7),
         new WaitCommand(0.5),
         new ExpelGamePieceCmd(0.5, intakeSub));
   }
