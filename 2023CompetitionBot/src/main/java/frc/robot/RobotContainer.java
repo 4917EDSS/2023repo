@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ArmMoveWithJoystickCmd;
+import frc.robot.commands.AutoBalanceOnlyGrp;
 import frc.robot.commands.AutoConeAndChargeStationGrp;
 import frc.robot.commands.AutoConeAndLeaveCloseGrp;
 import frc.robot.commands.AutoConeAndLeaveFarGrp;
@@ -176,6 +177,8 @@ public class RobotContainer {
     m_Chooser.addOption("6 Cone Drive Close Get Cube",
         new AutoConeDrivePickupCubeGrp(m_armSub, m_mastSub, m_intakeSub, m_drivetrainSub, m_ledSub, true));
     m_Chooser.addOption("7 Leave Community", new DriveStraightCmd(m_drivetrainSub, 1.5, 0.8));
+    m_Chooser.addOption("8 Balance",
+        new AutoBalanceOnlyGrp(m_armSub, m_mastSub, m_intakeSub, m_drivetrainSub, m_ledSub));
 
     SmartDashboard.putData("auto choices", m_Chooser);
   }

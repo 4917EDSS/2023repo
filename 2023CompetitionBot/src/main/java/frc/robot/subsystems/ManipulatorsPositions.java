@@ -29,7 +29,7 @@ public enum ManipulatorsPositions {
   TILTED_GROUND_CUBE(42.5, 105000, 8.0),
 
   // Cone Positions
-  HIGH_CONE(11.666, 242061, 7.357), // Cone high drop-off position 
+  HIGH_CONE(11.666, 254636, 7.357), // Cone high drop-off position 
   MEDIUM_CONE(18.66, 244001, 7.404), // Cone mid drop-off position 
   LOW_CONE(1.07, 101048, 12.857), // Cone low drop-off position 
   GROUND_CONE(17.785, 85881, 9.404), // Cone ground pick-up position

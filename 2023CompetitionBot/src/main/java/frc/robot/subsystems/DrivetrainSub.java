@@ -35,8 +35,8 @@ public class DrivetrainSub extends SubsystemBase {
       new CANSparkMax(Constants.CanIds.kLeftDriveMotor2, CANSparkMaxLowLevel.MotorType.kBrushless);
   private final CANSparkMax m_leftMotor3 =
       new CANSparkMax(Constants.CanIds.kLeftDriveMotor3, CANSparkMaxLowLevel.MotorType.kBrushless);
-  private final CANSparkMax m_rightMotor1 =
-      new CANSparkMax(Constants.CanIds.kRightDriveMotor1, CANSparkMaxLowLevel.MotorType.kBrushless);
+  //private final CANSparkMax m_rightMotor1 =
+  //new CANSparkMax(Constants.CanIds.kRightDriveMotor1, CANSparkMaxLowLevel.MotorType.kBrushless);
   private final CANSparkMax m_rightMotor2 =
       new CANSparkMax(Constants.CanIds.kRightDriveMotor2, CANSparkMaxLowLevel.MotorType.kBrushless);
   private final CANSparkMax m_rightMotor3 =
@@ -44,7 +44,7 @@ public class DrivetrainSub extends SubsystemBase {
 
   private final MotorControllerGroup m_leftMotors = new MotorControllerGroup(m_leftMotor1, m_leftMotor2, m_leftMotor3);
   private final MotorControllerGroup m_rightMotors =
-      new MotorControllerGroup(m_rightMotor1, m_rightMotor2, m_rightMotor3);
+      new MotorControllerGroup(m_rightMotor2, m_rightMotor3);
 
   private final DifferentialDrive m_drive = new DifferentialDrive(m_leftMotors, m_rightMotors);
 
@@ -61,7 +61,7 @@ public class DrivetrainSub extends SubsystemBase {
     m_leftMotor1.setInverted(false);
     m_leftMotor2.setInverted(false);
     m_leftMotor3.setInverted(false);
-    m_rightMotor1.setInverted(true);
+    //m_rightMotor1.setInverted(true);
     m_rightMotor2.setInverted(true);
     m_rightMotor3.setInverted(true);
   }
@@ -86,7 +86,7 @@ public class DrivetrainSub extends SubsystemBase {
     m_leftMotor1.setSmartCurrentLimit(40);
     m_leftMotor2.setSmartCurrentLimit(40);
     m_leftMotor3.setSmartCurrentLimit(40);
-    m_rightMotor1.setSmartCurrentLimit(40);
+    //m_rightMotor1.setSmartCurrentLimit(40);
     m_rightMotor2.setSmartCurrentLimit(40);
     m_rightMotor3.setSmartCurrentLimit(40);
 
@@ -102,7 +102,7 @@ public class DrivetrainSub extends SubsystemBase {
     m_leftMotor1.getEncoder().setPosition(0);
     m_leftMotor2.getEncoder().setPosition(0);
     m_leftMotor3.getEncoder().setPosition(0);
-    m_rightMotor1.getEncoder().setPosition(0);
+    //m_rightMotor1.getEncoder().setPosition(0);
     m_rightMotor2.getEncoder().setPosition(0);
     m_rightMotor3.getEncoder().setPosition(0);
   }
@@ -112,7 +112,7 @@ public class DrivetrainSub extends SubsystemBase {
   }
 
   private double getRightMotorEncoder() {
-    return m_rightMotor1.getEncoder().getPosition();
+    return m_rightMotor2.getEncoder().getPosition();
   }
 
   private double getLeftVelocity() {
@@ -120,7 +120,7 @@ public class DrivetrainSub extends SubsystemBase {
   }
 
   private double getRightVelocity() {
-    return m_rightMotor1.getEncoder().getVelocity() * getEncoderRotationsToMeterFactor() / 60.; // In meters per second
+    return m_rightMotor2.getEncoder().getVelocity() * getEncoderRotationsToMeterFactor() / 60.; // In meters per second
   }
 
   public double getVelocity() {
@@ -212,7 +212,7 @@ public class DrivetrainSub extends SubsystemBase {
     m_leftMotor1.setIdleMode(mode);
     m_leftMotor2.setIdleMode(mode);
     m_leftMotor3.setIdleMode(mode);
-    m_rightMotor1.setIdleMode(mode);
+    // m_rightMotor1.setIdleMode(mode);
     m_rightMotor2.setIdleMode(mode);
     m_rightMotor3.setIdleMode(mode);
   }
