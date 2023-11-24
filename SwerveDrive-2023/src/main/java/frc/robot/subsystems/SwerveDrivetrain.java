@@ -18,6 +18,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.music.Orchestra;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
+import com.ctre.phoenix.sensors.SensorTimeBase;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
@@ -98,6 +99,10 @@ public class SwerveDrivetrain extends SubsystemBase {
     m_frontrightSteerMotor.setIdleMode(IdleMode.kBrake);
     m_backleftSteerMotor.setIdleMode(IdleMode.kBrake);
     m_backrightSteerMotor.setIdleMode(IdleMode.kBrake);
+    m_encoderFrontLeft.configFeedbackCoefficient(0.087890625, "deg", SensorTimeBase.PerSecond);
+    m_encoderFrontRight.configFeedbackCoefficient(0.087890625, "deg", SensorTimeBase.PerSecond);
+    m_encoderBackLeft.configFeedbackCoefficient(0.087890625, "deg", SensorTimeBase.PerSecond);
+    m_encoderBackRight.configFeedbackCoefficient(0.087890625, "deg", SensorTimeBase.PerSecond);
   }
 
   @Override
