@@ -28,6 +28,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.SPI.Port;
+import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 
@@ -67,20 +68,25 @@ public class SwerveDrivetrain extends SubsystemBase {
 
   // Motors
 
-  private final CANSparkMax m_frontleftSteerMotor =
-      new CANSparkMax(Constants.CanIds.kSteeringMotorFL, CANSparkMax.MotorType.kBrushless);
+  private final TalonFX m_frontleftSteerMotor = new TalonFX(Constants.CanIds.kSteeringMotorFL);
+  
+  /*private final CANSparkMax m_frontleftSteerMotor =
+      new CANSparkMax(Constants.CanIds.kSteeringMotorFL, CANSparkMax.MotorType.kBrushless);*/
   private static final TalonFX m_frontleftDriveMotor = new TalonFX(Constants.CanIds.kDriveMotorFL);
 
-  private final CANSparkMax m_frontrightSteerMotor =
-      new CANSparkMax(Constants.CanIds.kSteeringMotorFR, CANSparkMax.MotorType.kBrushless);
+  // private final CANSparkMax m_frontrightSteerMotor =
+  //     new CANSparkMax(Constants.CanIds.kSteeringMotorFR, CANSparkMax.MotorType.kBrushless);
+  private final TalonFX m_frontrightSteerMotor = new TalonFX(Constants.CanIds.kSteeringMotorFR);
   private static final TalonFX m_frontrightDriveMotor = new TalonFX(Constants.CanIds.kDriveMotorFR);
 
-  private final CANSparkMax m_backleftSteerMotor =
-      new CANSparkMax(Constants.CanIds.kSteeringMotorBL, CANSparkMax.MotorType.kBrushless);
+  // private final CANSparkMax m_backleftSteerMotor =
+  //     new CANSparkMax(Constants.CanIds.kSteeringMotorBL, CANSparkMax.MotorType.kBrushless);
+  private final TalonFX m_backleftSteerMotor = new TalonFX(Constants.CanIds.kSteeringMotorBL);
   private static final TalonFX m_backleftDriveMotor = new TalonFX(Constants.CanIds.kDriveMotorBL);
 
-  private final CANSparkMax m_backrightSteerMotor =
-      new CANSparkMax(Constants.CanIds.kSteeringMotorBR, CANSparkMax.MotorType.kBrushless);
+  // private final CANSparkMax m_backrightSteerMotor =
+  //     new CANSparkMax(Constants.CanIds.kSteeringMotorBR, CANSparkMax.MotorType.kBrushless);
+  private final TalonFX m_backrightSteerMotor = new TalonFX(Constants.CanIds.kSteeringMotorBR);
   private static final TalonFX m_backrightDriveMotor = new TalonFX(Constants.CanIds.kDriveMotorBR);
 
 
@@ -95,10 +101,10 @@ public class SwerveDrivetrain extends SubsystemBase {
     SmartDashboard.putNumber("FR Offset Set", fr_encoderOffset);
     SmartDashboard.putNumber("BL Offset Set", bl_encoderOffset);
     SmartDashboard.putNumber("BR Offset Set", br_encoderOffset);
-    m_frontleftSteerMotor.setIdleMode(IdleMode.kBrake);
-    m_frontrightSteerMotor.setIdleMode(IdleMode.kBrake);
-    m_backleftSteerMotor.setIdleMode(IdleMode.kBrake);
-    m_backrightSteerMotor.setIdleMode(IdleMode.kBrake);
+    //m_frontleftSteerMotor.setIdleMode(IdleMode.kBrake);
+    //m_frontrightSteerMotor.setIdleMode(IdleMode.kBrake);
+    //m_backleftSteerMotor.setIdleMode(IdleMode.kBrake);
+    //m_backrightSteerMotor.setIdleMode(IdleMode.kBrake);
     m_encoderFrontLeft.configFeedbackCoefficient(0.087890625, "deg", SensorTimeBase.PerSecond);
     m_encoderFrontRight.configFeedbackCoefficient(0.087890625, "deg", SensorTimeBase.PerSecond);
     m_encoderBackLeft.configFeedbackCoefficient(0.087890625, "deg", SensorTimeBase.PerSecond);
@@ -275,25 +281,25 @@ public class SwerveDrivetrain extends SubsystemBase {
           MathUtil.clamp(
               pid.calculate(m_encoderFrontLeft.getAbsolutePosition() - fl_encoderOffset, modulo(angle, 180.0)),
               -m_steeringPower, m_steeringPower);
-      m_frontleftSteerMotor.set(m_steeringPower * powerFL);
+      m_frontleftSteerMotor.set(TalonFXControlMode.PercentOutput,m_steeringPower * powerFL);
     } else if(motor == 1) {
       double powerFR =
           MathUtil.clamp(
               pid.calculate(m_encoderFrontRight.getAbsolutePosition() - fr_encoderOffset, modulo(angle, 180.0)),
               -m_steeringPower, m_steeringPower);
-      m_frontrightSteerMotor.set(m_steeringPower * powerFR);
+      m_frontrightSteerMotor.set(TalonFXControlMode.PercentOutput,m_steeringPower * powerFR);
     } else if(motor == 2) {
       double powerBL =
           MathUtil.clamp(
               pid.calculate(m_encoderBackLeft.getAbsolutePosition() - bl_encoderOffset, modulo(angle, 180.0)),
               -m_steeringPower, m_steeringPower);
-      m_backleftSteerMotor.set(m_steeringPower * powerBL);
+      m_backleftSteerMotor.set(TalonFXControlMode.PercentOutput,m_steeringPower * powerBL);
     } else if(motor == 3) {
       double powerBR =
           MathUtil.clamp(
               pid.calculate(m_encoderBackRight.getAbsolutePosition() - br_encoderOffset, modulo(angle, 180.0)),
               -m_steeringPower, m_steeringPower);
-      m_backrightSteerMotor.set(m_steeringPower * powerBR);
+      m_backrightSteerMotor.set(TalonFXControlMode.PercentOutput,m_steeringPower * powerBR);
     }
   }
 
@@ -303,19 +309,19 @@ public class SwerveDrivetrain extends SubsystemBase {
     if(motor == 0) {
       double powerFL =
           MathUtil.clamp(pid.calculate(motor_angle, modulo(angle, 180.0)), -m_steeringPower, m_steeringPower);
-      m_frontleftSteerMotor.set(m_steeringPower * powerFL);
+      m_frontleftSteerMotor.set(TalonFXControlMode.PercentOutput,m_steeringPower * powerFL);
     } else if(motor == 1) {
       double powerFR =
           MathUtil.clamp(pid.calculate(motor_angle, modulo(angle, 180.0)), -m_steeringPower, m_steeringPower);
-      m_frontrightSteerMotor.set(m_steeringPower * powerFR);
+      m_frontrightSteerMotor.set(TalonFXControlMode.PercentOutput,m_steeringPower * powerFR);
     } else if(motor == 2) {
       double powerBL =
           MathUtil.clamp(pid.calculate(motor_angle, modulo(angle, 180.0)), -m_steeringPower, m_steeringPower);
-      m_backleftSteerMotor.set(m_steeringPower * powerBL);
+      m_backleftSteerMotor.set(TalonFXControlMode.PercentOutput,m_steeringPower * powerBL);
     } else if(motor == 3) {
       double powerBR =
           MathUtil.clamp(pid.calculate(motor_angle, modulo(angle, 180.0)), -m_steeringPower, m_steeringPower);
-      m_backrightSteerMotor.set(m_steeringPower * powerBR);
+      m_backrightSteerMotor.set(TalonFXControlMode.PercentOutput,m_steeringPower * powerBR);
     }
   }
 
@@ -492,10 +498,10 @@ public class SwerveDrivetrain extends SubsystemBase {
   }
 
   public void brakeSteer() { // Set all steering motors to 0 power
-    m_frontleftSteerMotor.set(0.0);
-    m_frontrightSteerMotor.set(0.0);
-    m_backleftSteerMotor.set(0.0);
-    m_backrightSteerMotor.set(0.0);
+    m_frontleftSteerMotor.set(TalonFXControlMode.PercentOutput,0.0);
+    m_frontrightSteerMotor.set(TalonFXControlMode.PercentOutput,0.0);
+    m_backleftSteerMotor.set(TalonFXControlMode.PercentOutput,0.0);
+    m_backrightSteerMotor.set(TalonFXControlMode.PercentOutput,0.0);
   }
 
   public static void sans() {
