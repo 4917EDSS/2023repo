@@ -5,9 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.PS4Controller;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 import frc.robot.Vector;
 import frc.robot.subsystems.SwerveDrivetrain;
 
@@ -32,8 +30,8 @@ public class StrafeMoveWithJoystickCmd extends CommandBase {
   @Override
   public void execute() {
     double turnPower = m_controller.getLeftX();
-    double rightX = -m_controller.getRawAxis(2);
-    double rightY = m_controller.getRawAxis(3);
+    double rightX = -m_controller.getRightX();
+    double rightY = m_controller.getRightY();
     double fwdPower = Math.sqrt(rightX * rightX + rightY * rightY);
 
     Vector stuff = new Vector(rightX, rightY);
@@ -42,6 +40,13 @@ public class StrafeMoveWithJoystickCmd extends CommandBase {
       m_swerveDrivetrainSub.setSteeringAngle(0.0);
     } else if(m_controller.getCircleButton()) {
       m_swerveDrivetrainSub.resetGyro();
+    }
+
+    if(m_controller.getOptionsButton()) {
+      m_swerveDrivetrainSub.sans();
+    }
+    else if(m_controller.getShareButton()) {
+      m_swerveDrivetrainSub.stop_tone();
     }
   }
 

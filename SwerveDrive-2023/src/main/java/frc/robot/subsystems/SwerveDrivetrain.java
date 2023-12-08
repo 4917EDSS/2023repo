@@ -13,6 +13,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.music.Orchestra;
@@ -101,6 +102,11 @@ public class SwerveDrivetrain extends SubsystemBase {
     SmartDashboard.putNumber("FR Offset Set", fr_encoderOffset);
     SmartDashboard.putNumber("BL Offset Set", bl_encoderOffset);
     SmartDashboard.putNumber("BR Offset Set", br_encoderOffset);
+
+    m_frontleftSteerMotor.setNeutralMode(NeutralMode.Brake);
+    m_frontrightSteerMotor.setNeutralMode(NeutralMode.Brake);
+    m_backleftSteerMotor.setNeutralMode(NeutralMode.Brake);
+    m_backrightSteerMotor.setNeutralMode(NeutralMode.Brake);
     //m_frontleftSteerMotor.setIdleMode(IdleMode.kBrake);
     //m_frontrightSteerMotor.setIdleMode(IdleMode.kBrake);
     //m_backleftSteerMotor.setIdleMode(IdleMode.kBrake);
