@@ -10,9 +10,6 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.SensorTimeBase;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
-import com.revrobotics.CANSparkMax.IdleMode;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -24,7 +21,7 @@ import frc.robot.Constants.ModuleConstants;
 
 public class SwerveModule {
   private final TalonFX m_driveMotor;
-  private final CANSparkMax m_turnMotor;
+  private final TalonFX m_turnMotor;
   private final CANCoder m_turnEncoder;
   private final double m_turningEncoderOffset;
 
@@ -60,7 +57,7 @@ public class SwerveModule {
       double turnEncoderOffsetRad) {
 
     m_driveMotor = new TalonFX(driveMotorId);
-    m_turnMotor = new CANSparkMax(turnMotorId, CANSparkMaxLowLevel.MotorType.kBrushless);
+    m_turnMotor = new TalonFX(turnMotorId);
 
     // Drive encoder is built into the TalonFX do no need to create it
     m_turnEncoder = new CANCoder(turnEncoderId);
@@ -75,7 +72,7 @@ public class SwerveModule {
     m_driveMotor.setNeutralMode(NeutralMode.Brake);
 
     // Configure turn motor
-    m_turnMotor.setIdleMode(IdleMode.kBrake);
+    m_turnMotor.setNeutralMode(NeutralMode.Brake);
 
     // Set up the encorder
     m_turnEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
@@ -144,7 +141,7 @@ public class SwerveModule {
    */
   public void setMotors(double drivePower, double turnPower) {
     m_driveMotor.set(ControlMode.PercentOutput, drivePower);
-    m_turnMotor.set(turnPower);
+    m_turnMotor.set(ControlMode.PercentOutput, turnPower);
   }
 
   /**
